@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "active_package": "P0",
+  "active_contract": "contracts/p0_stage0.toml",
+  "branch": "codex/publication-stage0",
+  "baseline": "2f4539567980cedc28b605c2c27a84ed5fcad96f",
+  "package_status": "implemented_unreleased",
+  "builder_agents": [
+    "coordinator"
+  ],
+  "stage_registry": [
+    {
+      "stage": 0,
+      "package": "P0",
+      "status": "implemented_unreleased"
+    },
+    {
+      "stage": 1,
+      "package": "P1",
+      "status": "planned"
+    },
+    {
+      "stage": 2,
+      "package": "P1",
+      "status": "planned"
+    },
+    {
+      "stage": 3,
+      "package": "P2",
+      "status": "planned"
+    },
+    {
+      "stage": 4,
+      "package": "P2",
+      "status": "planned"
+    },
+    {
+      "stage": 5,
+      "package": "P3",
+      "status": "planned"
+    },
+    {
+      "stage": 6,
+      "package": "P3",
+      "status": "planned"
+    },
+    {
+      "stage": 7,
+      "package": "P4",
+      "status": "planned"
+    },
+    {
+      "stage": 8,
+      "package": "P4/P5",
+      "status": "planned"
+    },
+    {
+      "stage": 9,
+      "package": "P5",
+      "status": "deferred"
+    }
+  ],
+  "milestones": {
+    "research_mvp": "not_implemented",
+    "forward_observation": "not_started",
+    "vps_release": "not_authorized"
+  },
+  "github": {
+    "remote_creation_authorized": true,
+    "owner": "kamrean",
+    "repository": "a-share-market-intelligence-public",
+    "visibility": "public",
+    "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+    "merge_status": "not_merged"
+  },
+  "receipts": {
+    "blueprint_review": "docs/reviews/blueprint-review.json",
+    "prompt_audit": "docs/reviews/p0-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p0-builder-prompt.md",
+    "bundle": "docs/reviews/p0-bundle.json",
+    "validation": "docs/reviews/p0-validation.json",
+    "reviewer": "docs/reviews/p0-review.json",
+    "release": "docs/reviews/p0-release.json"
+  },
+  "next_gate": "reviewed_public_remote_bootstrap_then_exact_head_ci_and_human_merge; no P1 before merged P0 and its own contract",
+  "last_updated": "2026-11-12"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "e1c679dcc010ad9fdf26cc6aaadcba491cc508d8e33acca1a488f6d547c5e398",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_REMOTE_BOOTSTRAP",
+  "agent_id": "01a1d052-5bd2-7a52-b6b9-517d562693f9",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "reviewed_public_remote_bootstrap_then_exact_head_ci_and_human_merge"
+}

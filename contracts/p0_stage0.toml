@@ -1,0 +1,113 @@
+schema_version = 1
+package_id = "P0"
+stage_ids = [0]
+title = "Research MVP governance foundation"
+objective = "Import the merged governance foundation into a fresh public repository without private Git history; preserve source provenance and obtain new content-bound reviews and exact-head CI. No product runtime."
+branch = "codex/publication-stage0"
+baseline = "2f4539567980cedc28b605c2c27a84ed5fcad96f"
+merge_tier = "C"
+human_merge_required = true
+auto_merge_allowed = false
+max_repair_cycles = 1
+blueprint_review_required = true
+prompt_audit_required = true
+independent_review_required = true
+bootstrap_prompt = "The canonical TOML contract rendered verbatim as sorted JSON under the checked-in template."
+snapshot_algorithm = "sha256-path-and-lf-normalized-utf8-v1"
+next_gate = "After local validation and independent review/release/privacy checks, initialize only kamrean/a-share-market-intelligence-public main at 2f4539567980cedc28b605c2c27a84ed5fcad96f, enable protected PR-only main, then push this reviewed branch for exact-head CI and human merge. No P1 yet."
+rollback = "Stop work on this branch; preserve evidence and user changes. Repair only inside this contract. Never reset main, merge, deploy, or mutate the archived project."
+
+allowed_paths = [
+  ".gitattributes",
+  ".gitignore",
+  "AGENTS.md",
+  "README.md",
+  "BLUEPRINT.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "contracts/p0_stage0.toml",
+  "governance/policy.toml",
+  "project-state/state.json",
+  "docs/CONSTRUCTION_LOG.md",
+  "docs/LEGACY_REUSE_MANIFEST.md",
+  "docs/PUBLICATION_PROVENANCE.json",
+  "docs/reviews/blueprint-review.json",
+  "docs/reviews/p0-builder-prompt.md",
+  "docs/reviews/p0-prompt-audit.json",
+  "docs/reviews/p0-bundle.json",
+  "docs/reviews/p0-validation.json",
+  "docs/reviews/p0-review.json",
+  "docs/reviews/p0-release.json",
+  "templates/builder_prompt.md",
+  "tools/governance.py",
+  "tests/governance/test_governance.py",
+  ".github/workflows/governance.yml",
+]
+attestation_paths = [
+  "docs/reviews/p0-bundle.json",
+  "docs/reviews/p0-validation.json",
+  "docs/reviews/p0-review.json",
+  "docs/reviews/p0-release.json",
+]
+forbidden_prefixes = ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/", "tests/product/"]
+required_reads = ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", "contracts/p0_stage0.toml", "governance/policy.toml", "project-state/state.json", "docs/reviews/blueprint-review.json"]
+required_validation = [
+  "python -m unittest discover -s tests/governance -p test_*.py -v",
+  "python tools/governance.py check",
+  "python tools/governance.py prompt --verify",
+  "python tools/governance.py bundle",
+  "git diff --check",
+]
+deliverables = [
+  "Source-located, commit-pinned legacy inventory with reference_only/rewrite_pattern/forbidden decisions; no copied ETF code.",
+  "One coordinator entrypoint, P0 contract/policy/state with embedded Stage0-9 registry and separate MVP/observation/VPS milestones.",
+  "Stdlib-only Python 3.12 governance checker, deterministic prompt/bundle generation, content-bound review gates and offline regression tests.",
+  "CI definition using offline commands, no secrets, model/data calls, product implementation, or deployment.",
+  "Honest construction log and independent review/release evidence; frozen pre-publication records use NOT_RUN_AT_SNAPSHOT, with subsequent exact-head CI and merge evidence on the GitHub PR.",
+  "Fresh public remote bootstrap only; pin the new owner/name/visibility/baseline/branch across contract, policy, state and checker.",
+  "Retain the merged source Windows junction regression fix and all guard assertions; no business implementation or weakening.",
+  "Preserve sanitized source merge, original validation/review/CI and failure/correction provenance separately from new approvals.",
+]
+negative_tests = [
+  "Out-of-scope/untracked/ignored secret or runtime artifact, traversal and symlink escape are rejected.",
+  "Unknown or non-boolean permissions, broker/order/portfolio authority and all P0 runtime permissions are rejected.",
+  "Wrong branch/baseline, missing/unknown contract fields, inconsistent state/registry or premature completion are rejected.",
+  "Stale prompt, stale content snapshot, self-review identity, missing/BLOCK review or fake remote PASS cannot reach local readiness.",
+  "LF/CRLF normalization is deterministic; before/after snapshot detects input changes.",
+  "Factual market-price language is not rejected merely for containing price or volume.",
+  "Wrong remote owner/name/visibility/baseline, revoked or mistyped authorization, fake remote PASS and premature P1/merge claims are rejected.",
+]
+receipt_rules = [
+  "Only the four exact attestation paths are excluded from the protected content hash; they remain in scope and secret scans.",
+  "Freeze all other inputs, including decision-affecting state/log, blueprint review and prompt audit, before Reviewer.",
+  "Any protected input change invalidates approvals. Verdict/validation receipts bind the exact content snapshot.",
+  "Receipt files cannot authorize scopes, stage transitions, runtime permissions, remote creation, CI PASS, or merge.",
+  "Final local release is LOCAL_READY_FOR_REMOTE_BOOTSTRAP only; it is not remote CI, merged completion, or deploy authorization.",
+  "NOT_RUN_AT_SNAPSHOT describes the frozen pre-publication observation, not live GitHub status. Record subsequent CI and release verification on the PR with its exact head, run URLs and result; do not rewrite snapshot inputs to claim a later result.",
+  "Create a fresh empty public repository, not a clone, mirror or fork. Preserve the original private repository unchanged. Stop if the target already exists unexpectedly. No force push, direct merge, admin bypass, old-repository mutation or imported Git objects.",
+  "Before any public upload, scan every new reachable commit, author/committer/message, blob, staged/worktree file and proposed PR text for private contact details, local home paths, obsolete personal motivation wording and credentials. Report locations/counts, never sensitive matched values.",
+  "Use the verified GitHub noreply identity for every new commit; keep account email privacy enabled for web merges. Preserve private historical evidence without publishing raw private logs or rebinding old PASS receipts.",
+  "Before pushing the construction branch, require PRs and the two exact GitHub Actions governance checks on main, enforce for administrators, disable force pushes/deletions/auto-merge. A sole maintainer uses zero required GitHub approvals; independent agent review and human merge remain procedural gates, not enforced merger identity.",
+  "Record actual public head/run URLs, results, privacy scan and protection readback on the PR. Frozen NOT_RUN_AT_SNAPSHOT receipts are historical local observations, not live remote state. Preserve original failed CI only as explicitly historical evidence.",
+]
+
+[remote_bootstrap]
+authorized = true
+owner = "kamrean"
+repository = "a-share-market-intelligence-public"
+visibility = "public"
+baseline = "2f4539567980cedc28b605c2c27a84ed5fcad96f"
+branch = "codex/publication-stage0"
+authorization_date = "2026-11-12"
+authorization_source = "explicit_user_confirmation"
+
+[permissions]
+research_only = true
+external_data_access_allowed = false
+scheduled_collection_allowed = false
+llm_research_allowed = false
+telegram_delivery_allowed = false
+vps_deployment_allowed = false
+vps_mutation_allowed = false
+broker_allowed = false
+order_execution_allowed = false
+portfolio_control_allowed = false
