@@ -1,0 +1,536 @@
+"""Read-only, offline checks for the frozen P0 contract (Python 3.12)."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import string
+import subprocess
+import sys
+import tomllib
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BASELINE = "2f4539567980cedc28b605c2c27a84ed5fcad96f"
+BRANCH = "codex/publication-stage0"
+ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
+CONTRACT_PATH = "contracts/p0_stage0.toml"
+TEMPLATE_PATH = "templates/builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p0-builder-prompt.md"
+ATTESTATIONS = (
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-release.json",
+)
+ALLOWED = (
+    ".gitattributes", ".gitignore", "AGENTS.md", "README.md", "BLUEPRINT.md",
+    "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH, "governance/policy.toml",
+    "project-state/state.json", "docs/CONSTRUCTION_LOG.md",
+    "docs/LEGACY_REUSE_MANIFEST.md", "docs/PUBLICATION_PROVENANCE.json",
+    "docs/reviews/blueprint-review.json",
+    PROMPT_PATH, "docs/reviews/p0-prompt-audit.json", *ATTESTATIONS,
+    TEMPLATE_PATH, "tools/governance.py", "tests/governance/test_governance.py",
+    ".github/workflows/governance.yml",
+)
+PROTECTED = tuple(sorted(set(ALLOWED) - set(ATTESTATIONS)))
+PERMISSIONS = {
+    "research_only": True,
+    **dict.fromkeys((
+        "external_data_access_allowed", "scheduled_collection_allowed",
+        "llm_research_allowed", "telegram_delivery_allowed",
+        "vps_deployment_allowed", "vps_mutation_allowed", "broker_allowed",
+        "order_execution_allowed", "portfolio_control_allowed",
+    ), False),
+}
+VALIDATION_COMMANDS = [
+    "python -m unittest discover -s tests/governance -p test_*.py -v",
+    "python tools/governance.py check",
+    "python tools/governance.py prompt --verify",
+    "python tools/governance.py bundle",
+    "git diff --check",
+]
+def remote_bootstrap():
+    return {
+        "authorized": True, "owner": "kamrean", "repository": "a-share-market-intelligence-public",
+        "visibility": "public", "baseline": BASELINE, "branch": BRANCH,
+        "authorization_date": "2026-11-12", "authorization_source": "explicit_user_confirmation",
+    }
+
+
+POLICY = {
+    "schema_version": 1, "active_package": "P0", "python_version": "3.12",
+    "merge_tier": "C", "human_merge_required": True, "auto_merge_allowed": False,
+    "direct_merge_allowed": False, "admin_bypass_allowed": False,
+    "remote_creation_authorized": True, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
+    "remote_bootstrap": remote_bootstrap(),
+    "max_repair_cycles": 1, "reviewer_must_be_independent": True,
+    "construction_subagents_allowed": True, "product_runtime_implemented": False,
+    "permissions": PERMISSIONS,
+}
+RECEIPT_PATHS = {
+    "blueprint_review": "docs/reviews/blueprint-review.json",
+    "prompt_audit": "docs/reviews/p0-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    **dict(zip(("bundle", "validation", "reviewer", "release"), ATTESTATIONS)),
+}
+NEXT_GATE = "reviewed_public_remote_bootstrap_then_exact_head_ci_and_human_merge"
+
+
+class Block(ValueError):
+    """An unmet local prerequisite, never an authorization to repair scope."""
+
+
+def require(condition, message):
+    if not condition:
+        raise Block(message)
+
+
+def keys(value, expected, label):
+    require(type(value) is dict, f"{label}: expected an object")
+    missing, unknown = set(expected) - value.keys(), value.keys() - set(expected)
+    require(not missing and not unknown,
+            f"{label}: missing fields {sorted(missing)}; unknown fields {sorted(unknown)}")
+
+
+def exact(value, expected, label):
+    """Equality with exact types: False, 0 and null are never interchangeable."""
+    require(type(value) is type(expected), f"{label}: wrong type")
+    if type(expected) is dict:
+        keys(value, expected, label)
+        for key, item in expected.items():
+            exact(value[key], item, f"{label}.{key}")
+    elif type(expected) is list:
+        require(len(value) == len(expected), f"{label}: wrong length")
+        for index, item in enumerate(expected):
+            exact(value[index], item, f"{label}[{index}]")
+    else:
+        require(value == expected, f"{label}: unexpected value")
+
+
+def nonempty(value, label):
+    require(type(value) is str and bool(value.strip()), f"{label}: expected nonempty text")
+
+
+def string_list(value, label):
+    require(type(value) is list and bool(value), f"{label}: expected nonempty list")
+    for item in value:
+        nonempty(item, label)
+    require(len(value) == len(set(value)), f"{label}: duplicate entries")
+
+
+def validate_contract(contract):
+    pinned = {
+        "schema_version": 1, "package_id": "P0", "stage_ids": [0],
+        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "C",
+        "human_merge_required": True, "auto_merge_allowed": False,
+        "max_repair_cycles": 1, "blueprint_review_required": True,
+        "prompt_audit_required": True, "independent_review_required": True,
+        "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
+        "attestation_paths": list(ATTESTATIONS),
+        "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/",
+                               "secrets/", "tests/product/"],
+        "required_reads": ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
+                           "governance/policy.toml", "project-state/state.json",
+                           "docs/reviews/blueprint-review.json"],
+        "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
+        "remote_bootstrap": remote_bootstrap(),
+    }
+    text_fields = ("title", "objective", "bootstrap_prompt", "next_gate", "rollback")
+    list_fields = ("deliverables", "negative_tests", "receipt_rules")
+    keys(contract, (*pinned, *text_fields, *list_fields), "contract")
+    for key, value in pinned.items():
+        exact(contract[key], value, f"contract.{key}")
+    for key in text_fields:
+        nonempty(contract[key], f"contract.{key}")
+    for key in list_fields:
+        string_list(contract[key], f"contract.{key}")
+    return contract
+
+
+def validate_state(state):
+    pinned = {
+        "schema_version": 1, "active_package": "P0", "active_contract": CONTRACT_PATH,
+        "branch": BRANCH, "baseline": BASELINE,
+        "milestones": {"research_mvp": "not_implemented",
+                       "forward_observation": "not_started", "vps_release": "not_authorized"},
+        "github": {"remote_creation_authorized": True, "owner": "kamrean",
+                   "repository": "a-share-market-intelligence-public",
+                   "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+                   "merge_status": "not_merged"},
+        "receipts": RECEIPT_PATHS,
+        "next_gate": NEXT_GATE + "; no P1 before merged P0 and its own contract",
+    }
+    keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated"),
+         "state")
+    for key, value in pinned.items():
+        exact(state[key], value, f"state.{key}")
+    require(type(state["package_status"]) is str and state["package_status"] in
+            ("building", "implemented_unreleased"), "state: premature/unknown package status")
+    string_list(state["builder_agents"], "state.builder_agents")
+    require(all(agent == agent.strip() for agent in state["builder_agents"]),
+            "state.builder_agents: surrounding whitespace")
+    packages = ("P0", "P1", "P1", "P2", "P2", "P3", "P3", "P4", "P4/P5", "P5")
+    stage0 = "in_progress" if state["package_status"] == "building" else "implemented_unreleased"
+    expected = [{"stage": i, "package": package,
+                 "status": stage0 if i == 0 else "deferred" if i == 9 else "planned"}
+                for i, package in enumerate(packages)]
+    exact(state["stage_registry"], expected, "state.stage_registry")
+    require(type(state["last_updated"]) is str and
+            re.fullmatch(r"\d{4}-\d{2}-\d{2}", state["last_updated"]), "state: invalid date")
+
+
+def safe_path(root, name):
+    require(type(name) is str and bool(name), "unsafe empty path")
+    require(not any(ord(char) < 32 for char in name) and "\\" not in name and ":" not in name,
+            "unsafe path characters")
+    parts = name.split("/")
+    require(all(part not in ("", ".", "..") and not part.endswith((".", " ")) for part in parts),
+            "unsafe path components")
+    root = Path(root).resolve()
+    path = root
+    for part in parts:
+        path /= part
+        require(not path.is_symlink() and not path.is_junction(), f"link/junction forbidden: {name}")
+    require(path.resolve().is_relative_to(root), f"path escapes repository: {name}")
+    return path
+
+
+def normalize_text(text):
+    return text.replace("\r\n", "\n").replace("\r", "\n")
+
+
+def read_text(root, name):
+    path = safe_path(root, name)
+    require(path.is_file(), f"missing required file: {name}")
+    return normalize_text(path.read_bytes().decode("utf-8"))
+
+
+def parse_json(text):
+    def object_pairs(pairs):
+        result = {}
+        for key, value in pairs:
+            require(key not in result, "JSON: duplicate field")
+            result[key] = value
+        return result
+
+    def invalid_constant(_value):
+        raise Block("JSON: non-finite number")
+
+    return json.loads(text, object_pairs_hook=object_pairs, parse_constant=invalid_constant)
+
+
+def sha256(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def render_prompt(contract, template):
+    validate_contract(contract)
+    try:
+        result = string.Template(template).substitute(
+            contract_json=json.dumps(contract, indent=2, sort_keys=True))
+    except (KeyError, ValueError) as error:
+        raise Block("builder template: invalid substitution") from error
+    require("$contract_json" in template or "${contract_json}" in template,
+            "builder template: missing contract substitution")
+    return result.rstrip("\n") + "\n"
+
+
+def git_raw(root, *args, input_bytes=None):
+    environment = os.environ.copy()
+    # Inherited Git routing must not turn an injected root into a different repo.
+    for name in tuple(environment):
+        if name.startswith("GIT_"):
+            environment.pop(name)
+    environment["GIT_OPTIONAL_LOCKS"] = "0"
+    environment["GIT_NO_REPLACE_OBJECTS"] = "1"
+    result = subprocess.run(
+        ["git", "-c", "core.fsmonitor=false", "-C", str(root), *args],
+        input=input_bytes, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        env=environment, check=False)
+    require(result.returncode == 0, f"Git {' '.join(args[:2])}: failed ({result.returncode})")
+    return result.stdout
+
+
+def git(root, *args):
+    return git_raw(root, *args).decode("utf-8")
+
+
+def read_blobs(root, object_ids):
+    object_ids = sorted(set(object_ids))
+    require(all(type(oid) is str and re.fullmatch(r"[0-9a-f]{40}", oid)
+                for oid in object_ids), "index: invalid batch blob ID")
+    if not object_ids:
+        return {}
+    raw = git_raw(root, "cat-file", "--batch",
+                  input_bytes=("\n".join(object_ids) + "\n").encode("ascii"))
+    blobs, offset = {}, 0
+    # Git frames each payload with its byte length, not a line count. This also
+    # preserves multibyte UTF-8 and embedded newlines without a process per file.
+    for oid in object_ids:
+        newline = raw.find(b"\n", offset)
+        require(newline >= offset, "index: truncated batch header")
+        header = raw[offset:newline].split(b" ")
+        require(len(header) == 3 and header[:2] == [oid.encode("ascii"), b"blob"]
+                and header[2].isdigit(), "index: malformed batch header")
+        start = newline + 1
+        end = start + int(header[2])
+        require(end < len(raw) and raw[end:end + 1] == b"\n",
+                "index: truncated batch payload")
+        blobs[oid] = normalize_text(raw[start:end].decode("utf-8"))
+        offset = end + 1
+    require(offset == len(raw), "index: trailing batch output")
+    return blobs
+
+
+def git_paths(output):
+    require(not output or output.endswith("\0"), "Git returned malformed path list")
+    return output[:-1].split("\0") if output else []
+
+
+def harmless_cache(name):
+    return bool(re.fullmatch(
+        r"(?:tools/__pycache__/governance|tests/governance/__pycache__/test_governance)"
+        r"\.cpython-312(?:\.opt-[12])?\.pyc", name))
+
+
+def read_index(root):
+    entries = {}
+    for record in git_paths(git(root, "ls-files", "--stage", "-z")):
+        metadata, separator, name = record.partition("\t")
+        fields = metadata.split()
+        require(separator and len(fields) == 3, "Git returned malformed index entry")
+        mode, oid, stage = fields
+        safe_path(root, name)
+        require(name in ALLOWED, f"out-of-scope path: {name}")
+        require(stage == "0" and name not in entries, f"index: unresolved entry: {name}")
+        require(mode in ("100644", "100755"), f"index: non-regular file: {name}")
+        require(re.fullmatch(r"[0-9a-f]{40}", oid), f"index: invalid blob ID: {name}")
+        entries[name] = oid
+    return entries
+
+
+def inspect_git(root, *, ci=False, contents=None, complete_index=False):
+    root = Path(root).resolve()
+    require(Path(git(root, "rev-parse", "--show-toplevel").strip()).resolve() == root,
+            "Git root differs from requested root")
+    exact(git(root, "rev-parse", "--verify", f"{BASELINE}^{{commit}}").strip(), BASELINE,
+          "Git baseline")
+    git(root, "merge-base", "--is-ancestor", BASELINE, "HEAD")
+    if not ci:
+        exact(git(root, "symbolic-ref", "--quiet", "--short", "HEAD").strip(), BRANCH,
+              "Git branch")
+    diff_flags = ("--no-ext-diff", "--no-textconv", "--no-renames", "--name-only", "-z")
+    committed = git_paths(git(root, "diff", *diff_flags, BASELINE, "HEAD", "--"))
+    staged = git_paths(git(root, "diff", *diff_flags, "--cached", "--ita-invisible-in-index", "HEAD", "--"))
+    removed = git_paths(git(root, "diff", *diff_flags, "--cached", "--ita-invisible-in-index",
+                           "--diff-filter=D", "HEAD", "--"))
+    working = git_paths(git(root, "diff", *diff_flags, "--"))
+    entries = read_index(root)
+    tracked = list(entries)
+    head = git_paths(git(root, "ls-tree", "-r", "--name-only", "-z", "HEAD", "--"))
+    untracked = git_paths(git(root, "ls-files", "--others", "--exclude-standard", "-z"))
+    ignored = git_paths(git(root, "ls-files", "--others", "--ignored", "--exclude-standard", "-z"))
+    for name in set(committed + staged + working + tracked + head + untracked + ignored):
+        safe_path(root, name)
+        if name in ignored and harmless_cache(name):
+            continue
+        require(name in ALLOWED, f"out-of-scope path: {name}")
+    required = set(ALLOWED) if complete_index else set(head)
+    missing = (required - entries.keys()) | set(removed)
+    require(not missing, f"index: missing commit candidate files: {', '.join(sorted(missing))}")
+    indexed_blobs = read_blobs(root, entries.values())
+    for name, oid in sorted(entries.items()):
+        # Intent-to-add entries appear in ls-files but are omitted from a commit.
+        require(name in head or name in staged, f"index: intent-to-add entry: {name}")
+        indexed = indexed_blobs[oid]
+        scan_secrets(f"index:{name}", indexed)
+        if contents is None:
+            working_text = read_text(root, name)
+        else:
+            require(name in contents, f"index: missing working input: {name}")
+            working_text = contents[name]
+        require(indexed == working_text, f"index/worktree mismatch: {name}; stage the final working content")
+    # Git can omit an empty directory junction. Inspect links before descending,
+    # excluding only Git's own metadata, which is not a construction input.
+    directories = [root]
+    while directories:
+        directory = directories.pop()
+        for path in directory.iterdir():
+            if directory == root and path.name == ".git":
+                continue
+            safe_path(root, path.relative_to(root).as_posix())
+            if path.is_dir():
+                directories.append(path)
+    return sorted(set(committed + staged + working + untracked +
+                      [name for name in ignored if not harmless_cache(name)]))
+
+
+SECRET_PATTERNS = (
+    re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
+    re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,})\b"),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}\b"),
+    re.compile(r"\b\d{8,12}:[A-Za-z0-9_-]{30,}\b"),
+    re.compile(r"(?i)\b(?:api[_-]?key|access[_-]?token|auth[_-]?token|password|"
+               r"client[_-]?secret|telegram[_-]?bot[_-]?token)[\"']?\s*[:=]\s*"
+               r"[\"']?([A-Za-z0-9_./+=-]{12,})[\"']?(?=\s|[,;}]|$)"),
+)
+
+
+def scan_secrets(name, text):
+    for pattern in SECRET_PATTERNS:
+        require(pattern.search(text) is None, f"possible secret in {name}")
+
+
+def validate_prerequisite(receipt, role, names, contents):
+    require(type(receipt) is dict, f"{role}: expected receipt object")
+    for key, value in {"schema_version": 1, "role": role, "verdict": "PASS",
+                       "read_only": True, "independent": True}.items():
+        exact(receipt.get(key), value, f"{role}.{key}")
+    nonempty(receipt.get("agent_id"), f"{role}.agent_id")
+    expected = {name: sha256(contents[name]) for name in names}
+    exact(receipt.get("files"), expected, f"{role}.files")
+    if role == "blueprint_reviewer":
+        exact(receipt.get("baseline"), BASELINE, f"{role}.baseline")
+        cycles = receipt.get("repair_cycles")
+        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: repair bound")
+    else:
+        exact(receipt.get("findings"), [], f"{role}.findings")
+
+
+def check(root=ROOT, *, ci=False, complete_index=False):
+    root = Path(root).resolve()
+    contents = {name: read_text(root, name) for name in PROTECTED}
+    contract = validate_contract(tomllib.loads(contents[CONTRACT_PATH]))
+    exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "policy")
+    state = parse_json(contents["project-state/state.json"])
+    validate_state(state)
+    exact(contents[PROMPT_PATH], render_prompt(contract, contents[TEMPLATE_PATH]), "builder prompt")
+    validate_prerequisite(parse_json(contents[RECEIPT_PATHS["blueprint_review"]]),
+                          "blueprint_reviewer", ("BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md"),
+                          contents)
+    validate_prerequisite(parse_json(contents[RECEIPT_PATHS["prompt_audit"]]), "prompt_auditor",
+                          (CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH), contents)
+    for name in ATTESTATIONS:
+        path = safe_path(root, name)
+        if path.exists():
+            contents[name] = read_text(root, name)
+    for name, text in contents.items():
+        scan_secrets(name, text)
+    return contract, state, contents, inspect_git(root, ci=ci, contents=contents,
+                                                 complete_index=complete_index)
+
+
+def snapshot(contents):
+    aggregate = hashlib.sha256()
+    hashes = {}
+    for name in PROTECTED:
+        content = contents[name].encode("utf-8")
+        hashes[name] = hashlib.sha256(content).hexdigest()
+        # Length framing makes even embedded NULs unambiguous; Git HEAD is not an input.
+        aggregate.update(name.encode("utf-8") + b"\0" + str(len(content)).encode("ascii") +
+                         b"\0" + content + b"\0")
+    return aggregate.hexdigest(), hashes
+
+
+def make_bundle(checked):
+    contract, _state, contents, changed = checked
+    snapshot_id, hashes = snapshot(contents)
+    return {"schema_version": 1, "package_id": "P0", "baseline": contract["baseline"],
+            "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
+            "protected_file_hashes": hashes, "changed_paths": changed,
+            "attestation_paths": list(ATTESTATIONS), "scope_result": "PASS"}
+
+
+def bundle(root=ROOT, *, ci=False):
+    return make_bundle(check(root, ci=ci))
+
+
+def validate_attestations(checked, current):
+    contract, state, contents, _changed = checked
+    require(state["package_status"] == "implemented_unreleased", "gate: state is still building")
+    receipts = []
+    for name in ATTESTATIONS:
+        require(name in contents, f"missing required receipt: {name}")
+        receipts.append(parse_json(contents[name]))
+    saved, validation, review, release = receipts
+    keys(saved, current, "bundle receipt")
+    # Paths may move from untracked to committed after review; neither status nor HEAD is approval.
+    for key, value in current.items():
+        if key != "changed_paths":
+            exact(saved[key], value, f"bundle receipt.{key}")
+    require(type(saved["changed_paths"]) is list, "bundle receipt.changed_paths: expected list")
+    require(all(type(name) is str and name in ALLOWED for name in saved["changed_paths"]),
+            "bundle receipt.changed_paths: out of scope")
+    exact(saved["changed_paths"], sorted(set(saved["changed_paths"])), "bundle receipt.changed_paths")
+    common = {"schema_version": 1, "snapshot_id": current["snapshot_id"]}
+    exact(validation, {**common, "role": "builder_validation", "verdict": "PASS",
+                       "commands": [{"command": command, "exit_code": 0}
+                                    for command in contract["required_validation"]],
+                       "python_version": "3.12.10", "remote_ci": "NOT_RUN_AT_SNAPSHOT"},
+          "validation receipt")
+    keys(review, (*common, "role", "verdict", "agent_id", "read_only", "findings", "repair_cycles"),
+         "review receipt")
+    for key, value in {**common, "role": "reviewer", "verdict": "PASS", "read_only": True,
+                       "findings": []}.items():
+        exact(review[key], value, f"review receipt.{key}")
+    require(type(review["repair_cycles"]) is int and 0 <= review["repair_cycles"] <= 1,
+            "review receipt: repair bound")
+    keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
+                   "merge_status", "vps_sync", "next_gate"), "release receipt")
+    for key, value in {**common, "role": "release_checker", "read_only": True,
+                       "verdict": "LOCAL_READY_FOR_REMOTE_BOOTSTRAP", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+                       "pr_url": None, "merge_status": "not_merged", "vps_sync": "not_requested",
+                       "next_gate": NEXT_GATE}.items():
+        exact(release[key], value, f"release receipt.{key}")
+    for role, receipt in (("reviewer", review), ("release_checker", release)):
+        nonempty(receipt["agent_id"], f"{role}.agent_id")
+        require(receipt["agent_id"] == receipt["agent_id"].strip() and
+                receipt["agent_id"] not in state["builder_agents"], f"{role}: builder self-review")
+    # Identity strings bind records, not authenticity. Actual independence needs external audit.
+
+
+def gate(root=ROOT, *, ci=False):
+    checked = check(root, ci=ci, complete_index=True)
+    validate_attestations(checked, make_bundle(checked))
+    return "LOCAL_READY_FOR_REMOTE_BOOTSTRAP"
+
+
+def main(argv=None, *, root=ROOT):
+    parser = argparse.ArgumentParser(description=__doc__)
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    for command in ("check", "prompt", "bundle", "gate"):
+        subparser = subparsers.add_parser(command)
+        subparser.add_argument("--ci", action="store_true",
+                               help="skip local branch identity only; retain baseline/scope/permission checks")
+        if command == "prompt":
+            subparser.add_argument("--verify", action="store_true")
+    args = parser.parse_args(argv)
+    try:
+        if args.command == "prompt":
+            contract = validate_contract(tomllib.loads(read_text(root, CONTRACT_PATH)))
+            rendered = render_prompt(contract, read_text(root, TEMPLATE_PATH))
+            if args.verify:
+                exact(read_text(root, PROMPT_PATH), rendered, "builder prompt")
+                print("PASS")
+            else:
+                print(rendered, end="")
+        elif args.command == "check":
+            check(root, ci=args.ci)
+            print("PASS (CI skips local branch identity only)" if args.ci else "PASS")
+        elif args.command == "bundle":
+            print(json.dumps(bundle(root, ci=args.ci), indent=2, sort_keys=True))
+        else:
+            print(gate(root, ci=args.ci))
+        return 0
+    except (ValueError, OSError, RuntimeError, subprocess.SubprocessError) as error:
+        print(f"BLOCK: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

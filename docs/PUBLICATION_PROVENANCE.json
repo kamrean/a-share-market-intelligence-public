@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "historical_private_source_provenance",
+  "current_public_approval": false,
+  "private_git_history_imported": false,
+  "source": {
+    "repository": "kamrean/a-share-market-intelligence",
+    "visibility": "private",
+    "pull_request": 1,
+    "merge_commit": "b4754fc1a8bd30b93002c9be338e103897b1b71e",
+    "merged_at": "2026-11-12T15:05:21Z",
+    "merged_by": "kamrean",
+    "reviewed_head": "32ed475eaf3daeefcfb23b6a3594bbfb9dd5a8e6"
+  },
+  "historical_validation": {
+    "local_tests": 50,
+    "result": "PASS",
+    "elapsed_seconds": 231.205,
+    "ci_run": 43242445201,
+    "ci_url": "https://github.com/kamrean/a-share-market-intelligence/actions/runs/43242445201",
+    "jobs": [
+      {
+        "os": "windows-2022",
+        "id": 131266202258,
+        "result": "PASS",
+        "tests": 50,
+        "skipped": 0
+      },
+      {
+        "os": "ubuntu-24.04",
+        "id": 131266202420,
+        "result": "PASS",
+        "skipped": 1,
+        "skip_reason": "Windows-only real junction regression"
+      }
+    ]
+  },
+  "historical_review": {
+    "snapshot_id": "7013512523a00a1ff5b2e1fa7e15b3d8a15375813bd20d580e0db16bca19cd3e",
+    "prompt_auditor": "01a1d022-61c5-7912-9841-5fd5f2b5a86f",
+    "reviewer": "01a1d02b-0579-7c32-a65e-cf4e1df8bd4d",
+    "release_checker": "01a1d022-61c5-7912-9841-5fd5f2b5a86f",
+    "result": "PASS for source head only; not an approval of the new public snapshot"
+  },
+  "historical_failure": {
+    "ci_run": 43239408113,
+    "head": "7e1cf1251a4ed0dcb307243fb9f9359f614ed80f",
+    "test": "test_empty_directory_junction_cannot_hide_from_git",
+    "cause": "Mock compared an unresolved expected path against the guard's canonical path.",
+    "correction": "User-authorized extra bounded R1 cycle: normalize expected path, cover equivalent root spellings and add a real Windows junction regression. Production guard and workflow unchanged.",
+    "prior_prompt_repair": "An earlier prompt R0 cycle remains in the private source history; not erased or treated as unused."
+  },
+  "publication": {
+    "repository": "kamrean/a-share-market-intelligence-public",
+    "baseline": "2f4539567980cedc28b605c2c27a84ed5fcad96f",
+    "method": "Fresh independent Git root plus selected sanitized current files; no clone, fork or mirror.",
+    "fresh_evidence": "docs/reviews/p0-*.json and exact-head public PR checks",
+    "historical_access": "Source links require private-repository access. Sanitized historical summaries are not independently reproducible public CI. Public acceptance uses new reviews and runs.",
+    "license": "No new license grant is made by this import."
+  }
+}
