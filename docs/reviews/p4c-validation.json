@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "cbaad2a0a0c0a48ebdb6b948ec744f7ab574308201fc0dd9225eaf61e74fb7b3",
+  "role": "builder_validation",
+  "verdict": "PASS",
+  "commands": [
+    {
+      "command": "python -m unittest discover -s tests/governance -p test_*.py -v",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests/product -p test_*.py -v",
+      "exit_code": 0
+    },
+    {
+      "command": "python tools/governance.py check",
+      "exit_code": 0
+    },
+    {
+      "command": "python tools/governance.py prompt --verify",
+      "exit_code": 0
+    },
+    {
+      "command": "python tools/governance.py bundle",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "python_version": "3.12.10",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT"
+}

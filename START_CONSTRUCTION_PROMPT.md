@@ -2,56 +2,46 @@
 
 Work in this public repository. Read AGENTS.md, BLUEPRINT.md,
 project-state/state.json, governance/policy.toml,
-contracts/p4_live_integration_entry.toml, docs/LIVE_INTEGRATION_PLAN.md,
-docs/evidence/live-integration-prerequisites.json and docs/reviews/p4-merge.json.
-Blueprint remains v1. Do not bulk-read or mutate archived/private sources.
+contracts/p4c_offline_workflow.toml, docs/OFFLINE_WORKFLOW_PLAN.md,
+docs/evidence/live-integration-prerequisites.json and docs/reviews/p4l-merge.json.
+Do not bulk-read or mutate archived/private sources. Blueprint remains v1.
 
 ## Current Package
 
-P0-P4 are human-merged in PRs #1-#5. P4 merge evidence records actual tested head,
-merge commit and successful PR/main CI. Stage1/3-7 retain live integration gaps;
-Stage8 has a merged offline subset, not MVP/observation acceptance.
-
-P4L on stage7-live-integration-entry is a governance-only entry for the next
-grouped live-integration work package. It updates planning/state/checker bindings,
-not product runtime. Existing research/publication accepts fixed synthetic data
-only. Keys alone do not make that path a live integration.
+P0-P4L are human-merged in PRs #1-#6. P4L main/PR CI passed. Prior frozen receipts
+remain historical. The user requests code completion before final model hookup.
+P4C on stage7-offline-workflow implements configurable offline scenario-to-report
+operations, persistent budgets/ledger and restart-safe local commands in one PR.
+It does not mark source/model/private delivery accepted, and is not full MVP.
 
 ## Work Sequence
 
-1. Verify clean synced main, predecessor human merge and successful CI.
-2. Freeze exact entry/contract/policy/plan/prerequisites, render complete prompt,
-   and obtain actual independent entrypoint and Prompt Auditor PASS.
-3. Checker Builder owns tools/governance.py, tests/governance/test_governance.py
-   and .github/workflows/governance.yml. Coordinator owns docs/state/log/receipts.
-   Preserve all95 immutable paths, including every P0-P4 product artifact.
-4. Run both offline suites, scope/state/prompt/bundle/diff checks. No new demo,
-   provider payload, credential reads, product requests or private test send.
-5. Freeze protected content. Obtain independent read-only Reviewer and separate
-   Release Checker. One R0/R1 repair/re-review; retain original BLOCK.
-   Second/unknown/R2+ findings require human escalation.
-6. Attach only four current attestations. Inspect privacy/identity and exact
-   named staging/index/worktree, then commit/push/PR.
-7. Wait for actual exact-head Ubuntu/Windows CI and independent remote release.
-   Preserve app-bound checks, administrator enforcement and auto-merge off.
-   Stop AWAITING_HUMAN_MERGE; no direct merge or bypass.
+1. Verify clean synced main, predecessor human merge and successful exact-head CI.
+2. Amend exact contract/policy/plan and this entry; render the complete prompt.
+   Obtain actual independent entrypoint and Prompt Auditor PASS before code edits.
+3. Builders own disjoint exact paths; preserve original240 product tests and all
+   historical contracts/receipts/demos. No external product calls or credentials.
+4. Run both offline suites and scope/state/prompt/bundle/diff checks. Exercise
+   variable cases, malformed evidence, repeated task/restart, interruption,
+   failed/ambiguous fake delivery, corrections, quotas and unsafe paths.
+5. Freeze all decision inputs and construction log. Independent read-only
+   Reviewer, then separate Release Checker. One R0/R1 repair/re-review; preserve
+   initial findings. Second/unknown/R2+ BLOCK requires human escalation.
+6. Attach only four current attestations, inspect privacy/identity and exact
+   staged/index/worktree, commit/push/PR. Wait for exact-head Ubuntu/Windows CI
+   and separate remote release. Human merge only; auto-merge remains disabled.
 
 ## Next Gate
 
-Human merge of this entry does not enable requests. Resolve concrete free-source
-rights/entitlements, chosen model/budgets and intended private test destination.
-Then amend and independently audit one grouped implementation contract in its
-implementation PR before product edits. Do not split per source/agent/evidence.
-Separate release approval and current valid authorization precede external
-dispatch; offline clients alone do not satisfy live acceptance.
+Stop AWAITING_HUMAN_MERGE. Final grouped integration will select permitted free
+sources and a free model, and bind the user-designated own private Telegram chat
+through local secret configuration. Bot existence is user-reported, not a tested
+credential or delivery receipt. Do not request secrets in chat or commit them.
+No model API or paid call is needed to complete this offline implementation.
 
 All effective external permissions remain false. Five live benchmarks0/5,
-genuine model and private delivery unverified, research_mvp not_implemented,
-forward observation not_started and VPS not_authorized. No readiness PASS,
-production Telegram or Stage9 advancement is implied by a governance PASS.
-Unknown account state means not established, not proof of no account.
-Never ask for secret values in public chat or put them in Git.
-
-Report actual branch/commit/PR, audits/tests/review/release/CI, merge/protection,
-VPS, external prerequisites and next gate. Frozen NOT_RUN_AT_SNAPSHOT is
-historical; later CI/merge belongs on PR and the next package's merge receipt.
+model/private delivery unverified, research_mvp not_implemented, observation
+not_started and VPS not_authorized. Preserve original genuine acceptance gates;
+offline engineering can pass without claiming real research or operational PASS.
+Report branch/commit/PR, audits/tests/review/release/CI, merge/protection, VPS,
+remaining prerequisites and next gate. No direct merge or administrative bypass.

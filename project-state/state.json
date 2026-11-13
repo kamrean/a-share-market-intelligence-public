@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
-  "active_package": "P4L",
-  "active_contract": "contracts/p4_live_integration_entry.toml",
-  "branch": "stage7-live-integration-entry",
-  "baseline": "a95a90d16c98d09e3adc678a79038057676cff05",
-  "package_status": "contract_prepared_unreleased",
+  "active_package": "P4C",
+  "active_contract": "contracts/p4c_offline_workflow.toml",
+  "branch": "stage7-offline-workflow",
+  "baseline": "8ebfa0994436c05234336105c424cbd823b2af0b",
+  "package_status": "implemented_unreleased",
   "builder_agents": [
     "coordinator",
-    "01a1d54b-1a17-7600-a51c-4b90d5916acf",
-    "01a1d55a-2b51-7683-b878-db168b519b8d"
+    "01a1d5a5-9105-7eb0-81b3-e81e5eb5f381",
+    "01a1d5a5-925e-75c2-82cf-818cefee3ddf",
+    "01a1d5bf-b063-7c92-bd37-062e9eddee77"
   ],
   "stage_registry": [
     {
@@ -69,13 +70,13 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P4",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/5",
-    "merge_commit": "a95a90d16c98d09e3adc678a79038057676cff05",
-    "merged_at": "2026-11-13T14:20:51Z",
-    "tested_head": "332128840902d78f84fbb05e4794f72d7b8b2a77",
-    "pr_ci_run": 43439268823,
-    "merge_ci_run": 43441856767,
+    "package_id": "P4L",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/6",
+    "merge_commit": "8ebfa0994436c05234336105c424cbd823b2af0b",
+    "merged_at": "2026-11-13T15:39:08Z",
+    "tested_head": "02fe397651e17f3485a7d282b861cc6007fbce49",
+    "pr_ci_run": 43450010910,
+    "merge_ci_run": 43454745770,
     "ci_status": "PASS",
     "merge_status": "merged"
   },
@@ -88,19 +89,19 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p4l-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4l-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p4l-builder-prompt.md",
-    "bundle": "docs/reviews/p4l-bundle.json",
-    "validation": "docs/reviews/p4l-validation.json",
-    "reviewer": "docs/reviews/p4l-review.json",
-    "release": "docs/reviews/p4l-release.json"
+    "blueprint_review": "docs/reviews/p4c-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4c-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p4c-builder-prompt.md",
+    "bundle": "docs/reviews/p4c-bundle.json",
+    "validation": "docs/reviews/p4c-validation.json",
+    "reviewer": "docs/reviews/p4c-review.json",
+    "release": "docs/reviews/p4c-release.json"
   },
-  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; resolve external prerequisites and audit one grouped live implementation amendment; no dispatch or VPS",
-  "last_updated": "2026-11-13",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; select and audit final free model/source/private delivery integration; no dispatch or VPS",
+  "last_updated": "2026-11-14",
   "live_integration": {
-    "entry_status": "contract_prepared_unreleased",
-    "runtime_implementation": "not_started",
+    "entry_status": "human_merged",
+    "runtime_implementation": "offline_core_implemented_live_deferred",
     "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
     "prerequisite_register": "docs/evidence/live-integration-prerequisites.json",
     "permissions_enabled": false

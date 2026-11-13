@@ -10,19 +10,21 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P4 are human-merged in this public repository. Stage1 retains source gaps;
+P0-P4L are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
 simulated delivery safeguards. It does not complete the research MVP, full
 Stage8 or verify live model/Telegram integration.
 
-Current P4L prepares a grouped live-integration contract and acceptance plan.
-This entry changes governance only; no product adapter or external permission
-is enabled. The [integration plan](docs/LIVE_INTEGRATION_PLAN.md) and
+Current P4C implements a configurable offline workflow before final model hookup.
+It connects variable authored scenarios, bounded research, local reports and
+persistent task/ledger operations. No external permission is enabled.
+The [offline plan](docs/OFFLINE_WORKFLOW_PLAN.md), historical
+[live integration plan](docs/LIVE_INTEGRATION_PLAN.md) and
 [prerequisite register](docs/evidence/live-integration-prerequisites.json)
 separate free-source rights, implementation, actual observations and account
 choices. Unknown account status means not established, not proof of absence.
-The following implementation PR must pin those choices and its audited scope.
+Final operational integration must pin those choices and its audited scope.
 See [Blueprint v1](BLUEPRINT.md), [P4 methods](docs/P4_METHODS.md) and
 [canonical state](project-state/state.json) for scope and lifecycle status.
 
@@ -36,7 +38,7 @@ The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
 P1's original official Federal Reserve press observation remains historical.
-Active P4L policy disables all external retrieval, including the old probe command;
+Active P4C policy disables all external retrieval, including the old probe command;
 existing runtime guards deny dispatch before network access. Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
 Scheduling, live models, real Telegram, trading and VPS remain outside P4.
@@ -48,7 +50,8 @@ receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json
 [P1 merge evidence](docs/reviews/p1-merge.json) and
 [P2 merge evidence](docs/reviews/p2-merge.json) and
 [P3 merge evidence](docs/reviews/p3-merge.json) and
-[P4 merge evidence](docs/reviews/p4-merge.json) record actual public closeout.
+[P4 merge evidence](docs/reviews/p4-merge.json) and
+[P4L merge evidence](docs/reviews/p4l-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -57,12 +60,65 @@ on the public pull request. Future live integration and MVP acceptance require
 this package's human merge and their own reviewed scope; no later external work
 is authorized implicitly.
 
+## Configurable Offline Workflow
+
+Python 3.12 and the standard library are sufficient; no model account or key is
+needed. Run all commands from the checkout. Replace angle-bracket placeholders
+with absolute paths outside every Git checkout. The workspace is a directory;
+case/report arguments are files. Existing export targets are never overwritten.
+
+```text
+python -m market_intelligence.workflow example --output <absolute-case.json>
+python -m market_intelligence.workflow validate --input <absolute-case.json>
+python -m market_intelligence.workflow run --input <absolute-case.json> --workspace <absolute-workspace-directory> --task-key example-1
+python -m market_intelligence.workflow status --workspace <absolute-workspace-directory>
+python -m market_intelligence.workflow export --workspace <absolute-workspace-directory> --report-id <report-id> --output <absolute-report.txt>
+python -m market_intelligence.workflow correct --workspace <absolute-workspace-directory> --report-id <report-id> --reason "Clarification of the offline scenario scope."
+```
+
+The case contains `payload`, `methods`, `entities`, `research_config`, `responses`
+and `publication_config`, with an explicit synthetic label and schema version.
+Use the exported example as the schema reference. Changes to facts require their
+content hashes and claim evidence references to match; changed claims need new
+exact-content reviewer digests. Invalid or unsupported claims are rejected, not
+silently repaired. Research responses are authored scripts, not actual AI output.
+Inputs may vary within the bounded schema; the old fixed demos remain unchanged.
+
+`run` persists task intent before work and uses the same workspace's budget and
+append-only publication ledger. Repeating a completed task key with identical
+input returns its original verified report without new research. Changed intent
+fails. Research/publication configurations are pinned per workspace. Do not use
+new workspaces to evade quotas; budgets are not global across separate stores.
+There are at most32 tasks and16 MiB of workflow state, plus separately bounded
+budget/report stores. Input and individual stored/exported records are bounded.
+
+`status` reads recorded task state without creating or resetting stores. It does
+not claim current ledger health or remote delivery; `export` revalidates the
+current ledger. Interrupted reservations and blocked tasks remain visible and
+are not automatically retried. Missing/corrupt stores require investigation,
+not deletion, implicit recreation or budget refunds. Explanatory corrections
+append to the current lineage leaf; they cannot rewrite factual claims.
+Correction notes are selected from fixed non-factual explanations: offline scope,
+authored responses versus model output, or simulated acknowledgements versus
+real delivery. Arbitrary replacement facts in a correction note are rejected.
+
+Optional explicit `simulate-delivery --workspace <absolute-workspace-directory>
+--report-id <report-id>` exercises the local fake transport only. The default
+run does not dispatch, and this simulation never contacts Telegram. Failed or
+unknown simulated outcomes persist across restarts and prevent blind retries.
+
+This is engineering verification, not live research acceptance. Model hookup
+is intentionally last, with zero authorized paid budget. Free sources still
+need compatible rights and genuine observations; private Telegram credentials
+and actual send remain unverified. Never place credentials in a case or Git.
+
 ## Local Reports and Delivery Safeguards
 
 P4 connects the fixed authored P3 synthetic demo to three ordered report parts:
 news/events, benchmarks/flow/turnover, and sectors/approved impact claims.
-The publication boundary recomputes the original demo; it currently accepts
-that fixed dataset only, not arbitrary live model output. Every report preserves
+The historical P4 publication boundary recomputes the original fixed demo. P4C
+also accepts its separate strictly verified configurable synthetic envelope,
+not arbitrary live model output. Every report preserves
 evidence, historical as_of, gaps, limitations and research fingerprints.
 
 A separate external SQLite ledger stores immutable research before simulated
@@ -190,7 +246,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage7-live-integration-entry`. The gate checks
+The active construction branch is `stage7-offline-workflow`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

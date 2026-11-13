@@ -1,4 +1,4 @@
-"""Fixed authored P3 publication only; no live publication authorization."""
+"""Fixed P3 and explicit authored-scenario publication; no live authorization."""
 
 from functools import lru_cache
 from pathlib import Path
@@ -32,6 +32,17 @@ LIMITATIONS = [
 GATES = {"stage7": "partial_offline_engineering", "stage8": "partial_offline_quality",
          "live_market_coverage": "0/5", "real_model": "unverified", "real_telegram": "unverified",
          "research_mvp": "not_implemented", "forward_observation": "not_started", "vps": "not_authorized"}
+SCENARIO_LABEL = "SYNTHETIC SCENARIO PUBLICATION; AUTHORED RESPONSES; NOT REAL DELIVERY"
+SCENARIO_CORRECTION_REASONS = frozenset({
+    "Clarification of the offline scenario scope.",
+    "Clarification: authored responses are not actual model output.",
+    "Clarification: simulated acknowledgements are not real delivery.",
+})
+SCENARIO_LIMITATIONS = [
+    "Configurable authored synthetic scenario; historical as_of is not a live observation.",
+    *LIMITATIONS[1:],
+    "Correction reasons are explanatory notes only; verified scenario facts remain unchanged.",
+]
 
 
 def validate_config(config):
@@ -90,6 +101,13 @@ def _verified_source(encoded, assets):
 
 
 def verify_source(sample):
+    from . import scenario
+    # A caller cannot opt out of fixed-asset checks using an incidental case field.
+    if type(sample) is dict and "schema" in sample:
+        if (sample["schema"] != scenario.SCHEMA or type(sample.get("schema_version")) is not int
+                or sample["schema_version"] != 1):
+            raise Invalid("unsupported publication source schema")
+        return scenario.verify_execution(sample)
     try:
         encoded = canonical(sample)
         if len(encoded) > 240000:
@@ -116,7 +134,8 @@ def _sections(source):
     bundle = source["bundle"]["content"]
     results = bundle["results"]
     refs = {r["fact_id"]: r for r in bundle["references"]}
-    payload, _, _ = load_inputs()
+    variable = "schema" in source
+    payload = source["case"]["payload"] if variable else load_inputs()[0]
     facts = {digest(row): row["payload"] for row in payload["facts"]}
     bars = sorted(i for i in refs if facts[i]["kind"] == "bar")
     sections = []
@@ -133,8 +152,15 @@ def _sections(source):
     news = [("sourced_news", row | {"titles": sorted({facts[i]["title"] for i in row["member_ids"]})},
              row["member_ids"]) for row in results["news"]]
     events = [("event_state_not_causal_claim", row, _references(row, refs)) for row in results["events"]["items"]]
+    if variable and results["events"]["empty_day"]:
+        empty_refs = sorted(i for i in refs if facts[i]["kind"] == "event_day")
+        evidence = set(empty_refs)
+        for identity in empty_refs:
+            evidence.update(facts[identity]["news_refs"])
+        events.append(("empty_scenario_events", {"empty": True}, evidence))
     section("1. Sourced news and upcoming events", news + events or [
-        ("empty_fixed_day", {"news": "none", "events": "none", "live_discovery": "unverified"}, [])])
+        ("empty_scenario_day" if variable else "empty_fixed_day",
+         {"news": "none", "events": "none", "live_discovery": "unverified"}, [])])
     market = results["market"]
     section("2. Benchmarks, breadth, turnover and unavailable flow", [
         ("benchmark", row, [i for i in bars if facts[i]["symbol"] == row["symbol"]])
@@ -169,7 +195,8 @@ def split_text(value, limit):
 
 
 def _header(report_id, content, part):
-    return (LABEL + "\nreport_id=" + report_id + " part=" + str(part) + "/3\n"
+    label = SCENARIO_LABEL if "schema" in content["source"] else LABEL
+    return (label + "\nreport_id=" + report_id + " part=" + str(part) + "/3\n"
             "mode=synthetic_test as_of=" + content["as_of"] + "\n"
             "kind=" + content["kind"] + " supersedes=" + str(content["supersedes"]) + "\n"
             "correction_reason=" + str(content["correction_reason"]) + "\n"
@@ -220,6 +247,10 @@ def _item_text(item):
                 "Invalidation: " + data["invalidation"]]
     if kind == "empty_fixed_day":
         return ["No sourced news or upcoming events in this fixed input; live discovery remains unverified."]
+    if kind == "empty_scenario_day":
+        return ["No sourced news or upcoming events in this synthetic scenario; live discovery remains unverified."]
+    if kind == "empty_scenario_events":
+        return ["Sourced synthetic empty event day; no upcoming events asserted; live discovery remains unverified."]
     raise Invalid("unknown report item kind")
 
 
@@ -259,8 +290,15 @@ def _render(content, config):
 
 
 def build_report(sample, config=None, *, supersedes=None, reason=None):
-    config = validate_config(load_config() if config is None else config)
     source = verify_source(sample)
+    variable = "schema" in source
+    if variable:
+        pinned = source["case"]["publication_config"]
+        config = validate_config(pinned if config is None else config)
+        if canonical(config) != canonical(pinned):
+            raise Invalid("scenario publication configuration mismatch")
+    else:
+        config = validate_config(load_config() if config is None else config)
     if supersedes is None:
         if reason is not None:
             raise Invalid("ordinary report cannot carry correction reason")
@@ -269,22 +307,36 @@ def build_report(sample, config=None, *, supersedes=None, reason=None):
         fingerprint(supersedes)
         research.safe_text(reason, "correction reason", 500)
         # This package permits explanatory clarification, not new factual claims.
-        if reason != CORRECTION_REASON:
+        if variable:
+            from .scenario import _line
+            _line(reason, "explanatory correction reason", 300)
+            if reason not in SCENARIO_CORRECTION_REASONS:
+                raise Invalid("unsupported scenario explanatory correction")
+        elif reason != CORRECTION_REASON:
             raise Invalid("unsupported explanatory correction")
         kind = "correction"
-    content = {"schema_version": 1, "version": VERSION, "config_id": digest(config),
+    gaps = list(SCENARIO_LIMITATIONS if variable else LIMITATIONS)
+    if variable:
+        gaps.extend("Synthetic domain " + name + ": " + domain["status"] + "; " + ", ".join(domain["reasons"])
+                    for name, domain in sorted(source["bundle"]["content"]["domains"].items())
+                    if domain["status"] != "PASS")
+    content = {"schema_version": 1, "version": source["version"] if variable else VERSION, "config_id": digest(config),
                "mode": "synthetic_test", "as_of": source["research"]["as_of"],
-               "dataset_id": digest(research.deterministic_content(source)),
+               "dataset_id": source["case_id"] if variable else digest(research.deterministic_content(source)),
                "research_id": digest(source["research"]), "source": source,
                "kind": kind, "supersedes": supersedes, "correction_reason": reason,
-               "gaps": list(LIMITATIONS), "sections": _sections(source)}
+               "gaps": gaps, "sections": _sections(source)}
     return _render(content, config)
 
 
 def verify_report(report, config=None):
-    config = validate_config(load_config() if config is None else config)
     try:
         exact(report, {"report_id", "content", "parts", "chunks"})
+        source = report["content"]["source"]
+        if config is None and type(source) is dict and "schema" in source:
+            source = verify_source(source)
+            config = source["case"]["publication_config"]
+        config = validate_config(load_config() if config is None else config)
         if len(canonical(report)) > config["max_report_bytes"]:
             raise Invalid("report size bound")
         c = report["content"]
