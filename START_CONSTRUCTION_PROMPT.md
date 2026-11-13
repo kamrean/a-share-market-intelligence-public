@@ -1,74 +1,63 @@
 # Construction Entrypoint
 
-Work in this repository, not the archived ETF project or private publication source.
-Read AGENTS.md, BLUEPRINT.md, project-state/state.json, the active contract and
-governance/policy.toml. Read only the named source/design/review records needed
-for the active package. The blueprint remains v1.
+Work in this public repository, not the archived ETF or private publication source.
+Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml,
+contracts/p2_intelligence.toml and docs/P2_METHODS.md. Blueprint remains v1.
 
 ## Current Package
 
-P0 was human-merged in public PR #1. Its actual merge and successful PR/merge CI
-are recorded in docs/reviews/p0-merge.json. Old P0 NOT_RUN_AT_SNAPSHOT receipts
-describe historical pre-publication observations; do not rewrite them.
+P0 and P1 were human-merged in public PRs #1 and #2. Actual P1 merge/head/CI
+evidence is in docs/reviews/p1-merge.json. Old frozen local receipts are historical
+observations, not stale instructions to reopen the prior package.
+P1 Stage1 engineering is merged with source gaps (0/5 live benchmarks);
+Stage2 evidence core is merged. Neither means research MVP or live acceptance.
 
-Current P1 covers Stage 1-2: bounded source intake, task records, normalization,
-retention/replay and domain evidence gates. Read contracts/p1_sources_evidence.toml
-and docs/P1_DESIGN.md. The active branch is stage1-2-evidence-foundation.
-New branches must not include the codex/ prefix. Historical names remain intact
-in old receipts and commits; do not rewrite history just to rename them.
+Current P2 covers Stage3-4: bounded market/flow/sector methods, source-linked
+news ranking/dedup, entity mapping and event lifecycle/domain validation.
+Branch: stage3-4-intelligence-foundation. New names omit codex/.
+This is an offline engineering package; no new retrieval rights are enabled.
 
 ## Work Sequence
 
-1. Inspect clean Git state, remote and merged prerequisite evidence. Stop on
-   unexpected changes; do not silently stash or revert user work.
-2. Finalize contract/policy/state and render the exact contract through the
-   P1 template. Obtain actual independent entrypoint and Prompt Auditor PASS
-   before implementation or product network capture.
-3. Use one coordinator plus bounded agents with disjoint write sets. Builders
-   cannot independently review their own changes. Preserve all existing guards.
-4. Run offline governance/product tests, scope check, prompt verification, review
-   bundle and diff checks. Live capture is separately explicit and bounded.
-5. Keep SQLite files/raw payloads/private paths outside the repository. Commit
-   only safe source-located observations and synthetic/redistributable fixtures.
-   A source success is not full benchmark coverage or research acceptance.
-6. Freeze source evidence, state, log and all other decision inputs. Obtain
-   independent read-only Reviewer and Release Checker verdicts. Allow one
-   in-scope R0/R1 correction and one re-review; further/unknown/R2+ BLOCK escalates.
-   The user explicitly authorized one additional P1 correction/re-review for
-   optional-domain DEGRADED freezing, recorded in repair_exception. Its product
-   scope is store.py and test_p1.py only; the default limit remains one. Preserve
-   the prior BLOCK in CONSTRUCTION_LOG.md and record two total consumed cycles
-   after this repair. Another BLOCK requires a new human decision. No permissions,
-   sources, coverage thresholds, merge mode or later-stage authority are expanded.
-7. Only four active P1 attestations may be appended after freeze. Old receipts
-   stay protected and unchanged. Changed inputs invalidate approvals.
-8. Scan commit metadata, public files, descriptions and eventual CI logs for
-   credentials/private details. Use the verified noreply identity.
-9. Preserve existing public main protection: PR, both app-bound CI checks,
-   administrators included, no force pushes/deletion, auto-merge off. Zero
-   approving GitHub reviews avoids sole-maintainer self-approval deadlock;
+1. Inspect clean main, remote and actual merged prerequisite evidence. Stop on
+   unexpected changes; do not silently stash/revert user work.
+2. Finalize contract/policy/state/method boundaries and render the exact contract.
+   Obtain actual independent entrypoint and Prompt Auditor PASS before product edits.
+3. One coordinator and bounded Builder use disjoint file ownership. Preserve
+   P0/P1 history, P1 runtime guards and every existing safety regression.
+4. Run both offline suites, scope/state check, exact prompt, bundle and diff checks.
+   P1 injected transports use explicit temporary audited-policy fixtures. The
+   actual active P2 policy must deny product requests with zero transport calls.
+5. Commit only authored synthetic fixture and safe actual CLI sample. No raw
+   provider payload, SQLite artifact, credential or private path in Git.
+6. Freeze all protected inputs. Obtain independent read-only Reviewer and a
+   different Release Checker; Builder cannot self-review. Allow one default
+   in-scope R0/R1 correction and one re-review. A further/unknown/R2+ BLOCK escalates.
+   P1's one-off exception is retired and cannot authorize a P2 correction.
+7. Only four current P2 attestations can be attached after freeze; historical
+   P0/P1 approvals remain protected and unchanged. Changed inputs require review.
+8. Scan metadata/files/PR text and eventual CI logs; use the verified noreply identity.
+9. Preserve public main protection: PR plus both app-bound Ubuntu/Windows checks,
+   strict, administrators included, no force push/deletion, auto-merge off.
+   Zero required GitHub approving reviews avoids sole-maintainer deadlock;
    independent agent review and human merge remain procedural requirements.
-10. Push only the reviewed work branch, open one coherent PR, wait for exact-head
-    CI and independent remote release verification, then await human merge.
+10. Push only the reviewed branch, open one coherent PR, wait for exact-head CI,
+    independent remote release verification, then stop AWAITING_HUMAN_MERGE.
 
 ## Effective Boundaries
 
-Only explicitly approved, bounded local read-only source retrieval is enabled.
-P1's network allowlist contains the official Fed press RSS endpoint only.
-Unknown source rights, missing keys and paid adapters do not permit requests.
-Scheduled collection, model execution, Telegram delivery, production operation,
-broker/orders, portfolio control, deployment and VPS mutation remain disabled.
-No data-access flag authorizes any of those actions.
+research_only=true; every external retrieval, scheduling, LLM, Telegram,
+deployment, VPS, broker, order and portfolio-control permission is false in P2.
+No stage inherits the archived ETF project's trading permissions.
+P1's original feed observation stays historical; do not rerun it in this package.
 
-Keep benchmark targets and missing-source denominators unchanged. Unknown
-publication delay/calendars remain unknown, not guessed. Synthetic tests,
-historical replay, a live source probe and forward research observation are
-different evidence modes. Required market gaps remain BLOCKED_MARKET_SOURCES.
+Keep required-domain failure, mode, as_of, source/expiry and coverage explicit.
+Synthetic/replay results cannot close live source, research, forward-observation
+or VPS gates. Missing flow is unavailable, not zero or a turnover proxy mislabeled
+as net flow. Time passing cannot confirm an event or prove a stock price effect.
 
 ## Handoff
 
-Before interruption preserve actual branch/status, completed and pending checks,
-source gaps, snapshot and next gate. Read repository state on resumption.
-Report commit, PR, audit/review/release, CI, protection, merge and VPS status.
-P2 requires P1's human merge and its own reviewed contract; this entrypoint is
-not authorization to skip unresolved data requirements.
+Report package/branch/commit/PR, actual audit/validation/review/release/CI,
+protection, merge and VPS status. P3 waits for human merge and its own reviewed
+contract. No unresolved source requirement is waived by this entrypoint.

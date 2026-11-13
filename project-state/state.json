@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "active_package": "P1",
-  "active_contract": "contracts/p1_sources_evidence.toml",
-  "branch": "stage1-2-evidence-foundation",
-  "baseline": "94ae20ca0ea225aa8118314e04684869accb2a11",
+  "active_package": "P2",
+  "active_contract": "contracts/p2_intelligence.toml",
+  "branch": "stage3-4-intelligence-foundation",
+  "baseline": "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a",
   "package_status": "implemented_unreleased",
   "builder_agents": [
     "coordinator",
-    "01a1d246-fddb-7ba1-9336-6350ccddf82b"
+    "01a1d42c-9f2c-7d83-9bbe-b6ffb4e8fca4"
   ],
   "stage_registry": [
     {
@@ -18,22 +18,22 @@
     {
       "stage": 1,
       "package": "P1",
-      "status": "implemented_unreleased"
+      "status": "engineering_merged_source_gaps"
     },
     {
       "stage": 2,
       "package": "P1",
-      "status": "implemented_unreleased"
+      "status": "complete"
     },
     {
       "stage": 3,
       "package": "P2",
-      "status": "planned"
+      "status": "implemented_unreleased"
     },
     {
       "stage": 4,
       "package": "P2",
-      "status": "planned"
+      "status": "implemented_unreleased"
     },
     {
       "stage": 5,
@@ -68,13 +68,13 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P0",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/1",
-    "merge_commit": "94ae20ca0ea225aa8118314e04684869accb2a11",
-    "merged_at": "2026-11-12T23:56:51Z",
-    "tested_head": "9c07dc37ce6fed8a42b440ca0ac17f3334c83533",
-    "pr_ci_run": 43250862059,
-    "merge_ci_run": 43333054559,
+    "package_id": "P1",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/2",
+    "merge_commit": "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a",
+    "merged_at": "2026-11-13T05:46:19Z",
+    "tested_head": "2e00cd9b7f45a4cd675764b9d3bc6bae4a19d763",
+    "pr_ci_run": 43363252300,
+    "merge_ci_run": 43374192450,
     "ci_status": "PASS",
     "merge_status": "merged"
   },
@@ -87,14 +87,14 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p1-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p1-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p1-builder-prompt.md",
-    "bundle": "docs/reviews/p1-bundle.json",
-    "validation": "docs/reviews/p1-validation.json",
-    "reviewer": "docs/reviews/p1-review.json",
-    "release": "docs/reviews/p1-release.json"
+    "blueprint_review": "docs/reviews/p2-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p2-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p2-builder-prompt.md",
+    "bundle": "docs/reviews/p2-bundle.json",
+    "validation": "docs/reviews/p2-validation.json",
+    "reviewer": "docs/reviews/p2-review.json",
+    "release": "docs/reviews/p2-release.json"
   },
-  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; source gaps remain; no P2 before its own contract",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; source gaps remain; no P3 before its own contract",
   "last_updated": "2026-11-13"
 }

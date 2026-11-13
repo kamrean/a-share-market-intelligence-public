@@ -1,0 +1,77 @@
+schema_version = 1
+version = "p2-synthetic-methods-v1"
+profile_version = "p2-offline-profile-v1"
+universe_id = "synthetic-cn-four-v1"
+benchmark_symbols = ["000001.SH", "399001.SZ", "399006.SZ", "KOSPI", "SP500"]
+constituents = ["SYN_A", "SYN_B", "SYN_C", "SYN_D"]
+lookback_sessions = 3
+news_half_life_seconds = 86400
+news_ttl_seconds = 259200
+approach_seconds = 86400
+confirmation_grace_seconds = 21600
+event_ttl_seconds = 604800
+
+[flow]
+provider = "unconfigured"
+series_kind = "provider_estimate"
+enabled = false
+
+[[sources]]
+source_id = "synthetic_primary"
+tier = "A"
+locator_prefix = "https://example.invalid/primary/"
+scopes = ["market", "news", "event", "impact", "reaction"]
+event_ids = ["SYN_EVENT", "SYN_REPLACEMENT"]
+synthetic = true
+
+[[sources]]
+source_id = "synthetic_secondary"
+tier = "B"
+locator_prefix = "https://example.invalid/secondary/"
+scopes = ["news", "impact"]
+event_ids = []
+synthetic = true
+
+[[sources]]
+source_id = "synthetic_lead"
+tier = "C"
+locator_prefix = "https://example.invalid/lead/"
+scopes = ["news"]
+event_ids = []
+synthetic = true
+
+[[rules]]
+domain = "market"
+validator = "market-p2-v1"
+required = true
+allow_degraded = false
+
+[[rules]]
+domain = "sector"
+validator = "sector-p2-v1"
+required = true
+allow_degraded = false
+
+[[rules]]
+domain = "news"
+validator = "news-p2-v1"
+required = true
+allow_degraded = false
+
+[[rules]]
+domain = "event"
+validator = "event-p2-v1"
+required = true
+allow_degraded = false
+
+[[rules]]
+domain = "entity"
+validator = "entity-p2-v1"
+required = true
+allow_degraded = false
+
+[[rules]]
+domain = "flow"
+validator = "flow-p2-v1"
+required = false
+allow_degraded = true

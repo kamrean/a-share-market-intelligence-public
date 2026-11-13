@@ -1,0 +1,84 @@
+schema_version = 1
+version = "p2-synthetic-mapping-v1"
+mapping_refs = ["https://example.invalid/synthetic/authored-mapping-v1"]
+
+[[entities]]
+entity_id = "000001.SH"
+aliases = ["SYNTHETIC Shanghai benchmark"]
+sector_id = "benchmark"
+calendar_id = "SSE"
+currency = "CNY"
+unit = "index_points"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "399001.SZ"
+aliases = ["SYNTHETIC Shenzhen benchmark"]
+sector_id = "benchmark"
+calendar_id = "SZSE"
+currency = "CNY"
+unit = "index_points"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "399006.SZ"
+aliases = ["SYNTHETIC ChiNext benchmark"]
+sector_id = "benchmark"
+calendar_id = "SZSE"
+currency = "CNY"
+unit = "index_points"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "KOSPI"
+aliases = ["SYNTHETIC Korean benchmark"]
+sector_id = "benchmark"
+calendar_id = "KRX"
+currency = "KRW"
+unit = "index_points"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "SP500"
+aliases = ["SYNTHETIC US benchmark"]
+sector_id = "benchmark"
+calendar_id = "US_CASH"
+currency = "USD"
+unit = "index_points"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "SYN_A"
+aliases = ["Synthetic Alpha", "Synthetic Shared"]
+sector_id = "synthetic_technology"
+calendar_id = "SSE"
+currency = "CNY"
+unit = "currency_units"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "SYN_B"
+aliases = ["Synthetic Beta"]
+sector_id = "synthetic_technology"
+calendar_id = "SSE"
+currency = "CNY"
+unit = "currency_units"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "SYN_C"
+aliases = ["Synthetic Gamma", "Synthetic Shared"]
+sector_id = "synthetic_industry"
+calendar_id = "SSE"
+currency = "CNY"
+unit = "currency_units"
+provider = "synthetic_primary"
+
+[[entities]]
+entity_id = "SYN_D"
+aliases = ["Synthetic Delta"]
+sector_id = "synthetic_industry"
+calendar_id = "SSE"
+currency = "CNY"
+unit = "currency_units"
+provider = "synthetic_primary"

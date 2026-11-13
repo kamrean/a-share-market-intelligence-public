@@ -1,4 +1,4 @@
-"""Read-only, offline checks for the current P1 contract (Python 3.12)."""
+"""Read-only, offline checks for the current P2 contract (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -15,19 +15,19 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "94ae20ca0ea225aa8118314e04684869accb2a11"
-BRANCH = "stage1-2-evidence-foundation"
+BASELINE = "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a"
+BRANCH = "stage3-4-intelligence-foundation"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p1_sources_evidence.toml"
-TEMPLATE_PATH = "templates/p1_builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p1-builder-prompt.md"
-ATTESTATIONS = (
-    "docs/reviews/p1-bundle.json",
-    "docs/reviews/p1-validation.json",
-    "docs/reviews/p1-review.json",
-    "docs/reviews/p1-release.json",
-)
-ALLOWED = (
+CONTRACT_PATH = "contracts/p2_intelligence.toml"
+TEMPLATE_PATH = "templates/p2_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p2-builder-prompt.md"
+ATTESTATIONS = tuple([
+    "docs/reviews/p2-bundle.json",
+    "docs/reviews/p2-validation.json",
+    "docs/reviews/p2-review.json",
+    "docs/reviews/p2-release.json"
+])
+ALLOWED = tuple([
     ".gitattributes",
     ".github/workflows/governance.yml",
     ".gitignore",
@@ -36,10 +36,75 @@ ALLOWED = (
     "README.md",
     "START_CONSTRUCTION_PROMPT.md",
     "config/p1_profile.toml",
+    "config/p2_entities.toml",
+    "config/p2_methods.toml",
     "config/sources.toml",
     "contracts/p0_stage0.toml",
     "contracts/p1_sources_evidence.toml",
+    "contracts/p2_intelligence.toml",
     "docs/CONSTRUCTION_LOG.md",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/P1_DESIGN.md",
+    "docs/P2_METHODS.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/SOURCE_MATRIX.md",
+    "docs/evidence/p1-source-probe.json",
+    "docs/evidence/p2-demo.json",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-merge.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p1-builder-prompt.md",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-entrypoint-review.json",
+    "docs/reviews/p1-merge.json",
+    "docs/reviews/p1-prompt-audit.json",
+    "docs/reviews/p1-release.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-validation.json",
+    "docs/reviews/p2-builder-prompt.md",
+    "docs/reviews/p2-bundle.json",
+    "docs/reviews/p2-entrypoint-review.json",
+    "docs/reviews/p2-prompt-audit.json",
+    "docs/reviews/p2-release.json",
+    "docs/reviews/p2-review.json",
+    "docs/reviews/p2-validation.json",
+    "governance/policy.toml",
+    "market_intelligence/__init__.py",
+    "market_intelligence/__main__.py",
+    "market_intelligence/gate.py",
+    "market_intelligence/intelligence.py",
+    "market_intelligence/market_state.py",
+    "market_intelligence/models.py",
+    "market_intelligence/news_events.py",
+    "market_intelligence/runtime.py",
+    "market_intelligence/sources.py",
+    "market_intelligence/store.py",
+    "project-state/state.json",
+    "requirements.lock",
+    "templates/builder_prompt.md",
+    "templates/p1_builder_prompt.md",
+    "templates/p2_builder_prompt.md",
+    "tests/fixtures/p1_feed.xml",
+    "tests/fixtures/p1_market.csv",
+    "tests/fixtures/p2_input.json",
+    "tests/governance/test_governance.py",
+    "tests/product/test_p1.py",
+    "tests/product/test_p2.py",
+    "tools/governance.py"
+])
+IMMUTABLE = tuple([
+    ".gitattributes",
+    ".gitignore",
+    "BLUEPRINT.md",
+    "config/p1_profile.toml",
+    "config/sources.toml",
+    "contracts/p0_stage0.toml",
+    "contracts/p1_sources_evidence.toml",
     "docs/LEGACY_REUSE_MANIFEST.md",
     "docs/P1_DESIGN.md",
     "docs/PUBLICATION_PROVENANCE.json",
@@ -60,7 +125,6 @@ ALLOWED = (
     "docs/reviews/p1-release.json",
     "docs/reviews/p1-review.json",
     "docs/reviews/p1-validation.json",
-    "governance/policy.toml",
     "market_intelligence/__init__.py",
     "market_intelligence/__main__.py",
     "market_intelligence/gate.py",
@@ -68,43 +132,29 @@ ALLOWED = (
     "market_intelligence/runtime.py",
     "market_intelligence/sources.py",
     "market_intelligence/store.py",
-    "project-state/state.json",
     "requirements.lock",
     "templates/builder_prompt.md",
     "templates/p1_builder_prompt.md",
     "tests/fixtures/p1_feed.xml",
-    "tests/fixtures/p1_market.csv",
-    "tests/governance/test_governance.py",
-    "tests/product/test_p1.py",
-    "tools/governance.py",
-)
-IMMUTABLE = (
-    ".gitattributes",
-    ".gitignore",
-    "BLUEPRINT.md",
-    "contracts/p0_stage0.toml",
-    "docs/LEGACY_REUSE_MANIFEST.md",
-    "docs/PUBLICATION_PROVENANCE.json",
-    "docs/reviews/blueprint-review.json",
-    "docs/reviews/p0-builder-prompt.md",
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-prompt-audit.json",
-    "docs/reviews/p0-release.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-validation.json",
-    "templates/builder_prompt.md",
-)
+    "tests/fixtures/p1_market.csv"
+])
 PROTECTED = tuple(sorted(set(ALLOWED) - set(ATTESTATIONS)))
 PERMISSIONS = {
-    "research_only": True, "external_data_access_allowed": True,
-    **dict.fromkeys((
-        "scheduled_collection_allowed", "llm_research_allowed", "telegram_delivery_allowed",
-        "vps_deployment_allowed", "vps_mutation_allowed", "broker_allowed",
-        "order_execution_allowed", "portfolio_control_allowed",
-    ), False),
+    "research_only": True,
+    "external_data_access_allowed": False,
+    "scheduled_collection_allowed": False,
+    "llm_research_allowed": False,
+    "telegram_delivery_allowed": False,
+    "vps_deployment_allowed": False,
+    "vps_mutation_allowed": False,
+    "broker_allowed": False,
+    "order_execution_allowed": False,
+    "portfolio_control_allowed": False
 }
 REPOSITORY = {
-    "owner": "kamrean", "name": "a-share-market-intelligence-public", "visibility": "public",
+    "owner": "kamrean",
+    "name": "a-share-market-intelligence-public",
+    "visibility": "public"
 }
 VALIDATION_COMMANDS = [
     "python -m unittest discover -s tests/governance -p test_*.py -v",
@@ -112,50 +162,38 @@ VALIDATION_COMMANDS = [
     "python tools/governance.py check",
     "python tools/governance.py prompt --verify",
     "python tools/governance.py bundle",
-    "git diff --check",
+    "git diff --check"
 ]
-AUDIT_INPUTS = (
-    CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH,
-    "AGENTS.md", "docs/P1_DESIGN.md",
-)
+AUDIT_INPUTS = (CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH,
+                "AGENTS.md", "docs/P2_METHODS.md")
 
 
 def dependency():
     return {
-        "package_id": "P0",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/1",
-        "merge_commit": BASELINE, "merged_at": "2026-11-12T23:56:51Z",
-        "tested_head": "9c07dc37ce6fed8a42b440ca0ac17f3334c83533",
-        "pr_ci_run": 43250862059, "merge_ci_run": 43333054559,
-        "ci_status": "PASS", "merge_status": "merged",
+        "package_id": "P1",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/2",
+        "merge_commit": BASELINE,
+        "merged_at": "2026-11-13T05:46:19Z",
+        "tested_head": "2e00cd9b7f45a4cd675764b9d3bc6bae4a19d763",
+        "pr_ci_run": 43363252300,
+        "merge_ci_run": 43374192450,
+        "ci_status": "PASS",
+        "merge_status": "merged"
     }
 
 
-REPAIR_EXCEPTION = {
-    "id": "p1-optional-degraded-freeze-20261113",
-    "authorized_on": "2026-11-13",
-    "blocked_snapshot": "88b9de82cd67ac3c9653170902ef7416a44e2cc160ae9b046153ac5760874c3d",
-    "additional_cycles": 1,
-    "product_paths": [
-        "market_intelligence/store.py",
-        "tests/product/test_p1.py"
-    ],
-    "purpose": "Preserve validated rejected-input provenance for optional-domain DEGRADED freezing; add regression tests and repeat independent review/release/PR/CI.",
-    "permissions_changed": False
-}
-
 POLICY = {
-    "schema_version": 1, "active_package": "P1", "python_version": "3.12",
+    "schema_version": 1, "active_package": "P2", "python_version": "3.12",
     "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
     "remote_creation_authorized": False, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
     "repository": REPOSITORY, "max_repair_cycles": 1,
     "reviewer_must_be_independent": True, "construction_subagents_allowed": True,
-    "permissions": PERMISSIONS, "repair_exception": REPAIR_EXCEPTION,
+    "permissions": PERMISSIONS,
 }
 RECEIPT_PATHS = {
-    "blueprint_review": "docs/reviews/p1-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p1-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    "blueprint_review": "docs/reviews/p2-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p2-prompt-audit.json", "builder_prompt": PROMPT_PATH,
     **dict(zip(("bundle", "validation", "reviewer", "release"), ATTESTATIONS)),
 }
 NEXT_GATE = "exact_head_ci_and_independent_release_then_human_merge"
@@ -206,21 +244,19 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P1", "stage_ids": [1, 2],
+        "schema_version": 1, "package_id": "P2", "stage_ids": [3, 4],
         "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
         "prompt_audit_required": True, "independent_review_required": True,
         "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
-        "immutable_paths": list(IMMUTABLE),
-        "attestation_paths": list(ATTESTATIONS),
+        "immutable_paths": list(IMMUTABLE), "attestation_paths": list(ATTESTATIONS),
         "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
         "required_reads": ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
                            "governance/policy.toml", "project-state/state.json",
-                           "docs/reviews/p0-merge.json", "docs/P1_DESIGN.md"],
+                           "docs/reviews/p1-merge.json", "docs/P2_METHODS.md"],
         "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
         "repository": REPOSITORY, "dependency": dependency(),
-        "repair_exception": REPAIR_EXCEPTION,
     }
     text_fields = ("title", "objective", "bootstrap_prompt", "next_gate", "rollback")
     list_fields = ("deliverables", "negative_tests", "receipt_rules")
@@ -236,7 +272,7 @@ def validate_contract(contract):
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P1", "active_contract": CONTRACT_PATH,
+        "schema_version": 1, "active_package": "P2", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
@@ -246,7 +282,7 @@ def validate_state(state):
                    "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                    "merge_status": "not_merged"},
         "receipts": RECEIPT_PATHS,
-        "next_gate": NEXT_GATE + "; source gaps remain; no P2 before its own contract",
+        "next_gate": NEXT_GATE + "; source gaps remain; no P3 before its own contract",
     }
     keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated"),
          "state")
@@ -260,7 +296,7 @@ def validate_state(state):
     packages = ("P0", "P1", "P1", "P2", "P2", "P3", "P3", "P4", "P4/P5", "P5")
     active = "in_progress" if state["package_status"] == "building" else "implemented_unreleased"
     expected = [{"stage": i, "package": package,
-                 "status": "complete" if i == 0 else active if i in (1, 2) else
+                 "status": "complete" if i in (0, 2) else "engineering_merged_source_gaps" if i == 1 else active if i in (3, 4) else
                            "deferred" if i == 9 else "planned"}
                 for i, package in enumerate(packages)]
     exact(state["stage_registry"], expected, "state.stage_registry")
@@ -501,7 +537,8 @@ def validate_prerequisite(receipt, role, names, contents):
         require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: repair bound")
     else:
         exact(receipt.get("findings"), [], f"{role}.findings")
-        exact(receipt.get("repair_cycles"), 1, f"{role}: consumed P1 repair cycle")
+        cycles = receipt.get("repair_cycles")
+        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P2 repair bound")
 
 
 def check(root=ROOT, *, ci=False, complete_index=False):
@@ -511,12 +548,12 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "policy")
     state = parse_json(contents["project-state/state.json"])
     validate_state(state)
-    prior = parse_json(contents["docs/reviews/p0-merge.json"])
+    prior = parse_json(contents["docs/reviews/p1-merge.json"])
     expected_prior = {
         "schema_version": 1, "role": "historical_merge_observation",
         "observed_on": "2026-11-13", **dependency(),
-        "prior_snapshot": "e1c679dcc010ad9fdf26cc6aaadcba491cc508d8e33acca1a488f6d547c5e398",
-        "prior_gate_check": "PASS on merged main using --ci; frozen local P0 receipt remains historical",
+        "prior_snapshot": "a40fa1e2228ef48b04dd93ac0f61fe7328aa4ff89677cbcd7fa9f22c4b4e2ae5",
+        "prior_gate_check": "PASS on merged main using --ci; frozen local P1 receipt remains historical",
         "authority": "Evidence of prior human merge, not authorization for later runtime scopes.",
     }
     exact(prior, expected_prior, "prior merge evidence")
@@ -555,7 +592,7 @@ def snapshot(contents):
 def make_bundle(checked):
     contract, _state, contents, changed = checked
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P1", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P2", "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
             "attestation_paths": list(ATTESTATIONS), "scope_result": "PASS"}
@@ -593,7 +630,9 @@ def validate_attestations(checked, current):
     for key, value in {**common, "role": "reviewer", "verdict": "PASS", "read_only": True,
                        "findings": []}.items():
         exact(review[key], value, f"review receipt.{key}")
-    exact(review["repair_cycles"], 2, "review receipt: total P1 repair cycles including named exception")
+    cycles = review["repair_cycles"]
+    audit_cycles = parse_json(contents[RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
+    require(type(cycles) is int and audit_cycles <= cycles <= 1, "review receipt: P2 repair bound or reset")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
                    "merge_status", "vps_sync", "next_gate"), "release receipt")
     for key, value in {**common, "role": "release_checker", "read_only": True,

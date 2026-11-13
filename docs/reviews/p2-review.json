@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "role": "reviewer",
+  "verdict": "PASS",
+  "snapshot_id": "f3528b8cf5c8051970744e4a15bd9c52e1ac7752dbb76eb5838ff4a3b83a98e2",
+  "agent_id": "01a1d450-4973-7ec0-b10c-c1555a6082bc",
+  "read_only": true,
+  "findings": [],
+  "repair_cycles": 1
+}
