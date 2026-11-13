@@ -1,0 +1,17 @@
+schema_version = 1
+version = "p4-fixed-synthetic-v1"
+adapter = "offline_fake"
+sink = "synthetic-local-sink"
+chunk_chars = 6000
+max_chunks = 48
+max_report_bytes = 400000
+max_reports = 16
+max_attempts = 256
+max_store_bytes = 8388608
+attempts_per_run = 48
+attempts_per_day = 96
+chars_per_run = 200000
+chars_per_day = 400000
+rate_calls = 96
+rate_seconds = 60
+timeout_seconds = 5
