@@ -598,3 +598,95 @@ The repaired product suite240/240 passed in29.456s (50 P4,190 historical).
 The unchanged canonical sample reverified and text matched exactly. The new
 governance run starts only after this repaired freeze; its actual result will
 be attached in the validation receipt rather than assumed here.
+
+## P4 Human Merge and P4L Live Integration Entry - 2026-11-13
+
+Verified PR #5 human-merged at2026-11-13T14:20:51Z. Tested head
+332128840902d78f84fbb05e4794f72d7b8b2a77; merge
+a95a90d16c98d09e3adc678a79038057676cff05. PR CI43439268823 passed
+both platforms. Independent P4 re-review and remote Release Checker passed
+after the recorded single R1 repair; final evidence remains on PR #5.
+Approved P4 snapshot f0b442973958b7690dc6bf504d0f4aa9d2960741f4734e227f59b1c130a6d5a8.
+Its final local validation was66 governance tests and240 product tests PASS.
+
+Synced clean main and verified its existing gate --ci: LOCAL_READY_FOR_PR.
+Waited for actual merge-main CI43441856767: Ubuntu1m47s and Windows7m31s
+both passed. Created stage7-live-integration-entry from the exact merge.
+No private source/archived ETF files were changed. Frozen prior local receipts
+remain historical, not failed/pending claims about the now-merged PR.
+
+Current canonical next scope requires reviewed live integration rather than
+an automatic move to VPS. The existing P2/P3/P4 entrypoints accept fixed
+synthetic inputs and have no general real-data/model/delivery path. Real keys
+alone cannot supply that missing implementation. Provider/model/destination
+choices and use rights remain unresolved dependencies, not failed API probes.
+
+P4L is a governance-only entry: one grouped implementation plan, non-secret
+source-located prerequisite register, state/policy/checker/test/CI alignment.
+All95 prior product/config/product-test/contract/review/sample paths and
+Blueprint v1 remain immutable. Scope116 paths,112 protected and four current
+attestations. All product external permissions remain false. The entry does
+not complete MVP, close live evidence gaps or authorize any external dispatch.
+
+Read-only source researcher01a1d54b-1a17-7600-a51c-4b90d5916acf inspected
+primary documentation only. Coordinator verified key iFinD/FSC/FRED statements.
+iFinD free API access is terminal-bundled, not proven standalone zero-cost;
+FSC is free but requires a key and compatible downstream-use scope; FRED's
+current restrictions conflict with the proposed stored-evidence use without
+further applicable permission. BaoStock documents free standard access and
+local storage/analysis; no personal key is required. Two exact mainland codes
+are documented, while sz.399006 still needs an authorized live identity probe.
+External model transfer and redistribution remain separate unresolved uses.
+No blanket claim is made that all free sources or personal local use are barred.
+
+The current register records no product probes or credential inspection,0/5
+live benchmarks and no selected model/private sink. Account status is unknown,
+not inferred absent. Model/provider and private-test configuration information
+was requested without requesting secret values. No chat token, local private
+path, provider payload or invented live record is added to the repository.
+
+The follow-up implementation is one coherent PR across the existing integration
+boundaries, with concrete providers, bounded budgets and separate permissions
+audited before edits/dispatch. No new contract-only PR is required merely for
+each source or role. Current entry and Prompt Auditor review precede checker
+implementation; actual findings and validation will be recorded as they occur.
+
+Independent entrypoint and Prompt Auditor01a1d554-2385-7283-b5bc-06a625c60465
+returned actual PASS with no findings and repair_cycles0 before checker edits.
+It verified the exact prior merge/CI,116/95/112/4 scope, unchanged immutable
+files, sorted complete contract prompt and normalized hashes. Current audit
+receipts are attached without changing their frozen input files.
+
+Governance Builder01a1d55a-2b51-7683-b878-db168b519b8d owns only tools/governance.py,
+tests/governance/test_governance.py and .github/workflows/governance.yml.
+Coordinator owns docs/state/log/attestations and later integration checks.
+The source researcher is recorded as a contributing Builder, not a Reviewer.
+No actor may review its own contribution. No product changes are authorized.
+
+Coordinator reran the unchanged complete product suite:240/240 PASS in29.713s.
+Product/config/product-test/Blueprint diff is empty. This validates preservation
+of existing offline behavior, not real data/model/delivery acceptance. The
+governance suite runs after the checker/state/log are integrated and frozen.
+
+Governance Builder completed its three owned files. The original66 governance
+tests remain (one direct rename);13 new cases bring the suite to79. Actual
+focused binding/prerequisite/lifecycle tests25/25 passed in1.698s, and four
+historical gate/commit/merge tests passed in24.831s. Prompt verification,
+in-memory syntax and whitespace checks passed. All95 immutable paths match
+the baseline. CI changes only its baseline diff check and explanatory comment;
+platforms, job names, action pins, permissions and15-minute timeout are unchanged.
+
+Coordinator inspected the changes and froze package_status and entry_status as
+contract_prepared_unreleased. This is not product implementation. Stage7 stays
+engineering_merged_live_gaps; Stage8 stays offline_subset_merged_live_gaps.
+The checker now explicitly labels governance-only success with live readiness
+BLOCKED_EXTERNAL_PREREQUISITES; no completed source/model/send is implied.
+
+No formal P4L repair cycle has been consumed. Complete governance validation,
+exact scope/prompt/bundle/index checks, independent read-only Reviewer and
+separate Release Checker require their actual results after this freeze.
+Only the four current attestations may add those results without changing the
+protected snapshot. Later exact-head CI and remote release belong on the PR.
+No product request, credential read, private test send, scheduler or VPS action
+has occurred. Missing external inputs remain prerequisites for the next grouped
+implementation amendment, not reasons to weaken acceptance.

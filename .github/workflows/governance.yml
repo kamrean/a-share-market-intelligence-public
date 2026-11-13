@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
-    # Expanded offline P4 coverage runs after the existing governance regressions.
+    # P4L governance-only bindings retain all offline product regressions.
     timeout-minutes: 15
     steps:
       - name: Checkout exact PR head
@@ -40,4 +40,4 @@ jobs:
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
       - name: Check committed patch whitespace
-        run: git diff --check 9976a304c23be444093eaeaaf1277a2c846aed4d HEAD
+        run: git diff --check a95a90d16c98d09e3adc678a79038057676cff05 HEAD

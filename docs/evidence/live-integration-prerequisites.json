@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "package_id": "P4L",
+  "observed_on": "2026-11-13",
+  "basis": "primary_documentation_and_repository_only",
+  "product_probes_performed": false,
+  "credentials_inspected": false,
+  "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
+  "benchmark_universe": [
+    "000001.SH",
+    "399001.SZ",
+    "399006.SZ",
+    "KOSPI",
+    "SP500"
+  ],
+  "live_verified_benchmarks": 0,
+  "selected_providers": [],
+  "rights_scope": [
+    "automated_retrieval",
+    "raw_retention",
+    "normalized_retention",
+    "derived_analysis",
+    "external_model_input",
+    "private_delivery",
+    "public_redistribution"
+  ],
+  "required_inputs": [
+    {
+      "id": "mainland_sources",
+      "targets": [
+        "000001.SH",
+        "399001.SZ",
+        "399006.SZ"
+      ],
+      "status": "free_local_candidate_available_live_and_external_processing_unverified",
+      "account_status": "not_established",
+      "source_refs": [
+        "https://www.sse.com.cn/home/legal/",
+        "https://www.cnindex.com.cn/zh_services/data_licensing/index.html?act_menu=4&act_service=3",
+        "https://quantapi.51ifind.com/gwstatic/static/ds_web/quantapi-web/help-center/faq.html",
+        "https://www.baostock.com/mainContent?file=home.md",
+        "https://www.baostock.com/mainContent?file=indexData.md",
+        "https://www.baostock.com/disclaimer"
+      ],
+      "candidate": "baostock_standard_free",
+      "candidate_personal_key_required": false,
+      "documented_symbols": [
+        "sh.000001",
+        "sz.399001"
+      ],
+      "unverified_symbol": "sz.399006"
+    },
+    {
+      "id": "korean_source",
+      "targets": [
+        "KOSPI"
+      ],
+      "status": "rights_and_entitlement_unresolved",
+      "account_status": "not_established",
+      "source_refs": [
+        "https://www.data.go.kr/data/15094807/openapi.do",
+        "https://www.kogl.or.kr/info/licenseType4.do"
+      ]
+    },
+    {
+      "id": "us_source",
+      "targets": [
+        "SP500"
+      ],
+      "status": "compatible_provider_unresolved",
+      "account_status": "not_established",
+      "source_refs": [
+        "https://fred.stlouisfed.org/series/SP500",
+        "https://fred.stlouisfed.org/legal/"
+      ]
+    },
+    {
+      "id": "primary_news",
+      "status": "historical_fed_observation_current_permission_disabled",
+      "a_share_source_status": "candidate_only",
+      "source_refs": [
+        "docs/evidence/p1-source-probe.json",
+        "https://www.sse.com.cn/aboutus/mediacenter/hotandd/",
+        "https://www.sse.com.cn/home/legal/"
+      ]
+    },
+    {
+      "id": "model",
+      "status": "provider_model_budget_and_data_egress_not_selected",
+      "account_status": "not_established"
+    },
+    {
+      "id": "private_telegram",
+      "status": "user_designated_destination_and_test_release_not_established",
+      "account_status": "not_established"
+    },
+    {
+      "id": "engineering",
+      "status": "live_input_and_transport_paths_not_implemented",
+      "source_refs": [
+        "market_intelligence/intelligence.py",
+        "market_intelligence/research.py",
+        "market_intelligence/publication.py"
+      ]
+    },
+    {
+      "id": "acceptance",
+      "status": "genuine_runs_human_sampling_and_private_delivery_not_completed",
+      "required_dated_runs": 3,
+      "completed_dated_runs": 0,
+      "required_claim_sample": "at_least_20_or_all_if_fewer",
+      "human_sample_status": "not_assessed"
+    }
+  ],
+  "permission_grant": false,
+  "next_action": "Resolve concrete provider rights/model/private-test choices, then audit one grouped implementation amendment; no dispatch from this entry."
+}
