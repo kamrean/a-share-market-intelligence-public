@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "agent_id": "01a1d431-da96-7f32-b9c7-3fa0b1469258",
+  "verdict": "PASS",
+  "independent": true,
+  "read_only": true,
+  "repair_cycles": 0,
+  "role": "prompt_auditor",
+  "findings": [],
+  "files": {
+    "contracts/p2_intelligence.toml": "544c506c680e2cb1a951dd8be353b8ddf5a6b5bb44c5f1bd9fccc95e9097ed55",
+    "governance/policy.toml": "171b031bdc1d234a3116706c28285aa1e68efd1a47ba941811620f9f1126265f",
+    "templates/p2_builder_prompt.md": "8dcfd6034c457b0cc4f12aec11920e01173c2bc6edf76dfbe5548af03358cd3b",
+    "docs/reviews/p2-builder-prompt.md": "aad541d15295668862317f0e394d09993cbecf908647d970ed822f492d01f5de",
+    "AGENTS.md": "1858584ae5fb7871b1dbdf28d9174e0cb1d6627c8d6fae3b87e8767c90c6137f",
+    "docs/P2_METHODS.md": "cf2b92f76ec1b3db1feec27882f596f3e20bff633f2c28b5ea6a5cb2f50ad634"
+  }
+}

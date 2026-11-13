@@ -1,43 +1,39 @@
 # Project Work Rules
 
 This repository is the source of truth. Read START_CONSTRUCTION_PROMPT.md,
-BLUEPRINT.md, project-state/state.json, active contract and governance/policy.toml.
-Consult named design/source/review records; no default bulk read of old projects.
+BLUEPRINT.md, state, active contract/policy and named method/review records.
+Do not bulk-read the archived ETF project or private publication source.
 
-The user authorized one coordinator plus bounded construction agents. One writer
-owns each file set. Independent Reviewer must be a separate read-only agent,
-never a Builder. Wait for actual results; tests and CI cannot impersonate review.
-Follow the contract's single R0/R1 repair and re-review bound. The named P1
-repair_exception records the user's one additional correction/re-review for
-optional-domain DEGRADED freezing only. Preserve the original BLOCK history;
-do not reset consumed cycles. Another BLOCK escalates, not another automatic fix.
+Use one coordinator plus bounded agents with disjoint write ownership. Builder
+cannot provide independent review. Wait for actual Prompt Auditor, Reviewer,
+separate Release Checker and CI results. P2 has one default R0/R1 correction and
+one re-review; further/unknown/R2+ BLOCK escalates. P1's exception is historical,
+not a P2 allowance. Record actual consumed P2 cycles without resetting them.
 
-New work branches omit codex/ by explicit user request. Never rewrite historical
-names or evidence. P0 is merged; P1 covers Stage1-2 under its own audited contract.
-Do not copy old ETF code, business permissions or lifecycle state.
+New branches omit codex/ by explicit user request. P0/P1 are human-merged;
+P1 Stage1 engineering has unresolved source gaps, Stage2 core is merged. Current
+P2 covers Stage3-4 offline methods and news/event intelligence only.
+No product network requests, scheduling, models, reports/delivery, Telegram,
+broker/orders, portfolio control, deployment or VPS mutation. Unknown source
+rights never authorize capture. Five benchmark targets remain fixed and 0/5
+live-verified; synthetic acceptance is not research/source/MVP completion.
 
-Only narrowly authorized local read-only retrieval is enabled. Unknown source
-permission means no request. Missing keys, synthetic tests and disabled paid
-adapters are not connected integrations. No scheduling, model calls, Telegram,
-broker, orders, portfolio control, deployment or VPS mutation.
+Use apply_patch for manual edits and preserve unrelated user work. Inspect Git
+status/branch first; stop on unexpected changes, secrets, artifacts or scope
+expansion. Never merge, bypass protection, force push or push work to main.
+Use verified GitHub noreply identity and scan all public surfaces for privacy.
 
-Use apply_patch for manual edits. Preserve unrelated user changes. Inspect Git
-status/branch first; stop on unexpected changes, forbidden artifacts or scope
-expansion. Do not merge, bypass protection, force-push or push construction to main.
-Use the verified GitHub noreply identity and scan all public surfaces for privacy.
+Python3.12 standard library only. Runtime data remain outside every checkout.
+Tests are offline, including sockets/DNS prevention. P1 test policy isolation
+must retain real policy/audit checks, not globally mock authorization away.
 
-Python 3.12 and standard library only. Runtime SQLite/raw data stay outside the
-repository. Test output belongs in temporary stores, not committed runtime files.
-Run both offline test suites and every contract validation. No live network in CI.
+All decision inputs are protected. Only four current P2 attestations are
+hash-exempt. Enumerated historical P0/P1 inputs are immutable. Changing protected
+bytes invalidates approval. Preserve exact index/worktree, secrets, link/junction,
+baseline and scope guards. Freeze state/log/methods before independent review.
 
-All decision inputs, including source observations and lifecycle/log, are protected.
-Only four named current attestations are hash-exempt. Historical P0 receipts and
-Blueprint are immutable. Changed inputs invalidate approvals. Preserve exact
-index/worktree checks, secret scanning and symlink/junction rejection.
-
-Registry belongs in project-state/state.json. Keep engineering, source coverage,
-research MVP, forward observation and VPS readiness distinct. Frozen local
-NOT_RUN_AT_SNAPSHOT is not live CI; exact-head CI/merge evidence belongs on the PR.
-
-At interruption, retain a truthful checkpoint and pending gates. A new chat can
-resume through the entrypoint; no permanent five-window arrangement is required.
+State separates engineering, source coverage, MVP, observation and VPS readiness.
+Frozen NOT_RUN_AT_SNAPSHOT is not live CI. Record subsequent exact-head CI,
+privacy/protection and human merge on the PR. Stop at AWAITING_HUMAN_MERGE.
+P3 requires human merge and its own contract. At interruption preserve a truthful
+checkpoint; resume through the entrypoint, not chat-memory assumptions.

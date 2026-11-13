@@ -213,3 +213,123 @@ formal BLOCK requires another human decision, not automatic repair. Independent
 implementation re-review and release verdicts are pending at this protected
 freeze; their actual results belong in the four active attestations. Remote CI
 and the final human-merge gate remain separate, to be recorded on the PR.
+
+## P2 Stage 3-4 - 2026-11-13
+
+The user confirmed PR #2 merged and authorized the next blueprint work package,
+with actual independent review/release/PR/CI and a final human-merge stop.
+Clean main was synchronized to e7b36fb715a508c1e4ca91ac97a06b40bed2da7a.
+PR #2 merged at 2026-11-13T05:46:19Z; exact-head PR CI 43363252300 and merged-main
+CI 43374192450 both succeeded. The prior full gate passed on merged main.
+docs/reviews/p1-merge.json records those observations without rewriting old
+pre-publication records. P1's pending wording above is historical, not a current
+claim that its independent review or merge remains pending.
+
+P1 Stage1 engineering is merged with unresolved 0/5 live benchmark coverage;
+Stage2 core is merged. P2 does not waive source or full research acceptance.
+The active package covers offline market/flow/sector methods, news ranking,
+entity mapping and sourced event lifecycle/domain validation. All product
+external access is disabled. P1 runtime, source configuration and historical
+reviews stay immutable; only its test fixture isolation may change for P2.
+Default one R0/R1 correction applies anew to this package. P1's exceptional
+second correction is retired historical authorization, not inherited by P2.
+
+Independent entrypoint and Prompt Auditor PASS preceded implementation. The
+coordinator owns governance/docs/integration; one bounded Builder owns the eight
+named product/config/fixture/test paths. Runtime modules from P1 are unchanged.
+Only explicitly synthetic offline execution is allowed. Validation and final
+independent verdicts will be recorded after actual completion, not prefilled.
+
+The bounded Builder delivered three pure modules, two pinned configs, an authored
+synthetic fixture and its tests. P1 product runtime/storage stayed unchanged.
+P1 test isolation now uses an explicitly test-only audited policy tree; active
+P2 policy still denies dispatch before reservations or transport. The coordinator
+re-ran the final product suite: 102/102 PASS (64 P1, 38 P2). Earlier 95-test runs
+preceded seven final boundary tests and do not approve the final bytes.
+The complete governance suite also passed 56/56 tests, retaining index/worktree,
+scope, immutable-history, secrets, Windows junction and independent-role guards.
+
+The final demo actually ran at 2026-11-13T09:47:16.318784Z, run
+41dc4bef3d55429d81a2373e9121fe27, with historical synthetic
+as_of=2020-01-10T12:00:00Z. Deterministic bundle ID is
+f4c8c13da591b461976b76939c362a2f7039600116daf7dc95dd4f79c099781d.
+It has 40 usable references. Market/sector/news/entity/event domains PASS under
+the synthetic profile; optional unintegrated flow is DEGRADED, making the global
+result DEGRADED. Live benchmark coverage remains 0/5 and readiness remains
+BLOCKED_MARKET_SOURCES. The actual envelope is in docs/evidence/p2-demo.json;
+it is not a real source observation, production calendar or research run.
+
+P2 is implemented_unreleased, with zero formal repair cycles consumed. New
+source/model/delivery/VPS/trading permissions were not granted or used.
+Independent implementation review, release and remote CI/human merge remain
+separate gates. Final verdicts are appended only after actual completion.
+
+### P2 Single R0/R1 Repair
+
+The first independent Reviewer returned BLOCK on the frozen snapshot below.
+It found late bar versions could enter reaction calculations (R1), and the
+coordinator's JavaScript JSON reserialization changed float scores to integers,
+invalidating the committed sample's Python canonical hash (R0). The initial
+snapshot and review are historical; they do not approve corrected bytes.
+
+```json
+{
+  "schema_version": 1,
+  "role": "reviewer",
+  "verdict": "BLOCK",
+  "snapshot_id": "0f78cc49120da94d48a88dc255dc0465f1066b5814c81953abf76bb9d8bc5afb",
+  "agent_id": "01a1d450-4973-7ec0-b10c-c1555a6082bc",
+  "read_only": true,
+  "repair_cycles": 0,
+  "findings": [
+    {
+      "severity": "P2",
+      "classification": "R1",
+      "path": "market_intelligence/news_events.py",
+      "line": 298,
+      "description": "Reaction calculations check closes but accept bar publication/retrieval/first-seen versions later than the reaction assertion. Validate every referenced version against the assertion and regress both publication and possession."
+    },
+    {
+      "severity": "P2",
+      "classification": "R0",
+      "path": "docs/evidence/p2-demo.json",
+      "line": 787,
+      "description": "JavaScript reserialization changed float scores to integers, invalidating the Python canonical bundle hash. Preserve actual CLI numeric representations and verify the committed sample."
+    }
+  ]
+}
+```
+
+Within the contract's one correction cycle, every referenced start/end bar and
+event-confirmation version
+version now checks publication against the assertion's publication, retrieval
+against assertion retrieval and first-seen against assertion first-seen.
+Regression cases first failed
+on both endpoint sessions, then passed with market facts still valid but the
+unsupported reaction/event rejected. Equal-boundary and unknown-publication
+controls and equivalent duplicate versions are covered. No timing requirement
+was weakened or inferred from session close alone.
+
+The sample was regenerated from the actual CLI, preserving its raw JSON text
+without JavaScript number conversion. Current real envelope run is
+24e0292440d64733b6a054e8ff0d3460 at 2026-11-13T10:02:35.905281Z;
+fixture as_of and the deterministic f4c8c13d... bundle ID are unchanged.
+A new test verifies the committed sample's hash and complete recomputation.
+
+During repair self-validation, an old P1 first-seen test intermittently failed:
+two consecutive Windows clock reads could coincide, so its intended later
+capture was not later. The R0 fixture now explicitly makes the first capture one
+second earlier; rejection/preservation assertions and all P1 runtime bytes are
+unchanged. This is test-evidence stabilization within the same correction batch,
+not a permission change or a second formal repair/re-review.
+
+Final product self-validation passed 108/108 tests (64 P1, 44 P2). The full
+governance suite was re-run and passed 56/56 tests after correction. P2 has now
+consumed one formal repair cycle. The initial zero-cycle record above describes
+the pre-BLOCK freeze only. Further formal BLOCK requires human escalation.
+A fresh protected snapshot, validation and independent re-review/release are
+required; old approvals and the malformed sample are not reused.
+The repair also tests distinct assertion first-seen/retrieval times so a later
+bar cannot backfill knowledge at an earlier assertion first-seen timestamp.
+The same check covers later event-confirmation versions; its regression also
+failed before the correction and passed afterwards within this same batch.

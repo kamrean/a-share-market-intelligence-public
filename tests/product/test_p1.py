@@ -386,7 +386,9 @@ class TempStoreTests(unittest.TestCase):
 
     def test_first_seen_cannot_be_backdated_or_reset(self):
         lease = self.begin()
-        cap, _ = self.save(lease)
+        # Consecutive Windows clock reads can coincide; make the fixture gap explicit.
+        first = models.stamp(models.utc_now() - timedelta(seconds=1))
+        cap, _ = self.save(lease, retrieved_at=first, first_seen_at=first)
         later = capture()
         with self.assertRaises(models.Invalid):
             self.store.put_capture(later, FEED, lease=lease)
@@ -635,6 +637,41 @@ class TempStoreTests(unittest.TestCase):
 class RuntimeTests(TempStoreTests):
     # unittest inherits the storage assertions as well; keep workflow tests separate
     # by selecting only RuntimeTests' new names through load_tests below.
+    def setUp(self):
+        super().setUp()
+        self.policy_root = Path(self.temp.name) / "synthetic-p1-policy"
+        self.make_policy_fixture()
+
+    def make_policy_fixture(self):
+        # Synthetic unit-test attestation only; never a real construction approval.
+        paths = ("contracts/p1_sources_evidence.toml", "governance/policy.toml",
+                 "templates/p1_builder_prompt.md", "docs/reviews/p1-builder-prompt.md",
+                 "AGENTS.md", "docs/P1_DESIGN.md")
+        permissions = {"research_only": True, "external_data_access_allowed": True,
+                       **{key: False for key in ("scheduled_collection_allowed", "llm_research_allowed",
+                          "telegram_delivery_allowed", "vps_deployment_allowed", "vps_mutation_allowed",
+                          "broker_allowed", "order_execution_allowed", "portfolio_control_allowed")}}
+        policy = 'active_package = "P1"\n[permissions]\n' + "".join(
+            key + " = " + str(value).lower() + "\n" for key, value in permissions.items())
+        hashes = {}
+        for relative in paths:
+            value = policy if relative == "governance/policy.toml" else (ROOT / relative).read_text(encoding="utf-8")
+            value = value.replace("\r\n", "\n")
+            path = self.policy_root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(value, encoding="utf-8")
+            hashes[relative] = models.digest(value.encode("utf-8"))
+        audit = {"verdict": "PASS", "independent": True, "read_only": True,
+                 "role": "prompt_auditor", "test_fixture_only": True, "files": hashes}
+        (self.policy_root / "docs/reviews/p1-prompt-audit.json").write_text(json.dumps(audit), encoding="utf-8")
+
+    def probe(self, *args, **kwargs):
+        transport = kwargs.get("transport", args[4] if len(args) > 4 else None)
+        if transport is None:
+            raise AssertionError("P1 policy fixture requires an injected offline transport")
+        kwargs.setdefault("policy_root", self.policy_root)
+        return runtime.probe(*args, **kwargs)
+
     def test_demo_idempotent_durable_and_summary_integrity(self):
         first = runtime.demo(self.store, "demo-idempotent")
         second = runtime.demo(self.store, "demo-idempotent")
@@ -653,25 +690,27 @@ class RuntimeTests(TempStoreTests):
     def test_probe_denied_flag_unknown_paid_market_zero_transport(self):
         transport = Mock(side_effect=forbidden)
         for n, (allow, source) in enumerate(((False, "fed_press"), (True, "unknown"), (True, "paid_provider"), (True, "market_csv"))):
-            result = runtime.probe(self.store, "denied-" + str(n), allow, source, transport)
+            result = self.probe(self.store, "denied-" + str(n), allow, source, transport)
             self.assertEqual(result["requests"]["attempted"], 0)
             self.assertEqual(result["outcome"], "not_attempted")
         transport.assert_not_called()
 
     def test_policy_false_and_audit_absent_prevent_dispatch(self):
         transport = Mock(side_effect=forbidden)
-        with patch.object(runtime, "policy_allows", side_effect=models.Invalid("active_policy_denies_network")):
-            result = runtime.probe(self.store, "policy-false", True, transport=transport)
+        path = self.policy_root / "governance/policy.toml"
+        path.write_text(path.read_text(encoding="utf-8").replace("external_data_access_allowed = true",
+                                                              "external_data_access_allowed = false"), encoding="utf-8")
+        result = self.probe(self.store, "policy-false", True, transport=transport)
         self.assertEqual(result["requests"]["attempted"], 0)
-        result = runtime.probe(self.store, "audit-missing", True, transport=transport, policy_root=Path(self.temp.name))
+        result = self.probe(self.store, "audit-missing", True, transport=transport, policy_root=Path(self.temp.name))
         self.assertEqual(result["requests"]["attempted"], 0)
         transport.assert_not_called()
 
     def test_injected_probe_never_claims_live_and_gate_market_blocks(self):
         body = current_feed()
         transport = Mock(return_value=sources.Response(body, "application/rss+xml"))
-        first = runtime.probe(self.store, "probe", True, transport=transport)
-        second = runtime.probe(self.store, "probe", True, transport=transport)
+        first = self.probe(self.store, "probe", True, transport=transport)
+        second = self.probe(self.store, "probe", True, transport=transport)
         self.assertEqual(first, second)
         self.assertEqual(transport.call_count, 1)
         self.assertEqual(first["mode"], "synthetic_test")
@@ -693,25 +732,25 @@ class RuntimeTests(TempStoreTests):
             self.assertEqual(rows[-1]["reserved_bytes"], sources.MAX_BYTES)
             raise sources.TransportError("http_status_503")
         transport = Mock(side_effect=transient)
-        result = runtime.probe(self.store, "retry", True, transport=transport)
+        result = self.probe(self.store, "retry", True, transport=transport)
         self.assertEqual(transport.call_count, 2)
         self.assertEqual(result["requests"]["attempted"], 2)
         self.assertEqual(result["requests"]["failed"], 2)
 
     def test_unknown_outcome_no_retry_and_new_task_no_network(self):
         transport = Mock(side_effect=TimeoutError("PRIVATE PATH OR CREDENTIAL MUST NOT ESCAPE"))
-        first = runtime.probe(self.store, "unknown", True, transport=transport)
+        first = self.probe(self.store, "unknown", True, transport=transport)
         self.assertEqual(first["outcome"], "unknown")
         self.assertIsNone(first["requests"]["observed_bytes"])
         self.assertNotIn("PRIVATE", models.canonical(first))
-        second = runtime.probe(self.store, "different-key", True, transport=transport)
+        second = self.probe(self.store, "different-key", True, transport=transport)
         self.assertEqual(second["requests"]["attempted"], 0)
         self.assertIn("unknown_usage_halts_dispatch", second["error_codes"])
         self.assertEqual(transport.call_count, 1)
 
     def test_empty_malformed_and_rejected_feed_not_source_verified(self):
         for n, body in enumerate((b"<rss><channel/></rss>", b"not XML", current_feed(title=""))):
-            result = runtime.probe(self.store, "bad-feed-" + str(n), True,
+            result = self.probe(self.store, "bad-feed-" + str(n), True,
                                    transport=lambda source: sources.Response(body, "application/rss+xml"))
             self.assertEqual(result["source_state"], "degraded")
             self.assertEqual(result["outcome"], "failed")
@@ -725,7 +764,7 @@ class RuntimeTests(TempStoreTests):
         self.store.settle(lease, attempt, "success", len(FEED), "response_received", earlier)
         # Simulate a process loss after request success but before saving the body.
         transport = Mock(side_effect=forbidden)
-        result = runtime.probe(self.store, "resume-success", True, transport=transport)
+        result = self.probe(self.store, "resume-success", True, transport=transport)
         self.assertEqual(result["outcome"], "unknown")
         transport.assert_not_called()
 
@@ -738,31 +777,49 @@ class RuntimeTests(TempStoreTests):
         parsed = sources.parse(FEED, cap)
         self.store.put_capture(cap, FEED, parsed.records, earlier, lease=lease)
         transport = Mock(side_effect=forbidden)
-        result = runtime.probe(self.store, "resume-capture", True, transport=transport)
+        result = self.probe(self.store, "resume-capture", True, transport=transport)
         self.assertEqual(result["outcome"], "simulated_probe")
         self.assertEqual(result["capture_ids"], [cap.version_id])
         self.assertEqual(result["requests"]["attempted"], 1)
         transport.assert_not_called()
 
     def test_policy_reader_checks_actual_flag_and_audit_hash(self):
-        text = (ROOT / "governance/policy.toml").read_text(encoding="utf-8")
-        changed = text.replace("external_data_access_allowed = true", "external_data_access_allowed = false")
-        with patch.object(runtime.tomllib, "load", return_value=__import__("tomllib").loads(changed)):
-            with self.assertRaisesRegex(models.Invalid, "policy_denies"):
-                runtime.policy_allows()
-        audit = json.loads((ROOT / "docs/reviews/p1-prompt-audit.json").read_text(encoding="utf-8"))
+        path = self.policy_root / "governance/policy.toml"
+        original = path.read_text(encoding="utf-8")
+        path.write_text(original.replace("external_data_access_allowed = true", "external_data_access_allowed = false"), encoding="utf-8")
+        with self.assertRaisesRegex(models.Invalid, "policy_denies"):
+            runtime.policy_allows(self.policy_root)
+        path.write_text(original, encoding="utf-8")
+        runtime.policy_allows(self.policy_root)
+        path = self.policy_root / "docs/reviews/p1-prompt-audit.json"
+        audit = json.loads(path.read_text(encoding="utf-8"))
         audit["files"]["governance/policy.toml"] = "0" * 64
-        original = Path.read_text
-        def altered(path, *args, **kwargs):
-            return json.dumps(audit) if path.name == "p1-prompt-audit.json" else original(path, *args, **kwargs)
-        with patch.object(Path, "read_text", altered), self.assertRaisesRegex(models.Invalid, "audited_input_changed"):
-            runtime.policy_allows()
+        path.write_text(json.dumps(audit), encoding="utf-8")
+        with self.assertRaisesRegex(models.Invalid, "audited_input_changed"):
+            runtime.policy_allows(self.policy_root)
+
+    def test_active_p2_policy_denies_even_injected_transport(self):
+        transport = Mock(side_effect=forbidden)
+        result = runtime.probe(self.store, "actual-p2-denial", True, transport=transport, policy_root=ROOT)
+        self.assertEqual(result["requests"]["attempted"], 0)
+        self.assertEqual(result["requests"]["reserved_bytes"], 0)
+        self.assertIn("active_policy_denies_network", result["error_codes"])
+        transport.assert_not_called()
+
+    def test_each_audited_fixture_file_is_checked(self):
+        audit = json.loads((self.policy_root / "docs/reviews/p1-prompt-audit.json").read_text(encoding="utf-8"))
+        for relative in audit["files"]:
+            self.make_policy_fixture()
+            path = self.policy_root / relative
+            path.write_text(path.read_text(encoding="utf-8") + "\n# test tamper\n", encoding="utf-8")
+            with self.subTest(path=relative), self.assertRaisesRegex(models.Invalid, "audited_input_changed"):
+                runtime.policy_allows(self.policy_root)
 
     def test_daily_limit_prevents_injected_transport(self):
         transport = Mock(side_effect=sources.TransportError("http_status_503"))
         for n in range(6):
-            runtime.probe(self.store, "daily-" + str(n), True, transport=transport)
-        last = runtime.probe(self.store, "daily-over", True, transport=transport)
+            self.probe(self.store, "daily-" + str(n), True, transport=transport)
+        last = self.probe(self.store, "daily-over", True, transport=transport)
         self.assertEqual(transport.call_count, 12)
         self.assertEqual(last["requests"]["attempted"], 0)
         self.assertIn("request_budget_exhausted", last["error_codes"])
@@ -770,7 +827,7 @@ class RuntimeTests(TempStoreTests):
     def test_task_intent_conflict_not_reinterpreted(self):
         runtime.demo(self.store, "same-key")
         with self.assertRaises(models.Invalid):
-            runtime.probe(self.store, "same-key", True, transport=Mock(side_effect=forbidden))
+            self.probe(self.store, "same-key", True, transport=Mock(side_effect=forbidden))
 
     def test_cli_generic_errors_do_not_expose_private_details(self):
         output = io.StringIO()

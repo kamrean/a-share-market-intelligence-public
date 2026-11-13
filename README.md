@@ -10,9 +10,11 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-Stage 0 is human-merged in this public repository. P1 covers the Stage 1-2 data
-capture and evidence foundation; it does not complete the research product.
-See [Blueprint v1](BLUEPRINT.md), [the P1 design](docs/P1_DESIGN.md) and
+P0 and P1 are human-merged in this public repository. Stage1 engineering retains
+source gaps; Stage2 evidence core is merged. Current P2 implements the offline
+Stage3-4 market, flow/sector, news, entity and event-intelligence foundation.
+It does not complete the research product.
+See [Blueprint v1](BLUEPRINT.md), [P2 methods](docs/P2_METHODS.md) and
 [canonical state](project-state/state.json) for scope and lifecycle status.
 
 The local foundation includes bounded RSS capture, offline market CSV parsing,
@@ -24,23 +26,55 @@ The [source matrix](docs/SOURCE_MATRIX.md) records candidate sources and limits.
 The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
-Only one official Federal Reserve press feed is allowlisted for explicit local
-retrieval. Market normalization fixtures are synthetic. The paid-provider boundary
-is disabled, not a connected integration. Scheduling, research agents, report
-delivery, Telegram, trading and VPS deployment remain outside P1.
+P1's original official Federal Reserve press observation remains historical.
+Active P2 policy disables all external retrieval, including the old probe command;
+existing runtime guards deny dispatch before network access. Market normalization
+fixtures are synthetic. The paid-provider boundary is disabled, not connected.
+Scheduling, models, reports/delivery, Telegram, trading and VPS remain outside P2.
 
 This repository began as a sanitized import, documented in
 [the publication manifest](docs/PUBLICATION_PROVENANCE.json). Historical P0
 receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json)
-records their subsequent public closeout.
+and [P1 merge evidence](docs/reviews/p1-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
 status. Subsequent exact-head runs, protection checks and merge evidence belong
-on the public pull request. P2 requires P1 human merge and its own reviewed
+on the public pull request. P3 requires P2 human merge and its own reviewed
 contract; no later work is authorized implicitly.
 
 ## Local Workflows
+
+The P2 offline command uses fixed authored fixtures, reads no credentials and
+makes no network requests or persistent writes:
+
+```text
+python -m market_intelligence.intelligence demo
+```
+
+Its envelope separates actual `run_id` / `generated_at` from historical fixture
+`as_of`. The content-addressed result is under `bundle.content`; inspect `status`,
+the six `domains`, `live_market_coverage` and `readiness` together. A synthetic
+DEGRADED result is expected when optional flow is unavailable. The committed
+[demo record](docs/evidence/p2-demo.json) identifies actual execution status.
+Verify bundles with `verify_bundle` and the original inputs/configuration. Keep
+raw CLI JSON when exporting evidence: numeric representations participate in
+the Python canonical hash and must not be coerced by another runtime.
+
+Methods include explicit-universe breadth and turnover, equal-weight sector
+returns and rank change over complete declared session windows. Missing history
+is `insufficient_history`. Source-linked news groups retain all member IDs and
+visible ranking factors; mapping ambiguity stays unresolved. Event states never
+infer confirmation from elapsed time. Outcome, expected impact and measured
+reaction are separate. See [the method boundaries](docs/P2_METHODS.md) and the
+versioned configuration for formulas, universes and limitations.
+
+Sector rotation compares equal-weight returns over the last L sessions with the
+preceding nonoverlapping L-session window; it needs 2L+1 closes for every declared
+member. Relative turnover divides the current universe total by the mean of the
+previous L totals. Rank ties use sector IDs; zero/missing baselines remain null.
+News priority uses authority points A=4/B=2/C=0, plus one for unambiguous mapping,
+times step decay 2^(-floor(age/half_life)). It is not a truth/profit probability.
 
 Prerequisites: Git and Python 3.12. There are no third-party dependencies.
 Run from the checkout, using an absolute SQLite **file** path outside every Git
@@ -50,7 +84,6 @@ are not a system-wide quota service and must not be used to evade limits.
 
 ```text
 python -m market_intelligence demo --store <absolute-external-demo.sqlite> --task-key demo-1
-python -m market_intelligence probe --store <absolute-external-live.sqlite> --task-key probe-1 --allow-network
 python -m market_intelligence replay --store <absolute-external-demo.sqlite> --capture-id <capture-id> --parser-version rss-v1
 python -m market_intelligence sweep --store <absolute-external-live.sqlite>
 ```
@@ -90,7 +123,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage1-2-evidence-foundation`. The gate checks
+The active construction branch is `stage3-4-intelligence-foundation`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

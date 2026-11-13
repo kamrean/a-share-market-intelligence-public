@@ -39,4 +39,4 @@ jobs:
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
       - name: Check committed patch whitespace
-        run: git diff --check 94ae20ca0ea225aa8118314e04684869accb2a11 HEAD
+        run: git diff --check e7b36fb715a508c1e4ca91ac97a06b40bed2da7a HEAD

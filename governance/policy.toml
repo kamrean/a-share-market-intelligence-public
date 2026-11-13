@@ -1,5 +1,5 @@
 schema_version = 1
-active_package = "P1"
+active_package = "P2"
 python_version = "3.12"
 merge_tier = "D"
 human_merge_required = true
@@ -19,7 +19,7 @@ visibility = "public"
 
 [permissions]
 research_only = true
-external_data_access_allowed = true
+external_data_access_allowed = false
 scheduled_collection_allowed = false
 llm_research_allowed = false
 telegram_delivery_allowed = false
@@ -28,12 +28,3 @@ vps_mutation_allowed = false
 broker_allowed = false
 order_execution_allowed = false
 portfolio_control_allowed = false
-
-[repair_exception]
-id = "p1-optional-degraded-freeze-20261113"
-authorized_on = "2026-11-13"
-blocked_snapshot = "88b9de82cd67ac3c9653170902ef7416a44e2cc160ae9b046153ac5760874c3d"
-additional_cycles = 1
-product_paths = ["market_intelligence/store.py","tests/product/test_p1.py"]
-purpose = "Preserve validated rejected-input provenance for optional-domain DEGRADED freezing; add regression tests and repeat independent review/release/PR/CI."
-permissions_changed = false
