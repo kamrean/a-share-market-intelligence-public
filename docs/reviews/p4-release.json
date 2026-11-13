@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a1d4fb-314f-7ac0-a2fc-e1952264dd91",
+  "read_only": true,
+  "snapshot_id": "f0b442973958b7690dc6bf504d0f4aa9d2960741f4734e227f59b1c130a6d5a8",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; live integration and MVP acceptance require reviewed scope; no VPS"
+}

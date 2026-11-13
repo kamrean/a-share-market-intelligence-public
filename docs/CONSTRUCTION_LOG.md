@@ -450,3 +450,151 @@ Audited inputs and all59 immutable paths remain unchanged. Old snapshot
 a8fc9b574c05ce2238c2828f997f54a2540710a44e31b450512e766c801aec9d
 and its receipts do not approve the corrected bytes. One P3 repair cycle is
 consumed; only actual re-review and separate release may advance the next gate.
+
+## P3 Human Merge and P4 Publication Foundation - 2026-11-13
+
+Verified PR #4 human-merged at2026-11-13T12:46:44Z. Tested head
+e56c230a4b37ace4a6d12c53bad4e7463e88ebc3; merge
+9976a304c23be444093eaeaaf1277a2c846aed4d. PR CI43424527859 succeeded
+on both platforms. Waited for merge-main CI43428054869: Ubuntu1m1s and
+Windows5m58s both succeeded. Frozen P3 local receipts remain historical;
+actual final remote release PASS was recorded on PR #4. Its consumed repair
+cycle does not reset within P3 or grant a cross-package exception.
+
+Synced clean main, ran the existing local gate --ci (LOCAL_READY_FOR_PR),
+then created stage7-report-ledger. Drafted a P4 contract covering offline
+three-part reports, immutable ledger/corrections and simulated delivery
+guardrails. No source/model/Telegram/network/VPS permission is enabled.
+Five benchmarks remain0/5 live-verified; full MVP and observation stay unmet.
+All77 historical paths, including P0-P3 product/config/tests/reviews and
+Blueprint v1, are immutable. Current scope104 files/100 protected/four current
+attestations. Contract/entrypoint/Prompt Auditor must pass before product edits.
+
+P4 is a bounded offline subset, not completion of all Stage7/Stage8 or MVP.
+After human merge the next useful grouped package is reviewed live integration
+and acceptance, not an automatic jump to long observation or VPS. No real
+delivery destination or provider credentials are assumed or requested here.
+
+Independent entrypoint and Prompt Auditor returned actual PASS with zero
+findings/repair cycles before any P4 product/checker edits. Auditor
+01a1d4fb-314f-7ac0-a2fc-e1952264dd91 verified deterministic full-contract
+rendering,104/77/100/4 scope and hash-bound prerequisites. Coordinator attached
+the actual receipts using the tool-assigned identity; this is preparation
+approval only, not implementation review or release.
+
+Bounded product Builder01a1d500-8a3d-7b40-a7d4-7f499280b20a owns only
+publication.py/ledger.py/delivery.py, p4_publication.toml and test_p4.py.
+Governance Builder01a1d500-8c0c-7940-afe8-24f1c689f287 owns only checker,
+governance tests and CI definition. Coordinator owns integration/docs/state
+and actual execution evidence. Neither Builder may review its own work.
+The fixed-dataset boundary is intentional and disclosed; it is replaceable
+only by later reviewed live integration, not by relabeling fixture outputs.
+
+Governance Builder completed the three owned files. Focused binding tests12/12,
+prompt verification, syntax checks and diff whitespace passed; original61 tests
+remain with five new P4 binding cases (66 total). Full-suite validation is pending
+integration. CI preserves job names/platforms/action pins/permissions and uses a
+15-minute limit for the expanded offline suite. No protection rule is weakened.
+An intermediate publication privacy scan passed249 items; final scan remains
+required after all artifacts and the final commit are present.
+
+During normal Builder integration, coordinator requested readable deterministic
+item formatting instead of a raw JSON report dump, and explicit bounded reasons
+when a delivery quota/rate/clock/storage guard refuses dispatch. These remain
+inside the approved report/guard scope; no audited contract/policy/method input
+or permission changed. Formal implementation review has not begun and no P4
+formal repair cycle has been consumed.
+
+Coordinator executed the actual offline CLI and preserved raw JSON without
+numeric coercion plus the rendered text. Execution e315ffbb8a0f414fbfe8dac7a54e537b,
+generated2026-11-13T13:21:22.901725Z, retains historical fixture as_of2020-01-10.
+The original and linked explanatory correction each have three logical parts
+and five bounded chunks. Actual fake success and separate failure/ambiguity
+exercises are recorded; partial failure is failed/bound_fake_failed, malformed
+acknowledgement is unknown/invalid_ack. Sample recomputation and exact text
+comparison passed. No real send, live model/source run or human quality label
+was created. Final tests/review remain separate prerequisites.
+
+Product Builder completed the five owned files and actual focused49 tests
+passed in15.581s. Full product suite239 tests (190 historical plus49 P4) passed
+in29.331s. Coordinator separately ran the190 historical tests in12.715s with
+PASS. Existing generated JSON/text remain valid; no regeneration was needed.
+Bound fake receipts and dispatch reservations persist in SQLite; quota refusal
+reasons are returned explicitly, not falsely recorded as a send attempt.
+
+Freeze P4 as implemented_unreleased and Stage8 as offline_subset_implemented_unreleased,
+not full-stage/MVP completion. The66-test governance run, exact scope/prompt/bundle,
+independent read-only Reviewer and separate Release Checker still require actual
+results; only enumerated current attestations may attach them after this freeze.
+No P4 formal repair cycle consumed at freeze. Subsequent exact-head CI, remote
+release and human merge belong on PR; local records keep NOT_RUN_AT_SNAPSHOT.
+
+Before independent implementation review, the staged whitespace check detected
+an empty Evidence line with trailing whitespace for unavailable flow. Coordinator
+corrected the renderer to state unavailable (no source), added regression
+assertions and regenerated the sample through the actual CLI. This narrow
+integration correction changes no permission or audited prerequisite. The first
+execution above is historical; the canonical sample is now execution
+4d044eccf891471a8bf08785dea65fb9, generated2026-11-13T13:34:21.993514Z.
+All product tests and sample verification are rerun for the final renderer.
+The governance checker/test logic and audited contract inputs remain unchanged;
+the in-progress full governance run tests those same logic bytes. Final real-tree
+scope/index/snapshot and prompt checks run again after staging this correction.
+No formal P4 Reviewer verdict had been issued at that checkpoint; repair_cycles was0.
+
+## P4 Independent Review and Bounded R1 Repair
+
+Independent Reviewer 01a1d51f-8ff4-73d2-a62c-108117996c66 returned BLOCK on
+snapshot 35e3aa7b5c82ffcb9e98b9744a18112dd3aff62869942e4d428244ae4119a2c6.
+It ran49 focused tests,239 full product tests and12 governance binding tests,
+plus an actual forged-chronology probe. The probe made correction receipts
+precede completion of the original report while preserving per-report hashes.
+The sample verifier accepted; the actual ledger rejected the same chronology.
+The issue is evidence verification, not a live-send permission or ledger bypass.
+The earlier full66 governance tests completed PASS in700.667s; this did not
+override the independent finding.
+
+Original finding below retains its substance and exact location; its local
+absolute path is normalized to repo-relative form for public privacy.
+
+```json
+{
+  "schema_version": 1,
+  "role": "reviewer",
+  "verdict": "BLOCK",
+  "snapshot_id": "35e3aa7b5c82ffcb9e98b9744a18112dd3aff62869942e4d428244ae4119a2c6",
+  "agent_id": "01a1d51f-8ff4-73d2-a62c-108117996c66",
+  "read_only": true,
+  "findings": [
+    {
+      "id": "P4-REV-001",
+      "severity": "P2",
+      "repair_class": "R1",
+      "path": "market_intelligence/publication.py",
+      "line": 365,
+      "title": "Sample verification accepts impossible cross-report receipt chronology",
+      "reproduction": "Move correction reservations and outcomes to the original report's first reservation time; recompute acknowledgement reservation hashes. verify_demo accepts; Ledger rejects the same chronology."
+    }
+  ],
+  "repair_cycles": 0
+}
+```
+
+Coordinator used the single permitted R1 correction batch. A new regression
+first failed as expected: Invalid not raised. The narrow runtime change carries
+the prior success report's final completion time into validation of the next
+success report. Independent error-exercise databases keep their own timeline.
+A positive control explicitly permits independent exercise times without
+coupling them to the successful reports. Only publication.py/test_p4.py change
+in the product; no audited contract/policy/method/entrypoint input or historical
+artifact is modified.
+
+The valid actual sample remains unchanged and must reverify. Full product and
+governance suites, scope/prompt/bundle and exact staging are rerun for the repair.
+One formal P4 repair cycle is consumed. Only actual re-review and a separate
+Release Checker may advance; another/unknown/out-of-scope BLOCK requires human
+escalation. The original BLOCK is not approval of the repaired bytes.
+The repaired product suite240/240 passed in29.456s (50 P4,190 historical).
+The unchanged canonical sample reverified and text matched exactly. The new
+governance run starts only after this repaired freeze; its actual result will
+be attached in the validation receipt rather than assumed here.

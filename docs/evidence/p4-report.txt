@@ -1,0 +1,204 @@
+SYNTHETIC LOCAL PUBLICATION; NOT REAL TELEGRAM DELIVERY
+report_id=0d03cdf495f351541191acb88c301ce9876f7f63cce5c3cba342b0fb16f2332e part=1/3
+mode=synthetic_test as_of=2020-01-10T12:00:00Z
+kind=daily_brief supersedes=None
+correction_reason=None
+GAP: Fixed authored synthetic dataset; historical as_of is not current market news.
+GAP: Live benchmark coverage 0/5; flow unavailable, never zero-filled.
+GAP: Model and real Telegram unverified; MVP not_implemented; observation not_started; VPS not_authorized.
+GAP: Citation validity and synthetic role agreement are not truth, entailment or causal verification.
+1. Sourced news and upcoming events
+
+Item 7dbe24956fcba8c0538531b4706d88de5a8b9ce7210d25d0bcaa724f9aa9edc7
+News: SYNTHETIC Synthetic Alpha disclosure
+Classification: sourced_report
+Evidence: E004, E026
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item b235a0a531eae936a59ffd4c47975ba4acb63047ccafc27f56f838269b0d5f07
+Event: SYN_EVENT; state=confirmed
+Planned: None; occurred: 2020-01-09T07:00:00Z
+Success: unassessed; confirmation overdue=False
+Impact hypothesis only: synthetic_technology; direction=positive
+Observed synthetic reaction: SYN_A; return=0.0280373832; sessions=2020-01-09 to 2020-01-10; causal attribution not established.
+Evidence: E021, E026, E027, E030, E036, E039, E040
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item c72840fe41476571f15a267c7721c6227c5659b1b049cb15ef8918c5bb976672
+Event: SYN_REPLACEMENT; state=approaching
+Planned: 2020-01-11T12:00:00Z; occurred: None
+Success: unassessed; confirmation overdue=False
+Evidence: E025, E026
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+Source locators (synthetic; not fetched):
+E004 | 1457e28c0c95033c982350b45fdcc11769939911273e840cd052b907cbf9e72d | synthetic_secondary | https://example.invalid/secondary/news-alpha
+E021 | 88bdbb8ab81da2e5559d7fa0bdb88d41dd71231775f46b301dcfa02931273a93 | synthetic_primary | https://example.invalid/primary/6
+E025 | 9f39d95e05a9c72ecd6262ba3b2b1c4731f3adfb8948dd98d6c584deb5a6d708 | synthetic_primary | https://example.invalid/primary/37
+E026 | a70d5b128c577bf5ffce5c2c701d0461b2acf48f5b73bc41247ce127dd349f68 | synthetic_primary | https://example.invalid/primary/news-alpha
+E027 | a9dd4ab8f8ffed3e5eae01a979bc60662c1e9fc2d5babb14553381e79683f1db | synthetic_primary | https://example.invalid/primary/39
+E030 | cfeaf3523da376afb199bb2772ce775a5cd306bfc0333a1373cdb3117e8c00de | synthetic_primary | https://example.invalid/primary/5
+E036 | e7f904a81392b8e6abf05256dcce4fc741a972229c66628630644468d116b8aa | synthetic_primary | https://example.invalid/primary/36
+E039 | f92e98da7383accacd9874ee6c887282c001319cad13581f76385c20598d7a75 | synthetic_primary | https://example.invalid/primary/35
+E040 | fcfdde8aa6cc4115a85141b5f696e322800246ae4d4e77b0472857f213c7790a | synthetic_primary | https://example.invalid/primary/38
+
+SYNTHETIC LOCAL PUBLICATION; NOT REAL TELEGRAM DELIVERY
+report_id=0d03cdf495f351541191acb88c301ce9876f7f63cce5c3cba342b0fb16f2332e part=2/3
+mode=synthetic_test as_of=2020-01-10T12:00:00Z
+kind=daily_brief supersedes=None
+correction_reason=None
+GAP: Fixed authored synthetic dataset; historical as_of is not current market news.
+GAP: Live benchmark coverage 0/5; flow unavailable, never zero-filled.
+GAP: Model and real Telegram unverified; MVP not_implemented; observation not_started; VPS not_authorized.
+GAP: Citation validity and synthetic role agreement are not truth, entailment or causal verification.
+2. Benchmarks, breadth, turnover and unavailable flow
+
+Item dec61f349ca135a49e53a3f55dc7c1d17ed30e31399b31fe6cce9529d6d53786
+Benchmark: 000001.SH; value=1000; session=2020-01-10; available
+Evidence: E023
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item ffde2511eb41ad2d66208da6c7d16c50b49dd0653eea61963fcc0e47e33263f1
+Benchmark: 399001.SZ; value=1000; session=2020-01-10; available
+Evidence: E029
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item b24f1fa855091e3fe351318ef9594089211cbd6f063955f32eaa98b489ae3728
+Benchmark: 399006.SZ; value=1000; session=2020-01-10; available
+Evidence: E015
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item a18a2f6180e429c3e0b824903634ee7b82a0fb16b9993d2a4f9125413af57781
+Benchmark: KOSPI; value=1000; session=2020-01-10; available
+Evidence: E032
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item 0f4d978f6a4f9128b69e1e398d42249d065c08df107355f46b74d8146491fed0
+Benchmark: SP500; value=1000; session=2020-01-09; available
+Evidence: E020
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item 48a95372d3d0af6829268738b694f76cd09b23734b3cee7208b72156f1e06b49
+Synthetic breadth: advancing=1; declining=1; unchanged=2; eligible=4; expected=4
+Ratios: advancing=0.25; declining=0.25; unchanged=0.5
+Evidence: E001, E002, E003, E005, E006, E007, E008, E009, E010, E011, E012, E013, E014, E015, E016, E017, E018, E019, E020, E021, E022, E023, E024, E028, E029, E030, E031, E032, E033, E034, E035, E037, E038
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item f1379c38645a80f6d63d30dd856f056f15eda40b05e9be2e1da077f81e168745
+Turnover: 1240 CNY currency_units; relative=1.0689655172; reason=None
+Evidence: E001, E002, E003, E005, E006, E007, E008, E009, E010, E011, E012, E013, E014, E015, E016, E017, E018, E019, E020, E021, E022, E023, E024, E028, E029, E030, E031, E032, E033, E034, E035, E037, E038
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item b8a1c1f7dccd6249081db33350b2451403a12d59478d6476081bce018c0a9b22
+Flow: unavailable; value=unavailable; unit=unavailable; provider=unconfigured; series=provider_estimate; reason=not_integrated
+Evidence: unavailable (no source)
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+Source locators (synthetic; not fetched):
+E001 | 00f8ee766fc3de50492f580218d7d0a3f56806d00a43fbb7f23fd24778ef4415 | synthetic_primary | https://example.invalid/primary/4
+E002 | 01b3ac3dbdca4d8e6d16056be07ddd593cc0ee68f45dca8bc32f887cdc3d0996 | synthetic_primary | https://example.invalid/primary/25
+E003 | 06d50d07c454ec762b73e63bfb5bb407caf4f6f044989487fa3151b02618fba0 | synthetic_primary | https://example.invalid/primary/9
+E005 | 1a7a70df6e38ba3d14e9e92c8b0c13f2e85b451ef1f67adaa6a9d1f8574ac5d5 | synthetic_primary | https://example.invalid/primary/26
+E006 | 2618bb9f39f697c4ac97c0c3c9b4b4011e874c2e45898dedbd531cb6bb7b35ce | synthetic_primary | https://example.invalid/primary/14
+E007 | 390c137e22be936c4cd9951ea88c77632e331c94e13104625c4bf9ee31c2e389 | synthetic_primary | https://example.invalid/primary/15
+E008 | 40d0226ec3547461df2d1d14f7d3a8673f42af1d38fe87d817118b02ecef7ccc | synthetic_primary | https://example.invalid/primary/20
+E009 | 4873bacbae268084435a3157fcb6d22b3d6c921580bcec327a27cb50bb92aa51 | synthetic_primary | https://example.invalid/primary/23
+E010 | 5134c6515f7568fdfaabcc6cf6a41263fbbafaba28aa4b965209cf02263912ea | synthetic_primary | https://example.invalid/primary/8
+E011 | 518da7821c0e48a07cfb3e48ee01dfae67e227baf08ca834409708c2bcaf3b3d | synthetic_primary | https://example.invalid/primary/7
+E012 | 63e3bb963d973d7d1c8e77a1479b63798b92198828f5a4d4c3750a7820745112 | synthetic_primary | https://example.invalid/primary/2
+E013 | 66b8f3944e7e89ddb7896c9e4306cbe20e47eb18d0ad79cdcd784be39c24c031 | synthetic_primary | https://example.invalid/primary/1
+E014 | 733e0a7990d490f0c0c52d3edf4f845d0673e91d7b663a5fd981b79ffd8bc2ef | synthetic_primary | https://example.invalid/primary/17
+E015 | 77fc2105b854ef47bfb90b8786761da75c6aff1edcc4ff5f7b816ef7a3407d44 | synthetic_primary | https://example.invalid/primary/30
+E016 | 784075c4b84a0d4eb22fd76e56c10ac282dc169647df3785e21d8a5bf35aefd3 | synthetic_primary | https://example.invalid/primary/18
+E017 | 78b670ab7757da6ea2e908ae32f7e801021ade36a94e55793d668bcdd8bffe02 | synthetic_primary | https://example.invalid/primary/11
+E018 | 7a0b1138c51dd6fe5f7c0972ea3e43c7830751b9ddeddae66a1b2c5c3ada27bb | synthetic_primary | https://example.invalid/primary/0
+E019 | 7dbc5a7270685414ba4d99eb61d7bf47f2c4e58922ee9e7bc1b5117db749efcc | synthetic_primary | https://example.invalid/primary/19
+E020 | 872cf7daf448a0a8b0cefbf0bddef48aa86a7b2764bd2c93ddaf1aa2af77d09b | synthetic_primary | https://example.invalid/primary/32
+E021 | 88bdbb8ab81da2e5559d7fa0bdb88d41dd71231775f46b301dcfa02931273a93 | synthetic_primary | https://example.invalid/primary/6
+E022 | 8d8f41bd7bf828a3bb905a77ce52a35ddacc8c5ac4cf5e4738c34b831e2583c8 | synthetic_primary | https://example.invalid/primary/13
+E023 | 91726c994b0acf8e91aaab795025ec9d7542630d59e75701246a95d689e4ec91 | synthetic_primary | https://example.invalid/primary/28
+E024 | 9b1259ef27cdd58a4f6eba3c595bdeba74d78427fcb7707a90d8721acb0d9906 | synthetic_primary | https://example.invalid/primary/3
+E028 | b305d989a0243003ea26f996d0e849749c1f528fbbfc09bb585a9ec6ee40b49e | synthetic_primary | https://example.invalid/primary/12
+E029 | cf6a2a58b24a7c029ebb45a867d9d1522bc174dc4f149fd4495c2d9af3557eb2 | synthetic_primary | https://example.invalid/primary/29
+E030 | cfeaf3523da376afb199bb2772ce775a5cd306bfc0333a1373cdb3117e8c00de | synthetic_primary | https://example.invalid/primary/5
+E031 | d0857f784812410018e41887925ae40630209c20713b278c6b6f167503af58f8 | synthetic_primary | https://example.invalid/primary/27
+E032 | d85c2734124b9756a2b8d5e5baff692c3eece1713cc6c1715a1c129792c7761a | synthetic_primary | https://example.invalid/primary/31
+E033 | da55aa7964edfadd0b180a8af21bfa5dd3dd6733a5211cff8ceacefb1faa7954 | synthetic_primary | https://example.invalid/primary/16
+E034 | dc74cfea7fdaa72980f5a8f35b19424fd1dae00e7d8445887f4aebe0eec467f5 | synthetic_primary | https://example.invalid/primary/24
+E035 | e612b99465c8cfe4fa91e314068249930af7d943b43d785c507367b8614883fc | synthetic_primary | https://example.invalid/primary/21
+E037 | f5cdcbe8f362005437c8e9e84256ca08754133c669543d982e36ed7f99e2a874 | synthetic_primary | https://example.invalid/primary/10
+E038 | f6c9e63af24b90568986953e203c073545b399258c3664e271110917d11dcfbd | synthetic_primary | https://example.invalid/primary/22
+
+SYNTHETIC LOCAL PUBLICATION; NOT REAL TELEGRAM DELIVERY
+report_id=0d03cdf495f351541191acb88c301ce9876f7f63cce5c3cba342b0fb16f2332e part=3/3
+mode=synthetic_test as_of=2020-01-10T12:00:00Z
+kind=daily_brief supersedes=None
+correction_reason=None
+GAP: Fixed authored synthetic dataset; historical as_of is not current market news.
+GAP: Live benchmark coverage 0/5; flow unavailable, never zero-filled.
+GAP: Model and real Telegram unverified; MVP not_implemented; observation not_started; VPS not_authorized.
+GAP: Citation validity and synthetic role agreement are not truth, entailment or causal verification.
+3. Sectors and approved claims
+
+Item f6a09f0408435acdff02fa8a80cbeb403128a9595029348f4ab3e78669ce3320
+Sector: synthetic_industry; available
+Method: equal-weight synthetic return=-0.0154639175; turnover share=0.6612903226
+Rank=2; rank change=0; coverage=2/2
+Evidence: E001, E002, E003, E005, E006, E007, E008, E009, E010, E011, E012, E013, E014, E015, E016, E017, E018, E019, E020, E021, E022, E023, E024, E028, E029, E030, E031, E032, E033, E034, E035, E037, E038
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item 562648c8ad4273adee541713d44134437a70db9c38374fade56ee9b4d9033bd9
+Sector: synthetic_technology; available
+Method: equal-weight synthetic return=0.0437845041; turnover share=0.3387096774
+Rank=1; rank change=0; coverage=2/2
+Evidence: E001, E002, E003, E005, E006, E007, E008, E009, E010, E011, E012, E013, E014, E015, E016, E017, E018, E019, E020, E021, E022, E023, E024, E028, E029, E030, E031, E032, E033, E034, E035, E037, E038
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item be397d552433c9f19ed4343c48ce4ff1ba1c704c78c0e692e8c951fff3f594ae
+Approved claim: synthetic-close; kind=fact; stance=confirmation; confidence=limited
+Synthetic Alpha has a declared close of 110 on the 2020-01-10 synthetic session.
+Counterargument: The authored close is not a live market observation and does not establish a trend.
+Invalidation: A correction to this exact synthetic bar would invalidate the stated close.
+Evidence: E021
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+
+Item 382e4ba1e3fc83dda95d4cbf8db5b1a309b4fdcd27c926731b47ecb14e5dbed3
+Approved claim: synthetic-attention; kind=inference; stance=attention; confidence=limited
+The sourced synthetic Alpha report may warrant informational attention; its market implications remain uncertain.
+Counterargument: A sourced report alone cannot establish materiality or a causal market effect.
+Invalidation: A source correction or a changed entity mapping would require reassessment.
+Evidence: E026
+Method fingerprint: 13e3ec3cd577a1a16ba456b18491f2ba500babd1b0322e6b6595ba731961929e
+Source locators (synthetic; not fetched):
+E001 | 00f8ee766fc3de50492f580218d7d0a3f56806d00a43fbb7f23fd24778ef4415 | synthetic_primary | https://example.invalid/primary/4
+E002 | 01b3ac3dbdca4d8e6d16056be07ddd593cc0ee68f45dca8bc32f887cdc3d0996 | synthetic_primary | https://example.invalid/primary/25
+E003 | 06d50d07c454ec762b73e63bfb5bb407caf4f6f044989487fa3151b02618fba0 | synthetic_primary | https://example.invalid/primary/9
+E005 | 1a7a70df6e38ba3d14e9e92c8b0c13f2e85b451ef1f67adaa6a9d1f8574ac5d5 | synthetic_primary | https://example.invalid/primary/26
+E006 | 2618bb9f39f697c4ac97c0c3c9b4b4011e874c2e45898dedbd531cb6bb7b35ce | synthetic_primary | https://example.invalid/primary/14
+E007 | 390c137e22be936c4cd9951ea88c77632e331c94e13104625c4bf9ee31c2e389 | synthetic_primary | https://example.invalid/primary/15
+E008 | 40d0226ec3547461df2d1d14f7d3a8673f42af1d38fe87d817118b02ecef7ccc | synthetic_primary | https://example.invalid/primary/20
+E009 | 4873bacbae268084435a3157fcb6d22b3d6c921580bcec327a27cb50bb92aa51 | synthetic_primary | https://example.invalid/primary/23
+E010 | 5134c6515f7568fdfaabcc6cf6a41263fbbafaba28aa4b965209cf02263912ea | synthetic_primary | https://example.invalid/primary/8
+E011 | 518da7821c0e48a07cfb3e48ee01dfae67e227baf08ca834409708c2bcaf3b3d | synthetic_primary | https://example.invalid/primary/7
+E012 | 63e3bb963d973d7d1c8e77a1479b63798b92198828f5a4d4c3750a7820745112 | synthetic_primary | https://example.invalid/primary/2
+E013 | 66b8f3944e7e89ddb7896c9e4306cbe20e47eb18d0ad79cdcd784be39c24c031 | synthetic_primary | https://example.invalid/primary/1
+E014 | 733e0a7990d490f0c0c52d3edf4f845d0673e91d7b663a5fd981b79ffd8bc2ef | synthetic_primary | https://example.invalid/primary/17
+E015 | 77fc2105b854ef47bfb90b8786761da75c6aff1edcc4ff5f7b816ef7a3407d44 | synthetic_primary | https://example.invalid/primary/30
+E016 | 784075c4b84a0d4eb22fd76e56c10ac282dc169647df3785e21d8a5bf35aefd3 | synthetic_primary | https://example.invalid/primary/18
+E017 | 78b670ab7757da6ea2e908ae32f7e801021ade36a94e55793d668bcdd8bffe02 | synthetic_primary | https://example.invalid/primary/11
+E018 | 7a0b1138c51dd6fe5f7c0972ea3e43c7830751b9ddeddae66a1b2c5c3ada27bb | synthetic_primary | https://example.invalid/primary/0
+E019 | 7dbc5a7270685414ba4d99eb61d7bf47f2c4e58922ee9e7bc1b5117db749efcc | synthetic_primary | https://example.invalid/primary/19
+E020 | 872cf7daf448a0a8b0cefbf0bddef48aa86a7b2764bd2c93ddaf1aa2af77d09b | synthetic_primary | https://example.invalid/primary/32
+E021 | 88bdbb8ab81da2e5559d7fa0bdb88d41dd71231775f46b301dcfa02931273a93 | synthetic_primary | https://example.invalid/primary/6
+E022 | 8d8f41bd7bf828a3bb905a77ce52a35ddacc8c5ac4cf5e4738c34b831e2583c8 | synthetic_primary | https://example.invalid/primary/13
+E023 | 91726c994b0acf8e91aaab795025ec9d7542630d59e75701246a95d689e4ec91 | synthetic_primary | https://example.invalid/primary/28
+E024 | 9b1259ef27cdd58a4f6eba3c595bdeba74d78427fcb7707a90d8721acb0d9906 | synthetic_primary | https://example.invalid/primary/3
+E026 | a70d5b128c577bf5ffce5c2c701d0461b2acf48f5b73bc41247ce127dd349f68 | synthetic_primary | https://example.invalid/primary/news-alpha
+E028 | b305d989a0243003ea26f996d0e849749c1f528fbbfc09bb585a9ec6ee40b49e | synthetic_primary | https://example.invalid/primary/12
+E029 | cf6a2a58b24a7c029ebb45a867d9d1522bc174dc4f149fd4495c2d9af3557eb2 | synthetic_primary | https://example.invalid/primary/29
+E030 | cfeaf3523da376afb199bb2772ce775a5cd306bfc0333a1373cdb3117e8c00de | synthetic_primary | https://example.invalid/primary/5
+E031 | d0857f784812410018e41887925ae40630209c20713b278c6b6f167503af58f8 | synthetic_primary | https://example.invalid/primary/27
+E032 | d85c2734124b9756a2b8d5e5baff692c3eece1713cc6c1715a1c129792c7761a | synthetic_primary | https://example.invalid/primary/31
+E033 | da55aa7964edfadd0b180a8af21bfa5dd3dd6733a5211cff8ceacefb1faa7954 | synthetic_primary | https://example.invalid/primary/16
+E034 | dc74cfea7fdaa72980f5a8f35b19424fd1dae00e7d8445887f4aebe0eec467f5 | synthetic_primary | https://example.invalid/primary/24
+E035 | e612b99465c8cfe4fa91e314068249930af7d943b43d785c507367b8614883fc | synthetic_primary | https://example.invalid/primary/21
+E037 | f5cdcbe8f362005437c8e9e84256ca08754133c669543d982e36ed7f99e2a874 | synthetic_primary | https://example.invalid/primary/10
+E038 | f6c9e63af24b90568986953e203c073545b399258c3664e271110917d11dcfbd | synthetic_primary | https://example.invalid/primary/22

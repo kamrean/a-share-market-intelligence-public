@@ -10,11 +10,12 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0, P1 and P2 are human-merged in this public repository. Stage1 engineering
-retains source gaps; Stage2 core and Stage3-4 offline intelligence are merged.
-Current P3 work covers the Stage5-6 evaluation and research committee foundation.
-It does not complete the research product or verify live model integration.
-See [Blueprint v1](BLUEPRINT.md), [P3 methods](docs/P3_METHODS.md) and
+P0-P3 are human-merged in this public repository. Stage1 retains source gaps;
+Stage2 core, Stage3-4 intelligence and Stage5-6 offline research are merged.
+Current P4 work adds local three-part reports, an append-only ledger, linked
+corrections and simulated delivery safeguards. It does not complete the research
+MVP, full Stage8 or verify live model/Telegram integration.
+See [Blueprint v1](BLUEPRINT.md), [P4 methods](docs/P4_METHODS.md) and
 [canonical state](project-state/state.json) for scope and lifecycle status.
 
 The local foundation includes bounded RSS capture, offline market CSV parsing,
@@ -27,23 +28,54 @@ The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
 P1's original official Federal Reserve press observation remains historical.
-Active P3 policy disables all external retrieval, including the old probe command;
+Active P4 policy disables all external retrieval, including the old probe command;
 existing runtime guards deny dispatch before network access. Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
-Scheduling, live models, reports/delivery, Telegram, trading and VPS remain
-outside P3. Synthetic role adapters are explicitly simulated, not live-connected.
+Scheduling, live models, real Telegram, trading and VPS remain outside P4.
+Local report rendering and fake delivery are explicitly synthetic, not connected.
 
 This repository began as a sanitized import, documented in
 [the publication manifest](docs/PUBLICATION_PROVENANCE.json). Historical P0
 receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json)
 [P1 merge evidence](docs/reviews/p1-merge.json) and
-[P2 merge evidence](docs/reviews/p2-merge.json) record actual public closeout.
+[P2 merge evidence](docs/reviews/p2-merge.json) and
+[P3 merge evidence](docs/reviews/p3-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
 status. Subsequent exact-head runs, protection checks and merge evidence belong
-on the public pull request. P4 requires P3 human merge and its own reviewed
-contract; no later work is authorized implicitly.
+on the public pull request. Future live integration and MVP acceptance require
+this package's human merge and their own reviewed scope; no later external work
+is authorized implicitly.
+
+## Local Reports and Delivery Safeguards
+
+P4 connects the fixed authored P3 synthetic demo to three ordered report parts:
+news/events, benchmarks/flow/turnover, and sectors/approved impact claims.
+The publication boundary recomputes the original demo; it currently accepts
+that fixed dataset only, not arbitrary live model output. Every report preserves
+evidence, historical as_of, gaps, limitations and research fingerprints.
+
+A separate external SQLite ledger stores immutable research before simulated
+delivery. Corrections append a new identity linked to the previous lineage leaf.
+Durable chunk identities, sequential sends and persistent limits handle duplicate,
+failed and unknown outcomes without automatic retries of ambiguous sends.
+The live Telegram adapter is unavailable and reads no credentials.
+
+```text
+python -m market_intelligence.publication demo
+```
+
+This command uses temporary external stores and no network. Its local report,
+linked correction and fake delivery records are offline engineering evidence,
+not a real Telegram test, live research, forward observation or accuracy proof.
+See [raw demo evidence](docs/evidence/p4-demo.json) and
+[the readable sample](docs/evidence/p4-report.txt).
+
+Full MVP remains pending permitted five-index/source access, genuine model runs,
+three dated end-to-end live runs, human claim-support assessment and an authorized
+private Telegram test/correction. Those are a grouped live-integration acceptance
+task, not a reason to fabricate observations or proceed directly to VPS.
 
 ## Research Foundation
 
@@ -149,7 +181,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage5-6-research-foundation`. The gate checks
+The active construction branch is `stage7-report-ledger`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

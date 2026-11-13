@@ -16,7 +16,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    # Expanded offline P4 coverage runs after the existing governance regressions.
+    timeout-minutes: 15
     steps:
       - name: Checkout exact PR head
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -30,7 +31,7 @@ jobs:
           python-version: '3.12'
       - name: Offline governance tests
         run: python -m unittest discover -s tests/governance -p test_*.py -v
-      - name: Offline source, evidence and research tests
+      - name: Offline source, evidence, research and publication tests
         run: python -m unittest discover -s tests/product -p test_*.py -v
       - name: Scope and canonical consistency
         run: python tools/governance.py check --ci
@@ -39,4 +40,4 @@ jobs:
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
       - name: Check committed patch whitespace
-        run: git diff --check e61f1cbfc41118deb13df421b927ace3d01c150e HEAD
+        run: git diff --check 9976a304c23be444093eaeaaf1277a2c846aed4d HEAD

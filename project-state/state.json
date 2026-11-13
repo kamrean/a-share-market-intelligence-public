@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "active_package": "P3",
-  "active_contract": "contracts/p3_research.toml",
-  "branch": "stage5-6-research-foundation",
-  "baseline": "e61f1cbfc41118deb13df421b927ace3d01c150e",
+  "active_package": "P4",
+  "active_contract": "contracts/p4_publication.toml",
+  "branch": "stage7-report-ledger",
+  "baseline": "9976a304c23be444093eaeaaf1277a2c846aed4d",
   "package_status": "implemented_unreleased",
   "builder_agents": [
     "coordinator",
-    "01a1d4a5-9bd9-79f1-a271-ece02c6d29bf",
-    "01a1d4aa-0f6a-7e62-ad36-a8b97619cec0"
+    "01a1d500-8a3d-7b40-a7d4-7f499280b20a",
+    "01a1d500-8c0c-7940-afe8-24f1c689f287"
   ],
   "stage_registry": [
     {
@@ -39,22 +39,22 @@
     {
       "stage": 5,
       "package": "P3",
-      "status": "implemented_unreleased"
+      "status": "engineering_merged_live_gaps"
     },
     {
       "stage": 6,
       "package": "P3",
-      "status": "implemented_unreleased"
+      "status": "engineering_merged_live_gaps"
     },
     {
       "stage": 7,
       "package": "P4",
-      "status": "planned"
+      "status": "implemented_unreleased"
     },
     {
       "stage": 8,
       "package": "P4/P5",
-      "status": "planned"
+      "status": "offline_subset_implemented_unreleased"
     },
     {
       "stage": 9,
@@ -69,13 +69,13 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P2",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/3",
-    "merge_commit": "e61f1cbfc41118deb13df421b927ace3d01c150e",
-    "merged_at": "2026-11-13T11:15:32Z",
-    "tested_head": "20b543e417e35d2badb57aa675bbebffba718c55",
-    "pr_ci_run": 43409216927,
-    "merge_ci_run": 43415619622,
+    "package_id": "P3",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/4",
+    "merge_commit": "9976a304c23be444093eaeaaf1277a2c846aed4d",
+    "merged_at": "2026-11-13T12:46:44Z",
+    "tested_head": "e56c230a4b37ace4a6d12c53bad4e7463e88ebc3",
+    "pr_ci_run": 43424527859,
+    "merge_ci_run": 43428054869,
     "ci_status": "PASS",
     "merge_status": "merged"
   },
@@ -88,14 +88,14 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p3-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p3-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p3-builder-prompt.md",
-    "bundle": "docs/reviews/p3-bundle.json",
-    "validation": "docs/reviews/p3-validation.json",
-    "reviewer": "docs/reviews/p3-review.json",
-    "release": "docs/reviews/p3-release.json"
+    "blueprint_review": "docs/reviews/p4-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p4-builder-prompt.md",
+    "bundle": "docs/reviews/p4-bundle.json",
+    "validation": "docs/reviews/p4-validation.json",
+    "reviewer": "docs/reviews/p4-review.json",
+    "release": "docs/reviews/p4-release.json"
   },
-  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; source/model gaps remain; no P4 before its own contract",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; live integration and MVP acceptance require reviewed scope; no VPS",
   "last_updated": "2026-11-13"
 }

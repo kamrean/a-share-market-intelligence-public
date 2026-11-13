@@ -1,54 +1,49 @@
 # Construction Entrypoint
 
-Work in this public repository, not the archived ETF/private source.
-Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml,
-contracts/p3_research.toml, docs/P3_METHODS.md and docs/reviews/p2-merge.json.
-Blueprint remains v1; historical reviews are not approvals of changed bytes.
+Work in this public repository. Read AGENTS.md, BLUEPRINT.md,
+project-state/state.json, governance/policy.toml, contracts/p4_publication.toml,
+docs/P4_METHODS.md and docs/reviews/p3-merge.json. Blueprint remains v1.
+Do not bulk-read or mutate the archived ETF/private publication source.
 
 ## Current Package
 
-P0/P1/P2 were human-merged in PRs #1/#2/#3. The P2 merge receipt records actual
-tested head, merge commit and successful PR/main CI. Stage1 engineering keeps
-0/5 benchmark coverage; Stage2 core is merged. Stage3-4 engineering is merged
-with live-source gaps, not full live acceptance.
+P0-P3 are human-merged in PRs #1-#4. P3 merge evidence pins actual tested head,
+merge commit and successful PR/main CI. Stage1/3-6 retain live-source/model gaps.
+P4 implements the offline Stage7 report/ledger chain and partial Stage8 quality
+demonstration on branch stage7-report-ledger, not full P4 or MVP acceptance.
 
-P3 covers Stage5-6: evaluation measures, strict claim/review/editor protocol,
-maximum two research rounds, disabled live adapters and durable budget guard.
-Branch: stage5-6-research-foundation. The demo and tests are synthetic/offline.
-Genuine model integration, live market/news acceptance and publication are not
-claimed. Source selection and future real calls need reviewed authorization.
+This package provides three report parts, immutable records, linked corrections
+and simulated delivery safeguards. Only fixed authored P3 synthetic input is
+accepted. Five live benchmarks remain0/5; real model/Telegram, full MVP,
+forward observation and VPS remain explicitly unmet gates.
 
 ## Work Sequence
 
-1. Verify clean main, actual prerequisite human merge and CI; stop unexpected
-   modifications. Create the named branch without codex/.
-2. Freeze contract/policy/methods and render exact prompt. Obtain actual independent
-   entrypoint and Prompt Auditor PASS before product changes.
-3. Bounded Builders own disjoint files. Preserve all historical product/config/
-   tests/reviews. Coordinator owns integration, state and construction log.
-4. Run both offline suites, scope/state, exact prompt, bundle and diff checks.
-   Test adapters cannot access sockets/DNS or authorize a real model call.
-5. Execute the fixed synthetic demo; preserve raw CLI JSON without numeric
-   coercion. No runtime stores, raw provider payloads, keys or private paths in Git.
-6. Freeze protected decisions and actual sample. Get independent read-only
-   Reviewer and a different Release Checker. One default R0/R1 repair/re-review;
-   further/unknown/R2+ BLOCK requires a human decision. Preserve original BLOCK.
-7. Attach only four current attestations after freeze. Public privacy and identity
-   scans precede commit/push. Main keeps strict app-bound Ubuntu/Windows checks,
-   administrator enforcement, no force push/deletion/auto-merge.
-8. Open one coherent PR, wait for exact-head CI and independent remote release;
-   stop AWAITING_HUMAN_MERGE. Zero required GitHub approving reviews is the
-   sole-maintainer setting, not a substitute for independent agent review.
+1. Verify clean synced main, predecessor human merge and successful CI.
+2. Freeze exact contract/policy/methods and render complete prompt. Obtain actual
+   independent entrypoint and Prompt Auditor PASS before product edits.
+3. Builders own disjoint paths; coordinator owns integration/state/log/evidence.
+   Preserve all P0-P3 product/config/test/review files and Blueprint v1.
+4. Run both offline suites, scope/state/prompt/bundle/diff checks and actual demo.
+   Preserve raw JSON and readable report; no credentials/network/runtime in Git.
+5. Freeze protected content. Obtain independent read-only Reviewer and a separate
+   Release Checker. One R0/R1 repair/re-review; retain original BLOCK.
+   Second/unknown/R2+ findings require human escalation.
+6. Attach only four current attestations. Check privacy/identity and explicit
+   staging/index/worktree before commit/push/PR.
+7. Wait for actual exact-head Ubuntu/Windows CI and independent remote release.
+   Preserve app-bound checks, administrator enforcement and auto-merge off.
+   Stop AWAITING_HUMAN_MERGE; no direct merge or bypass.
 
-## Boundaries and Handoff
+## Next Gate
 
-research_only=true; all product external permissions remain false.
-No collector, live model, scheduler, report ledger/delivery, Telegram, broker,
-order, portfolio control or VPS work. No inherited ETF permissions.
-Five live benchmarks remain0/5; unavailable flow and real-model gaps stay visible.
-Preserve domain confidence, source/version/expiry, mode and as_of. Pure outcome
-calculations are descriptive, never proof of causal effects or profitable trades.
-Full MVP needs actual permitted sources, genuine model runs and P4 acceptance.
+All product external permissions stay false. No source/model network, scheduler,
+credential handling, real Telegram, broker/order/portfolio or VPS operation.
+Local fake delivery is not a private Telegram test. Old ETF Stage8 is unrelated.
 
-Report package/branch/commit/PR, actual audit/tests/review/release/CI, protection,
-merge/VPS status and next gate. P4 needs human merge and its own reviewed contract.
+After human merge, prepare one reviewed live-integration/MVP acceptance package
+for permitted sources, genuine model runs, private destination and evidence gaps.
+Do not skip to P5 long observation/VPS. Report actual branch/commit/PR, audits,
+tests/review/release/CI, protection/merge, VPS, gaps and next gate.
+Frozen NOT_RUN_AT_SNAPSHOT is historical; later CI/merge goes on PR and into
+the following package's merge receipt.
