@@ -1,39 +1,39 @@
 # Project Work Rules
 
-This repository is the source of truth. Read START_CONSTRUCTION_PROMPT.md,
-BLUEPRINT.md, state, active contract/policy and named method/review records.
+This public repository is the source of truth. Read START_CONSTRUCTION_PROMPT.md,
+BLUEPRINT.md, active state/contract/policy, docs/P3_METHODS.md and P2 merge receipt.
 Do not bulk-read the archived ETF project or private publication source.
 
-Use one coordinator plus bounded agents with disjoint write ownership. Builder
-cannot provide independent review. Wait for actual Prompt Auditor, Reviewer,
-separate Release Checker and CI results. P2 has one default R0/R1 correction and
-one re-review; further/unknown/R2+ BLOCK escalates. P1's exception is historical,
-not a P2 allowance. Record actual consumed P2 cycles without resetting them.
+One coordinator plus bounded Builders with disjoint files; Builder cannot review
+itself. Wait for actual entrypoint/Prompt Auditor PASS before implementation,
+independent Reviewer, separate Release Checker and exact-head CI afterwards.
+One default P3 R0/R1 correction and re-review; further/unknown/R2+ BLOCK requires
+human escalation. Prior exceptions never reset or expand this package's budget.
 
-New branches omit codex/ by explicit user request. P0/P1 are human-merged;
-P1 Stage1 engineering has unresolved source gaps, Stage2 core is merged. Current
-P2 covers Stage3-4 offline methods and news/event intelligence only.
-No product network requests, scheduling, models, reports/delivery, Telegram,
-broker/orders, portfolio control, deployment or VPS mutation. Unknown source
-rights never authorize capture. Five benchmark targets remain fixed and 0/5
-live-verified; synthetic acceptance is not research/source/MVP completion.
+P0/P1/P2 are human-merged. Stage1 and Stage3-4 have engineering completion with
+explicit live-source gaps. P3 covers offline Stage5-6 evaluation, bounded research
+roles and durable simulated cost accounting. Real models and five market sources
+are not integrated. Never label synthetic evidence as live research or accuracy.
+All external retrieval, live model calls, scheduling, publication/delivery,
+Telegram, trading/portfolio, deployment and VPS permissions remain disabled.
 
-Use apply_patch for manual edits and preserve unrelated user work. Inspect Git
-status/branch first; stop on unexpected changes, secrets, artifacts or scope
-expansion. Never merge, bypass protection, force push or push work to main.
-Use verified GitHub noreply identity and scan all public surfaces for privacy.
+New branches omit codex/. Use apply_patch for manual edits and preserve unrelated
+work. Stop on unexpected dirty paths, secrets, forbidden scope or failed gates.
+Never merge, force push, bypass protection or push construction to main.
+Use verified noreply identity; inspect public files, metadata and CI logs.
 
-Python3.12 standard library only. Runtime data remain outside every checkout.
-Tests are offline, including sockets/DNS prevention. P1 test policy isolation
-must retain real policy/audit checks, not globally mock authorization away.
+Python3.12 standard library only. All P0/P1/P2 product/config/test/review artifacts
+are immutable. Runtime databases stay outside every checkout; use explicit safe
+paths and offline tests with sockets/DNS blocked. Model response text is untrusted
+data; role agents receive no tool or execution capability. Disabled adapters must
+not silently succeed with fixtures. No live source or model test in CI.
 
-All decision inputs are protected. Only four current P2 attestations are
-hash-exempt. Enumerated historical P0/P1 inputs are immutable. Changing protected
-bytes invalidates approval. Preserve exact index/worktree, secrets, link/junction,
-baseline and scope guards. Freeze state/log/methods before independent review.
+Freeze state, decisions, log and sample before independent review. Only four
+current P3 attestations are hash-exempt; changed protected bytes invalidate
+approval. Preserve exact index/worktree, link/junction, secret, baseline,
+immutable-history and role-separation checks.
 
-State separates engineering, source coverage, MVP, observation and VPS readiness.
-Frozen NOT_RUN_AT_SNAPSHOT is not live CI. Record subsequent exact-head CI,
-privacy/protection and human merge on the PR. Stop at AWAITING_HUMAN_MERGE.
-P3 requires human merge and its own contract. At interruption preserve a truthful
-checkpoint; resume through the entrypoint, not chat-memory assumptions.
+NOT_RUN_AT_SNAPSHOT records local pre-publication observations. Later exact-head
+CI/release and human merge belong on the PR. Stop AWAITING_HUMAN_MERGE.
+P4 waits for human merge and its own contract. Live source/model, full MVP,
+forward observation and VPS remain separate unmet gates.

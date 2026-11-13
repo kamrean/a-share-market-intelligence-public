@@ -1,4 +1,4 @@
-"""Offline P2 regression tests; all mutations and commits use temporary repositories."""
+"""Offline P3 regression tests; all mutations and commits use temporary repositories."""
 
 from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location("p2_governance", ROOT / "tools/governance.py")
+SPEC = importlib.util.spec_from_file_location("p3_governance", ROOT / "tools/governance.py")
 g = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(g)
 
@@ -68,14 +68,63 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.policy["repository"], expected)
         self.assertEqual(self.contract["dependency"], g.dependency())
         self.assertEqual(self.state["dependency"], g.dependency())
-        self.assertEqual(g.BASELINE, "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a")
-        self.assertEqual(g.BRANCH, "stage3-4-intelligence-foundation")
+        self.assertEqual(g.BASELINE, "e61f1cbfc41118deb13df421b927ace3d01c150e")
+        self.assertEqual(g.BRANCH, "stage5-6-research-foundation")
         self.assertNotIn("codex", g.BRANCH)
         g.validate_contract(self.contract)
         g.exact(self.policy, g.POLICY, "policy")
         g.validate_state(self.state)
         self.assertIs(self.state["github"]["remote_creation_authorized"], False)
         self.assertEqual(self.state["stage_registry"][0]["status"], "complete")
+
+    def test_p3_scope_keeps_historical_packages_immutable(self):
+        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (86, 59, 82))
+        self.assertEqual(tuple(self.contract["allowed_paths"]), g.ALLOWED)
+        self.assertEqual(tuple(self.contract["immutable_paths"]), g.IMMUTABLE)
+        self.assertEqual(tuple(self.contract["attestation_paths"]), g.ATTESTATIONS)
+        self.assertEqual(set(g.ALLOWED) - set(g.PROTECTED), set(g.ATTESTATIONS))
+        self.assertEqual(g.ATTESTATIONS, (
+            "docs/reviews/p3-bundle.json", "docs/reviews/p3-validation.json",
+            "docs/reviews/p3-review.json", "docs/reviews/p3-release.json"))
+        for package in ("p0", "p1", "p2"):
+            for receipt in ("builder-prompt.md", "bundle.json", "prompt-audit.json",
+                            "release.json", "review.json", "validation.json"):
+                name = f"docs/reviews/{package}-{receipt}"
+                self.assertIn(name, g.IMMUTABLE)
+                self.assertIn(name, g.PROTECTED)
+                self.assertNotIn(name, g.ATTESTATIONS)
+        for name in ("docs/reviews/p0-merge.json", "docs/reviews/p1-merge.json",
+                     "tests/product/test_p1.py", "tests/product/test_p2.py",
+                     "contracts/p2_intelligence.toml", "templates/p2_builder_prompt.md",
+                     "docs/evidence/p2-demo.json"):
+            self.assertIn(name, g.IMMUTABLE)
+        self.assertIn("docs/reviews/p2-merge.json", g.PROTECTED)
+        self.assertNotIn("docs/reviews/p2-merge.json", g.IMMUTABLE)
+
+    def test_p2_merge_identity_and_ci_are_exact(self):
+        self.assertEqual(g.dependency(), {
+            "package_id": "P2",
+            "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/3",
+            "merge_commit": "e61f1cbfc41118deb13df421b927ace3d01c150e",
+            "merged_at": "2026-11-13T11:15:32Z",
+            "tested_head": "20b543e417e35d2badb57aa675bbebffba718c55",
+            "pr_ci_run": 43409216927, "merge_ci_run": 43415619622,
+            "ci_status": "PASS", "merge_status": "merged",
+        })
+
+    def test_stage_history_and_source_model_gaps_cannot_advance(self):
+        for stage in (3, 4):
+            self.assertEqual(self.state["stage_registry"][stage], {
+                "stage": stage, "package": "P2", "status": "engineering_merged_live_gaps"})
+        for stage in (5, 6):
+            self.assertEqual(self.state["stage_registry"][stage]["package"], "P3")
+        for next_gate in (g.NEXT_GATE, g.NEXT_GATE + "; source gaps remain; no P3 before its own contract",
+                          "start_P4", "source/model gaps resolved"):
+            with self.subTest(next_gate=next_gate), self.assertRaises(g.Block):
+                g.validate_state({**self.state, "next_gate": next_gate})
+        for active_package in ("P2", "P4"):
+            with self.assertRaises(g.Block):
+                g.validate_state({**self.state, "active_package": active_package})
 
     def test_contract_and_policy_reject_repository_drift(self):
         for key, bad in (("owner", "another-owner"), ("name", "a-share-sentinel"),
@@ -95,7 +144,9 @@ class RepositoryBindingTests(unittest.TestCase):
             with self.assertRaises(g.Block):
                 g.validate_contract(contract)
         for key, bad in (("merge_commit", "0" * 40), ("ci_status", "PENDING"),
-                         ("merge_status", "not_merged"), ("merge_ci_run", 0)):
+                         ("merge_status", "not_merged"), ("merge_ci_run", 0),
+                         ("package_id", "P1"), ("tested_head", "0" * 40),
+                         ("pr_ci_run", 43363252300), ("pr_ci_run", True)):
             contract = deepcopy(self.contract)
             contract["dependency"][key] = bad
             with self.assertRaises(g.Block):
@@ -148,7 +199,7 @@ class GovernanceTests(unittest.TestCase):
         }
 
     def setUp(self):
-        self.temporary = tempfile.TemporaryDirectory(prefix="p1-governance-")
+        self.temporary = tempfile.TemporaryDirectory(prefix="p3-governance-")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         self.run_git("init", "--initial-branch=" + g.BRANCH)
@@ -169,15 +220,18 @@ class GovernanceTests(unittest.TestCase):
         self.write(g.CONTRACT_PATH, self.original_contract.replace(self.contract["baseline"], baseline))
         self.write("governance/policy.toml", self.source_inputs["governance/policy.toml"]
                    .replace(self.contract["baseline"], baseline))
-        self.write("docs/reviews/p1-merge.json", self.source_inputs["docs/reviews/p1-merge.json"]
-                   .replace(self.contract["baseline"], baseline))
+        # Only the new P2 merge observation points at this temporary baseline.
+        # Historical P0/P1/P2 contracts, products and receipts retain their bytes.
+        prior = json.loads(self.source_inputs["docs/reviews/p2-merge.json"])
+        self.write_json("docs/reviews/p2-merge.json", {**prior, "merge_commit": baseline})
         self.state = {
-            "schema_version": 1, "active_package": "P2", "active_contract": g.CONTRACT_PATH,
+            "schema_version": 1, "active_package": "P3", "active_contract": g.CONTRACT_PATH,
             "branch": g.BRANCH, "baseline": baseline, "package_status": "implemented_unreleased",
             "builder_agents": ["coordinator", "implementation-builder"],
             "stage_registry": [
                 {"stage": i, "package": package,
-                 "status": "complete" if i in (0, 2) else "engineering_merged_source_gaps" if i == 1 else "implemented_unreleased" if i in (3, 4)
+                 "status": "complete" if i in (0, 2) else "engineering_merged_source_gaps" if i == 1 else
+                           "engineering_merged_live_gaps" if i in (3, 4) else "implemented_unreleased" if i in (5, 6)
                            else "deferred" if i == 9 else "planned"}
                 for i, package in enumerate(("P0", "P1", "P1", "P2", "P2", "P3", "P3", "P4", "P4/P5", "P5"))
             ],
@@ -188,8 +242,8 @@ class GovernanceTests(unittest.TestCase):
                        "repository": "a-share-market-intelligence-public",
                        "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT", "merge_status": "not_merged"},
             "receipts": g.RECEIPT_PATHS,
-            "next_gate": g.NEXT_GATE + "; source gaps remain; no P3 before its own contract",
-            "last_updated": "2026-11-12",
+            "next_gate": g.NEXT_GATE + "; source/model gaps remain; no P4 before its own contract",
+            "last_updated": "2026-11-13",
         }
         self.write_json("project-state/state.json", self.state)
         contract = tomllib.loads(g.read_text(self.root, g.CONTRACT_PATH))
@@ -279,14 +333,16 @@ class GovernanceTests(unittest.TestCase):
 
     def test_exact_scope_and_attestations(self):
         contract = tomllib.loads(g.read_text(self.root, g.CONTRACT_PATH))
-        self.assertEqual(len(g.ALLOWED), 68)
-        self.assertEqual(len(g.PROTECTED), 64)
-        self.assertEqual(len(g.IMMUTABLE), 39)
+        self.assertEqual(len(g.ALLOWED), 86)
+        self.assertEqual(len(g.PROTECTED), 82)
+        self.assertEqual(len(g.IMMUTABLE), 59)
         self.assertIn("docs/reviews/p0-review.json", g.PROTECTED)
         self.assertIn("docs/reviews/p0-review.json", g.IMMUTABLE)
         self.assertIn("docs/PUBLICATION_PROVENANCE.json", g.PROTECTED)
         for field, bad in (("allowed_paths", list(g.ALLOWED) + ["src/product.py"]),
                            ("attestation_paths", ["docs/"]), ("baseline", "0" * 40),
+                           ("immutable_paths", list(g.IMMUTABLE[:-1])),
+                           ("attestation_paths", [name.replace("p3-", "p2-") for name in g.ATTESTATIONS]),
                            ("branch", "main"), ("stage_ids", [1]),
                            ("required_validation", ["echo PASS"])):
             with self.subTest(field=field):
@@ -322,10 +378,10 @@ class GovernanceTests(unittest.TestCase):
             with self.assertRaises(g.Block):
                 g.exact({**policy, field: value}, g.POLICY, "policy")
 
-    def test_only_two_p2_lifecycle_states(self):
+    def test_only_two_p3_lifecycle_states(self):
         g.validate_state(self.state)
         self.state["package_status"] = "building"
-        for index in (3, 4):
+        for index in (5, 6):
             self.state["stage_registry"][index]["status"] = "in_progress"
         self.write_json("project-state/state.json", self.state)
         g.check(self.root)
@@ -340,7 +396,7 @@ class GovernanceTests(unittest.TestCase):
     def test_registry_milestones_and_remote_claims(self):
         mutations = [
             ("stage_registry", []), ("builder_agents", []), ("branch", "main"),
-            ("baseline", "0" * 40), ("active_package", "P3"), ("extra", True),
+            ("baseline", "0" * 40), ("active_package", "P4"), ("extra", True),
             ("milestones", {**self.state["milestones"], "research_mvp": "complete"}),
         ]
         for field, value in mutations:
@@ -826,11 +882,24 @@ class GovernanceTests(unittest.TestCase):
             self.write(name, original)
             self.run_git("add", name)
 
+    def test_temporary_history_preserves_prior_package_bytes(self):
+        for name in g.IMMUTABLE:
+            with self.subTest(path=name):
+                self.assertEqual(g.read_text(self.root, name), self.source_inputs[name])
+        prior_contract = tomllib.loads(g.read_text(self.root, "contracts/p2_intelligence.toml"))
+        self.assertEqual(prior_contract["package_id"], "P2")
+        self.assertEqual(prior_contract["baseline"], "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a")
+        self.assertEqual(self.load_json("docs/reviews/p1-merge.json")["package_id"], "P1")
+        self.assertEqual(self.load_json("docs/reviews/p2-merge.json")["package_id"], "P2")
+
     def test_prior_merge_evidence_cannot_be_forged(self):
-        name = "docs/reviews/p1-merge.json"
+        name = "docs/reviews/p2-merge.json"
         original = self.load_json(name)
         for key, bad in (("merge_commit", "0" * 40), ("ci_status", "PENDING"),
-                         ("merge_status", "not_merged"), ("prior_snapshot", "0" * 64)):
+                         ("merge_status", "not_merged"), ("prior_snapshot", "0" * 64),
+                         ("package_id", "P1"), ("tested_head", "0" * 40),
+                         ("pr_ci_run", 0), ("merge_ci_run", 0),
+                         ("prior_gate_check", "PASS")):
             self.write_json(name, {**original, key: bad})
             with self.assertRaisesRegex(g.Block, "prior merge evidence"):
                 g.check(self.root)
@@ -844,13 +913,26 @@ class GovernanceTests(unittest.TestCase):
             with self.assertRaisesRegex(g.Block, "builder self-review"):
                 g.check(self.root)
             self.write_json(name, original)
+            for count in (-1, 2, True, None):
+                self.write_json(name, {**original, "repair_cycles": count})
+                with self.assertRaisesRegex(g.Block, "repair bound"):
+                    g.check(self.root)
+            self.write_json(name, original)
+
+    def test_consumed_entrypoint_repair_cannot_reset_at_prompt_audit(self):
+        name = g.RECEIPT_PATHS["blueprint_review"]
+        self.write_json(name, {**self.load_json(name), "repair_cycles": 1})
+        with self.assertRaisesRegex(g.Block, "repair bound or reset"):
+            g.check(self.root)
         name = g.RECEIPT_PATHS["prompt_audit"]
-        original = self.load_json(name)
-        for count in (-1, 2, True, None):
-            self.write_json(name, {**original, "repair_cycles": count})
-            with self.assertRaisesRegex(g.Block, "repair bound"):
-                g.check(self.root)
-        self.write_json(name, original)
+        self.write_json(name, {**self.load_json(name), "repair_cycles": 1})
+        self.attest()
+        with self.assertRaisesRegex(g.Block, "repair bound or reset"):
+            g.gate(self.root)
+        review = self.load_json(g.ATTESTATIONS[2])
+        self.write_json(g.ATTESTATIONS[2], {**review, "repair_cycles": 1})
+        self.run_git("add", ".")
+        self.assertEqual(g.gate(self.root), g.LOCAL_RELEASE)
 
     def test_consumed_prompt_repair_cannot_reset_at_final_review(self):
         name = g.RECEIPT_PATHS["prompt_audit"]

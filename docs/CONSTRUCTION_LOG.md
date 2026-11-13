@@ -333,3 +333,120 @@ The repair also tests distinct assertion first-seen/retrieval times so a later
 bar cannot backfill knowledge at an earlier assertion first-seen timestamp.
 The same check covers later event-confirmation versions; its regression also
 failed before the correction and passed afterwards within this same batch.
+
+## P3 Stage 5-6 - 2026-11-13
+
+The user authorized the next blueprint package after the P2 human merge.
+PR #3 actually merged at 2026-11-13T11:15:32Z, merge commit
+e61f1cbfc41118deb13df421b927ace3d01c150e, tested head
+20b543e417e35d2badb57aa675bbebffba718c55. PR CI43409216927 and merged-main
+CI43415619622 both succeeded. The prior full local gate passed on merged main
+using --ci. docs/reviews/p2-merge.json records this observation; historical
+P2 pending wording is not the current merge status and is not rewritten.
+
+The clean main baseline was synchronized and branch
+stage5-6-research-foundation created. P3 covers Stage5-6 offline evaluation,
+strict research/rebuttal/editor roles and durable simulated cost accounting.
+Five benchmark live coverage remains0/5, live model integration is absent,
+flow unavailable, and research MVP/forward observation/VPS remain unmet.
+No product source/model request or external delivery is authorized.
+
+The coordinator prepared the exact contract, policy, methods and entrypoint.
+Independent prerequisite audit precedes product implementation. The scope
+preserves all prior product/config/test/review bytes; governance adaptation
+does not authorize runtime permissions. One default P3 correction/re-review
+is available; prior package exceptions are historical, not inherited.
+
+### P3 Implementation and Frozen Evidence
+
+Independent entrypoint and Prompt Auditor passed with zero findings/corrections.
+The auditor's tool-assigned identity is recorded in both receipts; its initial
+display alias was replaced only with the actual orchestration identity, with
+unchanged verdicts/hashes and explicit auditor confirmation.
+
+The governance Builder adapted only checker, governance tests and CI; existing
+56 tests were retained and five added. The product Builder added exactly six
+new files for evaluation, budget, research, config, authored responses and tests.
+No historical P0/P1/P2 product, config, fixture, test or review file changed.
+All 59 immutable paths were checked against the actual merged baseline.
+
+Product Builder validation passed78 new tests and186 total product tests.
+The coordinator executed the real offline CLI at2026-11-13T11:42:50.622524Z,
+run acd311f37d634b7aa2f2ffe26c6ab05c. It completed three simulated calls and
+two evidence-linked claims. The raw output, without numeric conversion, is
+docs/evidence/p3-demo.json; full deterministic recomputation passed.
+Run/generated timestamps are actual; fixture as_of and role replies are
+synthetic. No real model/source request, provider billing, publication or VPS
+operation occurred. Five benchmarks remain0/5 and semantic quality unassessed.
+
+Full governance/product results are recorded in the validation receipt only
+after actual completion. Before staging, the checker correctly rejected
+index/worktree mismatch; the response is to stage exact final allowed content,
+not weaken the guard. P3 is implemented_unreleased. At this protected freeze
+zero formal correction cycles are consumed; independent implementation and
+release decisions are not yet assumed. Historical exceptions do not apply.
+Post-freeze four attestations carry actual results; remote CI/merge remain
+NOT_RUN_AT_SNAPSHOT/not_merged here and are observed later on the PR.
+
+The fixed demo uses an ephemeral external budget store. Reusable BudgetStore
+persists across reopen but is single-store accounting, not a distributed quota.
+Unknown usage/interrupted runs fail closed without automatic recovery. Trusted
+synchronous test adapters have elapsed-time detection, not hard cancellation.
+Live model integration needs a future reviewed transport/deadline/credential
+contract and actual evidence; offline success cannot close that requirement.
+
+### P3 Independent Review and Single R1 Correction
+
+The independent implementation Reviewer returned BLOCK on the initial frozen
+snapshot. It reproduced canonical indices relabelled as a different exchange
+in the pure outcome calculator: the benchmark was checked against MARKETS,
+but the asset mapping was trusted. Its independent186 product tests, seven
+binding tests and26 additional checks passed, showing the missing negative case.
+The original verdict is preserved below; it does not approve revised content.
+
+```json
+{
+  "schema_version": 1,
+  "role": "reviewer",
+  "verdict": "BLOCK",
+  "snapshot_id": "a8fc9b574c05ce2238c2828f997f54a2540710a44e31b450512e766c801aec9d",
+  "agent_id": "01a1d4c1-0070-7042-bdb2-4ab83c24036a",
+  "read_only": true,
+  "findings": [
+    {
+      "id": "P3-R-001",
+      "severity": "P2",
+      "repair_class": "R1",
+      "path": "market_intelligence/evaluation.py",
+      "line": 92,
+      "title": "Asset calendar identity can bypass canonical market mapping",
+      "expected": "Reject conflicting canonical asset calendar mappings.",
+      "observed": "SP500 mapped to SSE produces available T+1/T+3/T+5 outcomes.",
+      "remediation": "Validate canonical market identity for both asset and benchmark and add negative regression coverage."
+    }
+  ],
+  "repair_cycles": 0
+}
+```
+
+The coordinator uses the one default in-contract R1 correction batch. Product
+edits are limited to evaluation.py and test_p3.py. Canonical market identities
+must be checked for both asset and benchmark; matching a forged input mapping
+is not sufficient. Add failing regression cases before the correction, retain
+all existing tests and recompute the unchanged synthetic demo. No old product
+artifact, audited contract/method/policy, permission or source gap is changed.
+This consumes one formal P3 correction; further BLOCK requires human escalation.
+
+The new pre-fix regressions reproduced all five canonical assets incorrectly
+relabelled to another market and a rehashed invalid forecast. The benchmark
+control already rejected the mismatch, but now reports the same explicit
+canonical-identity error. The two-line runtime correction validates every
+canonical mapping row against MARKETS, covering both asset and benchmark.
+Four regression methods include all five valid-market controls. Product suite
+now passes190/190 tests (82 P3,108 historical); sample recomputation remains PASS.
+The full governance suite is rerun for the repaired freeze. Its actual result
+belongs in the refreshed validation receipt, not an assumed PASS in this log.
+Audited inputs and all59 immutable paths remain unchanged. Old snapshot
+a8fc9b574c05ce2238c2828f997f54a2540710a44e31b450512e766c801aec9d
+and its receipts do not approve the corrected bytes. One P3 repair cycle is
+consumed; only actual re-review and separate release may advance the next gate.
