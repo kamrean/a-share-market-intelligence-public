@@ -45,3 +45,171 @@ reviewed root, apply and read back branch protection, then push the reviewed
 construction branch and open a PR. Actual head-specific CI, privacy and protection
 verification is recorded on that PR. Do not rewrite this snapshot to claim later
 events, direct-merge, bypass protection or start P1 before human merge.
+
+## P1 Stage 1-2 - 2026-11-13
+
+The user confirmed merge and authorized the next Stage1-2 package, with new
+branch names omitting the codex/ prefix. Historical P0 names are unchanged.
+Public PR #1 was actually merged at 94ae20ca0ea225aa8118314e04684869accb2a11;
+its exact-head and merged-main CI runs succeeded. Evidence is preserved in
+docs/reviews/p0-merge.json. The source private and archived ETF projects are
+not construction targets.
+
+P1 keeps the five named benchmark targets and an honest 0/5 live-verified
+coverage denominator. Only an explicitly permitted official press RSS probe
+is authorized. Account/key, use and retention gaps are not fabricated as
+failed network requests or completed integrations. Engineering readiness is
+separate from live-market research coverage and full MVP acceptance.
+
+The independent entrypoint review passed. Initial Prompt Auditor returned BLOCK
+because policy incorrectly declared product_runtime_implemented before any
+runtime code existed. The single permitted R0 correction removed that factual
+claim from policy; state remains the implementation-status authority. No
+permissions or scope changed. This consumes the one P1 repair cycle; it is not
+erased or reset for later review. The corrected Prompt Auditor returned actual
+PASS before any product implementation or capture. The new entrypoint and audit
+receipts retain the independent agent identity and exact input hashes.
+
+The bounded Builder completed seven runtime modules, two source/profile configs,
+an empty third-party dependency lock, two authored synthetic fixtures and the
+product test suite. The coordinator updated governance, scope/immutability tests,
+CI, source documentation and this lifecycle record. Both suites passed locally:
+54 governance tests and 55 product tests on Python 3.12.10. The coordinator also
+ran the actual demo, replay and sweep command entrypoints using external stores.
+Synthetic demo passed its synthetic profile; replay was explicitly historical.
+These results do not claim live-market coverage or independent review.
+
+The permitted real feed observation ran from 2026-11-13T00:51:36.953865Z to
+2026-11-13T00:51:37.312286Z, run eb81a0502a3b4d1eb657a3f7a3de5034. One request
+received 14801 bytes and parsed 20/20 records, with zero transport failures or
+unknown usage. Reusing the same task key returned the same run without a new
+request. The source is live_verified for this bounded observation only; quality
+rates requiring further observations remain null. The evidence gate is BLOCK:
+market coverage remains 0/5 and the news sample includes stale evidence. No
+freshness rule or denominator was relaxed. The safe summary and content/response
+hashes are in docs/evidence/p1-source-probe.json; raw bytes remain outside Git,
+expire after 24 hours and are unavailable for replay after expiry.
+
+P1 is implemented_unreleased, not completed research or source acceptance.
+The source selection matrix remains explicit about all five unavailable index
+integrations; no market requests, account keys or paid adapters were used. Public
+content/privacy prechecks passed. Final independent verdicts belong in the four
+active P1 attestations after they actually finish, with exact-head remote results
+on the PR. Human merge, unresolved source gaps and a separately reviewed P2
+contract remain gates. No deployment, VPS, scheduling, models or delivery ran.
+
+## Authorized P1 Repair Exception - 2026-11-13
+
+The user explicitly authorized exactly one additional bounded repair and re-review
+for optional-domain DEGRADED results that could not be frozen. Default repair
+budget remains one; the named contract/policy exception adds one for this defect
+only. Total consumed cycles after correction are two, not a reset to one.
+Product edits are limited to store.py and test_p1.py. Contract/entrypoint/policy,
+checker/tests, generated prompt and review records are aligned only as needed to
+record that authorization. No source, permission, coverage or merge boundary changes.
+
+The first implementation Reviewer reproduced a legitimate DEGRADED failure:
+recomputing only accepted records dropped rejected stale-news provenance. Both
+original offline suites passed but lacked the evaluate-to-freeze regression.
+The coordinator paused and preserved BLOCK; the user first requested explanation,
+then explicitly authorized this correction. The original verdict and prerequisite
+receipts follow verbatim as historical objects. They approve no changed inputs.
+New audited inputs and final verdicts require actual new independent reviews.
+
+### Historical p1-review
+
+```json
+{
+  "schema_version": 1,
+  "snapshot_id": "88b9de82cd67ac3c9653170902ef7416a44e2cc160ae9b046153ac5760874c3d",
+  "role": "reviewer",
+  "verdict": "BLOCK",
+  "agent_id": "01a1d265-dc4c-73a1-9eaa-79f1afd1dd4f",
+  "read_only": true,
+  "findings": [
+    {
+      "severity": "P2",
+      "path": "market_intelligence/store.py",
+      "line": 455,
+      "title": "Authorized optional-domain DEGRADED cannot be frozen",
+      "description": "freeze() recomputes only accepted_ids, discarding stale optional rejected-input provenance; strict domain equality then rejects a legitimate DEGRADED result.",
+      "reproduction": "In a temporary store run demo(), read complete synthetic evidence, and set only the news rule to required=false, allow_degraded=true, max_age_seconds=1. evaluate() returns DEGRADED; freeze() raises 'gate domain details do not match durable evidence'.",
+      "required_fix": "Validate and preserve rejection provenance without putting rejected evidence into usable references; add evaluate-to-freeze regression coverage without weakening fabricated-PASS protections.",
+      "next_gate": "HUMAN_ESCALATED: the one P1 repair cycle is consumed; explicit bounded authorization is required before another repair/re-review."
+    }
+  ],
+  "repair_cycles": 1
+}
+```
+
+### Historical p1-prompt-audit
+
+```json
+{
+  "schema_version": 1,
+  "role": "prompt_auditor",
+  "agent_id": "01a1d23c-5b4e-7af0-98d5-87b97c44f2e0",
+  "verdict": "PASS",
+  "independent": true,
+  "read_only": true,
+  "repair_cycles": 1,
+  "findings": [],
+  "files": {
+    "contracts/p1_sources_evidence.toml": "416c436d6a14eab998fa9802610f5e6b310f8271dca43f6216dd84407462910c",
+    "governance/policy.toml": "9fb18a82ec5865fa3b4f8607f8ca1b6ee6baaca3ab0aea18bcb5b8336a65ca85",
+    "templates/p1_builder_prompt.md": "7033af6d734b6739f9df270d0ccf5769f83f0a7e0226073a7c767b4923450e66",
+    "docs/reviews/p1-builder-prompt.md": "0280bc8e6753651a3fe46b0a6155279f483d91b40915a034939a3bd8b239968d",
+    "AGENTS.md": "d8ce46b22efbd879ebd0879c0ba7a7d4e4fe7f1f860538866672122dfec4d3e1",
+    "docs/P1_DESIGN.md": "38b7862aafb76172da7e347757f5639583efc2aa80fc5d4bf40e43b75ea4aa91"
+  }
+}
+```
+
+### Historical p1-entrypoint-review
+
+```json
+{
+  "schema_version": 1,
+  "role": "blueprint_reviewer",
+  "agent_id": "01a1d23c-5b4e-7af0-98d5-87b97c44f2e0",
+  "verdict": "PASS",
+  "independent": true,
+  "read_only": true,
+  "repair_cycles": 0,
+  "baseline": "94ae20ca0ea225aa8118314e04684869accb2a11",
+  "files": {
+    "BLUEPRINT.md": "030a634be17b87c594a3eeb95b665f870ea8da207567d0a91a20950695853d12",
+    "START_CONSTRUCTION_PROMPT.md": "cfd5c8646d73d493af334db5d94f01ebadab03c2ee7bef06c3d583a6c158432f"
+  },
+  "scope": "P1 entrypoint consistency; separate Prompt Auditor approval required."
+}
+```
+
+### Repair Implementation and Validation
+
+The independent entrypoint and Prompt Auditor approved the named exception.
+Only trailing extra blank lines were then removed from contract/policy/log;
+the auditor independently verified that formatting-only change and refreshed
+the exact hashes before product edits. This was not a new defect repair cycle.
+
+The coordinator added evaluate-to-freeze regression cases before changing the
+store. The pre-fix test run (61 tests) reproduced stale/conflicting optional-news
+freeze failures and the missing rejected-provenance validation. The bounded fix
+reloads accepted and rejected input IDs for non-BLOCK results, validates their
+durable hashes/retention and recomputes the complete result. A full-result match
+is required; only accepted records become usable references. Existing stricter
+BLOCK recording remains unchanged. No threshold or source configuration changed.
+
+Seven new product tests cover stale optional evidence and reopen/refreeze,
+missing/fresh controls, conflicting rejections, excluded Tier C on PASS,
+forged/omitted/unknown/duplicate rejection claims and fabricated PASS, corrupted
+rejected-record hashes, and retention expiry. Final local results are 55/55
+governance tests and 62/62 product tests PASS on Python 3.12.10. No live product
+request, deployment, VPS operation or delivery occurred during this correction.
+The original real probe and 0/5 benchmark gap remain unchanged.
+
+This consumes the explicitly authorized second P1 correction cycle. A further
+formal BLOCK requires another human decision, not automatic repair. Independent
+implementation re-review and release verdicts are pending at this protected
+freeze; their actual results belong in the four active attestations. Remote CI
+and the final human-merge gate remain separate, to be recorded on the PR.

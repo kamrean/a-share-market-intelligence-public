@@ -30,6 +30,8 @@ jobs:
           python-version: '3.12'
       - name: Offline governance tests
         run: python -m unittest discover -s tests/governance -p test_*.py -v
+      - name: Offline source and evidence tests
+        run: python -m unittest discover -s tests/product -p test_*.py -v
       - name: Scope and canonical consistency
         run: python tools/governance.py check --ci
       - name: Verify deterministic prompt
@@ -37,4 +39,4 @@ jobs:
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
       - name: Check committed patch whitespace
-        run: git diff --check 2f4539567980cedc28b605c2c27a84ed5fcad96f HEAD
+        run: git diff --check 94ae20ca0ea225aa8118314e04684869accb2a11 HEAD

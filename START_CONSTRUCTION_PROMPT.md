@@ -1,86 +1,74 @@
 # Construction Entrypoint
 
-Use this repository as the source of truth, not chat history. Work from the
-repository root containing this file. The canonical blueprint remains
-Market Intelligence System Blueprint v1; do not create a successor version.
+Work in this repository, not the archived ETF project or private publication source.
+Read AGENTS.md, BLUEPRINT.md, project-state/state.json, the active contract and
+governance/policy.toml. Read only the named source/design/review records needed
+for the active package. The blueprint remains v1.
 
-## Start and Current Authority
+## Current Package
 
-Read AGENTS.md when present, BLUEPRINT.md, project-state/state.json, the active
-contract, governance/policy.toml and named review records. Run git status --short,
-git log --oneline -5 and git remote -v. Unexpected changes stop work; do not
-automatically stash or revert them. Confirm Python 3.12 before using its explicit
-local installation if the launcher cannot find it.
+P0 was human-merged in public PR #1. Its actual merge and successful PR/merge CI
+are recorded in docs/reviews/p0-merge.json. Old P0 NOT_RUN_AT_SNAPSHOT receipts
+describe historical pre-publication observations; do not rewrite them.
 
-The user authorized a clean public repository import, with original evidence
-retained privately. The public target is kamrean/a-share-market-intelligence-public.
-The private source is provenance only, not the active workspace. Never copy its
-.git, refs, old blobs, raw CI logs, credentials or private contact details.
-Do not force-push or rewrite either source repository. Only consult source paths
-named by the active manifest, not the entire private history on every task.
+Current P1 covers Stage 1-2: bounded source intake, task records, normalization,
+retention/replay and domain evidence gates. Read contracts/p1_sources_evidence.toml
+and docs/P1_DESIGN.md. The active branch is stage1-2-evidence-foundation.
+New branches must not include the codex/ prefix. Historical names remain intact
+in old receipts and commits; do not rewrite history just to rename them.
 
-## Bootstrap and Scope
+## Work Sequence
 
-Before a contract exists, independently review this document and BLUEPRINT.md.
-Commit exactly those two reviewed files as the fresh root baseline. Use the
-verified GitHub noreply identity, not a personal contact address. Record the
-resulting baseline SHA in the later contract, policy, state, checker, tests and
-CI; the two root documents must not try to contain their own prospective SHA.
+1. Inspect clean Git state, remote and merged prerequisite evidence. Stop on
+   unexpected changes; do not silently stash or revert user work.
+2. Finalize contract/policy/state and render the exact contract through the
+   P1 template. Obtain actual independent entrypoint and Prompt Auditor PASS
+   before implementation or product network capture.
+3. Use one coordinator plus bounded agents with disjoint write sets. Builders
+   cannot independently review their own changes. Preserve all existing guards.
+4. Run offline governance/product tests, scope check, prompt verification, review
+   bundle and diff checks. Live capture is separately explicit and bounded.
+5. Keep SQLite files/raw payloads/private paths outside the repository. Commit
+   only safe source-located observations and synthetic/redistributable fixtures.
+   A source success is not full benchmark coverage or research acceptance.
+6. Freeze source evidence, state, log and all other decision inputs. Obtain
+   independent read-only Reviewer and Release Checker verdicts. Allow one
+   in-scope R0/R1 correction and one re-review; further/unknown/R2+ BLOCK escalates.
+   The user explicitly authorized one additional P1 correction/re-review for
+   optional-domain DEGRADED freezing, recorded in repair_exception. Its product
+   scope is store.py and test_p1.py only; the default limit remains one. Preserve
+   the prior BLOCK in CONSTRUCTION_LOG.md and record two total consumed cycles
+   after this repair. Another BLOCK requires a new human decision. No permissions,
+   sources, coverage thresholds, merge mode or later-stage authority are expanded.
+7. Only four active P1 attestations may be appended after freeze. Old receipts
+   stay protected and unchanged. Changed inputs invalidate approvals.
+8. Scan commit metadata, public files, descriptions and eventual CI logs for
+   credentials/private details. Use the verified noreply identity.
+9. Preserve existing public main protection: PR, both app-bound CI checks,
+   administrators included, no force pushes/deletion, auto-merge off. Zero
+   approving GitHub reviews avoids sole-maintainer self-approval deadlock;
+   independent agent review and human merge remain procedural requirements.
+10. Push only the reviewed work branch, open one coherent PR, wait for exact-head
+    CI and independent remote release verification, then await human merge.
 
-The publication package reconstructs the existing Stage 0 governance foundation,
-preserves sanitized source-located construction/review provenance, and obtains
-fresh tests, independent review, CI and protection evidence. Prior private merge
-evidence is not current public approval. An import is not a new business stage
-or a claim that the research MVP is implemented.
+## Effective Boundaries
 
-Current work is governance-only: exact contract paths, offline checker tests,
-CI definitions and publication records. No collectors, product model calls,
-Telegram sends, runtime scheduling, VPS mutation, deployment, trading, broker
-integration, portfolio control or copied ETF business code.
+Only explicitly approved, bounded local read-only source retrieval is enabled.
+P1's network allowlist contains the official Fed press RSS endpoint only.
+Unknown source rights, missing keys and paid adapters do not permit requests.
+Scheduled collection, model execution, Telegram delivery, production operation,
+broker/orders, portfolio control, deployment and VPS mutation remain disabled.
+No data-access flag authorizes any of those actions.
 
-## Review and Publication Workflow
+Keep benchmark targets and missing-source denominators unchanged. Unknown
+publication delay/calendars remain unknown, not guessed. Synthetic tests,
+historical replay, a live source probe and forward research observation are
+different evidence modes. Required market gaps remain BLOCKED_MARKET_SOURCES.
 
-1. Finalize the contract, policy and state, render its deterministic Builder
-   prompt, and obtain independent Prompt Auditor PASS before implementation.
-2. Use one coordinator and bounded subagents. Keep one writer per file set.
-   Builder cannot act as its own independent Reviewer.
-3. Implement only the exact authorized scope. Preserve permission, source,
-   scope, secret, staged-content and snapshot validation. Run all offline tests.
-4. Finalize decision-affecting documents and log before freezing the snapshot.
-   Scan all fresh history, metadata and proposed public text for private details
-   and prohibited historical wording. Keep sensitive search values out of logs.
-5. Obtain independent read-only Reviewer PASS against actual files and diff.
-   Allow one in-scope R0/R1 repair cycle. Further BLOCK, unknown or R2+ findings
-   require human escalation; do not change rules to force PASS.
-6. Obtain the independent local Release Checker result. Only four exact
-   contract-listed attestations may be appended afterwards; changed protected
-   inputs invalidate approval. NOT_RUN_AT_SNAPSHOT is not actual GitHub CI.
-7. Create only the authorized public repository after privacy and local review.
-   Initialize main with the reviewed two-document baseline only. Configure and
-   read back branch protection before pushing the reviewed codex branch:
-   require PR and both GitHub Actions checks, include administrators, prohibit
-   force pushes/deletion, and keep auto-merge off.
-8. Use zero GitHub approving-review requirements for the sole-maintainer setup;
-   independently recorded agent review and human merge remain required. Do not
-   claim this technically prevents an authenticated agent from merging.
-9. Open the PR, wait for exact-head CI, inspect resulting public logs/artifacts
-   and privacy surfaces, and obtain independent remote Release Checker PASS.
-   Record real run/protection results on the PR without changing tested inputs.
-   Never merge, bypass protection, or push construction directly to main.
-10. After actual human merge, the next package reconciles the public PR/CI/merge
-    evidence and creates its own reviewed contract before P1 implementation.
+## Handoff
 
-## Continuity and Handoff
-
-Keep Stage0-9 progress in project-state/state.json, with source provenance
-distinct from current publication state. Runtime, observation and VPS milestones
-remain separate. Free sources do not imply free model execution. Paid adapters
-remain disabled until authorization and successful live validation exist.
-
-At interruption, preserve a truthful checkpoint, current hashes, pending results
-and next gate. One coordinator plus independent subagents is sufficient; no
-permanent multi-window role arrangement or unlimited chat history is required.
-
-Report branch/commit, validation, independent audit/review/release, PR/CI,
-protection, merge status, VPS status and next gate. No fabricated observations,
-synthetic history presented as live, or unsupported completion claims.
+Before interruption preserve actual branch/status, completed and pending checks,
+source gaps, snapshot and next gate. Read repository state on resumption.
+Report commit, PR, audit/review/release, CI, protection, merge and VPS status.
+P2 requires P1's human merge and its own reviewed contract; this entrypoint is
+not authorization to skip unresolved data requirements.

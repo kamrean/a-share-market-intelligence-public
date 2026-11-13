@@ -1,0 +1,21 @@
+schema_version = 1
+version = "p1-five-benchmarks-v1"
+method_version = "p1-domain-evidence-v1"
+mode = "live_observation"
+universe = ["000001.SH", "399001.SZ", "399006.SZ", "KOSPI", "SP500"]
+
+[[rules]]
+domain = "market"
+validator = "market-v1"
+required = true
+minimum_coverage = 1.0
+max_age_seconds = 604800
+allow_degraded = false
+
+[[rules]]
+domain = "news"
+validator = "news-v1"
+required = true
+minimum_coverage = 1.0
+max_age_seconds = 2678400
+allow_degraded = false

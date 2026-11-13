@@ -1,4 +1,4 @@
-"""Read-only, offline checks for the frozen P0 contract (Python 3.12)."""
+"""Read-only, offline checks for the current P1 contract (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -15,69 +15,151 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "2f4539567980cedc28b605c2c27a84ed5fcad96f"
-BRANCH = "codex/publication-stage0"
+BASELINE = "94ae20ca0ea225aa8118314e04684869accb2a11"
+BRANCH = "stage1-2-evidence-foundation"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p0_stage0.toml"
-TEMPLATE_PATH = "templates/builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p0-builder-prompt.md"
+CONTRACT_PATH = "contracts/p1_sources_evidence.toml"
+TEMPLATE_PATH = "templates/p1_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p1-builder-prompt.md"
 ATTESTATIONS = (
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-validation.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-release.json",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-validation.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-release.json",
 )
 ALLOWED = (
-    ".gitattributes", ".gitignore", "AGENTS.md", "README.md", "BLUEPRINT.md",
-    "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH, "governance/policy.toml",
-    "project-state/state.json", "docs/CONSTRUCTION_LOG.md",
-    "docs/LEGACY_REUSE_MANIFEST.md", "docs/PUBLICATION_PROVENANCE.json",
-    "docs/reviews/blueprint-review.json",
-    PROMPT_PATH, "docs/reviews/p0-prompt-audit.json", *ATTESTATIONS,
-    TEMPLATE_PATH, "tools/governance.py", "tests/governance/test_governance.py",
+    ".gitattributes",
     ".github/workflows/governance.yml",
+    ".gitignore",
+    "AGENTS.md",
+    "BLUEPRINT.md",
+    "README.md",
+    "START_CONSTRUCTION_PROMPT.md",
+    "config/p1_profile.toml",
+    "config/sources.toml",
+    "contracts/p0_stage0.toml",
+    "contracts/p1_sources_evidence.toml",
+    "docs/CONSTRUCTION_LOG.md",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/P1_DESIGN.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/SOURCE_MATRIX.md",
+    "docs/evidence/p1-source-probe.json",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-merge.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p1-builder-prompt.md",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-entrypoint-review.json",
+    "docs/reviews/p1-prompt-audit.json",
+    "docs/reviews/p1-release.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-validation.json",
+    "governance/policy.toml",
+    "market_intelligence/__init__.py",
+    "market_intelligence/__main__.py",
+    "market_intelligence/gate.py",
+    "market_intelligence/models.py",
+    "market_intelligence/runtime.py",
+    "market_intelligence/sources.py",
+    "market_intelligence/store.py",
+    "project-state/state.json",
+    "requirements.lock",
+    "templates/builder_prompt.md",
+    "templates/p1_builder_prompt.md",
+    "tests/fixtures/p1_feed.xml",
+    "tests/fixtures/p1_market.csv",
+    "tests/governance/test_governance.py",
+    "tests/product/test_p1.py",
+    "tools/governance.py",
+)
+IMMUTABLE = (
+    ".gitattributes",
+    ".gitignore",
+    "BLUEPRINT.md",
+    "contracts/p0_stage0.toml",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "templates/builder_prompt.md",
 )
 PROTECTED = tuple(sorted(set(ALLOWED) - set(ATTESTATIONS)))
 PERMISSIONS = {
-    "research_only": True,
+    "research_only": True, "external_data_access_allowed": True,
     **dict.fromkeys((
-        "external_data_access_allowed", "scheduled_collection_allowed",
-        "llm_research_allowed", "telegram_delivery_allowed",
+        "scheduled_collection_allowed", "llm_research_allowed", "telegram_delivery_allowed",
         "vps_deployment_allowed", "vps_mutation_allowed", "broker_allowed",
         "order_execution_allowed", "portfolio_control_allowed",
     ), False),
 }
+REPOSITORY = {
+    "owner": "kamrean", "name": "a-share-market-intelligence-public", "visibility": "public",
+}
 VALIDATION_COMMANDS = [
     "python -m unittest discover -s tests/governance -p test_*.py -v",
+    "python -m unittest discover -s tests/product -p test_*.py -v",
     "python tools/governance.py check",
     "python tools/governance.py prompt --verify",
     "python tools/governance.py bundle",
     "git diff --check",
 ]
-def remote_bootstrap():
+AUDIT_INPUTS = (
+    CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH,
+    "AGENTS.md", "docs/P1_DESIGN.md",
+)
+
+
+def dependency():
     return {
-        "authorized": True, "owner": "kamrean", "repository": "a-share-market-intelligence-public",
-        "visibility": "public", "baseline": BASELINE, "branch": BRANCH,
-        "authorization_date": "2026-11-12", "authorization_source": "explicit_user_confirmation",
+        "package_id": "P0",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/1",
+        "merge_commit": BASELINE, "merged_at": "2026-11-12T23:56:51Z",
+        "tested_head": "9c07dc37ce6fed8a42b440ca0ac17f3334c83533",
+        "pr_ci_run": 43250862059, "merge_ci_run": 43333054559,
+        "ci_status": "PASS", "merge_status": "merged",
     }
 
 
+REPAIR_EXCEPTION = {
+    "id": "p1-optional-degraded-freeze-20261113",
+    "authorized_on": "2026-11-13",
+    "blocked_snapshot": "88b9de82cd67ac3c9653170902ef7416a44e2cc160ae9b046153ac5760874c3d",
+    "additional_cycles": 1,
+    "product_paths": [
+        "market_intelligence/store.py",
+        "tests/product/test_p1.py"
+    ],
+    "purpose": "Preserve validated rejected-input provenance for optional-domain DEGRADED freezing; add regression tests and repeat independent review/release/PR/CI.",
+    "permissions_changed": False
+}
+
 POLICY = {
-    "schema_version": 1, "active_package": "P0", "python_version": "3.12",
-    "merge_tier": "C", "human_merge_required": True, "auto_merge_allowed": False,
+    "schema_version": 1, "active_package": "P1", "python_version": "3.12",
+    "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
-    "remote_creation_authorized": True, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
-    "remote_bootstrap": remote_bootstrap(),
-    "max_repair_cycles": 1, "reviewer_must_be_independent": True,
-    "construction_subagents_allowed": True, "product_runtime_implemented": False,
-    "permissions": PERMISSIONS,
+    "remote_creation_authorized": False, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
+    "repository": REPOSITORY, "max_repair_cycles": 1,
+    "reviewer_must_be_independent": True, "construction_subagents_allowed": True,
+    "permissions": PERMISSIONS, "repair_exception": REPAIR_EXCEPTION,
 }
 RECEIPT_PATHS = {
-    "blueprint_review": "docs/reviews/blueprint-review.json",
-    "prompt_audit": "docs/reviews/p0-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    "blueprint_review": "docs/reviews/p1-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p1-prompt-audit.json", "builder_prompt": PROMPT_PATH,
     **dict(zip(("bundle", "validation", "reviewer", "release"), ATTESTATIONS)),
 }
-NEXT_GATE = "reviewed_public_remote_bootstrap_then_exact_head_ci_and_human_merge"
+NEXT_GATE = "exact_head_ci_and_independent_release_then_human_merge"
+LOCAL_RELEASE = "LOCAL_READY_FOR_PR"
 
 
 class Block(ValueError):
@@ -124,20 +206,21 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P0", "stage_ids": [0],
-        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "C",
+        "schema_version": 1, "package_id": "P1", "stage_ids": [1, 2],
+        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
         "prompt_audit_required": True, "independent_review_required": True,
         "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
+        "immutable_paths": list(IMMUTABLE),
         "attestation_paths": list(ATTESTATIONS),
-        "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/",
-                               "secrets/", "tests/product/"],
+        "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
         "required_reads": ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
                            "governance/policy.toml", "project-state/state.json",
-                           "docs/reviews/blueprint-review.json"],
+                           "docs/reviews/p0-merge.json", "docs/P1_DESIGN.md"],
         "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
-        "remote_bootstrap": remote_bootstrap(),
+        "repository": REPOSITORY, "dependency": dependency(),
+        "repair_exception": REPAIR_EXCEPTION,
     }
     text_fields = ("title", "objective", "bootstrap_prompt", "next_gate", "rollback")
     list_fields = ("deliverables", "negative_tests", "receipt_rules")
@@ -153,16 +236,17 @@ def validate_contract(contract):
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P0", "active_contract": CONTRACT_PATH,
+        "schema_version": 1, "active_package": "P1", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
-        "github": {"remote_creation_authorized": True, "owner": "kamrean",
+        "source_readiness": "BLOCKED_MARKET_SOURCES", "dependency": dependency(),
+        "github": {"remote_creation_authorized": False, "owner": "kamrean",
                    "repository": "a-share-market-intelligence-public",
                    "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                    "merge_status": "not_merged"},
         "receipts": RECEIPT_PATHS,
-        "next_gate": NEXT_GATE + "; no P1 before merged P0 and its own contract",
+        "next_gate": NEXT_GATE + "; source gaps remain; no P2 before its own contract",
     }
     keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated"),
          "state")
@@ -174,9 +258,10 @@ def validate_state(state):
     require(all(agent == agent.strip() for agent in state["builder_agents"]),
             "state.builder_agents: surrounding whitespace")
     packages = ("P0", "P1", "P1", "P2", "P2", "P3", "P3", "P4", "P4/P5", "P5")
-    stage0 = "in_progress" if state["package_status"] == "building" else "implemented_unreleased"
+    active = "in_progress" if state["package_status"] == "building" else "implemented_unreleased"
     expected = [{"stage": i, "package": package,
-                 "status": stage0 if i == 0 else "deferred" if i == 9 else "planned"}
+                 "status": "complete" if i == 0 else active if i in (1, 2) else
+                           "deferred" if i == 9 else "planned"}
                 for i, package in enumerate(packages)]
     exact(state["stage_registry"], expected, "state.stage_registry")
     require(type(state["last_updated"]) is str and
@@ -292,9 +377,12 @@ def git_paths(output):
 
 
 def harmless_cache(name):
-    return bool(re.fullmatch(
-        r"(?:tools/__pycache__/governance|tests/governance/__pycache__/test_governance)"
-        r"\.cpython-312(?:\.opt-[12])?\.pyc", name))
+    known = {
+        (Path(path).parent / "__pycache__" / Path(path).stem).as_posix()
+        for path in ALLOWED if path.endswith(".py")
+    }
+    match = re.fullmatch(r"(.+)\.cpython-312(?:\.opt-[12])?\.pyc", name)
+    return bool(match and match.group(1) in known)
 
 
 def read_index(root):
@@ -354,6 +442,19 @@ def inspect_git(root, *, ci=False, contents=None, complete_index=False):
             require(name in contents, f"index: missing working input: {name}")
             working_text = contents[name]
         require(indexed == working_text, f"index/worktree mismatch: {name}; stage the final working content")
+    # Historical evidence is not just in scope: its exact baseline content is immutable.
+    baseline_entries = {}
+    for record in git_paths(git(root, "ls-tree", "-r", "-z", BASELINE, "--", *IMMUTABLE)):
+        metadata, separator, name = record.partition("\t")
+        fields = metadata.split()
+        require(separator and len(fields) == 3 and fields[1] == "blob",
+                "immutable baseline: malformed entry")
+        baseline_entries[name] = fields[2]
+    exact(sorted(baseline_entries), sorted(IMMUTABLE), "immutable baseline paths")
+    baseline_blobs = read_blobs(root, baseline_entries.values())
+    for name, oid in baseline_entries.items():
+        require(read_text(root, name) == baseline_blobs[oid],
+                f"immutable historical input changed: {name}")
     # Git can omit an empty directory junction. Inspect links before descending,
     # excluding only Git's own metadata, which is not a construction input.
     directories = [root]
@@ -400,6 +501,7 @@ def validate_prerequisite(receipt, role, names, contents):
         require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: repair bound")
     else:
         exact(receipt.get("findings"), [], f"{role}.findings")
+        exact(receipt.get("repair_cycles"), 1, f"{role}: consumed P1 repair cycle")
 
 
 def check(root=ROOT, *, ci=False, complete_index=False):
@@ -409,12 +511,25 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "policy")
     state = parse_json(contents["project-state/state.json"])
     validate_state(state)
+    prior = parse_json(contents["docs/reviews/p0-merge.json"])
+    expected_prior = {
+        "schema_version": 1, "role": "historical_merge_observation",
+        "observed_on": "2026-11-13", **dependency(),
+        "prior_snapshot": "e1c679dcc010ad9fdf26cc6aaadcba491cc508d8e33acca1a488f6d547c5e398",
+        "prior_gate_check": "PASS on merged main using --ci; frozen local P0 receipt remains historical",
+        "authority": "Evidence of prior human merge, not authorization for later runtime scopes.",
+    }
+    exact(prior, expected_prior, "prior merge evidence")
     exact(contents[PROMPT_PATH], render_prompt(contract, contents[TEMPLATE_PATH]), "builder prompt")
     validate_prerequisite(parse_json(contents[RECEIPT_PATHS["blueprint_review"]]),
                           "blueprint_reviewer", ("BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md"),
                           contents)
     validate_prerequisite(parse_json(contents[RECEIPT_PATHS["prompt_audit"]]), "prompt_auditor",
-                          (CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH), contents)
+                          AUDIT_INPUTS, contents)
+    for role in ("blueprint_review", "prompt_audit"):
+        agent = parse_json(contents[RECEIPT_PATHS[role]])["agent_id"]
+        require(agent == agent.strip() and agent not in state["builder_agents"],
+                f"{role}: builder self-review")
     for name in ATTESTATIONS:
         path = safe_path(root, name)
         if path.exists():
@@ -440,7 +555,7 @@ def snapshot(contents):
 def make_bundle(checked):
     contract, _state, contents, changed = checked
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P0", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P1", "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
             "attestation_paths": list(ATTESTATIONS), "scope_result": "PASS"}
@@ -478,12 +593,11 @@ def validate_attestations(checked, current):
     for key, value in {**common, "role": "reviewer", "verdict": "PASS", "read_only": True,
                        "findings": []}.items():
         exact(review[key], value, f"review receipt.{key}")
-    require(type(review["repair_cycles"]) is int and 0 <= review["repair_cycles"] <= 1,
-            "review receipt: repair bound")
+    exact(review["repair_cycles"], 2, "review receipt: total P1 repair cycles including named exception")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
                    "merge_status", "vps_sync", "next_gate"), "release receipt")
     for key, value in {**common, "role": "release_checker", "read_only": True,
-                       "verdict": "LOCAL_READY_FOR_REMOTE_BOOTSTRAP", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+                       "verdict": LOCAL_RELEASE, "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                        "pr_url": None, "merge_status": "not_merged", "vps_sync": "not_requested",
                        "next_gate": NEXT_GATE}.items():
         exact(release[key], value, f"release receipt.{key}")
@@ -491,13 +605,15 @@ def validate_attestations(checked, current):
         nonempty(receipt["agent_id"], f"{role}.agent_id")
         require(receipt["agent_id"] == receipt["agent_id"].strip() and
                 receipt["agent_id"] not in state["builder_agents"], f"{role}: builder self-review")
+    require(release["agent_id"] != review["agent_id"],
+            "release_checker: Tier D needs a separate independent release agent")
     # Identity strings bind records, not authenticity. Actual independence needs external audit.
 
 
 def gate(root=ROOT, *, ci=False):
     checked = check(root, ci=ci, complete_index=True)
     validate_attestations(checked, make_bundle(checked))
-    return "LOCAL_READY_FOR_REMOTE_BOOTSTRAP"
+    return LOCAL_RELEASE
 
 
 def main(argv=None, *, root=ROOT):

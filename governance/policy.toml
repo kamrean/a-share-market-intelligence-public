@@ -1,31 +1,25 @@
 schema_version = 1
-active_package = "P0"
+active_package = "P1"
 python_version = "3.12"
-merge_tier = "C"
+merge_tier = "D"
 human_merge_required = true
 auto_merge_allowed = false
 direct_merge_allowed = false
 admin_bypass_allowed = false
-remote_creation_authorized = true
+remote_creation_authorized = false
 remote_ci_status = "NOT_RUN_AT_SNAPSHOT"
 max_repair_cycles = 1
 reviewer_must_be_independent = true
 construction_subagents_allowed = true
-product_runtime_implemented = false
 
-[remote_bootstrap]
-authorized = true
+[repository]
 owner = "kamrean"
-repository = "a-share-market-intelligence-public"
+name = "a-share-market-intelligence-public"
 visibility = "public"
-baseline = "2f4539567980cedc28b605c2c27a84ed5fcad96f"
-branch = "codex/publication-stage0"
-authorization_date = "2026-11-12"
-authorization_source = "explicit_user_confirmation"
 
 [permissions]
 research_only = true
-external_data_access_allowed = false
+external_data_access_allowed = true
 scheduled_collection_allowed = false
 llm_research_allowed = false
 telegram_delivery_allowed = false
@@ -34,3 +28,12 @@ vps_mutation_allowed = false
 broker_allowed = false
 order_execution_allowed = false
 portfolio_control_allowed = false
+
+[repair_exception]
+id = "p1-optional-degraded-freeze-20261113"
+authorized_on = "2026-11-13"
+blocked_snapshot = "88b9de82cd67ac3c9653170902ef7416a44e2cc160ae9b046153ac5760874c3d"
+additional_cycles = 1
+product_paths = ["market_intelligence/store.py","tests/product/test_p1.py"]
+purpose = "Preserve validated rejected-input provenance for optional-domain DEGRADED freezing; add regression tests and repeat independent review/release/PR/CI."
+permissions_changed = false
