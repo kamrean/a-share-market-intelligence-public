@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "agent_id": "01a1d2ff-b78d-7a41-a96e-f3a762ec8bb9",
+  "verdict": "PASS",
+  "independent": true,
+  "read_only": true,
+  "role": "prompt_auditor",
+  "repair_cycles": 1,
+  "findings": [],
+  "files": {
+    "contracts/p1_sources_evidence.toml": "37462169b17a175102d8d12a9ea6961a098a0307f4de54270317c8309f57aad6",
+    "governance/policy.toml": "73df2a322b48f787c732c238aa4bdf061d888b9ce3ab30167ad980761f92d9f2",
+    "templates/p1_builder_prompt.md": "7033af6d734b6739f9df270d0ccf5769f83f0a7e0226073a7c767b4923450e66",
+    "docs/reviews/p1-builder-prompt.md": "96877b688b9761c964f76f394185802bb4c0e3d680bcaf2456e8429a4008506a",
+    "AGENTS.md": "19a5f35a0e0f10ddf3b609c44c1477c135ce15a0a7f8d2965b886d954ef877b9",
+    "docs/P1_DESIGN.md": "38b7862aafb76172da7e347757f5639583efc2aa80fc5d4bf40e43b75ea4aa91"
+  }
+}

@@ -1,0 +1,173 @@
+schema_version = 1
+package_id = "P1"
+stage_ids = [1, 2]
+title = "Sources, capture and domain evidence foundation"
+objective = "Implement the Stage 1-2 foundation as one medium package; preserve genuine source-access and coverage gaps instead of inventing integrations."
+branch = "stage1-2-evidence-foundation"
+baseline = "94ae20ca0ea225aa8118314e04684869accb2a11"
+merge_tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+max_repair_cycles = 1
+blueprint_review_required = true
+prompt_audit_required = true
+independent_review_required = true
+bootstrap_prompt = "Render this complete TOML contract as sorted JSON under templates/p1_builder_prompt.md; no rewritten scope."
+snapshot_algorithm = "sha256-path-and-lf-normalized-utf8-v1"
+next_gate = "Independent review and release, exact-head protected CI, human merge; retain explicit source coverage gaps. No P2 implementation before its reviewed contract."
+rollback = "Stop the current branch, preserve records and observations, and disable local capture. No reset, history rewrite, remote merge, deployment or old-project mutation."
+
+allowed_paths = [
+  ".gitattributes",
+  ".github/workflows/governance.yml",
+  ".gitignore",
+  "AGENTS.md",
+  "BLUEPRINT.md",
+  "README.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "config/p1_profile.toml",
+  "config/sources.toml",
+  "contracts/p0_stage0.toml",
+  "contracts/p1_sources_evidence.toml",
+  "docs/CONSTRUCTION_LOG.md",
+  "docs/LEGACY_REUSE_MANIFEST.md",
+  "docs/P1_DESIGN.md",
+  "docs/PUBLICATION_PROVENANCE.json",
+  "docs/SOURCE_MATRIX.md",
+  "docs/evidence/p1-source-probe.json",
+  "docs/reviews/blueprint-review.json",
+  "docs/reviews/p0-builder-prompt.md",
+  "docs/reviews/p0-bundle.json",
+  "docs/reviews/p0-merge.json",
+  "docs/reviews/p0-prompt-audit.json",
+  "docs/reviews/p0-release.json",
+  "docs/reviews/p0-review.json",
+  "docs/reviews/p0-validation.json",
+  "docs/reviews/p1-builder-prompt.md",
+  "docs/reviews/p1-bundle.json",
+  "docs/reviews/p1-entrypoint-review.json",
+  "docs/reviews/p1-prompt-audit.json",
+  "docs/reviews/p1-release.json",
+  "docs/reviews/p1-review.json",
+  "docs/reviews/p1-validation.json",
+  "governance/policy.toml",
+  "market_intelligence/__init__.py",
+  "market_intelligence/__main__.py",
+  "market_intelligence/gate.py",
+  "market_intelligence/models.py",
+  "market_intelligence/runtime.py",
+  "market_intelligence/sources.py",
+  "market_intelligence/store.py",
+  "project-state/state.json",
+  "requirements.lock",
+  "templates/builder_prompt.md",
+  "templates/p1_builder_prompt.md",
+  "tests/fixtures/p1_feed.xml",
+  "tests/fixtures/p1_market.csv",
+  "tests/governance/test_governance.py",
+  "tests/product/test_p1.py",
+  "tools/governance.py",
+]
+immutable_paths = [
+  ".gitattributes",
+  ".gitignore",
+  "BLUEPRINT.md",
+  "contracts/p0_stage0.toml",
+  "docs/LEGACY_REUSE_MANIFEST.md",
+  "docs/PUBLICATION_PROVENANCE.json",
+  "docs/reviews/blueprint-review.json",
+  "docs/reviews/p0-builder-prompt.md",
+  "docs/reviews/p0-bundle.json",
+  "docs/reviews/p0-prompt-audit.json",
+  "docs/reviews/p0-release.json",
+  "docs/reviews/p0-review.json",
+  "docs/reviews/p0-validation.json",
+  "templates/builder_prompt.md",
+]
+attestation_paths = [
+  "docs/reviews/p1-bundle.json",
+  "docs/reviews/p1-validation.json",
+  "docs/reviews/p1-review.json",
+  "docs/reviews/p1-release.json",
+]
+forbidden_prefixes = ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"]
+required_reads = ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", "contracts/p1_sources_evidence.toml", "governance/policy.toml", "project-state/state.json", "docs/reviews/p0-merge.json", "docs/P1_DESIGN.md"]
+required_validation = [
+  "python -m unittest discover -s tests/governance -p test_*.py -v",
+  "python -m unittest discover -s tests/product -p test_*.py -v",
+  "python tools/governance.py check",
+  "python tools/governance.py prompt --verify",
+  "python tools/governance.py bundle",
+  "git diff --check",
+]
+
+deliverables = [
+  "Record actual P0 PR/head/merge/CI evidence; preserve all P0 receipts and Blueprint bytes as immutable historical inputs. New branches omit codex/ by explicit user request.",
+  "Keep one Python 3.12 standard-library application and SQLite store; requirements.lock states no third-party dependencies. No installation/network needed for offline tests.",
+  "Source matrix pins Shanghai Composite 000001, Shenzhen Component 399001, ChiNext 399006, KOSPI and S&P 500, with source/terms URLs, session/timezone/delay, retention, access state and honest gaps. Do not change targets to easier proxies.",
+  "Only the Board of Governors official press RSS endpoint https://www.federalreserve.gov/feeds/press_all.xml may be dispatched in P1, after Prompt Auditor PASS and explicit CLI opt-in. Official RSS and disclaimer pages establish the bounded use basis. No authentication, cookies, paywall bypass, unapproved scraping, feed-link fetching or source substitution.",
+  "Market CSV normalization and paid-provider interfaces are implemented and tested offline. Unknown permissions, missing API keys, disabled paid adapters and unresolved index coverage make zero requests; they remain unavailable or disabled, never live_verified.",
+  "Capture task/run IDs, UTC aware capture/first-seen times, response/content hashes, parser versions, source locators, request outcomes and idempotency keys. Use SQLite transactions for bounded task leases and request-budget reservations; preserve interrupted runs and unknown usage.",
+  "Bound each run to two requests, daily total to twelve, response size to 512000 bytes, timeout to ten seconds, retry to one and concurrency to one. Reserve budgets before each attempt; no unknown-usage refunds or duplicate idempotent dispatch. Bound storage and keep runtime artifacts outside the repository.",
+  "Validated evidence schemas distinguish source authority from observed operational quality, all explicit run modes, unknown timestamps, and source versions. No inference of event occurrence from publication time; live evidence must have been captured and first seen by as_of.",
+  "Domain Evidence Gate evaluates required/optional domains, exact universe, freshness, conflicts, numeric validity, Tier-C-only confirmation, calendar/session identity and confidence ceilings. Missing required validators block. Unknown domains, rules or fields fail closed. Optional gaps remain explicit, never zero-filled.",
+  "Provide versioned explicit-session calendar interface without claiming a production holiday calendar. Freeze deterministic bundles with source/evidence/parser/calendar/profile/method versions. Rejected evidence cannot silently enter a PASS bundle.",
+  "Retention classes are enforced before writes: restricted payloads not stored; metadata_only not replayable; permitted expiring raw removed by explicit sweep with immutable tombstone metadata; replay requires actual retained hash-matching payload and marks historical_replay. Frozen bundles contain references/hashes, not undeletable raw payload copies.",
+  "Provide offline synthetic demo and opt-in read-only probe CLI. Probe output preserves actual run/time, request/error/coverage counts and quality denominator; no raw feed payload, private paths, credentials or personal contact details committed.",
+  "Freeze source matrix after the actual permitted probe. If any index source remains unverified, state and sample result remain BLOCKED_MARKET_SOURCES, independent of engineering/test PASS. A single RSS success is not full Stage1 source coverage, live research acceptance or forward observation.",
+  "One coherent PR contains implementation, tests, source evidence, state/log and independent reviews. No scheduling, models, Telegram, ledger/report, sector methods, event/entity validators, VPS or trading implementation.",
+]
+negative_tests = [
+  "Existing staged/index/worktree, secret, out-of-scope, symlink/junction, baseline/branch, stale prompt/snapshot and independent-review protections remain effective.",
+  "P0 historical receipts/Blueprint cannot be edited, deleted or excluded from protected content; forged prior merge, runtime permission expansion, old branch prefix or remote creation are rejected.",
+  "Offline tests cannot perform HTTP/DNS; unknown source/destination, redirects, private addresses, oversized responses, XML entities/DTD, malformed input and non-finite or boolean market values fail closed.",
+  "Naive/future timestamps, first_seen/retrieved after as_of, replay presented as live, unknown calendars, unsupported domains, stale/missing/conflicting or Tier-C-only required facts block.",
+  "Expired/restricted/metadata-only payloads cannot replay; hash mismatch blocks; expired normalized records cannot masquerade as fresh evidence. Tombstones and prior run outcomes remain.",
+  "Duplicate tasks, concurrent leases, interrupted/unknown usage, per-run/day exhaustion and retry consumption are tested using temporary SQLite stores; budget denial occurs before any network request.",
+  "Optional missing data degrades only under an explicit profile rule; unknown required validator, inadequate benchmark universe or market coverage cannot be hidden by a news-domain PASS.",
+]
+receipt_rules = [
+  "Four current P1 attestations only are snapshot-exempt; every old P0 receipt remains immutable and protected. Old PASS never approves new bytes.",
+  "Freeze source observations, state, log and other decisions before independent Reviewer. Any protected change invalidates approvals; default one R0/R1 correction and one re-review maximum. The named user-authorized repair_exception permits exactly one additional correction/re-review for its defect; another BLOCK escalates. Preserve prior review history in CONSTRUCTION_LOG.md and count both consumed cycles.",
+  "Independent Prompt Auditor approves the contract/permission transition and entrypoint before implementation or live capture. Source research is not independent implementation review.",
+  "Local release verdict LOCAL_READY_FOR_PR is not remote CI, merged completion, source completeness or deployment authorization. Missing external evidence remains a recorded gap.",
+  "Before every public push scan new metadata, files and public text for privacy/credentials. Preserve verified noreply identity and existing main protection; no remote creation, direct merge or bypass.",
+  "After exact-head CI and independent remote release verification, stop at AWAITING_HUMAN_MERGE. Frozen NOT_RUN_AT_SNAPSHOT describes the pre-publication snapshot, not live GitHub state.",
+]
+
+[repository]
+owner = "kamrean"
+name = "a-share-market-intelligence-public"
+visibility = "public"
+
+[dependency]
+package_id = "P0"
+pr_url = "https://github.com/kamrean/a-share-market-intelligence-public/pull/1"
+merge_commit = "94ae20ca0ea225aa8118314e04684869accb2a11"
+merged_at = "2026-11-12T23:56:51Z"
+tested_head = "9c07dc37ce6fed8a42b440ca0ac17f3334c83533"
+pr_ci_run = 43250862059
+merge_ci_run = 43333054559
+ci_status = "PASS"
+merge_status = "merged"
+
+[permissions]
+research_only = true
+external_data_access_allowed = true
+scheduled_collection_allowed = false
+llm_research_allowed = false
+telegram_delivery_allowed = false
+vps_deployment_allowed = false
+vps_mutation_allowed = false
+broker_allowed = false
+order_execution_allowed = false
+portfolio_control_allowed = false
+
+[repair_exception]
+id = "p1-optional-degraded-freeze-20261113"
+authorized_on = "2026-11-13"
+blocked_snapshot = "88b9de82cd67ac3c9653170902ef7416a44e2cc160ae9b046153ac5760874c3d"
+additional_cycles = 1
+product_paths = ["market_intelligence/store.py","tests/product/test_p1.py"]
+purpose = "Preserve validated rejected-input provenance for optional-domain DEGRADED freezing; add regression tests and repeat independent review/release/PR/CI."
+permissions_changed = false

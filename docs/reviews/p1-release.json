@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "a40fa1e2228ef48b04dd93ac0f61fe7328aa4ff89677cbcd7fa9f22c4b4e2ae5",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a1d2ff-b78d-7a41-a96e-f3a762ec8bb9",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge"
+}

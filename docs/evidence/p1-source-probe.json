@@ -1,0 +1,99 @@
+{
+  "bundle_id": "0e23d24b54208c33a89b27e72cd66378e60707061796218d6f9d48c93100ae49",
+  "capture_ids": [
+    "e43df8015fbb5ff00318fae9312b25c0b61b5eb663ee90a5ee964437c8303344"
+  ],
+  "error_codes": [],
+  "finished_at": "2026-11-13T00:51:37.312286Z",
+  "gate": {
+    "confidence_ceiling": "none",
+    "domains": {
+      "market": {
+        "confidence_ceiling": "unavailable",
+        "covered": 0,
+        "expected": 5,
+        "missing": [
+          "000001.SH",
+          "399001.SZ",
+          "399006.SZ",
+          "KOSPI",
+          "SP500"
+        ],
+        "reasons": [
+          "insufficient_coverage"
+        ],
+        "status": "BLOCK"
+      },
+      "news": {
+        "confidence_ceiling": "unavailable",
+        "covered": 1,
+        "expected": 1,
+        "missing": [],
+        "reasons": [
+          "stale evidence"
+        ],
+        "status": "BLOCK"
+      }
+    },
+    "status": "BLOCK"
+  },
+  "live_market_coverage": {
+    "covered": 0,
+    "expected": 5,
+    "missing": [
+      "000001.SH",
+      "399001.SZ",
+      "399006.SZ",
+      "KOSPI",
+      "SP500"
+    ]
+  },
+  "mode": "live_observation",
+  "observations": [
+    {
+      "capture_id": "e43df8015fbb5ff00318fae9312b25c0b61b5eb663ee90a5ee964437c8303344",
+      "content_hash": "20db6e1df9971507f4ce0c85961f8f44b73b5545b5feda53f88e43a65c0a38d8",
+      "expires_at": "2026-11-14T00:51:37.270154Z",
+      "first_seen_at": "2026-11-13T00:51:37.270154Z",
+      "locator": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "parser_version": "rss-v1",
+      "response_hash": "5b8880b3b47def1b4482dffabc88747783e57745eb068e64ce4aab0cb6b81ada",
+      "retention": "short_term_raw",
+      "retrieved_at": "2026-11-13T00:51:37.270154Z",
+      "source_id": "fed_press",
+      "source_timestamp": null
+    }
+  ],
+  "outcome": "observed",
+  "parse": {
+    "accepted": 20,
+    "reasons": {},
+    "rejected": 0,
+    "total": 20
+  },
+  "quality": {
+    "accepted_records": 20,
+    "correction_rate": null,
+    "item_denominator": 20,
+    "long_term_reliability": null,
+    "nonempty_parse_count": 1,
+    "parse_sample_size": 1,
+    "parse_success_count": 1,
+    "publication_delay_seconds": null,
+    "request_sample_size": 1
+  },
+  "readiness": "BLOCKED_MARKET_SOURCES",
+  "requests": {
+    "attempted": 1,
+    "failed": 0,
+    "observed_bytes": 14801,
+    "reserved_bytes": 512000,
+    "success": 1,
+    "unknown": 0
+  },
+  "run_id": "eb81a0502a3b4d1eb657a3f7a3de5034",
+  "schema_version": 1,
+  "source_id": "fed_press",
+  "source_state": "live_verified",
+  "started_at": "2026-11-13T00:51:36.953865Z"
+}
