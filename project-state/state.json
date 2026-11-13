@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
-  "active_package": "P2",
-  "active_contract": "contracts/p2_intelligence.toml",
-  "branch": "stage3-4-intelligence-foundation",
-  "baseline": "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a",
+  "active_package": "P3",
+  "active_contract": "contracts/p3_research.toml",
+  "branch": "stage5-6-research-foundation",
+  "baseline": "e61f1cbfc41118deb13df421b927ace3d01c150e",
   "package_status": "implemented_unreleased",
   "builder_agents": [
     "coordinator",
-    "01a1d42c-9f2c-7d83-9bbe-b6ffb4e8fca4"
+    "01a1d4a5-9bd9-79f1-a271-ece02c6d29bf",
+    "01a1d4aa-0f6a-7e62-ad36-a8b97619cec0"
   ],
   "stage_registry": [
     {
@@ -28,22 +29,22 @@
     {
       "stage": 3,
       "package": "P2",
-      "status": "implemented_unreleased"
+      "status": "engineering_merged_live_gaps"
     },
     {
       "stage": 4,
       "package": "P2",
-      "status": "implemented_unreleased"
+      "status": "engineering_merged_live_gaps"
     },
     {
       "stage": 5,
       "package": "P3",
-      "status": "planned"
+      "status": "implemented_unreleased"
     },
     {
       "stage": 6,
       "package": "P3",
-      "status": "planned"
+      "status": "implemented_unreleased"
     },
     {
       "stage": 7,
@@ -68,13 +69,13 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P1",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/2",
-    "merge_commit": "e7b36fb715a508c1e4ca91ac97a06b40bed2da7a",
-    "merged_at": "2026-11-13T05:46:19Z",
-    "tested_head": "2e00cd9b7f45a4cd675764b9d3bc6bae4a19d763",
-    "pr_ci_run": 43363252300,
-    "merge_ci_run": 43374192450,
+    "package_id": "P2",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/3",
+    "merge_commit": "e61f1cbfc41118deb13df421b927ace3d01c150e",
+    "merged_at": "2026-11-13T11:15:32Z",
+    "tested_head": "20b543e417e35d2badb57aa675bbebffba718c55",
+    "pr_ci_run": 43409216927,
+    "merge_ci_run": 43415619622,
     "ci_status": "PASS",
     "merge_status": "merged"
   },
@@ -87,14 +88,14 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p2-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p2-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p2-builder-prompt.md",
-    "bundle": "docs/reviews/p2-bundle.json",
-    "validation": "docs/reviews/p2-validation.json",
-    "reviewer": "docs/reviews/p2-review.json",
-    "release": "docs/reviews/p2-release.json"
+    "blueprint_review": "docs/reviews/p3-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p3-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p3-builder-prompt.md",
+    "bundle": "docs/reviews/p3-bundle.json",
+    "validation": "docs/reviews/p3-validation.json",
+    "reviewer": "docs/reviews/p3-review.json",
+    "release": "docs/reviews/p3-release.json"
   },
-  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; source gaps remain; no P3 before its own contract",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; source/model gaps remain; no P4 before its own contract",
   "last_updated": "2026-11-13"
 }

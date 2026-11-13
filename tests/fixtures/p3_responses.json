@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "label": "AUTHORED SYNTHETIC RESPONSES; NOT MODEL OUTPUT",
+  "responses": [
+    {
+      "role": "researcher", "round": 1,
+      "body": {"claims": [
+        {
+          "claim_id": "synthetic-close", "kind": "fact", "domain": "market", "entity_id": "SYN_A",
+          "statement": "Synthetic Alpha has a declared close of 110 on the 2020-01-10 synthetic session.",
+          "evidence_ids": ["88bdbb8ab81da2e5559d7fa0bdb88d41dd71231775f46b301dcfa02931273a93"],
+          "stance": "confirmation", "confidence": "limited",
+          "counterargument": "The authored close is not a live market observation and does not establish a trend.",
+          "invalidation": "A correction to this exact synthetic bar would invalidate the stated close."
+        },
+        {
+          "claim_id": "synthetic-attention", "kind": "inference", "domain": "news", "entity_id": "SYN_A",
+          "statement": "The sourced synthetic Alpha report may warrant informational attention; its market implications remain uncertain.",
+          "evidence_ids": ["a70d5b128c577bf5ffce5c2c701d0461b2acf48f5b73bc41247ce127dd349f68"],
+          "stance": "attention", "confidence": "limited",
+          "counterargument": "A sourced report alone cannot establish materiality or a causal market effect.",
+          "invalidation": "A source correction or a changed entity mapping would require reassessment."
+        }
+      ]},
+      "usage": {"input_tokens": 1200, "output_tokens": 250}
+    },
+    {
+      "role": "reviewer", "round": 1,
+      "body": {"verdicts": [
+        {"claim_id": "synthetic-close", "claim_digest": "e277e35a08bda232a7af58ad3edb1b0ce4f8f3fe5bf74e17b41284773f12e91f", "verdict": "approve", "reason": "Synthetic protocol check only: bounded statement, counterargument and invalidation are present; no independent entailment assessment."},
+        {"claim_id": "synthetic-attention", "claim_digest": "33c283c5b1f6643b654725f2b454f182fa4ba7ec0b83c771ec745d4f49136317", "verdict": "approve", "reason": "Synthetic protocol check only: inference remains limited and explicitly uncertain; no human usefulness assessment."}
+      ]},
+      "usage": {"input_tokens": 1500, "output_tokens": 150}
+    },
+    {
+      "role": "editor", "round": 1,
+      "body": {"selected_ids": ["synthetic-close", "synthetic-attention"]},
+      "usage": {"input_tokens": 450, "output_tokens": 40}
+    }
+  ]
+}

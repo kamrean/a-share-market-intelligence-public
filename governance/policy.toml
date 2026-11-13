@@ -1,5 +1,5 @@
 schema_version = 1
-active_package = "P2"
+active_package = "P3"
 python_version = "3.12"
 merge_tier = "D"
 human_merge_required = true

@@ -1,0 +1,32 @@
+schema_version = 1
+version = "p3-offline-research-v1"
+adapter = "synthetic_fixture"
+max_rounds = 2
+max_claims = 24
+max_context_bytes = 65536
+max_response_bytes = 16384
+timeout_seconds = 5
+
+[roles.researcher]
+model = "synthetic-script-v1"
+prompt = "p3-researcher-v1"
+
+[roles.reviewer]
+model = "synthetic-script-v1"
+prompt = "p3-risk-review-v1"
+
+[roles.editor]
+model = "synthetic-script-v1"
+prompt = "p3-editor-v1"
+
+[budget]
+calls_per_run = 5
+calls_per_day = 20
+input_per_call = 65536
+output_per_call = 16384
+input_per_run = 327680
+output_per_run = 81920
+input_per_day = 1310720
+output_per_day = 327680
+max_runs = 256
+max_store_bytes = 4194304

@@ -10,11 +10,11 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0 and P1 are human-merged in this public repository. Stage1 engineering retains
-source gaps; Stage2 evidence core is merged. Current P2 implements the offline
-Stage3-4 market, flow/sector, news, entity and event-intelligence foundation.
-It does not complete the research product.
-See [Blueprint v1](BLUEPRINT.md), [P2 methods](docs/P2_METHODS.md) and
+P0, P1 and P2 are human-merged in this public repository. Stage1 engineering
+retains source gaps; Stage2 core and Stage3-4 offline intelligence are merged.
+Current P3 work covers the Stage5-6 evaluation and research committee foundation.
+It does not complete the research product or verify live model integration.
+See [Blueprint v1](BLUEPRINT.md), [P3 methods](docs/P3_METHODS.md) and
 [canonical state](project-state/state.json) for scope and lifecycle status.
 
 The local foundation includes bounded RSS capture, offline market CSV parsing,
@@ -27,21 +27,47 @@ The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
 P1's original official Federal Reserve press observation remains historical.
-Active P2 policy disables all external retrieval, including the old probe command;
+Active P3 policy disables all external retrieval, including the old probe command;
 existing runtime guards deny dispatch before network access. Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
-Scheduling, models, reports/delivery, Telegram, trading and VPS remain outside P2.
+Scheduling, live models, reports/delivery, Telegram, trading and VPS remain
+outside P3. Synthetic role adapters are explicitly simulated, not live-connected.
 
 This repository began as a sanitized import, documented in
 [the publication manifest](docs/PUBLICATION_PROVENANCE.json). Historical P0
 receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json)
-and [P1 merge evidence](docs/reviews/p1-merge.json) record actual public closeout.
+[P1 merge evidence](docs/reviews/p1-merge.json) and
+[P2 merge evidence](docs/reviews/p2-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
 status. Subsequent exact-head runs, protection checks and merge evidence belong
-on the public pull request. P3 requires P2 human merge and its own reviewed
+on the public pull request. P4 requires P3 human merge and its own reviewed
 contract; no later work is authorized implicitly.
+
+## Research Foundation
+
+P3 adds strict claim provenance and a fixed researcher/reviewer/editor protocol.
+At most two research/review rounds are permitted. Every selected claim needs
+an exact-content review; the editor cannot introduce or rewrite approved claims.
+Live adapters remain disabled and never fall back to fabricated successful runs.
+
+A bounded external SQLite budget store reserves calls and token allowances
+before dispatch, persists run/day accounting across restarts and fails closed
+on unknown usage. This is not a distributed quota service or exact dollar billing.
+The demonstration uses an ephemeral store and authored synthetic responses:
+
+```text
+python -m market_intelligence.research demo
+```
+
+Evaluation separates citation validity from actual semantic support and keeps
+missing entailment/usefulness assessments unassessed. T+1/T+3/T+5 calculations
+use explicit mapped-market sessions, a pinned anchor and benchmark, and disclose
+missing or immature outcomes; descriptive returns do not demonstrate profit.
+The [P3 methods](docs/P3_METHODS.md) define denominators and limitations.
+The [actual demo sample](docs/evidence/p3-demo.json) is synthetic engineering
+evidence, not a model-quality test or a genuine observation window.
 
 ## Local Workflows
 
@@ -123,7 +149,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage3-4-intelligence-foundation`. The gate checks
+The active construction branch is `stage5-6-research-foundation`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 
