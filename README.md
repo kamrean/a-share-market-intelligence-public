@@ -10,11 +10,19 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P3 are human-merged in this public repository. Stage1 retains source gaps;
-Stage2 core, Stage3-4 intelligence and Stage5-6 offline research are merged.
-Current P4 work adds local three-part reports, an append-only ledger, linked
-corrections and simulated delivery safeguards. It does not complete the research
-MVP, full Stage8 or verify live model/Telegram integration.
+P0-P4 are human-merged in this public repository. Stage1 retains source gaps;
+Stage2 core and the Stage3-7 offline engineering foundation are merged.
+P4 adds local three-part reports, an append-only ledger, linked corrections and
+simulated delivery safeguards. It does not complete the research MVP, full
+Stage8 or verify live model/Telegram integration.
+
+Current P4L prepares a grouped live-integration contract and acceptance plan.
+This entry changes governance only; no product adapter or external permission
+is enabled. The [integration plan](docs/LIVE_INTEGRATION_PLAN.md) and
+[prerequisite register](docs/evidence/live-integration-prerequisites.json)
+separate free-source rights, implementation, actual observations and account
+choices. Unknown account status means not established, not proof of absence.
+The following implementation PR must pin those choices and its audited scope.
 See [Blueprint v1](BLUEPRINT.md), [P4 methods](docs/P4_METHODS.md) and
 [canonical state](project-state/state.json) for scope and lifecycle status.
 
@@ -28,7 +36,7 @@ The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
 P1's original official Federal Reserve press observation remains historical.
-Active P4 policy disables all external retrieval, including the old probe command;
+Active P4L policy disables all external retrieval, including the old probe command;
 existing runtime guards deny dispatch before network access. Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
 Scheduling, live models, real Telegram, trading and VPS remain outside P4.
@@ -39,7 +47,8 @@ This repository began as a sanitized import, documented in
 receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json)
 [P1 merge evidence](docs/reviews/p1-merge.json) and
 [P2 merge evidence](docs/reviews/p2-merge.json) and
-[P3 merge evidence](docs/reviews/p3-merge.json) record actual public closeout.
+[P3 merge evidence](docs/reviews/p3-merge.json) and
+[P4 merge evidence](docs/reviews/p4-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -181,7 +190,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage7-report-ledger`. The gate checks
+The active construction branch is `stage7-live-integration-entry`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

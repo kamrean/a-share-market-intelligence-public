@@ -1,4 +1,4 @@
-"""Read-only, offline checks for the current P4 contract (Python 3.12)."""
+"""Read-only P4L governance checks; live readiness remains blocked (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -15,17 +15,19 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "9976a304c23be444093eaeaaf1277a2c846aed4d"
-BRANCH = "stage7-report-ledger"
+BASELINE = "a95a90d16c98d09e3adc678a79038057676cff05"
+BRANCH = "stage7-live-integration-entry"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p4_publication.toml"
-TEMPLATE_PATH = "templates/p4_builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p4-builder-prompt.md"
+CONTRACT_PATH = "contracts/p4_live_integration_entry.toml"
+TEMPLATE_PATH = "templates/p4l_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p4l-builder-prompt.md"
+PREREQUISITE_PATH = "docs/evidence/live-integration-prerequisites.json"
+PREREQUISITE_HASH = "12982b6ae57a2253b5c53bb2daab5fc4f65f1d9faab3b306aca05717ef444482"
 ATTESTATIONS = tuple([
-    "docs/reviews/p4-bundle.json",
-    "docs/reviews/p4-validation.json",
-    "docs/reviews/p4-review.json",
-    "docs/reviews/p4-release.json"
+    "docs/reviews/p4l-bundle.json",
+    "docs/reviews/p4l-validation.json",
+    "docs/reviews/p4l-review.json",
+    "docs/reviews/p4l-release.json"
 ])
 ALLOWED = tuple([
     ".gitattributes",
@@ -45,8 +47,121 @@ ALLOWED = tuple([
     "contracts/p1_sources_evidence.toml",
     "contracts/p2_intelligence.toml",
     "contracts/p3_research.toml",
+    "contracts/p4_live_integration_entry.toml",
     "contracts/p4_publication.toml",
     "docs/CONSTRUCTION_LOG.md",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/LIVE_INTEGRATION_PLAN.md",
+    "docs/P1_DESIGN.md",
+    "docs/P2_METHODS.md",
+    "docs/P3_METHODS.md",
+    "docs/P4_METHODS.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/SOURCE_MATRIX.md",
+    "docs/evidence/live-integration-prerequisites.json",
+    "docs/evidence/p1-source-probe.json",
+    "docs/evidence/p2-demo.json",
+    "docs/evidence/p3-demo.json",
+    "docs/evidence/p4-demo.json",
+    "docs/evidence/p4-report.txt",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-merge.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p1-builder-prompt.md",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-entrypoint-review.json",
+    "docs/reviews/p1-merge.json",
+    "docs/reviews/p1-prompt-audit.json",
+    "docs/reviews/p1-release.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-validation.json",
+    "docs/reviews/p2-builder-prompt.md",
+    "docs/reviews/p2-bundle.json",
+    "docs/reviews/p2-entrypoint-review.json",
+    "docs/reviews/p2-merge.json",
+    "docs/reviews/p2-prompt-audit.json",
+    "docs/reviews/p2-release.json",
+    "docs/reviews/p2-review.json",
+    "docs/reviews/p2-validation.json",
+    "docs/reviews/p3-builder-prompt.md",
+    "docs/reviews/p3-bundle.json",
+    "docs/reviews/p3-entrypoint-review.json",
+    "docs/reviews/p3-merge.json",
+    "docs/reviews/p3-prompt-audit.json",
+    "docs/reviews/p3-release.json",
+    "docs/reviews/p3-review.json",
+    "docs/reviews/p3-validation.json",
+    "docs/reviews/p4-builder-prompt.md",
+    "docs/reviews/p4-bundle.json",
+    "docs/reviews/p4-entrypoint-review.json",
+    "docs/reviews/p4-merge.json",
+    "docs/reviews/p4-prompt-audit.json",
+    "docs/reviews/p4-release.json",
+    "docs/reviews/p4-review.json",
+    "docs/reviews/p4-validation.json",
+    "docs/reviews/p4l-builder-prompt.md",
+    "docs/reviews/p4l-bundle.json",
+    "docs/reviews/p4l-entrypoint-review.json",
+    "docs/reviews/p4l-prompt-audit.json",
+    "docs/reviews/p4l-release.json",
+    "docs/reviews/p4l-review.json",
+    "docs/reviews/p4l-validation.json",
+    "governance/policy.toml",
+    "market_intelligence/__init__.py",
+    "market_intelligence/__main__.py",
+    "market_intelligence/cost_guard.py",
+    "market_intelligence/delivery.py",
+    "market_intelligence/evaluation.py",
+    "market_intelligence/gate.py",
+    "market_intelligence/intelligence.py",
+    "market_intelligence/ledger.py",
+    "market_intelligence/market_state.py",
+    "market_intelligence/models.py",
+    "market_intelligence/news_events.py",
+    "market_intelligence/publication.py",
+    "market_intelligence/research.py",
+    "market_intelligence/runtime.py",
+    "market_intelligence/sources.py",
+    "market_intelligence/store.py",
+    "project-state/state.json",
+    "requirements.lock",
+    "templates/builder_prompt.md",
+    "templates/p1_builder_prompt.md",
+    "templates/p2_builder_prompt.md",
+    "templates/p3_builder_prompt.md",
+    "templates/p4_builder_prompt.md",
+    "templates/p4l_builder_prompt.md",
+    "tests/fixtures/p1_feed.xml",
+    "tests/fixtures/p1_market.csv",
+    "tests/fixtures/p2_input.json",
+    "tests/fixtures/p3_responses.json",
+    "tests/governance/test_governance.py",
+    "tests/product/test_p1.py",
+    "tests/product/test_p2.py",
+    "tests/product/test_p3.py",
+    "tests/product/test_p4.py",
+    "tools/governance.py"
+])
+IMMUTABLE = tuple([
+    ".gitattributes",
+    ".gitignore",
+    "BLUEPRINT.md",
+    "config/p1_profile.toml",
+    "config/p2_entities.toml",
+    "config/p2_methods.toml",
+    "config/p3_research.toml",
+    "config/p4_publication.toml",
+    "config/sources.toml",
+    "contracts/p0_stage0.toml",
+    "contracts/p1_sources_evidence.toml",
+    "contracts/p2_intelligence.toml",
+    "contracts/p3_research.toml",
+    "contracts/p4_publication.toml",
     "docs/LEGACY_REUSE_MANIFEST.md",
     "docs/P1_DESIGN.md",
     "docs/P2_METHODS.md",
@@ -98,7 +213,6 @@ ALLOWED = tuple([
     "docs/reviews/p4-release.json",
     "docs/reviews/p4-review.json",
     "docs/reviews/p4-validation.json",
-    "governance/policy.toml",
     "market_intelligence/__init__.py",
     "market_intelligence/__main__.py",
     "market_intelligence/cost_guard.py",
@@ -115,7 +229,6 @@ ALLOWED = tuple([
     "market_intelligence/runtime.py",
     "market_intelligence/sources.py",
     "market_intelligence/store.py",
-    "project-state/state.json",
     "requirements.lock",
     "templates/builder_prompt.md",
     "templates/p1_builder_prompt.md",
@@ -126,91 +239,10 @@ ALLOWED = tuple([
     "tests/fixtures/p1_market.csv",
     "tests/fixtures/p2_input.json",
     "tests/fixtures/p3_responses.json",
-    "tests/governance/test_governance.py",
     "tests/product/test_p1.py",
     "tests/product/test_p2.py",
     "tests/product/test_p3.py",
-    "tests/product/test_p4.py",
-    "tools/governance.py"
-])
-IMMUTABLE = tuple([
-    ".gitattributes",
-    ".gitignore",
-    "BLUEPRINT.md",
-    "config/p1_profile.toml",
-    "config/p2_entities.toml",
-    "config/p2_methods.toml",
-    "config/p3_research.toml",
-    "config/sources.toml",
-    "contracts/p0_stage0.toml",
-    "contracts/p1_sources_evidence.toml",
-    "contracts/p2_intelligence.toml",
-    "contracts/p3_research.toml",
-    "docs/LEGACY_REUSE_MANIFEST.md",
-    "docs/P1_DESIGN.md",
-    "docs/P2_METHODS.md",
-    "docs/P3_METHODS.md",
-    "docs/PUBLICATION_PROVENANCE.json",
-    "docs/SOURCE_MATRIX.md",
-    "docs/evidence/p1-source-probe.json",
-    "docs/evidence/p2-demo.json",
-    "docs/evidence/p3-demo.json",
-    "docs/reviews/blueprint-review.json",
-    "docs/reviews/p0-builder-prompt.md",
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-merge.json",
-    "docs/reviews/p0-prompt-audit.json",
-    "docs/reviews/p0-release.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-validation.json",
-    "docs/reviews/p1-builder-prompt.md",
-    "docs/reviews/p1-bundle.json",
-    "docs/reviews/p1-entrypoint-review.json",
-    "docs/reviews/p1-merge.json",
-    "docs/reviews/p1-prompt-audit.json",
-    "docs/reviews/p1-release.json",
-    "docs/reviews/p1-review.json",
-    "docs/reviews/p1-validation.json",
-    "docs/reviews/p2-builder-prompt.md",
-    "docs/reviews/p2-bundle.json",
-    "docs/reviews/p2-entrypoint-review.json",
-    "docs/reviews/p2-merge.json",
-    "docs/reviews/p2-prompt-audit.json",
-    "docs/reviews/p2-release.json",
-    "docs/reviews/p2-review.json",
-    "docs/reviews/p2-validation.json",
-    "docs/reviews/p3-builder-prompt.md",
-    "docs/reviews/p3-bundle.json",
-    "docs/reviews/p3-entrypoint-review.json",
-    "docs/reviews/p3-prompt-audit.json",
-    "docs/reviews/p3-release.json",
-    "docs/reviews/p3-review.json",
-    "docs/reviews/p3-validation.json",
-    "market_intelligence/__init__.py",
-    "market_intelligence/__main__.py",
-    "market_intelligence/cost_guard.py",
-    "market_intelligence/evaluation.py",
-    "market_intelligence/gate.py",
-    "market_intelligence/intelligence.py",
-    "market_intelligence/market_state.py",
-    "market_intelligence/models.py",
-    "market_intelligence/news_events.py",
-    "market_intelligence/research.py",
-    "market_intelligence/runtime.py",
-    "market_intelligence/sources.py",
-    "market_intelligence/store.py",
-    "requirements.lock",
-    "templates/builder_prompt.md",
-    "templates/p1_builder_prompt.md",
-    "templates/p2_builder_prompt.md",
-    "templates/p3_builder_prompt.md",
-    "tests/fixtures/p1_feed.xml",
-    "tests/fixtures/p1_market.csv",
-    "tests/fixtures/p2_input.json",
-    "tests/fixtures/p3_responses.json",
-    "tests/product/test_p1.py",
-    "tests/product/test_p2.py",
-    "tests/product/test_p3.py"
+    "tests/product/test_p4.py"
 ])
 PROTECTED = tuple(sorted(set(ALLOWED) - set(ATTESTATIONS)))
 PERMISSIONS = {
@@ -239,25 +271,25 @@ VALIDATION_COMMANDS = [
     "git diff --check"
 ]
 AUDIT_INPUTS = (CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH,
-                "AGENTS.md", "docs/P4_METHODS.md")
+                "AGENTS.md", "docs/LIVE_INTEGRATION_PLAN.md", PREREQUISITE_PATH)
 
 
 def dependency():
     return {
-        "package_id": "P3",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/4",
+        "package_id": "P4",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/5",
         "merge_commit": BASELINE,
-        "merged_at": "2026-11-13T12:46:44Z",
-        "tested_head": "e56c230a4b37ace4a6d12c53bad4e7463e88ebc3",
-        "pr_ci_run": 43424527859,
-        "merge_ci_run": 43428054869,
+        "merged_at": "2026-11-13T14:20:51Z",
+        "tested_head": "332128840902d78f84fbb05e4794f72d7b8b2a77",
+        "pr_ci_run": 43439268823,
+        "merge_ci_run": 43441856767,
         "ci_status": "PASS",
         "merge_status": "merged"
     }
 
 
 POLICY = {
-    "schema_version": 1, "active_package": "P4", "python_version": "3.12",
+    "schema_version": 1, "active_package": "P4L", "python_version": "3.12",
     "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
     "remote_creation_authorized": False, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
@@ -266,13 +298,15 @@ POLICY = {
     "permissions": PERMISSIONS,
 }
 RECEIPT_PATHS = {
-    "blueprint_review": "docs/reviews/p4-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    "blueprint_review": "docs/reviews/p4l-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4l-prompt-audit.json", "builder_prompt": PROMPT_PATH,
     **dict(zip(("bundle", "validation", "reviewer", "release"), ATTESTATIONS)),
 }
 NEXT_GATE = ("exact_head_ci_and_independent_release_then_human_merge; "
-             "live integration and MVP acceptance require reviewed scope; no VPS")
+             "resolve external prerequisites and audit one grouped live implementation amendment; "
+             "no dispatch or VPS")
 LOCAL_RELEASE = "LOCAL_READY_FOR_PR"
+GOVERNANCE_ONLY = "governance-only; live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES"
 
 
 class Block(ValueError):
@@ -319,7 +353,7 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P4", "stage_ids": [7, 8],
+        "schema_version": 1, "package_id": "P4L", "stage_ids": [1, 2, 3, 4, 5, 6, 7, 8],
         "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
@@ -329,7 +363,8 @@ def validate_contract(contract):
         "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
         "required_reads": ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
                            "governance/policy.toml", "project-state/state.json",
-                           "docs/reviews/p3-merge.json", "docs/P4_METHODS.md"],
+                           "docs/reviews/p4-merge.json", "docs/LIVE_INTEGRATION_PLAN.md",
+                           PREREQUISITE_PATH],
         "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
         "repository": REPOSITORY, "dependency": dependency(),
     }
@@ -347,7 +382,7 @@ def validate_contract(contract):
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P4", "active_contract": CONTRACT_PATH,
+        "schema_version": 1, "active_package": "P4L", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
@@ -359,23 +394,28 @@ def validate_state(state):
         "receipts": RECEIPT_PATHS,
         "next_gate": NEXT_GATE,
     }
-    keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated"),
+    keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated",
+                 "live_integration"),
          "state")
     for key, value in pinned.items():
         exact(state[key], value, f"state.{key}")
     require(type(state["package_status"]) is str and state["package_status"] in
-            ("building", "implemented_unreleased"), "state: premature/unknown package status")
+            ("building", "contract_prepared_unreleased"), "state: premature/unknown package status")
+    entry_status = ("in_progress" if state["package_status"] == "building"
+                    else "contract_prepared_unreleased")
+    exact(state["live_integration"], {
+        "entry_status": entry_status, "runtime_implementation": "not_started",
+        "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
+        "prerequisite_register": PREREQUISITE_PATH, "permissions_enabled": False,
+    }, "state.live_integration")
     string_list(state["builder_agents"], "state.builder_agents")
     require(all(agent == agent.strip() for agent in state["builder_agents"]),
             "state.builder_agents: surrounding whitespace")
     packages = ("P0", "P1", "P1", "P2", "P2", "P3", "P3", "P4", "P4/P5", "P5")
-    active = "in_progress" if state["package_status"] == "building" else "implemented_unreleased"
-    offline = ("offline_subset_in_progress" if state["package_status"] == "building"
-               else "offline_subset_implemented_unreleased")
     expected = [{"stage": i, "package": package,
                  "status": "complete" if i in (0, 2) else "engineering_merged_source_gaps" if i == 1 else
-                           "engineering_merged_live_gaps" if i in (3, 4, 5, 6) else active if i == 7 else
-                           "deferred" if i == 9 else offline}
+                           "engineering_merged_live_gaps" if i in (3, 4, 5, 6, 7) else
+                           "deferred" if i == 9 else "offline_subset_merged_live_gaps"}
                 for i, package in enumerate(packages)]
     exact(state["stage_registry"], expected, "state.stage_registry")
     require(type(state["last_updated"]) is str and
@@ -424,6 +464,32 @@ def parse_json(text):
 
 def sha256(text):
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def validate_live_prerequisites(text):
+    text = normalize_text(text)
+    register = parse_json(text)
+    # This frozen governance-only register grants no capabilities. Pin every
+    # row and flag independently of locally recomputed audit/snapshot hashes.
+    exact(sha256(text), PREREQUISITE_HASH, "prerequisite register frozen content")
+    pinned = {
+        "schema_version": 1, "package_id": "P4L", "observed_on": "2026-11-13",
+        "basis": "primary_documentation_and_repository_only",
+        "product_probes_performed": False, "credentials_inspected": False,
+        "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
+        "benchmark_universe": ["000001.SH", "399001.SZ", "399006.SZ", "KOSPI", "SP500"],
+        "live_verified_benchmarks": 0, "selected_providers": [],
+        "rights_scope": ["automated_retrieval", "raw_retention", "normalized_retention",
+                         "derived_analysis", "external_model_input", "private_delivery",
+                         "public_redistribution"],
+        "permission_grant": False,
+        "next_action": "Resolve concrete provider rights/model/private-test choices, then audit "
+                       "one grouped implementation amendment; no dispatch from this entry.",
+    }
+    keys(register, (*pinned, "required_inputs"), "prerequisite register")
+    for key, value in pinned.items():
+        exact(register[key], value, f"prerequisite register.{key}")
+    return register
 
 
 def render_prompt(contract, template):
@@ -616,7 +682,7 @@ def validate_prerequisite(receipt, role, names, contents):
     else:
         exact(receipt.get("findings"), [], f"{role}.findings")
         cycles = receipt.get("repair_cycles")
-        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4 repair bound")
+        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4L repair bound")
 
 
 def check(root=ROOT, *, ci=False, complete_index=False):
@@ -626,12 +692,13 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "policy")
     state = parse_json(contents["project-state/state.json"])
     validate_state(state)
-    prior = parse_json(contents["docs/reviews/p3-merge.json"])
+    validate_live_prerequisites(contents[PREREQUISITE_PATH])
+    prior = parse_json(contents["docs/reviews/p4-merge.json"])
     expected_prior = {
         "schema_version": 1, "role": "historical_merge_observation",
         "observed_on": "2026-11-13", **dependency(),
-        "prior_snapshot": "09319af882c9ca7265a85cfc6822cc22da637cc6c8e4150727dc440460ebc36b",
-        "prior_gate_check": "PASS on merged main using --ci; frozen local P3 receipt remains historical",
+        "prior_snapshot": "f0b442973958b7690dc6bf504d0f4aa9d2960741f4734e227f59b1c130a6d5a8",
+        "prior_gate_check": "PASS on merged main using --ci; frozen local P4 receipt remains historical",
         "authority": "Evidence of prior human merge, not authorization for later runtime scopes.",
     }
     exact(prior, expected_prior, "prior merge evidence")
@@ -643,7 +710,7 @@ def check(root=ROOT, *, ci=False, complete_index=False):
                           AUDIT_INPUTS, contents)
     entrypoint_cycles = parse_json(contents[RECEIPT_PATHS["blueprint_review"]])["repair_cycles"]
     audit_cycles = parse_json(contents[RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
-    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4 repair bound or reset")
+    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4L repair bound or reset")
     for role in ("blueprint_review", "prompt_audit"):
         agent = parse_json(contents[RECEIPT_PATHS[role]])["agent_id"]
         require(agent == agent.strip() and agent not in state["builder_agents"],
@@ -673,7 +740,7 @@ def snapshot(contents):
 def make_bundle(checked):
     contract, _state, contents, changed = checked
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P4", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P4L", "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
             "attestation_paths": list(ATTESTATIONS), "scope_result": "PASS"}
@@ -685,7 +752,7 @@ def bundle(root=ROOT, *, ci=False):
 
 def validate_attestations(checked, current):
     contract, state, contents, _changed = checked
-    require(state["package_status"] == "implemented_unreleased", "gate: state is still building")
+    require(state["package_status"] == "contract_prepared_unreleased", "gate: state is still building")
     receipts = []
     for name in ATTESTATIONS:
         require(name in contents, f"missing required receipt: {name}")
@@ -713,7 +780,7 @@ def validate_attestations(checked, current):
         exact(review[key], value, f"review receipt.{key}")
     cycles = review["repair_cycles"]
     audit_cycles = parse_json(contents[RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
-    require(type(cycles) is int and audit_cycles <= cycles <= 1, "review receipt: P4 repair bound or reset")
+    require(type(cycles) is int and audit_cycles <= cycles <= 1, "review receipt: P4L repair bound or reset")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
                    "merge_status", "vps_sync", "next_gate"), "release receipt")
     for key, value in {**common, "role": "release_checker", "read_only": True,
@@ -752,16 +819,17 @@ def main(argv=None, *, root=ROOT):
             rendered = render_prompt(contract, read_text(root, TEMPLATE_PATH))
             if args.verify:
                 exact(read_text(root, PROMPT_PATH), rendered, "builder prompt")
-                print("PASS")
+                print(f"PASS ({GOVERNANCE_ONLY})")
             else:
                 print(rendered, end="")
         elif args.command == "check":
             check(root, ci=args.ci)
-            print("PASS (CI skips local branch identity only)" if args.ci else "PASS")
+            ci_note = "; CI skips local branch identity only" if args.ci else ""
+            print(f"PASS ({GOVERNANCE_ONLY}{ci_note})")
         elif args.command == "bundle":
             print(json.dumps(bundle(root, ci=args.ci), indent=2, sort_keys=True))
         else:
-            print(gate(root, ci=args.ci))
+            print(f"{gate(root, ci=args.ci)} ({GOVERNANCE_ONLY})")
         return 0
     except (ValueError, OSError, RuntimeError, subprocess.SubprocessError) as error:
         print(f"BLOCK: {error}", file=sys.stderr)

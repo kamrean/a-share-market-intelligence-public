@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "verdict": "PASS",
+  "agent_id": "01a1d554-2385-7283-b5bc-06a625c60465",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "role": "blueprint_reviewer",
+  "baseline": "a95a90d16c98d09e3adc678a79038057676cff05",
+  "files": {
+    "BLUEPRINT.md": "030a634be17b87c594a3eeb95b665f870ea8da207567d0a91a20950695853d12",
+    "START_CONSTRUCTION_PROMPT.md": "8724942a58d57e1080ac93a43b8e18e419189f525fa07cde7b6d6b893e80197c"
+  }
+}

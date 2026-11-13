@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "role": "historical_merge_observation",
+  "observed_on": "2026-11-13",
+  "package_id": "P4",
+  "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/5",
+  "merge_commit": "a95a90d16c98d09e3adc678a79038057676cff05",
+  "merged_at": "2026-11-13T14:20:51Z",
+  "tested_head": "332128840902d78f84fbb05e4794f72d7b8b2a77",
+  "pr_ci_run": 43439268823,
+  "merge_ci_run": 43441856767,
+  "ci_status": "PASS",
+  "merge_status": "merged",
+  "prior_snapshot": "f0b442973958b7690dc6bf504d0f4aa9d2960741f4734e227f59b1c130a6d5a8",
+  "prior_gate_check": "PASS on merged main using --ci; frozen local P4 receipt remains historical",
+  "authority": "Evidence of prior human merge, not authorization for later runtime scopes."
+}
