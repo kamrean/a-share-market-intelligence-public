@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a1d5d4-de22-7450-a21b-e1ade61dca4a",
+  "read_only": true,
+  "snapshot_id": "cbaad2a0a0c0a48ebdb6b948ec744f7ab574308201fc0dd9225eaf61e74fb7b3",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "exact_head_ci_and_independent_release_then_human_merge; select and audit final free model/source/private delivery integration; no dispatch or VPS"
+}

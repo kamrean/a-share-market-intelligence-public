@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "verdict": "PASS",
+  "agent_id": "01a1d5a1-1837-7942-b210-46131290cff6",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "role": "prompt_auditor",
+  "files": {
+    "contracts/p4c_offline_workflow.toml": "885faf19039fa359e7095f6f759269c75f853ff962a8e1196761335b529b0f69",
+    "governance/policy.toml": "2dab2dae4b2183b0ae2ae24eb479af04a07d6359a4b1b80d7b622dee98b11db8",
+    "templates/p4c_builder_prompt.md": "12553ccbd7ad4679ea76b28df4932447b45ae2e3b933b61e1d9facf65235a6f1",
+    "docs/reviews/p4c-builder-prompt.md": "dd32fbfe53bae2a85320a01f54c640b7fefe71d0a9ef5fc35d6ef0c95e04878d",
+    "AGENTS.md": "a50002fe1f3ae1a247951f3ab16de8a614ff5f14b36657a608ad6514f054d299",
+    "docs/OFFLINE_WORKFLOW_PLAN.md": "9dd2b6607825e4419f0a5fb2a504fbdbfa7956c2cda37ec8bd74e01cf07b6f70",
+    "docs/evidence/live-integration-prerequisites.json": "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3"
+  }
+}

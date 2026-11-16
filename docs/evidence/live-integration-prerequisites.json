@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "package_id": "P4L",
+  "package_id": "P4C",
   "observed_on": "2026-11-13",
-  "basis": "primary_documentation_and_repository_only",
+  "basis": "primary_documentation_repository_and_user_declared_scope",
   "product_probes_performed": false,
   "credentials_inspected": false,
   "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
@@ -86,17 +86,17 @@
     },
     {
       "id": "model",
-      "status": "provider_model_budget_and_data_egress_not_selected",
+      "status": "deferred_by_user_zero_paid_budget",
       "account_status": "not_established"
     },
     {
       "id": "private_telegram",
-      "status": "user_designated_destination_and_test_release_not_established",
-      "account_status": "not_established"
+      "status": "user_confirmed_own_private_chat_credentials_and_release_unverified",
+      "account_status": "bot_exists_user_reported"
     },
     {
       "id": "engineering",
-      "status": "live_input_and_transport_paths_not_implemented",
+      "status": "configurable_offline_workflow_in_scope_live_adapters_deferred",
       "source_refs": [
         "market_intelligence/intelligence.py",
         "market_intelligence/research.py",
@@ -113,5 +113,5 @@
     }
   ],
   "permission_grant": false,
-  "next_action": "Resolve concrete provider rights/model/private-test choices, then audit one grouped implementation amendment; no dispatch from this entry."
+  "next_action": "Finish configurable offline workflow first; final source/model/private delivery integration requires audited concrete scope and independent release. No external dispatch."
 }

@@ -124,6 +124,8 @@ Keep Stage 0-9 as capability identifiers. Deliver them through the following med
 | P4 | 7 plus MVP subset of 8 | Daily three-part report, ledger, corrections, private test delivery, replay/evaluation and MVP acceptance |
 | P5 | remaining 8 and 9 | Longer observation/calibration and separately authorized VPS release; deferred beyond MVP |
 
+Code-first sequencing: a reviewed P4C integration package may complete a configurable offline workflow before final model/provider hookup. Authored synthetic scenarios validate engineering only; they do not satisfy live source, genuine model, private delivery or MVP acceptance. Final operational integration still requires concrete rights, configuration and independent release.
+
 Each package normally produces one coherent PR after review; split only for an actual dependency, risk, or reviewability reason. P4 acceptance does not mark all of Stage 8 or Stage 9 complete.
 
 ### Stage 0: Project and Governance

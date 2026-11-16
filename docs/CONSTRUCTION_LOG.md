@@ -690,3 +690,136 @@ protected snapshot. Later exact-head CI and remote release belong on the PR.
 No product request, credential read, private test send, scheduler or VPS action
 has occurred. Missing external inputs remain prerequisites for the next grouped
 implementation amendment, not reasons to weaken acceptance.
+
+## 2026-11-14 P4C Configurable Offline Workflow
+
+PR #6 was human-merged as8ebfa0994436c05234336105c424cbd823b2af0b from
+tested head02fe397651e17f3485a7d282b861cc6007fbce49. Exact-head PR CI43450010910
+and main CI43454745770 both passed on Ubuntu and Windows. The coordinator
+verified clean synced main and the predecessor gate before creating
+stage7-offline-workflow. Historical receipts remain unchanged.
+
+The user explicitly requested code-first completion with model hookup last.
+P4C therefore amends sequencing and implements a configurable offline pipeline
+in the same PR. No additional contract-only PR is introduced. Blueprint remains
+v1. Current scope is131 exact paths,104 immutable,127 snapshot-protected and
+four current attestations. All original240 product tests and earlier contracts,
+reviews and samples remain immutable. Only publication.py is extended among
+existing product modules; scenario.py/workflow.py and focused tests are new.
+
+Actual independent entrypoint and Prompt Auditor01a1d5a1-1837-7942-b210-46131290cff6
+returned PASS with no findings and repair_cycles0 before product/checker edits.
+The receipts bind the reviewed input hashes, including Blueprint and startup
+instructions. Scenario Builder01a1d5a5-9105-7eb0-81b3-e81e5eb5f381 owns
+scenario.py/publication.py/test_scenario.py. Governance Builder
+01a1d5a5-925e-75c2-82cf-818cefee3ddf owns checker/governance tests/CI.
+Coordinator owns workflow.py/test_workflow.py and current docs/state/receipts.
+These contributors cannot independently review their own work.
+
+The workflow exports a self-contained synthetic case, validates evidence,
+executes authored researcher/reviewer/editor responses with persistent budgets,
+records three-part reports, exposes read-only recorded-task status, exports
+verified reports and appends explanatory corrections. Explicit fake delivery
+exercises remain local. It does not read credentials or call model/source/chat
+APIs. Variations are inputs, not edits to protected fixed-demo fixtures.
+
+Task intent is reserved before execution. Completed repeats reuse verified
+results; changed intent fails. Interrupted/unknown/blocked records remain
+visible, and missing budget or report stores are not silently recreated.
+Actual local execution IDs/times are separated from synthetic historical as_of.
+Status reports do not pretend to inspect remote delivery or current ledger
+health; report export verifies the ledger. Scope is one trusted local workspace,
+not hostile concurrent filesystem mutation or cross-store global accounting.
+
+The coordinator's initial workflow regression run exposed only unclosed test
+SQLite connections during Windows temporary-directory cleanup. Test handles
+were explicitly closed; no product protection was relaxed. The expanded
+32-case workflow suite passed in9.234s before final integration. This is Builder
+validation, not an independent review or permission to publish.
+
+Model integration is deferred by the user with zero authorized paid budget.
+The user reports an existing bot and selects their own private chat; credentials
+and actual delivery remain unverified. Five live benchmarks remain0/5, full
+research MVP not_implemented, forward observation not_started and VPS
+not_authorized. No genuine observations or successful model/send records are
+fabricated. Final external integration still needs permitted providers, exact
+scope, model/free allowance, local private configuration and separate release.
+
+Scenario Builder's final targeted tests:30 scenario tests PASS in7.405s and
+all50 original P4 tests PASS in17.243s. Integration inspection found that a free
+correction note could carry unreviewed factual prose. Before formal review,
+scenario corrections were restricted to three fixed non-factual explanations;
+the original P4 constraint is unchanged. Empty event days retain their evidence.
+No independent-review repair cycle was consumed by Builder-stage test/debug work.
+
+Governance Builder's36 focused tests passed. All79 original governance test
+names/behaviors remain, with12 additions for91 total; the coordinator separately
+checked no original test names were removed. Hardlinks, exact frozen audit input
+hashes, complete prerequisite schema and new offline-scope protections are tested.
+CI changes only its baseline/comment; action pins, job names, permissions and
+Windows/Linux platforms remain unchanged.
+
+Coordinator full product validation passed302/302 in46.216s: original240 plus
+30 scenario and32 workflow regressions, including network-denied tests. The
+state is frozen as implemented_unreleased for offline engineering only. Full
+governance validation, final scope/prompt/bundle checks and independent Reviewer/
+Release Checker results are attached only when actually obtained. Four current
+attestations may record these outcomes without changing the protected snapshot.
+No formal P4C repair has been consumed at this freeze. Remote exact-head CI and
+release evidence belong on the PR; human merge remains mandatory.
+
+### Independent Reviewer BLOCK and Single R1 Repair
+
+Independent Reviewer01a1d5b7-9219-7692-9ff5-0dd4dca43f3c returned BLOCK against
+snapshotc7492731274bfba5dddc140715528f38a18471bdd73b5e40d0fbb0567431e6f5.
+Original findings, preserved here before any repair:
+- P4C-F1, P1/R1, workflow.py:325-326: changing persisted budget attempt day to
+  2000-01-01 permitted two completed tasks and6 calls with calls_per_day3 on
+  the same actual date. New dispatch must reject corrupt budget chronology
+  and receipt inconsistencies without healing records or refunding usage.
+- P4C-F2, P2/R1, scenario.py:127-128: blanket rejection of every excluded
+  evidence item rejected a legal optional stale-news DEGRADED bundle, despite
+  market/sector PASS and supported market-only claims. Blueprint5.1 semantics
+  must be preserved while excluded evidence remains unavailable for claims.
+
+Reviewer independently ran30 scenario and32 workflow tests successfully; the
+two reproducers exposed coverage gaps, not existing-suite failures. Pending
+full governance validation was not a BLOCK reason. Both findings are combined
+into the one permitted R1 repair/re-review; no scope/permission expansion.
+Original BLOCK remains historical even after a later new-snapshot PASS.
+
+The coordinator repaired F1 only in the new workflow boundary: read-only budget
+preflight checks the pinned schema/configuration, task/run identity, reservation
+chronology and UTC day, conservative amounts, settlement state and saved execution
+receipts before any new dispatch-capable store opens. Altered/deleted records
+fail closed without new task records, healing, refunds or budget writes. The
+historical cost_guard.py remains unchanged. Twelve corruption variations plus
+deleted-history/unknown-usage regressions supplement normal quota/restart cases.
+
+Repair Builder01a1d5bf-b063-7c92-bd37-062e9eddee77 repaired F2 only in scenario.py
+and test_scenario.py. Explicit optional/allow_degraded domains may retain lawful
+stale/expired/unused evidence exclusions when their domain is DEGRADED. Excluded
+evidence remains unavailable for citations. Expiry is not allowed to hide future
+possession, invalid source scope or other integrity defects. Nine new scenario
+tests passed39/39 in13.808s; all original30 scenario cases remain. An initial
+environment hardlink-permission test error was rerun with permitted test access,
+not a relaxed product check. The coordinator added a complete persistence/reuse/
+export regression for optional stale news. Workflow tests passed36/36 in15.900s.
+
+Eight actual CLI subprocess commands passed: example, validate, run, repeated
+run, status, export, explicit simulated delivery and explanatory correction.
+They used temporary external stores, made no external product requests and left
+live coverage0/5. The pre-repair full governance suite passed91/91 in857.492s;
+post-repair full suites and final review results are recorded in the current
+attestations only after completion. No checker or audited prerequisite bytes
+were changed during this R1 cycle. The consumed repair count is1, not reset0.
+
+Before a second Reviewer verdict, the coordinator withdrew candidate
+7e65dd897ab2247d403390ef7968768f6598ad5c58860ef4d0481ed688641d66 and completed
+one further edge of F1 within the same repair: an opaque failed execution without
+a source/accounting receipt blocks new task dispatch even when budget history
+has vanished. The existing failed task remains inspectable/idempotent; no budget
+is refunded or healed. A regression injects publication failure after three
+actual simulated calls, removes the budget rows and verifies no new dispatch or
+write. All protected bytes are refrozen and product validation rerun before
+resubmission. No approval of the withdrawn candidate is reused.
