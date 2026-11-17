@@ -1,42 +1,42 @@
 # Construction Entrypoint
 
 Use this public repository. Read AGENTS.md, BLUEPRINT.md, project-state/state.json,
-governance/policy.toml, contracts/p4e_evidence_preparation.toml,
-docs/EVIDENCE_PREPARATION.md, docs/evidence/p4s-source-probe.json,
-docs/evidence/live-integration-prerequisites.json and docs/reviews/p4s-merge.json.
-Do not bulk-read or mutate archived/private projects. Blueprint remains v1.
+governance/policy.toml, contracts/p4i_real_evidence_composition.toml,
+docs/REAL_EVIDENCE_COMPOSITION.md, docs/reviews/p4e-merge.json,
+docs/evidence/live-integration-prerequisites.json, docs/evidence/p4s-source-probe.json
+and docs/evidence/p4e-preparation.json. Blueprint remains v1; no archived-project
+bulk reading or mutation.
 
 ## Current Package
 
-PR8 human-merged P4S; exact-head PR and merged-main CI passed. Its one Fed request
-is consumed, observed news remains BLOCK and benchmarks0/5. Historical frozen
-local receipts are not current merge metadata. P4E implements local preparation
-of already captured evidence, not another probe or completed research pipeline.
-All general external flags remain false; no credential or external operation.
+PR9 human-merged P4E; exact-head PR and merged-main CI passed. Its recorded local
+preparation is historical evidence, not renewed source access or research
+acceptance. P4I adds an explicit pure real-source historical-replay composition
+API, preserving legacy synthetic APIs, configuration, samples and429 old tests.
+Operation-scoped rights assessments do not enable operational permissions.
+Five exact benchmarks remain0/5 live-verified; model integration stays deferred.
 
 ## Work Sequence
 
-1. Verify clean main, PR8 merge and exact-head PR/main CI.
-2. Freeze contract/policy/local preparation plan and full rendered prompt.
-   Actual independent entrypoint and Prompt Auditor PASS precede code/checker.
-3. Builders own disjoint paths. Old product modules and358 tests remain immutable.
-   Preserve107 governance cases/protections; no real-store read during building.
-4. Run full offline suites, scope/prompt/bundle/diff and freeze code/state/log.
-   Independent Reviewer, then separate Release Checker. One R0/R1 repair total;
-   unknown/R2+ or second BLOCK escalates.
-5. LOCAL_READY_FOR_LOCAL_PREPARATION permits read-only access to the fixed prior
-   input store. No create/reset/sweep/write/refetch. Record truthful prepared or
-   unavailable outcome; expiry forbids raw and normalized payload materialization.
-6. Final independent LOCAL_READY_FOR_PR preserves preapproval and binds the
-   sanitized result. Protected bytes remain frozen; local replay is not live.
-7. Inspect complete index/privacy/identity, commit/push/PR, await exact-head
-   Ubuntu/Windows CI and independent remote release; human merge only.
+1. Verify clean main, PR9 merge and exact-head PR/main CI.
+2. Freeze bounded contract/policy/plan/template/rendered prompt; actual independent
+   entrypoint and Prompt Auditor PASS precede product/checker edits.
+3. Disjoint Builders implement only named paths. Preserve114 governance cases
+   and all old product tests; tests use authored fixtures and block external I/O.
+4. Run complete offline suites, scope/prompt/bundle/diff. Freeze protected state
+   and log before independent read-only Reviewer and separate Release Checker.
+   One R0/R1 repair total; second BLOCK/unknown/R2+ requires human escalation.
+5. Record actual four attestations, verify final gate and clean candidate,
+   commit/push/PR, wait exact-head Ubuntu/Windows CI and independent remote release.
+   No actual observation, operational preapproval or runtime-store read in P4I.
+6. Stop AWAITING_HUMAN_MERGE. Never direct/auto merge or bypass protection.
 
 ## Next Gate
 
-Stop AWAITING_HUMAN_MERGE. Resolve five-index source rights/transport/account
-requirements before market requests; real source-to-research/report wiring,
-model integration, private test delivery and genuine acceptance remain open.
-Model is deferred. No new requests, credentials, paid calls, SDK installs,
-scheduling, broker/order/portfolio action, deployment or VPS. Do not carry
-forward the historical shutdown request.
+After human merge, resolve selected source identities, applicable rights,
+authenticated transport, calendars and actual five-index validation, plus an
+audited runtime importer that binds real acquisition/provenance/rejections.
+Then model/research/report integration and private delivery require their own
+concrete authorization and evidence. No current source/model/send/scheduling/
+broker/order/portfolio/deploy/VPS permission. No inheritance of old one-shot
+probe/preparation gates. No completion claim from fixtures or hash agreement.

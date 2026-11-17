@@ -130,6 +130,8 @@ P4S follows merged P4C with audited source readiness and one user-authorized off
 
 P4E follows human-merged P4S with local, read-only preparation of already retained official-news evidence. Historical processing preserves source identity and real possession times; it is not a new live run or completed research pipeline. Existing synthetic APIs remain separate, all external flags stay false and five-index coverage remains0/5.
 
+P4I follows human-merged P4E with pure mode-safe real-source historical-replay composition and operation-scoped source-policy decisions. Legacy synthetic behavior remains unchanged; applicable local analysis rights are separated from disabled future model/delivery rights. It does not select sources, read runtime stores, dispatch research or grant operational permissions; live-verified benchmark coverage remains0/5.
+
 Each package normally produces one coherent PR after review; split only for an actual dependency, risk, or reviewability reason. P4 acceptance does not mark all of Stage 8 or Stage 9 complete.
 
 ### Stage 0: Project and Governance
