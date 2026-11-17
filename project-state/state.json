@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "active_package": "P4S",
-  "active_contract": "contracts/p4s_free_sources.toml",
-  "branch": "stage7-free-source-collection",
-  "baseline": "e2f35f41019ce01c9d72b5d08e495911e61369a4",
+  "active_package": "P4E",
+  "active_contract": "contracts/p4e_evidence_preparation.toml",
+  "branch": "stage7-source-evidence-preparation",
+  "baseline": "1a15840caab444637646e695467496e362f80bbb",
   "package_status": "implemented_unreleased",
   "builder_agents": [
     "coordinator",
-    "01a1e4ac-3e24-75f2-a703-e5ddf71450a0",
-    "01a1e4ac-3fec-7452-ba57-dc2649f8a331"
+    "01a1e939-5978-7b80-8516-34d24f6dac81",
+    "01a1e939-5bd4-7d90-8fba-d5599ea8a041"
   ],
   "stage_registry": [
     {
@@ -69,13 +69,13 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P4C",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/7",
-    "merge_commit": "e2f35f41019ce01c9d72b5d08e495911e61369a4",
-    "merged_at": "2026-11-16T13:33:36Z",
-    "tested_head": "ff7bcf5e2bedf2869242c5a5f4c6f7d53b8123a7",
-    "pr_ci_run": 43469023187,
-    "merge_ci_run": 43876931051,
+    "package_id": "P4S",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/8",
+    "merge_commit": "1a15840caab444637646e695467496e362f80bbb",
+    "merged_at": "2026-11-17T10:49:51Z",
+    "tested_head": "264a2cee207e4fdef400055551148d9117fcf306",
+    "pr_ci_run": 44043527840,
+    "merge_ci_run": 44068430541,
     "ci_status": "PASS",
     "merge_status": "merged"
   },
@@ -88,20 +88,20 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p4s-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4s-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p4s-builder-prompt.md",
-    "bundle": "docs/reviews/p4s-bundle.json",
-    "validation": "docs/reviews/p4s-validation.json",
-    "reviewer": "docs/reviews/p4s-review.json",
-    "release": "docs/reviews/p4s-release.json",
-    "source_probe": "docs/evidence/p4s-source-probe.json"
+    "blueprint_review": "docs/reviews/p4e-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4e-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p4e-builder-prompt.md",
+    "bundle": "docs/reviews/p4e-bundle.json",
+    "validation": "docs/reviews/p4e-validation.json",
+    "reviewer": "docs/reviews/p4e-review.json",
+    "release": "docs/reviews/p4e-release.json",
+    "preparation": "docs/evidence/p4e-preparation.json"
   },
-  "next_gate": "limited_Fed_probe_then_exact_head_ci_and_independent_release_then_human_merge; clarify BaoStock rights/transport and Korea/US sources; model remains deferred",
+  "next_gate": "Human merge after exact-head CI and independent release; resolve five-index rights/transport and real research integration; model remains deferred.",
   "last_updated": "2026-11-17",
   "live_integration": {
     "entry_status": "human_merged",
-    "runtime_implementation": "limited_source_probe_implemented_model_deferred",
+    "runtime_implementation": "retained_evidence_preparation_model_deferred",
     "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
     "prerequisite_register": "docs/evidence/live-integration-prerequisites.json",
     "permissions_enabled": false

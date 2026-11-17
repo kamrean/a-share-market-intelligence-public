@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
-    # P4S limited-probe bindings retain all offline product regressions.
+    # P4E local-preparation bindings retain all offline product regressions.
     timeout-minutes: 25
     steps:
       - name: Checkout exact PR head
@@ -40,4 +40,4 @@ jobs:
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
       - name: Check committed patch whitespace
-        run: git diff --check e2f35f41019ce01c9d72b5d08e495911e61369a4 HEAD
+        run: git diff --check 1a15840caab444637646e695467496e362f80bbb HEAD

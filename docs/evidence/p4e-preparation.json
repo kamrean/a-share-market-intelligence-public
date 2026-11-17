@@ -1,0 +1,417 @@
+{
+  "observation": {
+    "cluster_count": 8,
+    "clusters": [
+      {
+        "cluster_id": "1589f724d81ef3a9cf6ec32941f3a71a49c67eb65f38f9efa745007f0e3385bb",
+        "member_ids": [
+          "8f34a8b8574f687dd97f20c6bc3e1a0bf97d45427f34b7f9ac3c68dcddf564a9"
+        ]
+      },
+      {
+        "cluster_id": "1797613e76cf33262dfa985acf67eeba7944e76001ef7a0e3929a051d5a5fd88",
+        "member_ids": [
+          "ffb562183ddc3a697f83e36ba1942ac03013fbb057af532dc6e8951a4b7f2427"
+        ]
+      },
+      {
+        "cluster_id": "418f1b29ccc28b22ca61a1adfb4604e4e029b449a22414eedcbaa3c031f26291",
+        "member_ids": [
+          "b357404642afd652997d9b81cbd8b7c3974f374053f64b457af973f8ecc6f98a"
+        ]
+      },
+      {
+        "cluster_id": "538e90a60cc7c3561d859479c3c02e44b105efbefc31dc14aabac8b22a2bf944",
+        "member_ids": [
+          "80783751dc68d8a21973c6569c6a3131c513f467b924ad998f5a6e988296ed2c"
+        ]
+      },
+      {
+        "cluster_id": "c690d60778b2c6f95fa022a33c920d9c9bdce407119e2ffb20d0fb1b2fc07b7e",
+        "member_ids": [
+          "46bb38ea8502f3b2952da298908fc1f4a9d20325a801687d53dea6782edf4966"
+        ]
+      },
+      {
+        "cluster_id": "c6e0227029b0d03930bed52d495da092437bf96d8c3f1360efe5e7b7dc09a2ae",
+        "member_ids": [
+          "173af679df08cfe4013dac01e579712aec8228e5bf78616bcbd9a6fc4d4b913e"
+        ]
+      },
+      {
+        "cluster_id": "e5f8c55913e032fa7be037d35cec15c2eb484697c4825ae1ee8d150394765aab",
+        "member_ids": [
+          "d0800daad84ac2087a5f1dcba04c2c3fe6d794446cf455fa7ef67fdb2b7ce4c7"
+        ]
+      },
+      {
+        "cluster_id": "f59c79963f6d52326b59024e6a45107c0738fe0b59479a4a2ae72819a03031b7",
+        "member_ids": [
+          "9ebb76904dcd1768bd3b46e87c5d79c2b7e0a6264fc7a9f4e0d86d679878770a"
+        ]
+      }
+    ],
+    "eligible_count": 8,
+    "excluded_count": 12,
+    "input_count": 20,
+    "live_market_coverage": {
+      "covered": 0,
+      "expected": 5,
+      "missing": [
+        "000001.SH",
+        "399001.SZ",
+        "399006.SZ",
+        "KOSPI",
+        "SP500"
+      ]
+    },
+    "network_requests": 0,
+    "new_live_runs": 0,
+    "outcome": "prepared",
+    "parse_rejected": 0,
+    "prepared_count": 20,
+    "prepared_digest": "08a1d027fb137798c3138dde4e0f3eb5d65a6fccb722c92bd0b2607f342cc85b",
+    "processed_at": "2026-11-17T13:15:19.141098Z",
+    "processing_mode": "historical_replay",
+    "provenance": [
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "19c5999013b8483e561a7239b63ab9a3e785bff804f40130d9375d99422e3569",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "d75b7e11f29307b2bfdcfda4c17017f445a47390a3c62f1b054ebf702c272389",
+        "fact_payload_hash": "367f61c099f66e2e234ccdd0a6b19b1ebbfdd906a3b07ba394ea7a251c2d4a67",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-05T20:30:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "229dff049d5c9d656c9997afa665937e350d42d21d3cd47119d0f2f15cae563f",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "80783751dc68d8a21973c6569c6a3131c513f467b924ad998f5a6e988296ed2c",
+        "fact_payload_hash": "e5cf6959fe1dcfe58e8b58a9c22591e8ca8efdf0912282ecbbe5f84a3d7eb761",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-11-09T21:00:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "2542e04fc492486da31d7b00656a035f0b1cb38244533abacd07638ba52eff42",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "b357404642afd652997d9b81cbd8b7c3974f374053f64b457af973f8ecc6f98a",
+        "fact_payload_hash": "e4fb5c0e07c79e752b07b1820901d662de5fe41127cce0e466297ba4ea8bd4ee",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-11-05T16:00:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "3cde29f2e84f74db1e8077e97b9fe7857dec81556ffc8fe6a92d82c564c96d16",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "d404e529dfa3db6bafd22203fa31dfd380268025af4781f485bc529d101ba896",
+        "fact_payload_hash": "a5e6c510a02252fed3ee47cbad00e8fdfa63536bfd1e27c83cafcc79d215cbf0",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-02T20:45:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "3d237b20960fd94c3bd9565f2c63519d3374b6b3fcda3b8f38ea94bc24a15f8f",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "adb6e5d0d5a25fd0e607bde9a36639633fef1ace3e8661fc0dbef91a800569a4",
+        "fact_payload_hash": "79c185099a09bed7c298bbc4e705e680923a4809074847f186ee95399c2b51b1",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-13T18:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "476bb50769e559230828e6882e83cae9eacdc48b28767fc462b38132afafae8c",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "dc5e522f0a2711bc25295da6bd836260097614a71c3c0fd382c8da7e0b1a101e",
+        "fact_payload_hash": "b2481a3bd3eeb2b49c99c96e04588f1260e99af66814072a5f522bdee06455fa",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-16T15:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "48c2fbf801451f18a97472a3c1394764a03db5761ef3eed029f203a46041c9b7",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "8609c31b2feb9990cde5e2f224d1769bb23836ab34e4e2182c7e7541bfbc5979",
+        "fact_payload_hash": "7c784c0913ed9d03a90a6829b4ed791371bd289192958cf700e3d8f06c9e3f2b",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-09-30T13:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "51e30c95c0fdfd85145ebd0cdf83ea8b0621409a066bab4cc9046284543af0ce",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "49ccd20688d32f23cd1e6207a1022b3f93af76633c48a28af5ac0f3b5ebccfbe",
+        "fact_payload_hash": "946e496b7911dd1d0292112d2cbab493ee4f977139f1f0032e6df6cddb646ca3",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-02T15:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "52d7d45fd2d92692eccadc725a549e073108c2247e6ad031ab293b98b62afe5c",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "173af679df08cfe4013dac01e579712aec8228e5bf78616bcbd9a6fc4d4b913e",
+        "fact_payload_hash": "48bdf8fec7a08be104e1857759342e347ee373f79ce71ef2fcc6c052eb803428",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-11-12T18:30:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "6ea91f91193393e14031844e47b7209c687339ad70c6ce01cea3ae1c32346a92",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "46bb38ea8502f3b2952da298908fc1f4a9d20325a801687d53dea6782edf4966",
+        "fact_payload_hash": "3bc26de0a71ab4ea88a6d909a402c35a2a8a1a1136696ec7a1e1dd846bbf838f",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-11-12T16:00:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "9fafd013f5bc2d9dcdf69acaca1a233b3ea5f4eccbe7cf2349be854fadd88ea5",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "8b06f6dbd7abf883f5bceb81fe5f682ded19974dfafcc308b9bd8c4ddaec365c",
+        "fact_payload_hash": "6ea5b8cba31f741e3a3221257945e01ca3ac8c142a80b748382c20dfda1c3771",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-02T20:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "b5df5ba0b4d06b1c792d10123b9397b46f40ba1327a8c424a1274022730be5d8",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "8f34a8b8574f687dd97f20c6bc3e1a0bf97d45427f34b7f9ac3c68dcddf564a9",
+        "fact_payload_hash": "eec92988eff9570af26abab7deee562717c59f4709ef0d6bec9ed8e4ba0fc505",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-28T18:00:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "b958c8e6a632ade1483dd74aa81491c77983e1aa4095579c168a9deb65336fa4",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "d0800daad84ac2087a5f1dcba04c2c3fe6d794446cf455fa7ef67fdb2b7ce4c7",
+        "fact_payload_hash": "23f4620354f299759f634d0786decde5a1f4310791dcc5e5cca2870f789f95af",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-11-12T17:45:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "be449cc32bcdb94df4f225060b94f79b9d82c01171b0b565633a17ed474dcbb8",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "e6a1acbca6bca490efd258d704ed20ee73b689dbd5f7f197215de8f968c5e448",
+        "fact_payload_hash": "a19141cfc95c3c45042ebc62b6c83a9f91c3663ab9292552f8d358387606ac5f",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-09-25T20:30:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "c0e6f41eb3a642a1ae262d0564ecb7e2fdcd024b8db0f7e753c133410306939e",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "bf059c420b5060888aa60ba869d5b8b62537813b7b911b72ffac9d71f7ba1132",
+        "fact_payload_hash": "9d8b8bd8bc6df8c76079b9d295f560d07bfb3af9915bb6c83b4992b6d59bba90",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-07T18:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "c0f9a01d6e083d6a1cd5b23115ad908fe4b903b5d43a3e128cd7e14be64c32b5",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "e9981ed4194d97d64c2a1b30d9c08c86ad482f57268575709096b05ae5a341a4",
+        "fact_payload_hash": "b796b04a14d702d91d0eb888b9d224053442e81614f06447110d73f8bafd17fc",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-09-29T20:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "c65b02ade8d224a69ef09014da02c4135f88b7c88356f62e8bbb00a1984bb655",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "ffb562183ddc3a697f83e36ba1942ac03013fbb057af532dc6e8951a4b7f2427",
+        "fact_payload_hash": "0cd6849535c8ccf59d4cdc875336ce261404231fc23ab6b4dacedeadba54446e",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-11-13T21:15:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "eligible",
+        "evidence_id": "d9c2b341bb2872b48ead0fa665a91c94243a1315c9eb4eb3edc586709db3d701",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "9ebb76904dcd1768bd3b46e87c5d79c2b7e0a6264fc7a9f4e0d86d679878770a",
+        "fact_payload_hash": "bc22bcaaff9edc9bfec495b682e083267409455107bf7d181a486f0126b99617",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-29T20:30:00+00:00",
+        "reason": null,
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "dada7a77b55a6a44bd41de9f86b051aca42a0b0d2462ecae3fd5d9956b049be1",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "ce0a8cd1d3a7086e1a12dbaea1811607c0ca764b0e5ccf83a376cf0a42cc5c58",
+        "fact_payload_hash": "95d2387b737a8489042e2b1329629ce7bb0dca8428fa3e69afc69d7713a06881",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-09T14:00:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      },
+      {
+        "capture_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "disposition": "excluded",
+        "evidence_id": "dbb8532b30c221ad85068db98a12873908e16a193387d8f2c62de8474b301a86",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "fact_id": "95611d613427e3bf3ab4f2dfd1a040caa48f1c022a3a0c1df81251efa063ac81",
+        "fact_payload_hash": "0b6def79131cc8c4722465dbcedfb36b326744f94389d93180691478526824ff",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "published_at": "2026-10-08T20:30:00+00:00",
+        "reason": "stale_news",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_mode": "live_observation"
+      }
+    ],
+    "reason": "local_preparation",
+    "reason_counts": {
+      "stale_news": 12
+    },
+    "schema_version": 1,
+    "source_as_of": "2026-11-17T07:51:58.585711Z",
+    "source_bundle_id": "0db960a5f4c9f75d78f00c0ee85553be1ac716bbf006f9d6c81fb5d3dcf647ee",
+    "source_gate": {
+      "confidence_ceiling": "none",
+      "domains": {
+        "market": {
+          "confidence_ceiling": "unavailable",
+          "covered": 0,
+          "expected": 5,
+          "missing": [
+            "000001.SH",
+            "399001.SZ",
+            "399006.SZ",
+            "KOSPI",
+            "SP500"
+          ],
+          "reasons": [
+            "insufficient_coverage"
+          ],
+          "status": "BLOCK"
+        },
+        "news": {
+          "confidence_ceiling": "unavailable",
+          "covered": 1,
+          "expected": 1,
+          "missing": [],
+          "reasons": [
+            "stale evidence"
+          ],
+          "status": "BLOCK"
+        }
+      },
+      "status": "BLOCK"
+    },
+    "source_id": "fed_press",
+    "source_mode": "live_observation",
+    "source_probe_digest": "9d7225b06ff7ecc0631c94866e9fad6d932e062f00c7bd8017203282cbf279b4",
+    "source_run_id": "85ff2fc362914c3eb699efc276817616",
+    "source_snapshot": "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3c42",
+    "source_state": "degraded",
+    "unavailable_domains": [
+      "entity",
+      "event",
+      "flow",
+      "market",
+      "sector"
+    ]
+  },
+  "package_id": "P4E",
+  "processed_at": "2026-11-17T13:15:19.141098Z",
+  "reason": "local_preparation",
+  "schema_version": 1,
+  "snapshot_id": "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe",
+  "status": "RECORDED"
+}

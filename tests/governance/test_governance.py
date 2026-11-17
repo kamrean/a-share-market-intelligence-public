@@ -1,7 +1,8 @@
-"""Offline P4S regression tests; all mutations and commits use temporary repositories."""
+"""Offline P4E regression tests; all mutations and commits use temporary repositories."""
 
 from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
+from datetime import datetime, timedelta
 import ast
 import importlib.util
 import io
@@ -17,9 +18,48 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location("p4s_governance", ROOT / "tools/governance.py")
+SPEC = importlib.util.spec_from_file_location("p4e_governance", ROOT / "tools/governance.py")
 g = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(g)
+
+
+def preparation_fixture(snapshot_id, *, root=ROOT, prepared=False):
+    """Authored schema data only; no retained payload or runtime store is read."""
+    original = g.parse_json(g.read_text(root, g.SOURCE_PROBE_PATH))["observation"]
+    observation = {
+        "schema_version": 1, "source_id": "fed_press", "source_snapshot": g.SOURCE_SNAPSHOT,
+        "source_probe_digest": g.SOURCE_PROBE_DIGEST, "source_run_id": original["run_id"],
+        "source_bundle_id": original["bundle_id"], "source_mode": "live_observation",
+        "processing_mode": "historical_replay", "source_state": "degraded",
+        "source_gate": deepcopy(original["gate"]), "source_as_of": None,
+        "processed_at": original["finished_at"], "outcome": "unavailable", "reason": "missing_store",
+        "input_count": original["parse"]["accepted"], "prepared_count": 0, "eligible_count": 0,
+        "excluded_count": 0, "cluster_count": 0, "parse_rejected": original["parse"]["rejected"],
+        "reason_counts": dict(original["parse"]["reasons"]), "provenance": [], "clusters": [],
+        "prepared_digest": None, "network_requests": 0, "new_live_runs": 0,
+        "live_market_coverage": deepcopy(original["live_market_coverage"]),
+        "unavailable_domains": ["entity", "event", "flow", "market", "sector"],
+    }
+    if prepared:
+        capture = original["observations"][0]
+        count = observation["input_count"]
+        observation.update(outcome="prepared", reason="local_preparation",
+                           source_as_of=original["finished_at"], prepared_count=count,
+                           excluded_count=count, reason_counts={"stale_news": count},
+                           prepared_digest=g.sha256("authored private fixture content"))
+        observation["provenance"] = sorted([{
+            "evidence_id": g.sha256(f"fixture-evidence-{index}"),
+            "capture_id": capture["capture_id"], "fact_id": g.sha256(f"fixture-fact-{index}"),
+            "capture_hash": capture["content_hash"],
+            "fact_payload_hash": g.sha256(f"fixture-payload-{index}"),
+            "source_mode": "live_observation",
+            "published_at": (datetime.fromisoformat(original["started_at"]) - timedelta(days=32)).isoformat(),
+            **{key: capture[key] for key in ("retrieved_at", "first_seen_at", "expires_at")},
+            "disposition": "excluded", "reason": "stale_news",
+        } for index in range(count)], key=lambda row: row["evidence_id"])
+    return {"schema_version": 1, "package_id": "P4E", "snapshot_id": snapshot_id,
+            "status": "RECORDED", "processed_at": observation["processed_at"],
+            "observation": observation, "reason": "local_preparation"}
 
 
 class BatchBlobTests(unittest.TestCase):
@@ -70,8 +110,8 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.policy["repository"], expected)
         self.assertEqual(self.contract["dependency"], g.dependency())
         self.assertEqual(self.state["dependency"], g.dependency())
-        self.assertEqual(g.BASELINE, "e2f35f41019ce01c9d72b5d08e495911e61369a4")
-        self.assertEqual(g.BRANCH, "stage7-free-source-collection")
+        self.assertEqual(g.BASELINE, "1a15840caab444637646e695467496e362f80bbb")
+        self.assertEqual(g.BRANCH, "stage7-source-evidence-preparation")
         self.assertNotIn("codex", g.BRANCH)
         g.validate_contract(self.contract)
         g.exact(self.policy, g.POLICY, "policy")
@@ -80,16 +120,16 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.state["stage_registry"][0]["status"], "complete")
 
     def test_p4_scope_keeps_historical_packages_immutable(self):
-        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (145, 121, 140))
+        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (159, 135, 154))
         self.assertEqual(tuple(self.contract["allowed_paths"]), g.ALLOWED)
         self.assertEqual(tuple(self.contract["immutable_paths"]), g.IMMUTABLE)
         self.assertEqual(tuple(self.contract["attestation_paths"]), g.ATTESTATIONS)
         self.assertEqual(set(g.ALLOWED) - set(g.PROTECTED), set(g.ATTESTATIONS))
         self.assertEqual(g.ATTESTATIONS, (
-            "docs/reviews/p4s-bundle.json", "docs/reviews/p4s-validation.json",
-            "docs/reviews/p4s-review.json", "docs/reviews/p4s-release.json",
-            "docs/evidence/p4s-source-probe.json"))
-        for package in ("p0", "p1", "p2", "p3", "p4", "p4l", "p4c"):
+            "docs/reviews/p4e-bundle.json", "docs/reviews/p4e-validation.json",
+            "docs/reviews/p4e-review.json", "docs/reviews/p4e-release.json",
+            "docs/evidence/p4e-preparation.json"))
+        for package in ("p0", "p1", "p2", "p3", "p4", "p4l", "p4c", "p4s"):
             for receipt in ("builder-prompt.md", "bundle.json", "prompt-audit.json",
                             "release.json", "review.json", "validation.json"):
                 name = f"docs/reviews/{package}-{receipt}"
@@ -117,16 +157,18 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertIn("docs/reviews/p4l-merge.json", g.PROTECTED)
         self.assertIn("docs/reviews/p4l-merge.json", g.IMMUTABLE)
         self.assertIn("docs/reviews/p4c-merge.json", g.PROTECTED)
-        self.assertNotIn("docs/reviews/p4c-merge.json", g.IMMUTABLE)
+        self.assertIn("docs/reviews/p4c-merge.json", g.IMMUTABLE)
+        self.assertIn("docs/reviews/p4s-merge.json", g.PROTECTED)
+        self.assertNotIn("docs/reviews/p4s-merge.json", g.IMMUTABLE)
 
     def test_p4_merge_identity_and_ci_are_exact(self):
         self.assertEqual(g.dependency(), {
-            "package_id": "P4C",
-            "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/7",
-            "merge_commit": "e2f35f41019ce01c9d72b5d08e495911e61369a4",
-            "merged_at": "2026-11-16T13:33:36Z",
-            "tested_head": "ff7bcf5e2bedf2869242c5a5f4c6f7d53b8123a7",
-            "pr_ci_run": 43469023187, "merge_ci_run": 43876931051,
+            "package_id": "P4S",
+            "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/8",
+            "merge_commit": "1a15840caab444637646e695467496e362f80bbb",
+            "merged_at": "2026-11-17T10:49:51Z",
+            "tested_head": "264a2cee207e4fdef400055551148d9117fcf306",
+            "pr_ci_run": 44043527840, "merge_ci_run": 44068430541,
             "ci_status": "PASS", "merge_status": "merged",
         })
 
@@ -174,8 +216,8 @@ class RepositoryBindingTests(unittest.TestCase):
 
     def test_p4_stage7_and_partial_stage8_lifecycle_binding(self):
         for status, runtime in (
-            ("building", "limited_source_probe_building_model_deferred"),
-            ("implemented_unreleased", "limited_source_probe_implemented_model_deferred"),
+            ("building", "retained_evidence_preparation_planned_model_deferred"),
+            ("implemented_unreleased", "retained_evidence_preparation_model_deferred"),
         ):
             state = deepcopy(self.state)
             state["package_status"] = status
@@ -192,12 +234,12 @@ class RepositoryBindingTests(unittest.TestCase):
                         g.validate_state(changed)
 
     def test_p4_paths_and_next_gate_are_exact(self):
-        self.assertEqual(g.CONTRACT_PATH, "contracts/p4s_free_sources.toml")
-        self.assertEqual(g.TEMPLATE_PATH, "templates/p4s_builder_prompt.md")
-        self.assertEqual(g.PROMPT_PATH, "docs/reviews/p4s-builder-prompt.md")
+        self.assertEqual(g.CONTRACT_PATH, "contracts/p4e_evidence_preparation.toml")
+        self.assertEqual(g.TEMPLATE_PATH, "templates/p4e_builder_prompt.md")
+        self.assertEqual(g.PROMPT_PATH, "docs/reviews/p4e-builder-prompt.md")
         self.assertEqual(g.NEXT_GATE,
-                         "limited_Fed_probe_then_exact_head_ci_and_independent_release_then_human_merge; "
-                         "clarify BaoStock rights/transport and Korea/US sources; model remains deferred")
+                         "Human merge after exact-head CI and independent release; resolve five-index "
+                         "rights/transport and real research integration; model remains deferred.")
         self.assertEqual(self.state["next_gate"], g.NEXT_GATE)
         for field, bad in (("active_contract", "contracts/p3_research.toml"),
                            ("baseline", "e61f1cbfc41118deb13df421b927ace3d01c150e"),
@@ -205,7 +247,7 @@ class RepositoryBindingTests(unittest.TestCase):
             with self.subTest(field=field), self.assertRaises(g.Block):
                 g.validate_state({**self.state, field: bad})
         for field, bad in (("package_id", "P3"), ("stage_ids", [5, 6]),
-                           ("attestation_paths", [name.replace("p4s-", "p4-") for name in g.ATTESTATIONS])):
+                           ("attestation_paths", [name.replace("p4e-", "p4-") for name in g.ATTESTATIONS])):
             with self.subTest(field=field), self.assertRaises(g.Block):
                 g.validate_contract({**self.contract, field: bad})
 
@@ -227,7 +269,7 @@ class RepositoryBindingTests(unittest.TestCase):
             name for name in g.ALLOWED
             if name.startswith(("market_intelligence/", "config/", "tests/product/", "tests/fixtures/",
                                 "docs/reviews/p4-"))
-        } - {"market_intelligence/collection.py", "tests/product/test_collection.py"}
+        } - {"market_intelligence/preparation.py", "tests/product/test_preparation.py"}
         artifacts.update(("contracts/p4_publication.toml", "templates/p4_builder_prompt.md",
                           "docs/P4_METHODS.md", "docs/evidence/p4-demo.json",
                           "docs/evidence/p4-report.txt", "requirements.lock",
@@ -314,12 +356,12 @@ class RepositoryBindingTests(unittest.TestCase):
         product_paths = {name for name in g.ALLOWED
                          if name.startswith(("market_intelligence/", "tests/product/"))}
         self.assertEqual(product_paths - set(g.IMMUTABLE), {
-            "market_intelligence/collection.py", "tests/product/test_collection.py",
+            "market_intelligence/preparation.py", "tests/product/test_preparation.py",
         })
         for name in product_paths:
             self.assertIn(name, g.PROTECTED)
             self.assertNotIn(name, g.ATTESTATIONS)
-        for package in ("p1", "p2", "p3", "p4", "scenario", "workflow"):
+        for package in ("p1", "p2", "p3", "p4", "scenario", "workflow", "collection"):
             self.assertIn(f"tests/product/test_{package}.py", g.IMMUTABLE)
         self.assertIn(g.PREREQUISITE_PATH, g.IMMUTABLE)
         self.assertEqual(g.FROZEN_INPUT_HASHES[g.PREREQUISITE_PATH], g.PREREQUISITE_HASH)
@@ -327,8 +369,8 @@ class RepositoryBindingTests(unittest.TestCase):
     def test_current_required_reads_and_contract_next_gate_are_pinned(self):
         self.assertEqual(self.contract["required_reads"], [
             "BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", g.CONTRACT_PATH,
-            "governance/policy.toml", "project-state/state.json", "docs/reviews/p4c-merge.json",
-            "docs/FREE_SOURCE_COLLECTION.md", g.PREREQUISITE_PATH,
+            "governance/policy.toml", "project-state/state.json", "docs/reviews/p4s-merge.json",
+            "docs/EVIDENCE_PREPARATION.md", g.SOURCE_PROBE_PATH, g.PREREQUISITE_PATH,
         ])
         for field, bad in (("required_reads", self.contract["required_reads"][:-1]),
                            ("next_gate", "start_model_integration"),
@@ -340,10 +382,9 @@ class RepositoryBindingTests(unittest.TestCase):
         workflow = ".github/workflows/governance.yml"
         previous = g.normalize_text(g.git(ROOT, "show", f"{g.BASELINE}:{workflow}"))
         expected = previous.replace(
-            "# P4C offline-engineering bindings retain all offline product regressions.",
             "# P4S limited-probe bindings retain all offline product regressions.",
-        ).replace("8ebfa0994436c05234336105c424cbd823b2af0b", g.BASELINE).replace(
-            "timeout-minutes: 15", "timeout-minutes: 25")
+            "# P4E local-preparation bindings retain all offline product regressions.",
+        ).replace("e2f35f41019ce01c9d72b5d08e495911e61369a4", g.BASELINE)
         self.assertEqual(g.read_text(ROOT, workflow), expected)
 
     def test_frozen_inputs_match_actual_independent_zero_finding_audits(self):
@@ -353,6 +394,8 @@ class RepositoryBindingTests(unittest.TestCase):
             self.assertEqual(receipt["findings"], [])
             self.assertEqual(receipt["verdict"], "PASS")
             self.assertIs(receipt["independent"], True)
+            self.assertEqual(receipt["agent_id"], "01a1e932-f790-7d30-9160-e4ebea7ef2bf")
+            self.assertEqual(receipt["repair_cycles"], 0)
             approved.update(receipt["files"])
         self.assertEqual(g.FROZEN_INPUT_HASHES, approved)
         self.assertEqual(set(approved), set(g.AUDIT_INPUTS) |
@@ -367,7 +410,7 @@ class PrerequisiteManifestTests(unittest.TestCase):
         # These unit tests stop before Git/product inspection. Keep actual frozen
         # governance inputs, with inert snapshot data for unrelated product files.
         self.contents = dict.fromkeys(g.PROTECTED, "offline snapshot fixture\n")
-        names = {*g.FROZEN_INPUT_HASHES, "project-state/state.json", "docs/reviews/p4c-merge.json",
+        names = {*g.FROZEN_INPUT_HASHES, "project-state/state.json", "docs/reviews/p4s-merge.json",
                  g.RECEIPT_PATHS["blueprint_review"], g.RECEIPT_PATHS["prompt_audit"]}
         self.contents.update({name: g.read_text(ROOT, name) for name in names})
         self.original = self.contents[g.PREREQUISITE_PATH]
@@ -405,10 +448,10 @@ class PrerequisiteManifestTests(unittest.TestCase):
 
     def test_current_audit_inputs_are_exact_and_snapshot_protected(self):
         self.assertEqual(g.AUDIT_INPUTS, (
-            "contracts/p4s_free_sources.toml", "governance/policy.toml",
-            "templates/p4s_builder_prompt.md", "docs/reviews/p4s-builder-prompt.md",
-            "AGENTS.md", "docs/FREE_SOURCE_COLLECTION.md",
-            "docs/evidence/live-integration-prerequisites.json"))
+            "contracts/p4e_evidence_preparation.toml", "governance/policy.toml",
+            "templates/p4e_builder_prompt.md", "docs/reviews/p4e-builder-prompt.md",
+            "AGENTS.md", "docs/EVIDENCE_PREPARATION.md",
+            "docs/evidence/live-integration-prerequisites.json", "docs/evidence/p4s-source-probe.json"))
         self.assertTrue(set(g.AUDIT_INPUTS).issubset(g.PROTECTED))
         audit = g.parse_json(self.contents[g.RECEIPT_PATHS["prompt_audit"]])
         for name in g.AUDIT_INPUTS:
@@ -558,26 +601,56 @@ class PrerequisiteManifestTests(unittest.TestCase):
                             g.check(ROOT)
                         inspect.assert_not_called()
 
+    def test_historical_probe_is_immutable_and_pinned_by_bytes_and_canonical_digest(self):
+        original = self.contents[g.SOURCE_PROBE_PATH]
+        record = g.validate_historical_probe(original)
+        self.assertEqual(g.validate_historical_probe(original.replace("\n", "\r\n")), record)
+        self.assertIn(g.SOURCE_PROBE_PATH, g.IMMUTABLE)
+        self.assertIn(g.SOURCE_PROBE_PATH, g.PROTECTED)
+        self.assertNotIn(g.SOURCE_PROBE_PATH, g.ATTESTATIONS)
+        self.assertEqual(g.probe_digest(record), g.SOURCE_PROBE_DIGEST)
+        self.assertNotEqual(g.probe_digest(record["observation"]), g.SOURCE_PROBE_DIGEST)
+        g.validate_source_probe(record, g.SOURCE_SNAPSHOT)
+        changed = deepcopy(record)
+        changed["observation"]["requests"]["attempted"] = 2
+        text = json.dumps(changed)
+        with self.assertRaisesRegex(g.Block, "frozen content"):
+            g.validate_historical_probe(text)
+        with patch.object(g, "SOURCE_PROBE_HASH", g.sha256(text)), \
+                self.assertRaisesRegex(g.Block, "canonical digest"):
+            g.validate_historical_probe(text)
+        contents = {**self.contents, g.SOURCE_PROBE_PATH: text}
+        audit = g.parse_json(contents[g.RECEIPT_PATHS["prompt_audit"]])
+        audit["files"][g.SOURCE_PROBE_PATH] = g.sha256(text)
+        with self.assertRaisesRegex(g.Block, "files frozen input"):
+            g.validate_prerequisite(audit, "prompt_auditor", g.AUDIT_INPUTS, contents)
+        contents[g.RECEIPT_PATHS["prompt_audit"]] = json.dumps(audit)
+        with patch.object(g, "read_text", side_effect=lambda _root, path: contents[path]), \
+                patch.object(g, "inspect_git") as inspect, \
+                self.assertRaisesRegex(g.Block, "historical source probe"):
+            g.check(ROOT)
+        inspect.assert_not_called()
+
 
 class LiveIntegrationLifecycleTests(unittest.TestCase):
     def setUp(self):
         self.state = g.parse_json(g.read_text(ROOT, "project-state/state.json"))
 
     def test_only_matching_governance_entry_states_are_valid(self):
-        for package, runtime in (("building", "limited_source_probe_building_model_deferred"),
-                                 ("implemented_unreleased", "limited_source_probe_implemented_model_deferred")):
+        for package, runtime in (("building", "retained_evidence_preparation_planned_model_deferred"),
+                                 ("implemented_unreleased", "retained_evidence_preparation_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
             g.validate_state(state)
             state["live_integration"]["runtime_implementation"] = (
-                "limited_source_probe_implemented_model_deferred" if package == "building"
-                else "limited_source_probe_building_model_deferred")
+                "retained_evidence_preparation_model_deferred" if package == "building"
+                else "retained_evidence_preparation_planned_model_deferred")
             with self.assertRaisesRegex(g.Block, "runtime_implementation"):
                 g.validate_state(state)
 
     def test_no_premature_entry_runtime_or_milestone_completion(self):
-        for bad in ("implemented", "contract_prepared_unreleased", "complete", "live_ready", "PASS",
+        for bad in ("implemented", "contract_prepared", "complete", "live_ready", "PASS",
                     "merged", True, None):
             with self.subTest(package_status=bad), self.assertRaises(g.Block):
                 g.validate_state({**self.state, "package_status": bad})
@@ -620,8 +693,8 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             g.validate_state({**self.state, "permissions": {"external_data_access_allowed": True}})
 
     def test_historical_stage7_stage8_do_not_track_current_building(self):
-        for package, runtime in (("building", "limited_source_probe_building_model_deferred"),
-                                 ("implemented_unreleased", "limited_source_probe_implemented_model_deferred")):
+        for package, runtime in (("building", "retained_evidence_preparation_planned_model_deferred"),
+                                 ("implemented_unreleased", "retained_evidence_preparation_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
@@ -642,14 +715,14 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             with patch.object(g, "check"), patch.object(g, "gate", return_value="LOCAL_READY_FOR_PR"), \
                     redirect_stdout(output):
                 self.assertEqual(g.main(list(args)), 0)
-            self.assertIn("limited-probe governance only; model/live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES",
+            self.assertIn("local-preparation governance only; model/live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES",
                           output.getvalue())
             self.assertTrue(output.getvalue().startswith("PASS (" if args[0] == "check"
                                                         else "LOCAL_READY_FOR_PR ("))
 
     def test_both_offline_states_keep_human_merged_entry_and_closed_live_permissions(self):
-        for package, runtime in (("building", "limited_source_probe_building_model_deferred"),
-                                 ("implemented_unreleased", "limited_source_probe_implemented_model_deferred")):
+        for package, runtime in (("building", "retained_evidence_preparation_planned_model_deferred"),
+                                 ("implemented_unreleased", "retained_evidence_preparation_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
@@ -674,7 +747,7 @@ class ProbeAttestationTests(unittest.TestCase):
         self.state = g.parse_json(g.read_text(ROOT, "project-state/state.json"))
         self.state["package_status"] = "implemented_unreleased"
         self.state["live_integration"]["runtime_implementation"] = (
-            "limited_source_probe_implemented_model_deferred")
+            "retained_evidence_preparation_model_deferred")
         self.contents = dict.fromkeys(g.PROTECTED, "offline snapshot fixture\n")
         self.contents[g.RECEIPT_PATHS["prompt_audit"]] = json.dumps({"repair_cycles": 0})
         self.checked = (self.contract, self.state, self.contents, [])
@@ -689,14 +762,14 @@ class ProbeAttestationTests(unittest.TestCase):
             **common, "role": "reviewer", "verdict": "PASS", "agent_id": "fixture-reviewer",
             "read_only": True, "findings": [], "repair_cycles": 0,
         }, {
-            **common, "role": "release_checker", "verdict": g.PRE_PROBE_RELEASE,
+            **common, "role": "release_checker", "verdict": g.PRE_PREPARATION_RELEASE,
             "agent_id": "fixture-release", "read_only": True,
             "remote_ci": "NOT_RUN_AT_SNAPSHOT", "pr_url": None, "merge_status": "not_merged",
             "vps_sync": "not_requested", "next_gate": g.NEXT_GATE,
-            "pre_probe": {"verdict": g.PRE_PROBE_RELEASE, "snapshot_id": self.snapshot,
-                          "agent_id": "fixture-release"}, "probe_digest": None,
+            "pre_preparation": {"verdict": g.PRE_PREPARATION_RELEASE, "snapshot_id": self.snapshot,
+                          "agent_id": "fixture-release"}, "preparation_digest": None,
         }, {
-            **common, "package_id": "P4S", "status": "NOT_RUN", "observed_at": None,
+            **common, "package_id": "P4E", "status": "NOT_RUN", "processed_at": None,
             "observation": None, "reason": "awaiting_release",
         }]
         self.sync()
@@ -704,31 +777,26 @@ class ProbeAttestationTests(unittest.TestCase):
     def sync(self):
         self.contents.update({name: json.dumps(value) for name, value in zip(g.ATTESTATIONS, self.receipts)})
 
-    def validate(self, *, pre_probe=True):
+    def validate(self, *, pre_preparation=True):
         self.sync()
-        g.validate_attestations(self.checked, self.current, pre_probe=pre_probe)
+        g.validate_attestations(self.checked, self.current, pre_preparation=pre_preparation)
 
     def terminal(self, *, recorded=False):
-        self.receipts[4].update(status="BLOCKED_NO_REQUEST", observed_at="2026-01-01T00:00:00Z",
-                                observation=None, reason="probe_gate_blocked")
-        if recorded:
-            # Reuse a historical summary only as in-memory schema test data.
-            summary = g.parse_json(g.read_text(ROOT, "docs/evidence/p1-source-probe.json"))
-            summary.update(source_state="degraded", error_codes=["news_gate_blocked"])
-            self.receipts[4].update(status="RECORDED", observed_at=summary["finished_at"],
-                                    observation=summary, reason="source_observation")
-        self.receipts[3].update(verdict=g.LOCAL_RELEASE, probe_digest=g.probe_digest(self.receipts[4]))
+        self.receipts[4] = preparation_fixture(self.snapshot, prepared=recorded)
+        self.receipts[3].update(verdict=g.LOCAL_RELEASE, preparation_digest=g.preparation_digest(self.receipts[4]))
         self.sync()
 
     def test_exact_typed_limited_probe_does_not_expand_general_permissions(self):
         expected = {
-            "source": "fed_press", "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-            "method": "GET", "max_attempts_total": 1, "retries": 0, "paid_budget": 0,
-            "requires_independent_review": True, "requires_pre_probe_release": True,
-            "baostock_dispatch_allowed": False,
+            "source": "fed_press", "input_store": "p4s-fed-probe.sqlite",
+            "source_receipt": g.SOURCE_PROBE_PATH, "source_snapshot": g.SOURCE_SNAPSHOT,
+            "source_probe_digest": g.SOURCE_PROBE_DIGEST, "read_only": True, "network_requests": 0,
+            "processing_mode": "historical_replay", "requires_independent_review": True,
+            "requires_preparation_release": True,
         }
-        self.assertEqual(g.LIMITED_PROBE, expected)
-        self.assertNotIn("limited_probe", g.POLICY)
+        self.assertEqual(g.LOCAL_PREPARATION, expected)
+        self.assertNotIn("local_preparation", g.POLICY)
+        self.assertNotIn("limited_probe", self.contract)
         for key, value in expected.items():
             bad_values = [None, str(value), not value] if type(value) is not str else [None, 1, value + "/extra"]
             if type(value) is int:
@@ -737,21 +805,21 @@ class ProbeAttestationTests(unittest.TestCase):
                 bad_values += [int(value)]
             for bad in bad_values:
                 changed = deepcopy(self.contract)
-                changed["limited_probe"][key] = bad
+                changed["local_preparation"][key] = bad
                 with self.subTest(key=key, bad=bad), self.assertRaises(g.Block):
                     g.validate_contract(changed)
             changed = deepcopy(self.contract)
-            del changed["limited_probe"][key]
+            del changed["local_preparation"][key]
             with self.assertRaises(g.Block):
                 g.validate_contract(changed)
         for value in ({**expected, "allowed": True}, {}, "LOCAL_READY_FOR_LIMITED_PROBE"):
             with self.assertRaises(g.Block):
-                g.validate_contract({**self.contract, "limited_probe": value})
+                g.validate_contract({**self.contract, "local_preparation": value})
 
     def test_pending_probe_can_release_without_circular_terminal_observation(self):
         self.validate()
         with patch.object(g, "check", return_value=self.checked) as check:
-            self.assertEqual(g.probe_gate(ROOT), self.snapshot)
+            self.assertEqual(g.preparation_gate(ROOT), self.snapshot)
             check.assert_called_once_with(ROOT, complete_index=True)
         self.assertRegex(self.snapshot, r"^[0-9a-f]{64}$")
 
@@ -761,29 +829,29 @@ class ProbeAttestationTests(unittest.TestCase):
             with patch.object(g, "check", side_effect=g.Block(message)) as check, \
                     patch.object(g, "validate_attestations") as validation:
                 with self.subTest(message=message), self.assertRaisesRegex(g.Block, message):
-                    g.probe_gate(ROOT)
+                    g.preparation_gate(ROOT)
                 check.assert_called_once_with(ROOT, complete_index=True)
                 validation.assert_not_called()
 
     def test_probe_gate_has_no_ci_argument_and_cli_rejects_ci(self):
         with self.assertRaises(TypeError):
-            g.probe_gate(ROOT, ci=True)
+            g.preparation_gate(ROOT, ci=True)
         with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as result:
-            g.main(["probe-gate", "--ci"])
+            g.main(["preparation-gate", "--ci"])
         self.assertEqual(result.exception.code, 2)
-        with patch.object(g, "probe_gate", return_value=self.snapshot) as gate, \
+        with patch.object(g, "preparation_gate", return_value=self.snapshot) as gate, \
                 redirect_stdout(io.StringIO()) as output:
-            self.assertEqual(g.main(["probe-gate"], root=ROOT), 0)
+            self.assertEqual(g.main(["preparation-gate"], root=ROOT), 0)
             self.assertEqual(output.getvalue(), self.snapshot + "\n")
             gate.assert_called_once_with(ROOT)
 
     def test_final_gate_requires_terminal_observation(self):
-        self.receipts[3].update(verdict=g.LOCAL_RELEASE, probe_digest=g.probe_digest(self.receipts[4]))
-        with self.assertRaisesRegex(g.Block, "terminal source probe"):
-            self.validate(pre_probe=False)
+        self.receipts[3].update(verdict=g.LOCAL_RELEASE, preparation_digest=g.preparation_digest(self.receipts[4]))
+        with self.assertRaisesRegex(g.Block, "terminal preparation"):
+            self.validate(pre_preparation=False)
         for recorded in (False, True):
             self.terminal(recorded=recorded)
-            self.validate(pre_probe=False)
+            self.validate(pre_preparation=False)
             with patch.object(g, "check", return_value=self.checked) as check:
                 self.assertEqual(g.gate(ROOT), g.LOCAL_RELEASE)
                 check.assert_called_once_with(ROOT, ci=False, complete_index=True)
@@ -791,24 +859,24 @@ class ProbeAttestationTests(unittest.TestCase):
     def test_terminal_probe_never_reauthorizes_dispatch(self):
         for recorded in (False, True):
             self.terminal(recorded=recorded)
-            self.receipts[3].update(verdict=g.PRE_PROBE_RELEASE, probe_digest=None)
-            with self.assertRaisesRegex(g.Block, "pre-probe observation status"):
+            self.receipts[3].update(verdict=g.PRE_PREPARATION_RELEASE, preparation_digest=None)
+            with self.assertRaisesRegex(g.Block, "pre-preparation observation status"):
                 self.validate()
 
     def test_prerelease_requires_null_digest_and_final_requires_canonical_digest(self):
         for bad in ("", "0" * 64, False, {}, "LOCAL_READY_FOR_LIMITED_PROBE"):
-            self.receipts[3]["probe_digest"] = bad
+            self.receipts[3]["preparation_digest"] = bad
             with self.subTest(value=bad), self.assertRaises(g.Block):
                 self.validate()
         self.terminal()
-        self.validate(pre_probe=False)
+        self.validate(pre_preparation=False)
         from market_intelligence.models import digest
-        self.assertEqual(g.probe_digest(self.receipts[4]), digest(self.receipts[4]))
-        self.assertEqual(g.probe_digest({"text": "\uac00"}), digest({"text": "\uac00"}))
+        self.assertEqual(g.preparation_digest(self.receipts[4]), digest(self.receipts[4]))
+        self.assertEqual(g.preparation_digest({"text": "\uac00"}), digest({"text": "\uac00"}))
         for bad in (None, "", "0" * 64, False):
-            self.receipts[3]["probe_digest"] = bad
+            self.receipts[3]["preparation_digest"] = bad
             with self.subTest(value=bad), self.assertRaises(g.Block):
-                self.validate(pre_probe=False)
+                self.validate(pre_preparation=False)
 
     def test_preapproval_is_exact_and_same_agent_is_required_at_final_release(self):
         for terminal in (False, True):
@@ -819,14 +887,14 @@ class ProbeAttestationTests(unittest.TestCase):
                              ("agent_id", "different-release"), ("agent_id", 1),
                              ("agent_id", None), ("allow_network", True)):
                 self.receipts[3] = deepcopy(original)
-                self.receipts[3]["pre_probe"][key] = bad
+                self.receipts[3]["pre_preparation"][key] = bad
                 with self.subTest(terminal=terminal, key=key), self.assertRaises(g.Block):
-                    self.validate(pre_probe=not terminal)
-            for key in original["pre_probe"]:
+                    self.validate(pre_preparation=not terminal)
+            for key in original["pre_preparation"]:
                 self.receipts[3] = deepcopy(original)
-                del self.receipts[3]["pre_probe"][key]
+                del self.receipts[3]["pre_preparation"][key]
                 with self.assertRaises(g.Block):
-                    self.validate(pre_probe=not terminal)
+                    self.validate(pre_preparation=not terminal)
             self.receipts[3] = original
 
     def test_independent_roles_are_strict_strings_in_both_phases(self):
@@ -839,14 +907,14 @@ class ProbeAttestationTests(unittest.TestCase):
                             *self.state["builder_agents"]):
                     self.receipts[index] = {**original, "agent_id": bad}
                     with self.subTest(terminal=terminal, index=index, bad=bad), self.assertRaises(g.Block):
-                        self.validate(pre_probe=not terminal)
+                        self.validate(pre_preparation=not terminal)
                 self.receipts[index] = original
             self.receipts[3]["agent_id"] = self.receipts[2]["agent_id"]
-            self.receipts[3]["pre_probe"]["agent_id"] = self.receipts[2]["agent_id"]
+            self.receipts[3]["pre_preparation"]["agent_id"] = self.receipts[2]["agent_id"]
             with self.assertRaisesRegex(g.Block, "separate independent release"):
-                self.validate(pre_probe=not terminal)
+                self.validate(pre_preparation=not terminal)
             self.receipts[3]["agent_id"] = "fixture-release"
-            self.receipts[3]["pre_probe"]["agent_id"] = "fixture-release"
+            self.receipts[3]["pre_preparation"]["agent_id"] = "fixture-release"
 
     def test_missing_or_arbitrary_receipts_cannot_authorize_probe(self):
         self.sync()
@@ -858,7 +926,7 @@ class ProbeAttestationTests(unittest.TestCase):
                 else:
                     self.contents[name] = invalid
                 with self.subTest(name=name, invalid=invalid), self.assertRaises(g.Block):
-                    g.validate_attestations(self.checked, self.current, pre_probe=True)
+                    g.validate_attestations(self.checked, self.current, pre_preparation=True)
                 self.contents[name] = original
 
     def test_stale_snapshots_fail_in_every_probe_approval(self):
@@ -872,13 +940,13 @@ class ProbeAttestationTests(unittest.TestCase):
         changed = g.make_bundle(self.checked)
         self.sync()
         with self.assertRaisesRegex(g.Block, "bundle receipt"):
-            g.validate_attestations(self.checked, changed, pre_probe=True)
+            g.validate_attestations(self.checked, changed, pre_preparation=True)
 
     def test_probe_schema_rejects_unknown_fields_duplicates_and_diagnostic_strings(self):
         original = deepcopy(self.receipts[4])
         for key, bad in (("schema_version", True), ("status", "PASS"), ("observation", {}),
                          ("reason", "arbitrary receipt authorizes request"), ("path", "private"),
-                         ("package_id", "P4C"), ("observed_at", "2026-01-01T00:00:00Z")):
+                         ("package_id", "P4C"), ("processed_at", "2026-01-01T00:00:00Z")):
             self.receipts[4] = {**original, key: bad}
             with self.subTest(key=key), self.assertRaises(g.Block):
                 self.validate()
@@ -887,35 +955,35 @@ class ProbeAttestationTests(unittest.TestCase):
         self.contents[g.ATTESTATIONS[4]] = self.contents[g.ATTESTATIONS[4]].replace(
             '"status": "NOT_RUN"', '"status": "NOT_RUN", "status": "RECORDED"')
         with self.assertRaisesRegex(g.Block, "duplicate field"):
-            g.validate_attestations(self.checked, self.current, pre_probe=True)
+            g.validate_attestations(self.checked, self.current, pre_preparation=True)
 
     def test_forged_terminal_record_cannot_pass_even_with_matching_digest(self):
         self.terminal(recorded=True)
         original = deepcopy(self.receipts[4])
         for key, bad in (("live_market_coverage", {"covered": 5, "expected": 5, "missing": []}),
-                         ("mode", "synthetic_test"), ("source_id", "baostock"),
-                         ("error_codes", ["private exception text"]), ("title", "news payload"),
-                         ("requests", {**original["observation"]["requests"], "attempted": 2})):
+                         ("source_mode", "synthetic_test"), ("source_id", "baostock"),
+                         ("reason_counts", {"private exception text": 1}), ("title", "news payload"),
+                         ("network_requests", 1), ("new_live_runs", 1)):
             self.receipts[4] = deepcopy(original)
             self.receipts[4]["observation"][key] = bad
-            self.receipts[3]["probe_digest"] = g.probe_digest(self.receipts[4])
-            with self.subTest(key=key), self.assertRaisesRegex(g.Block, "source probe"):
-                self.validate(pre_probe=False)
+            self.receipts[3]["preparation_digest"] = g.preparation_digest(self.receipts[4])
+            with self.subTest(key=key), self.assertRaisesRegex(g.Block, "preparation"):
+                self.validate(pre_preparation=False)
 
     def test_validation_is_lazy_and_loads_the_requested_checkout(self):
-        # This isolated fixture deliberately differs from the real collection module.
+        # This isolated fixture deliberately differs from the real preparation module.
         with tempfile.TemporaryDirectory(prefix="p4s-validator-") as directory:
             root = Path(directory)
             package = root / "market_intelligence"
             package.mkdir()
             (package / "__init__.py").write_text("", encoding="utf-8")
-            (package / "collection.py").write_text(
-                "def validate_probe_record(value, snapshot_id):\n"
+            (package / "preparation.py").write_text(
+                "def validate_preparation_record(value, snapshot_id, *, root):\n"
                 "    raise ValueError('different checkout validator')\n", encoding="utf-8")
-            with self.assertRaisesRegex(g.Block, "source probe"):
-                g.validate_source_probe(self.receipts[4], self.snapshot, root=root)
-        g.validate_source_probe(self.receipts[4], self.snapshot)
-        self.assertFalse(any(name.startswith("_p4s_probe_validation_") for name in sys.modules))
+            with self.assertRaisesRegex(g.Block, "preparation"):
+                g.validate_preparation_record(self.receipts[4], self.snapshot, root=root)
+        g.validate_preparation_record(self.receipts[4], self.snapshot)
+        self.assertFalse(any(name.startswith("_p4e_preparation_validation_") for name in sys.modules))
 
     def test_direct_script_context_does_not_need_pythonpath_for_lazy_validator(self):
         # run_path uses the actual script entrypoint path; keep only tools on the
@@ -926,12 +994,116 @@ class ProbeAttestationTests(unittest.TestCase):
             "sys.path[:]=[str(script.parent)]+[p for p in sys.path if p and "
             "Path(p).resolve()!=script.parent.parent]; "
             "g=runpy.run_path(str(script)); "
-            "g['validate_source_probe'](json.loads(sys.argv[2]),sys.argv[3]); print('PASS')"
+            "g['validate_preparation_record'](json.loads(sys.argv[2]),sys.argv[3]); print('PASS')"
         )
         result = subprocess.run([sys.executable, "-I", "-B", "-c", code,
                                  str(ROOT / "tools/governance.py"), json.dumps(self.receipts[4]), self.snapshot],
                                 capture_output=True, text=True, check=False)
         self.assertEqual((result.returncode, result.stdout.strip(), result.stderr), (0, "PASS", ""))
+
+    def test_old_probe_gate_is_closed_without_even_consulting_approvals(self):
+        for root in (ROOT, Path("nonexistent-checkout")):
+            with patch.object(g, "check", return_value=self.checked) as check, \
+                    patch.object(g, "validate_attestations") as validate:
+                with self.assertRaisesRegex(g.Block, "historical P4S probe capability is closed"):
+                    g.probe_gate(root)
+                check.assert_not_called()
+                validate.assert_not_called()
+        with redirect_stdout(io.StringIO()) as output, redirect_stderr(io.StringIO()) as error:
+            self.assertEqual(g.main(["probe-gate"]), 1)
+        self.assertEqual(output.getvalue(), "")
+        self.assertIn("no network request authorized", error.getvalue())
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as result:
+            g.main(["probe-gate", "--ci"])
+        self.assertEqual(result.exception.code, 2)
+        with self.assertRaises(TypeError):
+            g.probe_gate(ROOT, ci=True)
+
+    def test_planned_or_building_state_never_authorizes_preparation_or_final_release(self):
+        for status in ("contract_prepared_unreleased", "building"):
+            self.state["package_status"] = status
+            self.state["live_integration"]["runtime_implementation"] = (
+                "retained_evidence_preparation_planned_model_deferred")
+            g.validate_state(self.state)
+            for pre_preparation in (False, True):
+                with self.subTest(status=status, pre_preparation=pre_preparation), \
+                        self.assertRaisesRegex(g.Block, "still building"):
+                    self.validate(pre_preparation=pre_preparation)
+
+    def test_legacy_probe_release_fields_cannot_authorize_local_preparation(self):
+        for terminal in (False, True):
+            if terminal:
+                self.terminal()
+            original = deepcopy(self.receipts[3])
+            for field, bad in (("verdict", "LOCAL_READY_FOR_LIMITED_PROBE"),
+                               ("pre_probe", original["pre_preparation"]),
+                               ("probe_digest", None), ("allow_network", True)):
+                self.receipts[3] = {**original, field: bad}
+                with self.subTest(terminal=terminal, field=field), self.assertRaises(g.Block):
+                    self.validate(pre_preparation=not terminal)
+            self.receipts[3] = original
+
+    def test_recorded_result_is_strict_even_with_recomputed_release_digest(self):
+        self.terminal()
+        original = deepcopy(self.receipts[4])
+        self.validate(pre_preparation=False)
+        for field, bad in (("outcome", "PASS"), ("reason", "private path or exception"),
+                           ("processing_mode", "live_observation"), ("source_snapshot", "0" * 64),
+                           ("source_probe_digest", "0" * 64), ("source_run_id", "0" * 32),
+                           ("source_bundle_id", "0" * 64), ("network_requests", False),
+                           ("input_count", True), ("prepared_count", 101),
+                           ("provenance", [{}] * 101), ("clusters", [{}] * 101),
+                           ("prepared_digest", "0" * 64), ("unavailable_domains", []),
+                           ("source_gate", {"status": "PASS"}), ("title", "private payload"),
+                           ("processed_at", "9999-01-01T00:00:00Z")):
+            self.receipts[4] = deepcopy(original)
+            self.receipts[4]["observation"][field] = bad
+            self.receipts[3]["preparation_digest"] = g.preparation_digest(self.receipts[4])
+            with self.subTest(field=field), self.assertRaisesRegex(g.Block, "preparation"):
+                self.validate(pre_preparation=False)
+        for field, bad in (("status", "BLOCKED_NO_REQUEST"), ("processed_at", None),
+                           ("observation", None), ("reason", "source_observation")):
+            self.receipts[4] = {**original, field: bad}
+            self.receipts[3]["preparation_digest"] = g.preparation_digest(self.receipts[4])
+            with self.subTest(field=field), self.assertRaises(g.Block):
+                self.validate(pre_preparation=False)
+
+    def test_preparation_validator_uses_explicit_root_and_ignores_foreign_import_cache(self):
+        with tempfile.TemporaryDirectory(prefix="p4e-validator-") as directory:
+            root = Path(directory).resolve()
+            package = root / "market_intelligence"
+            package.mkdir()
+            (package / "__init__.py").write_text("", encoding="utf-8")
+            validator = package / "preparation.py"
+            validator.write_text(
+                "from pathlib import Path\n"
+                "def validate_preparation_record(value, snapshot_id, *, root):\n"
+                "    assert root == Path(__file__).resolve().parents[1]\n"
+                "    return value\n", encoding="utf-8")
+            with patch.dict(sys.modules, {"market_intelligence.preparation": object()}), \
+                    patch.dict(os.environ, {"PYTHONPATH": "foreign-invalid-checkout"}):
+                g.validate_preparation_record(self.receipts[4], self.snapshot, root=root)
+            validator.write_text(
+                "def validate_preparation_record(value, snapshot_id, *, root):\n"
+                "    return dict(value, unapproved=True)\n", encoding="utf-8")
+            with self.assertRaisesRegex(g.Block, "preparation"):
+                g.validate_preparation_record(self.receipts[4], self.snapshot, root=root)
+            namespace = "_p4e_preparation_validation_" + g.sha256(str(root))
+            with patch.dict(sys.modules, {namespace: object()}), \
+                    self.assertRaisesRegex(g.Block, "recursive validation"):
+                g.validate_preparation_record(self.receipts[4], self.snapshot, root=root)
+        self.assertFalse(any(name.startswith("_p4e_preparation_validation_") for name in sys.modules))
+
+    def test_preparation_receipt_validation_never_reads_a_store_or_authorizes_operations(self):
+        self.terminal()
+        with patch("sqlite3.connect", side_effect=AssertionError("unexpected store read")), \
+                patch("socket.socket", side_effect=AssertionError("unexpected network")), \
+                patch.object(g, "preparation_gate", side_effect=AssertionError("unexpected authorization")):
+            self.validate(pre_preparation=False)
+        original = g.parse_json(g.read_text(ROOT, g.SOURCE_PROBE_PATH))
+        with patch("sqlite3.connect", side_effect=AssertionError("unexpected store read")), \
+                patch("socket.socket", side_effect=AssertionError("unexpected network")):
+            g.validate_source_probe(original, g.SOURCE_SNAPSHOT)
 
 
 class GovernanceTests(unittest.TestCase):
@@ -966,12 +1138,12 @@ class GovernanceTests(unittest.TestCase):
         self.write(g.CONTRACT_PATH, self.original_contract.replace(self.contract["baseline"], baseline))
         self.write("governance/policy.toml", self.source_inputs["governance/policy.toml"]
                    .replace(self.contract["baseline"], baseline))
-        # Only the new P4C merge observation points at this temporary baseline.
+        # Only the new P4S merge observation points at this temporary baseline.
         # Historical contracts, products and receipts retain their bytes.
-        prior = json.loads(self.source_inputs["docs/reviews/p4c-merge.json"])
-        self.write_json("docs/reviews/p4c-merge.json", {**prior, "merge_commit": baseline})
+        prior = json.loads(self.source_inputs["docs/reviews/p4s-merge.json"])
+        self.write_json("docs/reviews/p4s-merge.json", {**prior, "merge_commit": baseline})
         self.state = {
-            "schema_version": 1, "active_package": "P4S", "active_contract": g.CONTRACT_PATH,
+            "schema_version": 1, "active_package": "P4E", "active_contract": g.CONTRACT_PATH,
             "branch": g.BRANCH, "baseline": baseline, "package_status": "implemented_unreleased",
             "builder_agents": ["coordinator", "implementation-builder"],
             "stage_registry": [
@@ -992,7 +1164,7 @@ class GovernanceTests(unittest.TestCase):
             "last_updated": "2026-11-13",
             "live_integration": {
                 "entry_status": "human_merged",
-                "runtime_implementation": "limited_source_probe_implemented_model_deferred",
+                "runtime_implementation": "retained_evidence_preparation_model_deferred",
                 "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
                 "prerequisite_register": g.PREREQUISITE_PATH, "permissions_enabled": False,
             },
@@ -1045,18 +1217,16 @@ class GovernanceTests(unittest.TestCase):
             **common, "role": "reviewer", "verdict": "PASS", "agent_id": "independent-reviewer",
             "read_only": True, "findings": [], "repair_cycles": 0,
         })
-        probe = {**common, "package_id": "P4S", "status": "BLOCKED_NO_REQUEST",
-                 "observed_at": "2026-01-01T00:00:00Z", "observation": None,
-                 "reason": "probe_gate_blocked"}
+        probe = preparation_fixture(current["snapshot_id"], root=self.root)
         self.write_json(g.ATTESTATIONS[4], probe)
         self.write_json(g.ATTESTATIONS[3], {
             **common, "role": "release_checker", "verdict": "LOCAL_READY_FOR_PR",
             "agent_id": "independent-release-checker", "read_only": True,
             "remote_ci": "NOT_RUN_AT_SNAPSHOT", "pr_url": None, "merge_status": "not_merged",
             "vps_sync": "not_requested", "next_gate": g.NEXT_GATE,
-            "pre_probe": {"verdict": g.PRE_PROBE_RELEASE, "snapshot_id": current["snapshot_id"],
+            "pre_preparation": {"verdict": g.PRE_PREPARATION_RELEASE, "snapshot_id": current["snapshot_id"],
                           "agent_id": "independent-release-checker"},
-            "probe_digest": g.probe_digest(probe),
+            "preparation_digest": g.preparation_digest(probe),
         })
         self.run_git("add", ".")
         return current
@@ -1095,16 +1265,16 @@ class GovernanceTests(unittest.TestCase):
 
     def test_exact_scope_and_attestations(self):
         contract = tomllib.loads(g.read_text(self.root, g.CONTRACT_PATH))
-        self.assertEqual(len(g.ALLOWED), 145)
-        self.assertEqual(len(g.PROTECTED), 140)
-        self.assertEqual(len(g.IMMUTABLE), 121)
+        self.assertEqual(len(g.ALLOWED), 159)
+        self.assertEqual(len(g.PROTECTED), 154)
+        self.assertEqual(len(g.IMMUTABLE), 135)
         self.assertIn("docs/reviews/p0-review.json", g.PROTECTED)
         self.assertIn("docs/reviews/p0-review.json", g.IMMUTABLE)
         self.assertIn("docs/PUBLICATION_PROVENANCE.json", g.PROTECTED)
         for field, bad in (("allowed_paths", list(g.ALLOWED) + ["src/product.py"]),
                            ("attestation_paths", ["docs/"]), ("baseline", "0" * 40),
                            ("immutable_paths", list(g.IMMUTABLE[:-1])),
-                           ("attestation_paths", [name.replace("p4s-", "p4-") for name in g.ATTESTATIONS]),
+                           ("attestation_paths", [name.replace("p4e-", "p4-") for name in g.ATTESTATIONS]),
                            ("branch", "main"), ("stage_ids", [1]),
                            ("required_validation", ["echo PASS"])):
             with self.subTest(field=field):
@@ -1143,13 +1313,15 @@ class GovernanceTests(unittest.TestCase):
     def test_only_two_p4_lifecycle_states(self):
         g.validate_state(self.state)
         self.state["package_status"] = "building"
-        self.state["live_integration"]["runtime_implementation"] = "limited_source_probe_building_model_deferred"
+        self.state["live_integration"]["runtime_implementation"] = "retained_evidence_preparation_planned_model_deferred"
         self.write_json("project-state/state.json", self.state)
         g.check(self.root)
         self.attest()
         with self.assertRaisesRegex(g.Block, "still building"):
             g.gate(self.root)
-        for bad in ("contract_prepared_unreleased", "implemented", "complete", "merged", None, True):
+        self.state["package_status"] = "contract_prepared_unreleased"
+        g.validate_state(self.state)
+        for bad in ("contract_prepared", "implemented", "complete", "merged", None, True):
             self.state["package_status"] = bad
             with self.assertRaises(g.Block):
                 g.validate_state(self.state)
@@ -1396,6 +1568,10 @@ class GovernanceTests(unittest.TestCase):
                     self.assertEqual((status, out), (1, ""))
                     self.assertIn(message, error)
                     self.assertNotIn("Traceback", error)
+        status, out, error = self.cli("preparation-gate")
+        self.assertEqual((status, out), (1, ""))
+        self.assertIn(message, error)
+        self.assertNotIn("Traceback", error)
 
     def test_staged_only_content_blocks_check_bundle_and_gate(self):
         approved = self.attest()
@@ -1662,7 +1838,7 @@ class GovernanceTests(unittest.TestCase):
         self.assertEqual(self.load_json("docs/reviews/p4-merge.json")["package_id"], "P4")
 
     def test_prior_merge_evidence_cannot_be_forged(self):
-        name = "docs/reviews/p4c-merge.json"
+        name = "docs/reviews/p4s-merge.json"
         original = self.load_json(name)
         for key, bad in (("merge_commit", "0" * 40), ("ci_status", "PENDING"),
                          ("merge_status", "not_merged"), ("prior_snapshot", "0" * 64),
@@ -1737,7 +1913,7 @@ class GovernanceTests(unittest.TestCase):
 
     def test_new_offline_implementation_changes_stale_approval_without_thawing_history(self):
         approved = self.attest()
-        for name in ("market_intelligence/collection.py", "tests/product/test_collection.py"):
+        for name in ("market_intelligence/preparation.py", "tests/product/test_preparation.py"):
             original = g.read_text(self.root, name)
             with self.subTest(path=name):
                 self.write(name, original + "\n# Changed offline implementation.\n")
@@ -1753,7 +1929,7 @@ class GovernanceTests(unittest.TestCase):
 
     def test_bundle_package_and_final_receipt_schema_are_p4c_only(self):
         current = self.attest()
-        self.assertEqual(current["package_id"], "P4S")
+        self.assertEqual(current["package_id"], "P4E")
         self.assertEqual(self.state["package_status"], "implemented_unreleased")
         checked = g.check(self.root)
         for package in ("P4", "P4L", "P5", None):
@@ -1799,16 +1975,16 @@ class GovernanceTests(unittest.TestCase):
         self.assertEqual((result.returncode, result.stdout, result.stderr),
                          (0, f"{g.LOCAL_RELEASE} ({g.GOVERNANCE_ONLY})\n", ""))
         probe = self.load_json(g.ATTESTATIONS[4])
-        probe.update(status="NOT_RUN", observed_at=None, observation=None, reason="awaiting_release")
+        probe.update(status="NOT_RUN", processed_at=None, observation=None, reason="awaiting_release")
         self.write_json(g.ATTESTATIONS[4], probe)
         release = self.load_json(g.ATTESTATIONS[3])
-        release.update(verdict=g.PRE_PROBE_RELEASE, probe_digest=None)
+        release.update(verdict=g.PRE_PREPARATION_RELEASE, preparation_digest=None)
         self.write_json(g.ATTESTATIONS[3], release)
         self.run_git("add", *g.ATTESTATIONS)
-        result = invoke("probe-gate")
+        result = invoke("preparation-gate")
         self.assertEqual((result.returncode, result.stdout, result.stderr),
                          (0, current["snapshot_id"] + "\n", ""))
-        self.assertEqual(invoke("probe-gate", "--ci").returncode, 2)
+        self.assertEqual(invoke("preparation-gate", "--ci").returncode, 2)
         self.assertEqual(invoke("gate").returncode, 1)
 
 
