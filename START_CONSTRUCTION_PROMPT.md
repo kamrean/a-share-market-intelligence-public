@@ -1,47 +1,41 @@
 # Construction Entrypoint
 
-Work in this public repository. Read AGENTS.md, BLUEPRINT.md,
-project-state/state.json, governance/policy.toml,
-contracts/p4c_offline_workflow.toml, docs/OFFLINE_WORKFLOW_PLAN.md,
-docs/evidence/live-integration-prerequisites.json and docs/reviews/p4l-merge.json.
-Do not bulk-read or mutate archived/private sources. Blueprint remains v1.
+Use this public repository. Read AGENTS.md, BLUEPRINT.md, project-state/state.json,
+governance/policy.toml, contracts/p4s_free_sources.toml, docs/FREE_SOURCE_COLLECTION.md,
+docs/evidence/live-integration-prerequisites.json and docs/reviews/p4c-merge.json.
+Do not bulk-read or mutate archived/private projects. Blueprint remains v1.
 
 ## Current Package
 
-P0-P4L are human-merged in PRs #1-#6. P4L main/PR CI passed. Prior frozen receipts
-remain historical. The user requests code completion before final model hookup.
-P4C on stage7-offline-workflow implements configurable offline scenario-to-report
-operations, persistent budgets/ledger and restart-safe local commands in one PR.
-It does not mark source/model/private delivery accepted, and is not full MVP.
+P0-P4C human-merged in PRs #1-#7. PR7 and merged-main CI passed.
+P4S combines source-readiness evidence, one-shot official-news collection,
+validation and independent review. User authorized limited source tests only;
+all general external permissions remain false. BaoStock requests are disabled
+pending rights/transport clarification. No SDK/dependency installation.
+Model is deferred; five benchmarks remain0/5. This is not completed research MVP.
 
 ## Work Sequence
 
-1. Verify clean synced main, predecessor human merge and successful exact-head CI.
-2. Amend exact contract/policy/plan and this entry; render the complete prompt.
-   Obtain actual independent entrypoint and Prompt Auditor PASS before code edits.
-3. Builders own disjoint exact paths; preserve original240 product tests and all
-   historical contracts/receipts/demos. No external product calls or credentials.
-4. Run both offline suites and scope/state/prompt/bundle/diff checks. Exercise
-   variable cases, malformed evidence, repeated task/restart, interruption,
-   failed/ambiguous fake delivery, corrections, quotas and unsafe paths.
-5. Freeze all decision inputs and construction log. Independent read-only
-   Reviewer, then separate Release Checker. One R0/R1 repair/re-review; preserve
-   initial findings. Second/unknown/R2+ BLOCK requires human escalation.
-6. Attach only four current attestations, inspect privacy/identity and exact
-   staged/index/worktree, commit/push/PR. Wait for exact-head Ubuntu/Windows CI
-   and separate remote release. Human merge only; auto-merge remains disabled.
+1. Verify clean main, predecessor merge and exact-head PR/main CI.
+2. Freeze contract/policy/source plan and render complete prompt. Obtain actual
+   independent entrypoint and Prompt Auditor PASS before product/checker edits.
+3. Builders own disjoint paths; preserve316 product tests and historical artifacts.
+   No product network or credential reads yet.
+4. Run both offline suites and prompt/scope/bundle/diff checks. Freeze code/state/log.
+   Independent Reviewer then separate Release Checker. One R0/R1 repair total;
+   unknown/R2+ or second BLOCK escalates.
+5. LOCAL_READY_FOR_LIMITED_PROBE on the exact snapshot permits one Fed GET only,
+   in the fixed per-user external store. No retry/reset/fallback/article crawl.
+   Keep actual times, failures and gaps; publish only sanitized observation.
+6. Separate Release Checker inspects result for LOCAL_READY_FOR_PR. Protected
+   bytes must remain frozen. Never confuse HTTP success with fresh useful news.
+7. Inspect staged/index/worktree/privacy/identity; commit/push/PR; wait for
+   exact-head Ubuntu/Windows CI and remote release. Human merge only.
 
 ## Next Gate
 
-Stop AWAITING_HUMAN_MERGE. Final grouped integration will select permitted free
-sources and a free model, and bind the user-designated own private Telegram chat
-through local secret configuration. Bot existence is user-reported, not a tested
-credential or delivery receipt. Do not request secrets in chat or commit them.
-No model API or paid call is needed to complete this offline implementation.
-
-All effective external permissions remain false. Five live benchmarks0/5,
-model/private delivery unverified, research_mvp not_implemented, observation
-not_started and VPS not_authorized. Preserve original genuine acceptance gates;
-offline engineering can pass without claiming real research or operational PASS.
-Report branch/commit/PR, audits/tests/review/release/CI, merge/protection, VPS,
-remaining prerequisites and next gate. No direct merge or administrative bypass.
+Stop AWAITING_HUMAN_MERGE. Clarify BaoStock rights/transport and Korea/US sources
+before more market data requests. Real source-to-research handling, model research,
+own-private Telegram, genuine acceptance runs and human sampling remain separate
+unmet work. No general network, secret, paid call, model, send, scheduler, broker,
+orders, portfolio control or VPS. Do not carry forward the old shutdown request.

@@ -823,3 +823,103 @@ is refunded or healed. A regression injects publication failure after three
 actual simulated calls, removes the budget rows and verifies no new dispatch or
 write. All protected bytes are refrozen and product validation rerun before
 resubmission. No approval of the withdrawn candidate is reused.
+
+## 2026-11-16 P4S Limited Source Collection
+
+Verified PR7 human merge e2f35f41019ce01c9d72b5d08e495911e61369a4,
+tested head ff7bcf5e2bedf2869242c5a5f4c6f7d53b8123a7, successful PR CI
+43469023187 and merged-main CI43876931051. Clean main and historical gate passed.
+New branch stage7-free-source-collection; old projects remain untouched.
+
+The user authorized a few local personal zero-paid BaoStock three-index and Fed
+RSS tests only after independent review and release. Source research inspected
+official documentation and SDK metadata/source without installing/executing it
+or fetching product data. Independent source analyst identified unresolved
+BaoStock data-rights scope and unbounded unauthenticated SDK transport. The
+home-page local-storage description does not settle the website disclaimer's
+scope. This is an unresolved permission interpretation, not a legal conclusion.
+
+An initial proposed general-network permission flip was rejected before edits.
+The actual contract preserves all general external flags false and narrows
+dispatch to a separately reviewed/released one-shot Fed capability. BaoStock
+dispatch and SDK installation remain disabled. No model, key, Telegram, scheduler,
+trading or VPS. All five live benchmarks remain0/5; no full MVP acceptance.
+
+P4S preserves all prior artifacts and316 product tests. Actual entrypoint/Prompt
+Auditor review precedes code/checker edits. Current scope145 exact paths,
+121 historical immutable and140 protected; five current attestations excluded.
+Full offline validation, independent Reviewer and separate Release Checker must
+precede the real request. Failures/stale feed and incomplete coverage stay visible.
+Frozen local receipts do not claim later remote CI or human merge has occurred.
+
+Independent entrypoint and Prompt Auditor01a1e4a6-fced-71e0-99dc-d01843dab663
+returned PASS with no findings and zero repairs. It verified exact complete
+prompt rendering, allowlists, baseline, prior CI and approved normalized hashes.
+Builder-GOV01a1e4ac-3e24-75f2-a703-e5ddf71450a0 owns checker/governance-tests/CI;
+Builder-PRODUCT01a1e4ac-3fec-7452-ba57-dc2649f8a331 owns only new collection module
+and its new tests. Coordinator owns state/docs/actual receipts and integration.
+No Builder may self-review. Final results will be recorded only after execution.
+
+Baseline comparison confirms all316 original product test methods and bytes
+remain unchanged. Python3.12.10 is available; no third-party install is needed.
+GitHub main still requires strict Ubuntu/Windows checks, applies protection to
+admins and forbids force-push/deletion. Auto-merge is disabled. The sole-maintainer
+repository requires PRs but zero GitHub approving reviews; independent agent
+review and human merge remain procedural gates, not falsely claimed GitHub votes.
+
+Implementation freeze: one fixed per-user, snapshot-bound Fed task reserves
+before the only possible GET, validates durable run/attempt/capture relations,
+preserves failed/unknown/interrupted history and refuses a second dispatch.
+Status and retention sweep do not fetch. Existing safe transport/parser/store
+and domain gate are reused; the old general probe remains denied. Strict public
+receipt validation excludes raw bodies/titles/private paths and retains0/5.
+The governance checker has separate pre-probe and final gates; final release
+binds the observation digest and retains the separate agent's original approval.
+
+Builder focused validation passed38 collection tests and52 governance cases.
+All91 original governance methods are retained, now107 total. The original316
+product tests remain unchanged, now354 total. Full suite results, actual formal
+Reviewer/Release Checker verdicts and real probe status belong in current
+attestations after execution. No formal repair cycle has been consumed.
+Remote CI has not run at this freeze; no product request has been performed.
+
+## 2026-11-17 P4S R1 Retention Repair
+
+The first reviewer session01a1e4ce-1bbd-7641-9353-a327d7568e31 was interrupted
+without a final verdict. Its partial historical-test failure is preserved as
+unresolved interruption evidence, not treated as PASS or a completed BLOCK.
+Replacement independent Reviewer01a1e845-fcae-7371-b0cd-f04b39237a5b reproduced
+the entire121-path historical guard test successfully in328.528s; the specific
+P1 probe mutation with matching index was rejected. This does not establish the
+exact cause of the old partial failure. No historical bytes were changed.
+
+First formal verdict BLOCK on snapshot
+a0ac9b04a99d4a5eea035d6a6e2a0cc6edf7423597444333441b36b3c3bc3208:
+P4S-F1, P2/R1, collection.py:313-316 and sweep:499: expired raw content is
+reparsed by status/sweep before cleanup, bypassing retained_parse expiry rules.
+Two independent no-expired-reparse assertions failed. Requests remained one.
+Original full354-product/107-governance validation passed; independent focused
+38 collection,23 lower-level and56 governance tests passed, plus7 additional
+crash/conflict cases. Those passes did not cover the missing retention boundary.
+
+Coordinator consumes the one permitted R1 repair: metadata-only capture lookup
+and expired-record inspection, no expired raw re-read/hash/parse, continued
+cleanup with summary/attempt/hash/tombstone preservation, and regression tests
+for completed, exact-expiry, malformed and interrupted capture cases. The old
+store and all316 original product tests remain immutable. No policy/audit input,
+permission, data-source or acceptance expansion. Protected bytes are refrozen
+and validation rerun before the same independent Reviewer re-review. No request
+or Release Checker approval has occurred. A second BLOCK must escalate.
+
+R1 candidate: a collection-local Store specialization selects capture metadata
+without fetching the body, including inherited summary/bundle/sweep lookups.
+Expired normalized evidence also stays metadata-only. Current payloads retain
+digest, record and replay consistency checks; reparsing uses retained_parse.
+At/after expiry, status/idempotent probe, sweep and interrupted recovery never
+materialize or parse the expired raw payload. Tombstones still require absence
+of payload, and original summaries, attempts and content hashes are preserved.
+Four new regressions inspect SQL projections and forbid parser invocation at
+the boundary, after expiry, during interrupted recovery and for malformed raw
+captures. Focused collection42/42 passed in10.563s. Final product total358;
+governance remains107. Full validation and independent R1 re-review are pending
+at this refreeze, with consumed repair count1 and no live request.

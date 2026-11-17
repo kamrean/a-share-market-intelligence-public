@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "role": "historical_merge_observation",
+  "observed_on": "2026-11-16",
+  "package_id": "P4C",
+  "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/7",
+  "merge_commit": "e2f35f41019ce01c9d72b5d08e495911e61369a4",
+  "merged_at": "2026-11-16T13:33:36Z",
+  "tested_head": "ff7bcf5e2bedf2869242c5a5f4c6f7d53b8123a7",
+  "pr_ci_run": 43469023187,
+  "merge_ci_run": 43876931051,
+  "ci_status": "PASS",
+  "merge_status": "merged",
+  "prior_snapshot": "cbaad2a0a0c0a48ebdb6b948ec744f7ab574308201fc0dd9225eaf61e74fb7b3",
+  "prior_gate_check": "PASS on merged main using --ci; frozen local P4C receipt remains historical",
+  "authority": "Evidence of prior human merge, not authorization for later runtime scopes."
+}

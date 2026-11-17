@@ -1,0 +1,109 @@
+{
+  "observation": {
+    "bundle_id": "0db960a5f4c9f75d78f00c0ee85553be1ac716bbf006f9d6c81fb5d3dcf647ee",
+    "capture_ids": [
+      "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23"
+    ],
+    "error_codes": [
+      "news_gate_blocked"
+    ],
+    "finished_at": "2026-11-17T07:51:58.620435Z",
+    "gate": {
+      "confidence_ceiling": "none",
+      "domains": {
+        "market": {
+          "confidence_ceiling": "unavailable",
+          "covered": 0,
+          "expected": 5,
+          "missing": [
+            "000001.SH",
+            "399001.SZ",
+            "399006.SZ",
+            "KOSPI",
+            "SP500"
+          ],
+          "reasons": [
+            "insufficient_coverage"
+          ],
+          "status": "BLOCK"
+        },
+        "news": {
+          "confidence_ceiling": "unavailable",
+          "covered": 1,
+          "expected": 1,
+          "missing": [],
+          "reasons": [
+            "stale evidence"
+          ],
+          "status": "BLOCK"
+        }
+      },
+      "status": "BLOCK"
+    },
+    "live_market_coverage": {
+      "covered": 0,
+      "expected": 5,
+      "missing": [
+        "000001.SH",
+        "399001.SZ",
+        "399006.SZ",
+        "KOSPI",
+        "SP500"
+      ]
+    },
+    "mode": "live_observation",
+    "observations": [
+      {
+        "capture_id": "f115d7e189cd575e5ff6e7bc5b0b49ec757f3de611f7ae42448a6fcb75574f23",
+        "content_hash": "e3409b4269304eb422bd6fecf3317fbfb21de7f280477dc0237fda091f0125c4",
+        "expires_at": "2026-11-18T07:51:58.565070Z",
+        "first_seen_at": "2026-11-17T07:51:58.565070Z",
+        "locator": "https://www.federalreserve.gov/feeds/press_all.xml",
+        "parser_version": "rss-v1",
+        "response_hash": "b0541577cf5e7c4e2bda458590d2330da3788168485616009ef8322ebeae643d",
+        "retention": "short_term_raw",
+        "retrieved_at": "2026-11-17T07:51:58.565070Z",
+        "source_id": "fed_press",
+        "source_timestamp": null
+      }
+    ],
+    "outcome": "observed",
+    "parse": {
+      "accepted": 20,
+      "reasons": {},
+      "rejected": 0,
+      "total": 20
+    },
+    "quality": {
+      "accepted_records": 20,
+      "correction_rate": null,
+      "item_denominator": 20,
+      "long_term_reliability": null,
+      "nonempty_parse_count": 1,
+      "parse_sample_size": 1,
+      "parse_success_count": 1,
+      "publication_delay_seconds": null,
+      "request_sample_size": 1
+    },
+    "readiness": "BLOCKED_MARKET_SOURCES",
+    "requests": {
+      "attempted": 1,
+      "failed": 0,
+      "observed_bytes": 14607,
+      "reserved_bytes": 512000,
+      "success": 1,
+      "unknown": 0
+    },
+    "run_id": "85ff2fc362914c3eb699efc276817616",
+    "schema_version": 1,
+    "source_id": "fed_press",
+    "source_state": "degraded",
+    "started_at": "2026-11-17T07:51:55.106653Z"
+  },
+  "observed_at": "2026-11-17T07:51:58.620435Z",
+  "package_id": "P4S",
+  "reason": "source_observation",
+  "schema_version": 1,
+  "snapshot_id": "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3c42",
+  "status": "RECORDED"
+}

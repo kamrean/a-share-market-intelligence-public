@@ -10,13 +10,13 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P4L are human-merged in this public repository. Stage1 retains source gaps;
+P0-P4C are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
 simulated delivery safeguards. It does not complete the research MVP, full
 Stage8 or verify live model/Telegram integration.
 
-Current P4C implements a configurable offline workflow before final model hookup.
+Merged P4C implements a configurable offline workflow before final model hookup.
 It connects variable authored scenarios, bounded research, local reports and
 persistent task/ledger operations. No external permission is enabled.
 The [offline plan](docs/OFFLINE_WORKFLOW_PLAN.md), historical
@@ -38,8 +38,10 @@ The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
 P1's original official Federal Reserve press observation remains historical.
-Active P4C policy disables all external retrieval, including the old probe command;
-existing runtime guards deny dispatch before network access. Market normalization
+P4S keeps general retrieval disabled, including the old probe command. Its separate
+one-shot official-news collector requires frozen independent review and pre-probe
+release. BaoStock stays disabled pending rights/transport clarification; see the
+[bounded source plan](docs/FREE_SOURCE_COLLECTION.md). Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
 Scheduling, live models, real Telegram, trading and VPS remain outside P4.
 Local report rendering and fake delivery are explicitly synthetic, not connected.
@@ -51,7 +53,8 @@ receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json
 [P2 merge evidence](docs/reviews/p2-merge.json) and
 [P3 merge evidence](docs/reviews/p3-merge.json) and
 [P4 merge evidence](docs/reviews/p4-merge.json) and
-[P4L merge evidence](docs/reviews/p4l-merge.json) record actual public closeout.
+[P4L merge evidence](docs/reviews/p4l-merge.json) and
+[P4C merge evidence](docs/reviews/p4c-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -59,6 +62,26 @@ status. Subsequent exact-head runs, protection checks and merge evidence belong
 on the public pull request. Future live integration and MVP acceptance require
 this package's human merge and their own reviewed scope; no later external work
 is authorized implicitly.
+
+## Limited Source Collection
+
+The separate [P4S source collection plan](docs/FREE_SOURCE_COLLECTION.md) describes
+an explicitly authorized, single-request official-news probe. It is not an
+unattended collector. General network access remains disabled; the old probe
+command cannot enable it. After the exact local review/release gate passes:
+
+```text
+python -m market_intelligence.collection status
+python -m market_intelligence.collection probe --allow-network
+python -m market_intelligence.collection sweep
+```
+
+The fixed per-user store is outside Git. A completed task is inspectable;
+failed/unknown/interrupted attempts cannot be retried by this package. Do not
+delete the store to renew the allowance. Expiry removes raw content, not
+operational history. The current [sanitized observation](docs/evidence/p4s-source-probe.json)
+separately records what really happened; no benchmark/model/Telegram readiness
+follows from feed connectivity. BaoStock has not been tested or enabled.
 
 ## Configurable Offline Workflow
 

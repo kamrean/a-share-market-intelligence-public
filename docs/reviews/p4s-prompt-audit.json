@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "verdict": "PASS",
+  "agent_id": "01a1e4a6-fced-71e0-99dc-d01843dab663",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "role": "prompt_auditor",
+  "files": {
+    "contracts/p4s_free_sources.toml": "5c6a1af7ecfc7769268296fccc3b5009a02bcedf20ab3d8f0171e12040f7a08e",
+    "governance/policy.toml": "c780d24efab007265009adeae059244d84e3a3b115aa1a351905e7539e4f84a5",
+    "templates/p4s_builder_prompt.md": "29dbc0cc44aa35be689849d4dd0a7f528e486fca9a467ad5948664358e611624",
+    "docs/reviews/p4s-builder-prompt.md": "ab442b0271ebd098f50d76592c33034c2dace04aaf7e63e7a40c36d509d795e9",
+    "AGENTS.md": "308d144029035e833e46d57c592fee73aa5f22da91f8c189cd388f54f888a68f",
+    "docs/FREE_SOURCE_COLLECTION.md": "76e2c6cfead182462d11a949f0cfec58ffad1b5bc66337921cc84074434780e5",
+    "docs/evidence/live-integration-prerequisites.json": "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3"
+  }
+}
