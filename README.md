@@ -10,7 +10,7 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P4C are human-merged in this public repository. Stage1 retains source gaps;
+P0-P4S are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
 simulated delivery safeguards. It does not complete the research MVP, full
@@ -38,9 +38,9 @@ The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.
 
 P1's original official Federal Reserve press observation remains historical.
-P4S keeps general retrieval disabled, including the old probe command. Its separate
-one-shot official-news collector requires frozen independent review and pre-probe
-release. BaoStock stays disabled pending rights/transport clarification; see the
+P4S's one official-news request is completed and its allowance consumed. General
+retrieval stays disabled; P4E does not renew the historical probe capability.
+BaoStock stays disabled pending rights/transport clarification; see the
 [bounded source plan](docs/FREE_SOURCE_COLLECTION.md). Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
 Scheduling, live models, real Telegram, trading and VPS remain outside P4.
@@ -54,7 +54,8 @@ receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json
 [P3 merge evidence](docs/reviews/p3-merge.json) and
 [P4 merge evidence](docs/reviews/p4-merge.json) and
 [P4L merge evidence](docs/reviews/p4l-merge.json) and
-[P4C merge evidence](docs/reviews/p4c-merge.json) record actual public closeout.
+[P4C merge evidence](docs/reviews/p4c-merge.json) and
+[P4S merge evidence](docs/reviews/p4s-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -63,25 +64,29 @@ on the public pull request. Future live integration and MVP acceptance require
 this package's human merge and their own reviewed scope; no later external work
 is authorized implicitly.
 
-## Limited Source Collection
+## Retained Evidence Preparation
 
-The separate [P4S source collection plan](docs/FREE_SOURCE_COLLECTION.md) describes
-an explicitly authorized, single-request official-news probe. It is not an
-unattended collector. General network access remains disabled; the old probe
-command cannot enable it. After the exact local review/release gate passes:
+The [P4E preparation plan](docs/EVIDENCE_PREPARATION.md) defines a local boundary
+for already captured official-news evidence. It preserves real source identity
+and capture/publication/first-seen times; local historical processing is not
+a new live observation. Typed Facts and deduplication do not produce an accepted
+research bundle or allow real data into the synthetic research/report APIs.
+
+After independent review and the separate local preparation release, the
+command reads only the fixed existing per-user P4S store, outside Git:
 
 ```text
-python -m market_intelligence.collection status
-python -m market_intelligence.collection probe --allow-network
-python -m market_intelligence.collection sweep
+python -m market_intelligence.preparation prepare
 ```
 
-The fixed per-user store is outside Git. A completed task is inspectable;
-failed/unknown/interrupted attempts cannot be retried by this package. Do not
-delete the store to renew the allowance. Expiry removes raw content, not
-operational history. The current [sanitized observation](docs/evidence/p4s-source-probe.json)
-separately records what really happened; no benchmark/model/Telegram readiness
-follows from feed connectivity. BaoStock has not been tested or enabled.
+It never creates or changes that store, fetches content or reads credentials.
+Expired or unavailable content remains unavailable; the public diagnostic output
+contains counts/IDs/hashes and limitations, not news titles or private paths.
+See the immutable [P4S observation](docs/evidence/p4s-source-probe.json): its feed
+result is degraded, news freshness remains BLOCK and live benchmarks remain0/5.
+Do not delete the input store to renew a request allowance. P4E does not run
+retention cleanup; the historical collection tool's explicit sweep is separate
+from this read-only preparation operation. BaoStock has not been tested or enabled.
 
 ## Configurable Offline Workflow
 
@@ -269,7 +274,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage7-offline-workflow`. The gate checks
+The active construction branch is `stage7-source-evidence-preparation`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

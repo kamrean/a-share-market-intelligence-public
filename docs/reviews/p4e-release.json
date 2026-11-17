@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a1e99e-45d7-7e43-b63a-82e27a11e3dc",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "Human merge after exact-head CI and independent release; resolve five-index rights/transport and real research integration; model remains deferred.",
+  "pre_preparation": {
+    "verdict": "LOCAL_READY_FOR_LOCAL_PREPARATION",
+    "snapshot_id": "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe",
+    "agent_id": "01a1e99e-45d7-7e43-b63a-82e27a11e3dc"
+  },
+  "preparation_digest": "968d8bef1f30393c8855142bdf4f3c7a7eaa9b8ab39ec92bfac5f493735223a5"
+}

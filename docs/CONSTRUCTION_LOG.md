@@ -923,3 +923,122 @@ the boundary, after expiry, during interrupted recovery and for malformed raw
 captures. Focused collection42/42 passed in10.563s. Final product total358;
 governance remains107. Full validation and independent R1 re-review are pending
 at this refreeze, with consumed repair count1 and no live request.
+
+## 2026-11-17 P4E Retained Evidence Preparation Entry
+
+Verified PR8 human merge1a15840caab444637646e695467496e362f80bbb,
+tested head264a2cee207e4fdef400055551148d9117fcf306, successful PR CI44043527840
+and merged-main CI44068430541. Main was clean and synced; predecessor check
+and gate passed in merged-main mode. Frozen P4S log/receipts above describe their
+historical freeze, not current merge state. Actual later P4S observation remains
+in its immutable artifact and remote release on PR8. Nothing is retroactively
+rewritten as live-ready or complete.
+
+Independent source researcher01a1e922-af66-7b22-b5be-667b5e35544b reviewed primary
+documentation only. No data requests, SDK execution/install, credentials,
+account registration or provider contact. Five-index selection remains unresolved;
+unknown rights are not asserted to be illegality. BaoStock local-analysis support
+does not settle downstream rights or authenticated transport; Korea requires
+entitlement/key and scope clarification; FRED SP500 is not selected for this
+storage/AI chain. Exact original targets remain unchanged and0/5 live-verified.
+
+Code inspection found existing research/report APIs intentionally synthetic-only.
+P4E therefore prepares already retained real evidence through a separate local
+boundary; it does not bypass those APIs by relabeling real input. This is genuine
+input-preparation engineering, not a completed live research chain. Future
+market/method/model/report integration remains explicit unfinished work.
+
+New branch stage7-source-evidence-preparation. Scope159 exact paths,135 historical
+immutable paths,154 protected paths, five current attestations. Prior product
+modules and358 tests remain immutable;107 governance cases/protections retained.
+All general external permissions false; no requests, secrets, SDK/model/send,
+scheduler/trading/VPS. Actual prior-store read waits for independent Reviewer
+and separate local Release Checker; read-only handling cannot create or mutate
+the input or load expired raw/normalized content. Source observation and local
+historical replay remain distinct; stale/rejected inputs and0/5 are preserved.
+
+Entrypoint/Prompt Auditor review is pending at this entry draft. Product/checker
+implementation and actual local preparation have not started. No PASS or later
+CI is inferred from predecessor results. One current-package R0/R1 repair total;
+unknown/R2+ or second BLOCK requires human escalation.
+
+Actual independent entrypoint and Prompt Auditor01a1e932-f790-7d30-9160-e4ebea7ef2bf
+returned PASS, findings empty and repair_cycles0. It independently verified all
+ten frozen input hashes, exact deterministic prompt, prior merge/CI and bounded
+scope. The P4S file hash and canonical observation digest were checked separately.
+This is planning approval, not product/release/source acceptance.
+
+Builder-PRODUCT01a1e939-5978-7b80-8516-34d24f6dac81 owns only preparation.py and
+its new product test file. Builder-GOV01a1e939-5bd4-7d90-8fba-d5599ea8a041 owns
+only governance checker, governance tests and CI. Coordinator owns docs/state
+and actual attestations. Writers cannot review their own changes. No real input
+store read is allowed during construction; tests use isolated fixtures only.
+
+Implementation candidate completed. The read-only preparation module validates
+the immutable P4S observation and actual store relationships, enforces SQLite
+read-only/query-only access and metadata-first expiry with payload-read guards,
+prepares source-linked Facts and clustering in memory, and emits only bounded
+sanitized diagnostics. Source mode remains live_observation; processing mode is
+historical_replay. No current research/report API is bypassed or relabeled.
+The governance checker has separate local preparation and final release gates;
+the former P4S network gate always rejects under P4E.
+
+Builder-PRODUCT focused63 tests:62 passed,1 skipped in11.755s. Its full product
+suite421 tests:420 passed,1 skipped in105.687s with socket/DNS/HTTP blocked.
+The sole skip is this Windows host denying symlink creation; hardlink and mocked
+link-rejection tests passed. Initial non-escalated hardlink setup failed and
+passed under the correct execution permissions; no guard was removed.
+Builder-GOV full114 tests passed with zero skips in1553.532s. All107 original
+governance methods/protections and358 original product tests remain. The prior
+probe receipt digest versus observation digest integration mismatch was corrected
+during building, before formal code review; focused preparation-gate tests pass.
+
+These are Builder results, not independent approval or remote CI. Final state,
+README and this log are now frozen before coordinator validation and independent
+review. Current repair_cycles0; no formal Reviewer or Release verdict exists yet,
+and the real prior store has not been read. Local test duration does not prove
+the25-minute CI timeout sufficient; actual remote results remain required.
+
+Independent Reviewer01a1e95d-c35b-7612-9489-b1601d595b57 returned first BLOCK on
+snapshot2bddb1273b96f3bf3c8944a732a3056b1fdaf62826eb549fd204e29cd29ceba0.
+Three reproduced findings, all in-scope R1: P1 normal SQLite read-only precheck
+could create WAL/SHM sidecars while rejecting a WAL database; P1 prepare-time
+authorizer did not prevent normalized payload decoding when expiry crossed at
+SQL execution; P2 sanitized receipt accepted stale-as-eligible provenance with
+adjusted counts/clusters/digest. No release or actual retained-store read occurred.
+Coordinator product rerun on that rejected snapshot passed420/421 with the same
+one Windows symlink skip in97.164s. Its final full governance rerun was interrupted
+after BLOCK; it is NOT counted as PASS or as repaired-candidate validation.
+
+The coordinator consumed the ONE allowed combined R1 repair. Only the new
+preparation module and its new test file changed, plus this append-only record.
+WAL headers are refused before SQLite opens; all disk connections use immutable
+read-only access with pre/post identity checks and no writable Store constructor.
+SQLite execution progress, text/row decoding and cursor fetches now recheck the
+bound retention deadline, including direct queries in the unchanged reconciler.
+Sanitized provenance must satisfy the original frozen news TTL/as_of, including
+the exact freshness boundary. Digests do not substitute for semantic validation.
+New regressions cover no-sidecar WAL refusal, immutable opens, trace-time expiry,
+fetch variants and forged freshness through the actual final-release validator.
+The added isolated release fixture initially omitted the original profile config;
+that fixture setup was corrected within this R1 cycle, without product-policy
+changes. Final focused71 tests passed70 with the same one OS symlink skip in11.465s.
+All prior107 governance methods and358 product cases remain retained.
+
+This repaired candidate is frozen for full validation and re-review by the SAME
+Reviewer. Current repair_cycles1; no second PASS, release, local observation, PR
+or remote CI is claimed here. Second BLOCK, unknown/R2+ or release/CI failure
+requires human escalation. Audited inputs and permissions remain unchanged.
+
+Pre-re-review full validation of intermediate repaired snapshot
+1c4b20f3d2b8f4a5619a04262cdb15c93a7dcf7688c98c1af26959827ef1455b:
+product429 tests passed428/one OS symlink skip in88.450s; governance114 tests
+completed with112 passes, one failure and one error in1230.008s. Both failures
+came from the same authored prepared-receipt fixture: it labeled newly published
+news stale. The strengthened semantic guard correctly rejected that contradiction.
+The same R1 cycle aligns ONLY that fixture's publication date to32 days before
+the source start; no assertion, case, checker, profile or permission is weakened.
+The governance test file is explicitly mutable in this contract. The Reviewer
+was told to hold the formal second verdict before this fixture alignment; no
+second Reviewer verdict or Release approval has occurred. Full validation must
+be rerun on the final frozen snapshot; intermediate failures are not PASS.

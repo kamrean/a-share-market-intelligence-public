@@ -128,6 +128,8 @@ Code-first sequencing: a reviewed P4C integration package may complete a configu
 
 P4S follows merged P4C with audited source readiness and one user-authorized official-news probe. General network permissions remain false; only an exact-snapshot, independently reviewed and released one-shot Fed request is eligible. BaoStock remains disabled pending rights/transport clarification. No model, Telegram, scheduler or VPS permission is granted, and five-index coverage remains0/5.
 
+P4E follows human-merged P4S with local, read-only preparation of already retained official-news evidence. Historical processing preserves source identity and real possession times; it is not a new live run or completed research pipeline. Existing synthetic APIs remain separate, all external flags stay false and five-index coverage remains0/5.
+
 Each package normally produces one coherent PR after review; split only for an actual dependency, risk, or reviewability reason. P4 acceptance does not mark all of Stage 8 or Stage 9 complete.
 
 ### Stage 0: Project and Governance
