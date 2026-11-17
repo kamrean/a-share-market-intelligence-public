@@ -1,13 +1,15 @@
-"""Offline P4C regression tests; all mutations and commits use temporary repositories."""
+"""Offline P4S regression tests; all mutations and commits use temporary repositories."""
 
 from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
+import ast
 import importlib.util
 import io
 import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import tomllib
 import unittest
@@ -15,7 +17,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location("p4c_governance", ROOT / "tools/governance.py")
+SPEC = importlib.util.spec_from_file_location("p4s_governance", ROOT / "tools/governance.py")
 g = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(g)
 
@@ -68,8 +70,8 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.policy["repository"], expected)
         self.assertEqual(self.contract["dependency"], g.dependency())
         self.assertEqual(self.state["dependency"], g.dependency())
-        self.assertEqual(g.BASELINE, "8ebfa0994436c05234336105c424cbd823b2af0b")
-        self.assertEqual(g.BRANCH, "stage7-offline-workflow")
+        self.assertEqual(g.BASELINE, "e2f35f41019ce01c9d72b5d08e495911e61369a4")
+        self.assertEqual(g.BRANCH, "stage7-free-source-collection")
         self.assertNotIn("codex", g.BRANCH)
         g.validate_contract(self.contract)
         g.exact(self.policy, g.POLICY, "policy")
@@ -78,15 +80,16 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.state["stage_registry"][0]["status"], "complete")
 
     def test_p4_scope_keeps_historical_packages_immutable(self):
-        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (131, 104, 127))
+        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (145, 121, 140))
         self.assertEqual(tuple(self.contract["allowed_paths"]), g.ALLOWED)
         self.assertEqual(tuple(self.contract["immutable_paths"]), g.IMMUTABLE)
         self.assertEqual(tuple(self.contract["attestation_paths"]), g.ATTESTATIONS)
         self.assertEqual(set(g.ALLOWED) - set(g.PROTECTED), set(g.ATTESTATIONS))
         self.assertEqual(g.ATTESTATIONS, (
-            "docs/reviews/p4c-bundle.json", "docs/reviews/p4c-validation.json",
-            "docs/reviews/p4c-review.json", "docs/reviews/p4c-release.json"))
-        for package in ("p0", "p1", "p2", "p3", "p4", "p4l"):
+            "docs/reviews/p4s-bundle.json", "docs/reviews/p4s-validation.json",
+            "docs/reviews/p4s-review.json", "docs/reviews/p4s-release.json",
+            "docs/evidence/p4s-source-probe.json"))
+        for package in ("p0", "p1", "p2", "p3", "p4", "p4l", "p4c"):
             for receipt in ("builder-prompt.md", "bundle.json", "prompt-audit.json",
                             "release.json", "review.json", "validation.json"):
                 name = f"docs/reviews/{package}-{receipt}"
@@ -112,16 +115,18 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertIn("docs/reviews/p4-merge.json", g.PROTECTED)
         self.assertIn("docs/reviews/p4-merge.json", g.IMMUTABLE)
         self.assertIn("docs/reviews/p4l-merge.json", g.PROTECTED)
-        self.assertNotIn("docs/reviews/p4l-merge.json", g.IMMUTABLE)
+        self.assertIn("docs/reviews/p4l-merge.json", g.IMMUTABLE)
+        self.assertIn("docs/reviews/p4c-merge.json", g.PROTECTED)
+        self.assertNotIn("docs/reviews/p4c-merge.json", g.IMMUTABLE)
 
     def test_p4_merge_identity_and_ci_are_exact(self):
         self.assertEqual(g.dependency(), {
-            "package_id": "P4L",
-            "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/6",
-            "merge_commit": "8ebfa0994436c05234336105c424cbd823b2af0b",
-            "merged_at": "2026-11-13T15:39:08Z",
-            "tested_head": "02fe397651e17f3485a7d282b861cc6007fbce49",
-            "pr_ci_run": 43450010910, "merge_ci_run": 43454745770,
+            "package_id": "P4C",
+            "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/7",
+            "merge_commit": "e2f35f41019ce01c9d72b5d08e495911e61369a4",
+            "merged_at": "2026-11-16T13:33:36Z",
+            "tested_head": "ff7bcf5e2bedf2869242c5a5f4c6f7d53b8123a7",
+            "pr_ci_run": 43469023187, "merge_ci_run": 43876931051,
             "ci_status": "PASS", "merge_status": "merged",
         })
 
@@ -169,8 +174,8 @@ class RepositoryBindingTests(unittest.TestCase):
 
     def test_p4_stage7_and_partial_stage8_lifecycle_binding(self):
         for status, runtime in (
-            ("building", "offline_workflow_building_live_deferred"),
-            ("implemented_unreleased", "offline_core_implemented_live_deferred"),
+            ("building", "limited_source_probe_building_model_deferred"),
+            ("implemented_unreleased", "limited_source_probe_implemented_model_deferred"),
         ):
             state = deepcopy(self.state)
             state["package_status"] = status
@@ -187,13 +192,12 @@ class RepositoryBindingTests(unittest.TestCase):
                         g.validate_state(changed)
 
     def test_p4_paths_and_next_gate_are_exact(self):
-        self.assertEqual(g.CONTRACT_PATH, "contracts/p4c_offline_workflow.toml")
-        self.assertEqual(g.TEMPLATE_PATH, "templates/p4c_builder_prompt.md")
-        self.assertEqual(g.PROMPT_PATH, "docs/reviews/p4c-builder-prompt.md")
+        self.assertEqual(g.CONTRACT_PATH, "contracts/p4s_free_sources.toml")
+        self.assertEqual(g.TEMPLATE_PATH, "templates/p4s_builder_prompt.md")
+        self.assertEqual(g.PROMPT_PATH, "docs/reviews/p4s-builder-prompt.md")
         self.assertEqual(g.NEXT_GATE,
-                         "exact_head_ci_and_independent_release_then_human_merge; "
-                         "select and audit final free model/source/private delivery integration; "
-                         "no dispatch or VPS")
+                         "limited_Fed_probe_then_exact_head_ci_and_independent_release_then_human_merge; "
+                         "clarify BaoStock rights/transport and Korea/US sources; model remains deferred")
         self.assertEqual(self.state["next_gate"], g.NEXT_GATE)
         for field, bad in (("active_contract", "contracts/p3_research.toml"),
                            ("baseline", "e61f1cbfc41118deb13df421b927ace3d01c150e"),
@@ -201,7 +205,7 @@ class RepositoryBindingTests(unittest.TestCase):
             with self.subTest(field=field), self.assertRaises(g.Block):
                 g.validate_state({**self.state, field: bad})
         for field, bad in (("package_id", "P3"), ("stage_ids", [5, 6]),
-                           ("attestation_paths", [name.replace("p4c-", "p4-") for name in g.ATTESTATIONS])):
+                           ("attestation_paths", [name.replace("p4s-", "p4-") for name in g.ATTESTATIONS])):
             with self.subTest(field=field), self.assertRaises(g.Block):
                 g.validate_contract({**self.contract, field: bad})
 
@@ -223,9 +227,7 @@ class RepositoryBindingTests(unittest.TestCase):
             name for name in g.ALLOWED
             if name.startswith(("market_intelligence/", "config/", "tests/product/", "tests/fixtures/",
                                 "docs/reviews/p4-"))
-        } - {"market_intelligence/publication.py", "market_intelligence/scenario.py",
-             "market_intelligence/workflow.py", "tests/product/test_scenario.py",
-             "tests/product/test_workflow.py"}
+        } - {"market_intelligence/collection.py", "tests/product/test_collection.py"}
         artifacts.update(("contracts/p4_publication.toml", "templates/p4_builder_prompt.md",
                           "docs/P4_METHODS.md", "docs/evidence/p4-demo.json",
                           "docs/evidence/p4-report.txt", "requirements.lock",
@@ -312,23 +314,21 @@ class RepositoryBindingTests(unittest.TestCase):
         product_paths = {name for name in g.ALLOWED
                          if name.startswith(("market_intelligence/", "tests/product/"))}
         self.assertEqual(product_paths - set(g.IMMUTABLE), {
-            "market_intelligence/publication.py", "market_intelligence/scenario.py",
-            "market_intelligence/workflow.py", "tests/product/test_scenario.py",
-            "tests/product/test_workflow.py",
+            "market_intelligence/collection.py", "tests/product/test_collection.py",
         })
         for name in product_paths:
             self.assertIn(name, g.PROTECTED)
             self.assertNotIn(name, g.ATTESTATIONS)
-        for package in ("p1", "p2", "p3", "p4"):
+        for package in ("p1", "p2", "p3", "p4", "scenario", "workflow"):
             self.assertIn(f"tests/product/test_{package}.py", g.IMMUTABLE)
-        self.assertNotIn(g.PREREQUISITE_PATH, g.IMMUTABLE)
+        self.assertIn(g.PREREQUISITE_PATH, g.IMMUTABLE)
         self.assertEqual(g.FROZEN_INPUT_HASHES[g.PREREQUISITE_PATH], g.PREREQUISITE_HASH)
 
     def test_current_required_reads_and_contract_next_gate_are_pinned(self):
         self.assertEqual(self.contract["required_reads"], [
             "BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", g.CONTRACT_PATH,
-            "governance/policy.toml", "project-state/state.json", "docs/reviews/p4l-merge.json",
-            "docs/OFFLINE_WORKFLOW_PLAN.md", g.PREREQUISITE_PATH,
+            "governance/policy.toml", "project-state/state.json", "docs/reviews/p4c-merge.json",
+            "docs/FREE_SOURCE_COLLECTION.md", g.PREREQUISITE_PATH,
         ])
         for field, bad in (("required_reads", self.contract["required_reads"][:-1]),
                            ("next_gate", "start_model_integration"),
@@ -340,9 +340,10 @@ class RepositoryBindingTests(unittest.TestCase):
         workflow = ".github/workflows/governance.yml"
         previous = g.normalize_text(g.git(ROOT, "show", f"{g.BASELINE}:{workflow}"))
         expected = previous.replace(
-            "# P4L governance-only bindings retain all offline product regressions.",
             "# P4C offline-engineering bindings retain all offline product regressions.",
-        ).replace("a95a90d16c98d09e3adc678a79038057676cff05", g.BASELINE)
+            "# P4S limited-probe bindings retain all offline product regressions.",
+        ).replace("8ebfa0994436c05234336105c424cbd823b2af0b", g.BASELINE).replace(
+            "timeout-minutes: 15", "timeout-minutes: 25")
         self.assertEqual(g.read_text(ROOT, workflow), expected)
 
     def test_frozen_inputs_match_actual_independent_zero_finding_audits(self):
@@ -366,7 +367,7 @@ class PrerequisiteManifestTests(unittest.TestCase):
         # These unit tests stop before Git/product inspection. Keep actual frozen
         # governance inputs, with inert snapshot data for unrelated product files.
         self.contents = dict.fromkeys(g.PROTECTED, "offline snapshot fixture\n")
-        names = {*g.FROZEN_INPUT_HASHES, "project-state/state.json", "docs/reviews/p4l-merge.json",
+        names = {*g.FROZEN_INPUT_HASHES, "project-state/state.json", "docs/reviews/p4c-merge.json",
                  g.RECEIPT_PATHS["blueprint_review"], g.RECEIPT_PATHS["prompt_audit"]}
         self.contents.update({name: g.read_text(ROOT, name) for name in names})
         self.original = self.contents[g.PREREQUISITE_PATH]
@@ -404,9 +405,9 @@ class PrerequisiteManifestTests(unittest.TestCase):
 
     def test_current_audit_inputs_are_exact_and_snapshot_protected(self):
         self.assertEqual(g.AUDIT_INPUTS, (
-            "contracts/p4c_offline_workflow.toml", "governance/policy.toml",
-            "templates/p4c_builder_prompt.md", "docs/reviews/p4c-builder-prompt.md",
-            "AGENTS.md", "docs/OFFLINE_WORKFLOW_PLAN.md",
+            "contracts/p4s_free_sources.toml", "governance/policy.toml",
+            "templates/p4s_builder_prompt.md", "docs/reviews/p4s-builder-prompt.md",
+            "AGENTS.md", "docs/FREE_SOURCE_COLLECTION.md",
             "docs/evidence/live-integration-prerequisites.json"))
         self.assertTrue(set(g.AUDIT_INPUTS).issubset(g.PROTECTED))
         audit = g.parse_json(self.contents[g.RECEIPT_PATHS["prompt_audit"]])
@@ -563,15 +564,15 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
         self.state = g.parse_json(g.read_text(ROOT, "project-state/state.json"))
 
     def test_only_matching_governance_entry_states_are_valid(self):
-        for package, runtime in (("building", "offline_workflow_building_live_deferred"),
-                                 ("implemented_unreleased", "offline_core_implemented_live_deferred")):
+        for package, runtime in (("building", "limited_source_probe_building_model_deferred"),
+                                 ("implemented_unreleased", "limited_source_probe_implemented_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
             g.validate_state(state)
             state["live_integration"]["runtime_implementation"] = (
-                "offline_core_implemented_live_deferred" if package == "building"
-                else "offline_workflow_building_live_deferred")
+                "limited_source_probe_implemented_model_deferred" if package == "building"
+                else "limited_source_probe_building_model_deferred")
             with self.assertRaisesRegex(g.Block, "runtime_implementation"):
                 g.validate_state(state)
 
@@ -619,8 +620,8 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             g.validate_state({**self.state, "permissions": {"external_data_access_allowed": True}})
 
     def test_historical_stage7_stage8_do_not_track_current_building(self):
-        for package, runtime in (("building", "offline_workflow_building_live_deferred"),
-                                 ("implemented_unreleased", "offline_core_implemented_live_deferred")):
+        for package, runtime in (("building", "limited_source_probe_building_model_deferred"),
+                                 ("implemented_unreleased", "limited_source_probe_implemented_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
@@ -641,14 +642,14 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             with patch.object(g, "check"), patch.object(g, "gate", return_value="LOCAL_READY_FOR_PR"), \
                     redirect_stdout(output):
                 self.assertEqual(g.main(list(args)), 0)
-            self.assertIn("offline-engineering only; model/live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES",
+            self.assertIn("limited-probe governance only; model/live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES",
                           output.getvalue())
             self.assertTrue(output.getvalue().startswith("PASS (" if args[0] == "check"
                                                         else "LOCAL_READY_FOR_PR ("))
 
     def test_both_offline_states_keep_human_merged_entry_and_closed_live_permissions(self):
-        for package, runtime in (("building", "offline_workflow_building_live_deferred"),
-                                 ("implemented_unreleased", "offline_core_implemented_live_deferred")):
+        for package, runtime in (("building", "limited_source_probe_building_model_deferred"),
+                                 ("implemented_unreleased", "limited_source_probe_implemented_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
@@ -663,6 +664,274 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
                 changed["live_integration"]["entry_status"] = entry
                 with self.subTest(package=package, entry=entry), self.assertRaises(g.Block):
                     g.validate_state(changed)
+
+
+class ProbeAttestationTests(unittest.TestCase):
+    """Synthetic in-memory approvals, never real reviewer/release receipts."""
+
+    def setUp(self):
+        self.contract = tomllib.loads(g.read_text(ROOT, g.CONTRACT_PATH))
+        self.state = g.parse_json(g.read_text(ROOT, "project-state/state.json"))
+        self.state["package_status"] = "implemented_unreleased"
+        self.state["live_integration"]["runtime_implementation"] = (
+            "limited_source_probe_implemented_model_deferred")
+        self.contents = dict.fromkeys(g.PROTECTED, "offline snapshot fixture\n")
+        self.contents[g.RECEIPT_PATHS["prompt_audit"]] = json.dumps({"repair_cycles": 0})
+        self.checked = (self.contract, self.state, self.contents, [])
+        self.current = g.make_bundle(self.checked)
+        self.snapshot = self.current["snapshot_id"]
+        common = {"schema_version": 1, "snapshot_id": self.snapshot}
+        self.receipts = [self.current, {
+            **common, "role": "builder_validation", "verdict": "PASS",
+            "commands": [{"command": command, "exit_code": 0} for command in g.VALIDATION_COMMANDS],
+            "python_version": "3.12.10", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+        }, {
+            **common, "role": "reviewer", "verdict": "PASS", "agent_id": "fixture-reviewer",
+            "read_only": True, "findings": [], "repair_cycles": 0,
+        }, {
+            **common, "role": "release_checker", "verdict": g.PRE_PROBE_RELEASE,
+            "agent_id": "fixture-release", "read_only": True,
+            "remote_ci": "NOT_RUN_AT_SNAPSHOT", "pr_url": None, "merge_status": "not_merged",
+            "vps_sync": "not_requested", "next_gate": g.NEXT_GATE,
+            "pre_probe": {"verdict": g.PRE_PROBE_RELEASE, "snapshot_id": self.snapshot,
+                          "agent_id": "fixture-release"}, "probe_digest": None,
+        }, {
+            **common, "package_id": "P4S", "status": "NOT_RUN", "observed_at": None,
+            "observation": None, "reason": "awaiting_release",
+        }]
+        self.sync()
+
+    def sync(self):
+        self.contents.update({name: json.dumps(value) for name, value in zip(g.ATTESTATIONS, self.receipts)})
+
+    def validate(self, *, pre_probe=True):
+        self.sync()
+        g.validate_attestations(self.checked, self.current, pre_probe=pre_probe)
+
+    def terminal(self, *, recorded=False):
+        self.receipts[4].update(status="BLOCKED_NO_REQUEST", observed_at="2026-01-01T00:00:00Z",
+                                observation=None, reason="probe_gate_blocked")
+        if recorded:
+            # Reuse a historical summary only as in-memory schema test data.
+            summary = g.parse_json(g.read_text(ROOT, "docs/evidence/p1-source-probe.json"))
+            summary.update(source_state="degraded", error_codes=["news_gate_blocked"])
+            self.receipts[4].update(status="RECORDED", observed_at=summary["finished_at"],
+                                    observation=summary, reason="source_observation")
+        self.receipts[3].update(verdict=g.LOCAL_RELEASE, probe_digest=g.probe_digest(self.receipts[4]))
+        self.sync()
+
+    def test_exact_typed_limited_probe_does_not_expand_general_permissions(self):
+        expected = {
+            "source": "fed_press", "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+            "method": "GET", "max_attempts_total": 1, "retries": 0, "paid_budget": 0,
+            "requires_independent_review": True, "requires_pre_probe_release": True,
+            "baostock_dispatch_allowed": False,
+        }
+        self.assertEqual(g.LIMITED_PROBE, expected)
+        self.assertNotIn("limited_probe", g.POLICY)
+        for key, value in expected.items():
+            bad_values = [None, str(value), not value] if type(value) is not str else [None, 1, value + "/extra"]
+            if type(value) is int:
+                bad_values += [bool(value), value + 1, -1]
+            if type(value) is bool:
+                bad_values += [int(value)]
+            for bad in bad_values:
+                changed = deepcopy(self.contract)
+                changed["limited_probe"][key] = bad
+                with self.subTest(key=key, bad=bad), self.assertRaises(g.Block):
+                    g.validate_contract(changed)
+            changed = deepcopy(self.contract)
+            del changed["limited_probe"][key]
+            with self.assertRaises(g.Block):
+                g.validate_contract(changed)
+        for value in ({**expected, "allowed": True}, {}, "LOCAL_READY_FOR_LIMITED_PROBE"):
+            with self.assertRaises(g.Block):
+                g.validate_contract({**self.contract, "limited_probe": value})
+
+    def test_pending_probe_can_release_without_circular_terminal_observation(self):
+        self.validate()
+        with patch.object(g, "check", return_value=self.checked) as check:
+            self.assertEqual(g.probe_gate(ROOT), self.snapshot)
+            check.assert_called_once_with(ROOT, complete_index=True)
+        self.assertRegex(self.snapshot, r"^[0-9a-f]{64}$")
+
+    def test_probe_gate_preserves_check_and_complete_index_failures(self):
+        for message in ("index/worktree mismatch", "missing commit candidate files", "Git branch",
+                        "immutable historical input changed", "possible secret", "link/junction forbidden"):
+            with patch.object(g, "check", side_effect=g.Block(message)) as check, \
+                    patch.object(g, "validate_attestations") as validation:
+                with self.subTest(message=message), self.assertRaisesRegex(g.Block, message):
+                    g.probe_gate(ROOT)
+                check.assert_called_once_with(ROOT, complete_index=True)
+                validation.assert_not_called()
+
+    def test_probe_gate_has_no_ci_argument_and_cli_rejects_ci(self):
+        with self.assertRaises(TypeError):
+            g.probe_gate(ROOT, ci=True)
+        with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as result:
+            g.main(["probe-gate", "--ci"])
+        self.assertEqual(result.exception.code, 2)
+        with patch.object(g, "probe_gate", return_value=self.snapshot) as gate, \
+                redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(g.main(["probe-gate"], root=ROOT), 0)
+            self.assertEqual(output.getvalue(), self.snapshot + "\n")
+            gate.assert_called_once_with(ROOT)
+
+    def test_final_gate_requires_terminal_observation(self):
+        self.receipts[3].update(verdict=g.LOCAL_RELEASE, probe_digest=g.probe_digest(self.receipts[4]))
+        with self.assertRaisesRegex(g.Block, "terminal source probe"):
+            self.validate(pre_probe=False)
+        for recorded in (False, True):
+            self.terminal(recorded=recorded)
+            self.validate(pre_probe=False)
+            with patch.object(g, "check", return_value=self.checked) as check:
+                self.assertEqual(g.gate(ROOT), g.LOCAL_RELEASE)
+                check.assert_called_once_with(ROOT, ci=False, complete_index=True)
+
+    def test_terminal_probe_never_reauthorizes_dispatch(self):
+        for recorded in (False, True):
+            self.terminal(recorded=recorded)
+            self.receipts[3].update(verdict=g.PRE_PROBE_RELEASE, probe_digest=None)
+            with self.assertRaisesRegex(g.Block, "pre-probe observation status"):
+                self.validate()
+
+    def test_prerelease_requires_null_digest_and_final_requires_canonical_digest(self):
+        for bad in ("", "0" * 64, False, {}, "LOCAL_READY_FOR_LIMITED_PROBE"):
+            self.receipts[3]["probe_digest"] = bad
+            with self.subTest(value=bad), self.assertRaises(g.Block):
+                self.validate()
+        self.terminal()
+        self.validate(pre_probe=False)
+        from market_intelligence.models import digest
+        self.assertEqual(g.probe_digest(self.receipts[4]), digest(self.receipts[4]))
+        self.assertEqual(g.probe_digest({"text": "\uac00"}), digest({"text": "\uac00"}))
+        for bad in (None, "", "0" * 64, False):
+            self.receipts[3]["probe_digest"] = bad
+            with self.subTest(value=bad), self.assertRaises(g.Block):
+                self.validate(pre_probe=False)
+
+    def test_preapproval_is_exact_and_same_agent_is_required_at_final_release(self):
+        for terminal in (False, True):
+            if terminal:
+                self.terminal()
+            original = deepcopy(self.receipts[3])
+            for key, bad in (("verdict", "PASS"), ("snapshot_id", "0" * 64),
+                             ("agent_id", "different-release"), ("agent_id", 1),
+                             ("agent_id", None), ("allow_network", True)):
+                self.receipts[3] = deepcopy(original)
+                self.receipts[3]["pre_probe"][key] = bad
+                with self.subTest(terminal=terminal, key=key), self.assertRaises(g.Block):
+                    self.validate(pre_probe=not terminal)
+            for key in original["pre_probe"]:
+                self.receipts[3] = deepcopy(original)
+                del self.receipts[3]["pre_probe"][key]
+                with self.assertRaises(g.Block):
+                    self.validate(pre_probe=not terminal)
+            self.receipts[3] = original
+
+    def test_independent_roles_are_strict_strings_in_both_phases(self):
+        for terminal in (False, True):
+            if terminal:
+                self.terminal()
+            for index in (2, 3):
+                original = deepcopy(self.receipts[index])
+                for bad in (None, 1, True, {}, "", " ", " fixture-agent", "fixture-agent ",
+                            *self.state["builder_agents"]):
+                    self.receipts[index] = {**original, "agent_id": bad}
+                    with self.subTest(terminal=terminal, index=index, bad=bad), self.assertRaises(g.Block):
+                        self.validate(pre_probe=not terminal)
+                self.receipts[index] = original
+            self.receipts[3]["agent_id"] = self.receipts[2]["agent_id"]
+            self.receipts[3]["pre_probe"]["agent_id"] = self.receipts[2]["agent_id"]
+            with self.assertRaisesRegex(g.Block, "separate independent release"):
+                self.validate(pre_probe=not terminal)
+            self.receipts[3]["agent_id"] = "fixture-release"
+            self.receipts[3]["pre_probe"]["agent_id"] = "fixture-release"
+
+    def test_missing_or_arbitrary_receipts_cannot_authorize_probe(self):
+        self.sync()
+        for name in g.ATTESTATIONS:
+            original = self.contents[name]
+            for invalid in (None, '"PASS"', '{}'):
+                if invalid is None:
+                    del self.contents[name]
+                else:
+                    self.contents[name] = invalid
+                with self.subTest(name=name, invalid=invalid), self.assertRaises(g.Block):
+                    g.validate_attestations(self.checked, self.current, pre_probe=True)
+                self.contents[name] = original
+
+    def test_stale_snapshots_fail_in_every_probe_approval(self):
+        for index in range(5):
+            original = deepcopy(self.receipts[index])
+            self.receipts[index]["snapshot_id"] = "0" * 64
+            with self.subTest(index=index), self.assertRaises(g.Block):
+                self.validate()
+            self.receipts[index] = original
+        self.contents["README.md"] += "changed protected decision\n"
+        changed = g.make_bundle(self.checked)
+        self.sync()
+        with self.assertRaisesRegex(g.Block, "bundle receipt"):
+            g.validate_attestations(self.checked, changed, pre_probe=True)
+
+    def test_probe_schema_rejects_unknown_fields_duplicates_and_diagnostic_strings(self):
+        original = deepcopy(self.receipts[4])
+        for key, bad in (("schema_version", True), ("status", "PASS"), ("observation", {}),
+                         ("reason", "arbitrary receipt authorizes request"), ("path", "private"),
+                         ("package_id", "P4C"), ("observed_at", "2026-01-01T00:00:00Z")):
+            self.receipts[4] = {**original, key: bad}
+            with self.subTest(key=key), self.assertRaises(g.Block):
+                self.validate()
+        self.receipts[4] = original
+        self.sync()
+        self.contents[g.ATTESTATIONS[4]] = self.contents[g.ATTESTATIONS[4]].replace(
+            '"status": "NOT_RUN"', '"status": "NOT_RUN", "status": "RECORDED"')
+        with self.assertRaisesRegex(g.Block, "duplicate field"):
+            g.validate_attestations(self.checked, self.current, pre_probe=True)
+
+    def test_forged_terminal_record_cannot_pass_even_with_matching_digest(self):
+        self.terminal(recorded=True)
+        original = deepcopy(self.receipts[4])
+        for key, bad in (("live_market_coverage", {"covered": 5, "expected": 5, "missing": []}),
+                         ("mode", "synthetic_test"), ("source_id", "baostock"),
+                         ("error_codes", ["private exception text"]), ("title", "news payload"),
+                         ("requests", {**original["observation"]["requests"], "attempted": 2})):
+            self.receipts[4] = deepcopy(original)
+            self.receipts[4]["observation"][key] = bad
+            self.receipts[3]["probe_digest"] = g.probe_digest(self.receipts[4])
+            with self.subTest(key=key), self.assertRaisesRegex(g.Block, "source probe"):
+                self.validate(pre_probe=False)
+
+    def test_validation_is_lazy_and_loads_the_requested_checkout(self):
+        # This isolated fixture deliberately differs from the real collection module.
+        with tempfile.TemporaryDirectory(prefix="p4s-validator-") as directory:
+            root = Path(directory)
+            package = root / "market_intelligence"
+            package.mkdir()
+            (package / "__init__.py").write_text("", encoding="utf-8")
+            (package / "collection.py").write_text(
+                "def validate_probe_record(value, snapshot_id):\n"
+                "    raise ValueError('different checkout validator')\n", encoding="utf-8")
+            with self.assertRaisesRegex(g.Block, "source probe"):
+                g.validate_source_probe(self.receipts[4], self.snapshot, root=root)
+        g.validate_source_probe(self.receipts[4], self.snapshot)
+        self.assertFalse(any(name.startswith("_p4s_probe_validation_") for name in sys.modules))
+
+    def test_direct_script_context_does_not_need_pythonpath_for_lazy_validator(self):
+        # run_path uses the actual script entrypoint path; keep only tools on the
+        # project's import path and disable environment/user site injection.
+        code = (
+            "import json,runpy,sys; from pathlib import Path; "
+            "script=Path(sys.argv[1]).resolve(); "
+            "sys.path[:]=[str(script.parent)]+[p for p in sys.path if p and "
+            "Path(p).resolve()!=script.parent.parent]; "
+            "g=runpy.run_path(str(script)); "
+            "g['validate_source_probe'](json.loads(sys.argv[2]),sys.argv[3]); print('PASS')"
+        )
+        result = subprocess.run([sys.executable, "-I", "-B", "-c", code,
+                                 str(ROOT / "tools/governance.py"), json.dumps(self.receipts[4]), self.snapshot],
+                                capture_output=True, text=True, check=False)
+        self.assertEqual((result.returncode, result.stdout.strip(), result.stderr), (0, "PASS", ""))
 
 
 class GovernanceTests(unittest.TestCase):
@@ -697,12 +966,12 @@ class GovernanceTests(unittest.TestCase):
         self.write(g.CONTRACT_PATH, self.original_contract.replace(self.contract["baseline"], baseline))
         self.write("governance/policy.toml", self.source_inputs["governance/policy.toml"]
                    .replace(self.contract["baseline"], baseline))
-        # Only the new P4L merge observation points at this temporary baseline.
-        # Historical P0-P4L contracts, products and receipts retain their bytes.
-        prior = json.loads(self.source_inputs["docs/reviews/p4l-merge.json"])
-        self.write_json("docs/reviews/p4l-merge.json", {**prior, "merge_commit": baseline})
+        # Only the new P4C merge observation points at this temporary baseline.
+        # Historical contracts, products and receipts retain their bytes.
+        prior = json.loads(self.source_inputs["docs/reviews/p4c-merge.json"])
+        self.write_json("docs/reviews/p4c-merge.json", {**prior, "merge_commit": baseline})
         self.state = {
-            "schema_version": 1, "active_package": "P4C", "active_contract": g.CONTRACT_PATH,
+            "schema_version": 1, "active_package": "P4S", "active_contract": g.CONTRACT_PATH,
             "branch": g.BRANCH, "baseline": baseline, "package_status": "implemented_unreleased",
             "builder_agents": ["coordinator", "implementation-builder"],
             "stage_registry": [
@@ -723,7 +992,7 @@ class GovernanceTests(unittest.TestCase):
             "last_updated": "2026-11-13",
             "live_integration": {
                 "entry_status": "human_merged",
-                "runtime_implementation": "offline_core_implemented_live_deferred",
+                "runtime_implementation": "limited_source_probe_implemented_model_deferred",
                 "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
                 "prerequisite_register": g.PREREQUISITE_PATH, "permissions_enabled": False,
             },
@@ -776,11 +1045,18 @@ class GovernanceTests(unittest.TestCase):
             **common, "role": "reviewer", "verdict": "PASS", "agent_id": "independent-reviewer",
             "read_only": True, "findings": [], "repair_cycles": 0,
         })
+        probe = {**common, "package_id": "P4S", "status": "BLOCKED_NO_REQUEST",
+                 "observed_at": "2026-01-01T00:00:00Z", "observation": None,
+                 "reason": "probe_gate_blocked"}
+        self.write_json(g.ATTESTATIONS[4], probe)
         self.write_json(g.ATTESTATIONS[3], {
             **common, "role": "release_checker", "verdict": "LOCAL_READY_FOR_PR",
             "agent_id": "independent-release-checker", "read_only": True,
             "remote_ci": "NOT_RUN_AT_SNAPSHOT", "pr_url": None, "merge_status": "not_merged",
             "vps_sync": "not_requested", "next_gate": g.NEXT_GATE,
+            "pre_probe": {"verdict": g.PRE_PROBE_RELEASE, "snapshot_id": current["snapshot_id"],
+                          "agent_id": "independent-release-checker"},
+            "probe_digest": g.probe_digest(probe),
         })
         self.run_git("add", ".")
         return current
@@ -819,16 +1095,16 @@ class GovernanceTests(unittest.TestCase):
 
     def test_exact_scope_and_attestations(self):
         contract = tomllib.loads(g.read_text(self.root, g.CONTRACT_PATH))
-        self.assertEqual(len(g.ALLOWED), 131)
-        self.assertEqual(len(g.PROTECTED), 127)
-        self.assertEqual(len(g.IMMUTABLE), 104)
+        self.assertEqual(len(g.ALLOWED), 145)
+        self.assertEqual(len(g.PROTECTED), 140)
+        self.assertEqual(len(g.IMMUTABLE), 121)
         self.assertIn("docs/reviews/p0-review.json", g.PROTECTED)
         self.assertIn("docs/reviews/p0-review.json", g.IMMUTABLE)
         self.assertIn("docs/PUBLICATION_PROVENANCE.json", g.PROTECTED)
         for field, bad in (("allowed_paths", list(g.ALLOWED) + ["src/product.py"]),
                            ("attestation_paths", ["docs/"]), ("baseline", "0" * 40),
                            ("immutable_paths", list(g.IMMUTABLE[:-1])),
-                           ("attestation_paths", [name.replace("p4c-", "p4-") for name in g.ATTESTATIONS]),
+                           ("attestation_paths", [name.replace("p4s-", "p4-") for name in g.ATTESTATIONS]),
                            ("branch", "main"), ("stage_ids", [1]),
                            ("required_validation", ["echo PASS"])):
             with self.subTest(field=field):
@@ -867,7 +1143,7 @@ class GovernanceTests(unittest.TestCase):
     def test_only_two_p4_lifecycle_states(self):
         g.validate_state(self.state)
         self.state["package_status"] = "building"
-        self.state["live_integration"]["runtime_implementation"] = "offline_workflow_building_live_deferred"
+        self.state["live_integration"]["runtime_implementation"] = "limited_source_probe_building_model_deferred"
         self.write_json("project-state/state.json", self.state)
         g.check(self.root)
         self.attest()
@@ -1386,7 +1662,7 @@ class GovernanceTests(unittest.TestCase):
         self.assertEqual(self.load_json("docs/reviews/p4-merge.json")["package_id"], "P4")
 
     def test_prior_merge_evidence_cannot_be_forged(self):
-        name = "docs/reviews/p4l-merge.json"
+        name = "docs/reviews/p4c-merge.json"
         original = self.load_json(name)
         for key, bad in (("merge_commit", "0" * 40), ("ci_status", "PENDING"),
                          ("merge_status", "not_merged"), ("prior_snapshot", "0" * 64),
@@ -1461,9 +1737,7 @@ class GovernanceTests(unittest.TestCase):
 
     def test_new_offline_implementation_changes_stale_approval_without_thawing_history(self):
         approved = self.attest()
-        for name in ("market_intelligence/publication.py", "market_intelligence/scenario.py",
-                     "market_intelligence/workflow.py", "tests/product/test_scenario.py",
-                     "tests/product/test_workflow.py"):
+        for name in ("market_intelligence/collection.py", "tests/product/test_collection.py"):
             original = g.read_text(self.root, name)
             with self.subTest(path=name):
                 self.write(name, original + "\n# Changed offline implementation.\n")
@@ -1479,7 +1753,7 @@ class GovernanceTests(unittest.TestCase):
 
     def test_bundle_package_and_final_receipt_schema_are_p4c_only(self):
         current = self.attest()
-        self.assertEqual(current["package_id"], "P4C")
+        self.assertEqual(current["package_id"], "P4S")
         self.assertEqual(self.state["package_status"], "implemented_unreleased")
         checked = g.check(self.root)
         for package in ("P4", "P4L", "P5", None):
@@ -1498,6 +1772,44 @@ class GovernanceTests(unittest.TestCase):
         self.write_json(name, {**self.load_json(name), "findings": ["unresolved"]})
         with self.assertRaisesRegex(g.Block, "findings"):
             g.check(self.root)
+
+    def test_real_script_probe_and_final_gates_without_pythonpath(self):
+        # Bind the subprocess checker to this synthetic repository's approved
+        # inputs, just as setUp binds the in-process checker. Real files stay untouched.
+        checker = self.source_inputs["tools/governance.py"]
+        bindings = {"BASELINE": g.BASELINE, "FROZEN_INPUT_HASHES": g.FROZEN_INPUT_HASHES}
+        for node in ast.parse(checker).body:
+            if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+                name = node.targets[0].id
+                if name in bindings:
+                    checker = checker.replace(ast.get_source_segment(
+                        self.source_inputs["tools/governance.py"], node),
+                        name + " = " + repr(bindings[name]), 1)
+        self.write("tools/governance.py", checker)
+        current = self.attest()
+        environment = {key: value for key, value in os.environ.items()
+                       if not key.startswith("GIT_") and key != "PYTHONPATH"}
+
+        def invoke(*args):
+            return subprocess.run([sys.executable, "-I", "-B", "tools/governance.py", *args],
+                                  cwd=self.root, env=environment, capture_output=True,
+                                  text=True, check=False)
+
+        result = invoke("gate")
+        self.assertEqual((result.returncode, result.stdout, result.stderr),
+                         (0, f"{g.LOCAL_RELEASE} ({g.GOVERNANCE_ONLY})\n", ""))
+        probe = self.load_json(g.ATTESTATIONS[4])
+        probe.update(status="NOT_RUN", observed_at=None, observation=None, reason="awaiting_release")
+        self.write_json(g.ATTESTATIONS[4], probe)
+        release = self.load_json(g.ATTESTATIONS[3])
+        release.update(verdict=g.PRE_PROBE_RELEASE, probe_digest=None)
+        self.write_json(g.ATTESTATIONS[3], release)
+        self.run_git("add", *g.ATTESTATIONS)
+        result = invoke("probe-gate")
+        self.assertEqual((result.returncode, result.stdout, result.stderr),
+                         (0, current["snapshot_id"] + "\n", ""))
+        self.assertEqual(invoke("probe-gate", "--ci").returncode, 2)
+        self.assertEqual(invoke("gate").returncode, 1)
 
 
 if __name__ == "__main__":

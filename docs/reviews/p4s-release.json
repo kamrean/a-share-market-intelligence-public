@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a1e876-3140-7a62-8ed4-b369a723eddc",
+  "read_only": true,
+  "snapshot_id": "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3c42",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "limited_Fed_probe_then_exact_head_ci_and_independent_release_then_human_merge; clarify BaoStock rights/transport and Korea/US sources; model remains deferred",
+  "pre_probe": {
+    "verdict": "LOCAL_READY_FOR_LIMITED_PROBE",
+    "snapshot_id": "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3c42",
+    "agent_id": "01a1e876-3140-7a62-8ed4-b369a723eddc"
+  },
+  "probe_digest": "9d7225b06ff7ecc0631c94866e9fad6d932e062f00c7bd8017203282cbf279b4"
+}
