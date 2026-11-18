@@ -5,6 +5,7 @@ import math
 
 from .gate import Calendar
 from .models import (Invalid, MARKETS, UNIVERSE, exact, instant, integer, locator, text)
+from .source_policy import https_location, identifier, validate_source_policy
 
 DOMAINS = frozenset({"market", "sector", "flow", "news", "event", "entity"})
 FLOW_KINDS = frozenset({"provider_estimate", "exchange_statistic", "turnover_proxy"})
@@ -33,16 +34,20 @@ def unique_strings(value, limit, name, minimum=0, width=100):
 
 
 def validate_methods(data):
+    return _validate_methods(data)
+
+
+def _validate_methods(data, *, real=False, source_policy=None):
     exact(data, {"schema_version", "version", "profile_version", "universe_id",
                  "benchmark_symbols", "constituents", "lookback_sessions",
                  "news_half_life_seconds", "news_ttl_seconds", "approach_seconds",
                  "confirmation_grace_seconds", "event_ttl_seconds", "flow", "sources", "rules"})
-    integer(data["schema_version"], 1, 1)
+    integer(data["schema_version"], 2 if real else 1, 2 if real else 1)
     for key in ("version", "profile_version", "universe_id"):
         text(data[key], key, 100)
     if data["benchmark_symbols"] != list(UNIVERSE):
         raise Invalid("fixed benchmark universe changed")
-    unique_strings(data["constituents"], 27, "constituents", 1)
+    unique_strings(data["constituents"], 27, "constituents", 0 if real else 1)
     if set(data["constituents"]) & set(UNIVERSE):
         raise Invalid("benchmark is not a constituent")
     integer(data["lookback_sessions"], 1, 30)
@@ -54,15 +59,25 @@ def validate_methods(data):
     text(data["flow"]["series_kind"], "series_kind", 80)
     if data["flow"]["series_kind"] not in FLOW_KINDS or data["flow"]["enabled"] is not False:
         raise Invalid("only unavailable flow is implemented")
-    array(data["sources"], 8, "sources", 1)
+    array(data["sources"], 8, "sources", 0 if real else 1)
+    policies = ({s["source_id"]: s for s in validate_source_policy(source_policy)["sources"]}
+                if real else {})
     ids = set()
     for source in data["sources"]:
         exact(source, {"source_id", "tier", "locator_prefix", "scopes", "event_ids", "synthetic"})
         text(source["source_id"], "source_id", 80)
         text(source["tier"], "tier", 1)
         locator(source["locator_prefix"])
-        if (source["source_id"] in ids or source["tier"] not in {"A", "B", "C"}
-                or source["synthetic"] is not True
+        if source["source_id"] in ids or source["tier"] not in {"A", "B", "C"}:
+            raise Invalid("invalid source registry identity or tier")
+        if real:
+            identifier(source["source_id"], "source", 80)
+            https_location(source["locator_prefix"], prefix=True)
+            policy = policies.get(source["source_id"])
+            if (source["synthetic"] is not False or policy is None
+                    or source["locator_prefix"] != policy["locator_prefix"]):
+                raise Invalid("real source policy binding mismatch")
+        elif (source["synthetic"] is not True
                 or not source["locator_prefix"].startswith("https://example.invalid/")
                 or not source["locator_prefix"].endswith("/")):
             raise Invalid("invalid synthetic source registry")
@@ -71,6 +86,8 @@ def validate_methods(data):
         if not set(source["scopes"]) <= {"market", "news", "event", "impact", "reaction"}:
             raise Invalid("unknown authority scope")
         unique_strings(source["event_ids"], 20, "event authority")
+    if real and ids != set(policies):
+        raise Invalid("method and policy source identities disagree")
     array(data["rules"], 6, "rules", 6)
     domains = set()
     for rule in data["rules"]:
@@ -88,17 +105,26 @@ def validate_methods(data):
 
 
 def validate_entities(data, methods):
+    return _validate_entities(data, methods)
+
+
+def _validate_entities(data, methods, *, real=False):
     exact(data, {"schema_version", "version", "mapping_refs", "entities"})
-    integer(data["schema_version"], 1, 1)
+    integer(data["schema_version"], 2 if real else 1, 2 if real else 1)
     text(data["version"], "mapping version", 100)
-    unique_strings(data["mapping_refs"], 8, "mapping references", 1, 2048)
+    unique_strings(data["mapping_refs"], 8, "mapping references", 0 if real else 1, 2048)
     for ref in data["mapping_refs"]:
         locator(ref)
-    array(data["entities"], 32, "entities", 1)
+        if real:
+            https_location(ref)
+    array(data["entities"], 32, "entities", 0 if real else 1)
+    if real and data["entities"] and not data["mapping_refs"]:
+        raise Invalid("configured mapping requires source references")
     ids = set()
     sources = {s["source_id"] for s in methods["sources"]}
     for row in data["entities"]:
-        exact(row, {"entity_id", "aliases", "sector_id", "calendar_id", "currency", "unit", "provider"})
+        exact(row, {"entity_id", "aliases", "sector_id", "calendar_id", "currency", "unit", "provider"}
+              | ({"provider_symbol", "publication_delay_seconds"} if real else set()))
         for key in ("entity_id", "sector_id", "calendar_id", "currency", "unit", "provider"):
             text(row[key], key, 100)
         unique_strings(row["aliases"], 8, "aliases", 1, 200)
@@ -109,11 +135,24 @@ def validate_entities(data, methods):
             raise Invalid("benchmark calendar mismatch")
         if row["entity_id"] in MARKETS and row["sector_id"] != "benchmark":
             raise Invalid("benchmark sector mismatch")
+        if real:
+            identifier(row["provider_symbol"], "provider symbol")
+            if row["publication_delay_seconds"] is not None:
+                integer(row["publication_delay_seconds"], 0, 31536000)
+            currency = {"SSE": "CNY", "SZSE": "CNY", "KRX": "KRW", "US_CASH": "USD"}[row["calendar_id"]]
+            unit = "index_points" if row["entity_id"] in MARKETS else "currency_units"
+            if row["currency"] != currency or row["unit"] != unit:
+                raise Invalid("inconsistent currency or unit")
+            provider = next(s for s in methods["sources"] if s["source_id"] == row["provider"])
+            if "market" not in provider["scopes"]:
+                raise Invalid("mapped provider lacks market authority scope")
         ids.add(row["entity_id"])
-    if ids != set(UNIVERSE) | set(methods["constituents"]):
+    expected = set(UNIVERSE) | set(methods["constituents"])
+    if (real and not ids <= expected) or (not real and ids != expected):
         raise Invalid("mapping does not match declared universe")
     constituents = [r for r in data["entities"] if r["entity_id"] in methods["constituents"]]
-    if len({(r["currency"], r["unit"]) for r in constituents}) != 1:
+    combinations = len({(r["currency"], r["unit"]) for r in constituents})
+    if combinations > 1 or (not real and combinations != 1):
         raise Invalid("cross-currency or incompatible turnover universe")
     if any(r["sector_id"] == "benchmark" for r in constituents):
         raise Invalid("constituent requires a sector")
@@ -148,12 +187,19 @@ def rounded(value):
 
 
 def evaluate_market(facts, methods, entities, calendar, as_of):
+    return _evaluate_market(facts, methods, entities, calendar, as_of)
+
+
+def _evaluate_market(facts, methods, entities, calendar, as_of, *, real=False, source_policy=None, guard=None):
     """Evaluate already eligible facts against the complete declared session grid."""
-    validate_methods(methods)
-    validate_entities(entities, methods)
+    _validate_methods(methods, real=real, source_policy=source_policy)
+    _validate_entities(entities, methods, real=real)
     calendar = Calendar.from_dict(calendar)
     cutoff = instant(as_of)
     mapping = {r["entity_id"]: r for r in entities["entities"]}
+    # Shared validation may consume the remaining retention window.
+    if guard is not None:
+        guard()
     bars, conflicts, used = {}, [], set()
     constituent_conflict = False
     for fact in facts:
@@ -182,7 +228,7 @@ def evaluate_market(facts, methods, entities, calendar, as_of):
         return group[0]["payload"] if group else None
 
     def window(symbol, count):
-        sessions = windows[symbol][-count:]
+        sessions = windows.get(symbol, [])[-count:]
         rows = [sample(symbol, s) for s in sessions]
         return sessions, rows, len(sessions) == count and all(r is not None for r in rows)
 
@@ -194,6 +240,8 @@ def evaluate_market(facts, methods, entities, calendar, as_of):
                            "status": "available" if complete else "unavailable"})
     latest, returns, long_returns, prior_returns, sector_members = {}, {}, {}, {}, {}
     for symbol in sorted(methods["constituents"]):
+        if symbol not in mapping:
+            continue
         info = mapping[symbol]
         sector_members.setdefault(info["sector_id"], []).append(symbol)
         sessions, rows, complete = window(symbol, 2)
@@ -206,7 +254,7 @@ def evaluate_market(facts, methods, entities, calendar, as_of):
             prior_returns[symbol] = rows[lookback]["close"] / rows[0]["close"] - 1
     expected = len(methods["constituents"])
     compatible = len({instant(v[0].close_at) for v in latest.values()}) <= 1
-    full = len(returns) == expected and compatible
+    full = expected > 0 and len(returns) == expected and compatible
     counts = {"advancing": sum(v > 0 for v in returns.values()),
               "declining": sum(v < 0 for v in returns.values()),
               "unchanged": sum(v == 0 for v in returns.values())}
@@ -218,7 +266,7 @@ def evaluate_market(facts, methods, entities, calendar, as_of):
     for offset in range(1, lookback + 1):
         amounts, closes = [], []
         for symbol in sorted(methods["constituents"]):
-            sessions = windows[symbol]
+            sessions = windows.get(symbol, [])
             if len(sessions) <= offset:
                 break
             row = sample(symbol, sessions[-1 - offset])
@@ -230,8 +278,9 @@ def evaluate_market(facts, methods, entities, calendar, as_of):
             historical_totals.append(sum(amounts))
     baseline = sum(historical_totals) / lookback if len(historical_totals) == lookback else None
     relative = rounded(turnover / baseline) if turnover is not None and baseline not in (None, 0) else None
-    turnover_result = {"value": turnover, "currency": mapping[methods["constituents"][0]]["currency"],
-                       "unit": mapping[methods["constituents"][0]]["unit"], "relative": relative,
+    first = mapping.get(methods["constituents"][0], {}) if expected else {}
+    turnover_result = {"value": turnover, "currency": first.get("currency"),
+                       "unit": first.get("unit"), "relative": relative,
                        "reason": "insufficient_history" if turnover is None or baseline is None else (
                            "zero_baseline" if baseline == 0 else None)}
     rotation_complete = (full and len(long_returns) == expected
@@ -258,7 +307,19 @@ def evaluate_market(facts, methods, entities, calendar, as_of):
         market_reasons.append(turnover_result["reason"] or "incompatible_sessions")
     if conflicts:
         market_reasons.append("conflicting_market_evidence")
+    sector_reasons = ([] if rotation_complete and not constituent_conflict else
+                      ["insufficient_history" if not constituent_conflict else "conflicting_market_evidence"])
+    if real:
+        if not methods["constituents"]:
+            market_reasons.append("unconfigured_constituents")
+            sector_reasons.append("unconfigured_constituents")
+        if set(mapping) != set(UNIVERSE) | set(methods["constituents"]):
+            market_reasons.append("unconfigured_mapping")
+        if not set(methods["constituents"]) <= set(mapping):
+            sector_reasons.append("unconfigured_mapping")
+        if any(not windows.get(s) for s in (*UNIVERSE, *methods["constituents"])):
+            market_reasons.append("unavailable_calendar")
     return {"benchmarks": benchmarks, "breadth": breadth, "turnover": turnover_result,
             "sectors": sectors, "market_reasons": sorted(set(market_reasons)),
-            "sector_reasons": [] if rotation_complete and not constituent_conflict else ["insufficient_history" if not constituent_conflict else "conflicting_market_evidence"],
+            "sector_reasons": sorted(set(sector_reasons)),
             "conflicting_ids": sorted(conflicts), "used_refs": sorted(used - set(conflicts))}

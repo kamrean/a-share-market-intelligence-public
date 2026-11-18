@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "60a38cef20921ff5096d7144dbb11c2d3a7b0b9aad24410cb1a2723b4878e307",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a1ea56-a4cc-7e41-a5f5-97939ec720fe",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "Human merge after exact-head CI and independent release; select and verify five-index sources and audited runtime input bindings, then model/report integration; no operational permission inherited."
+}

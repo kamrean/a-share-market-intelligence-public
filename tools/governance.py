@@ -1,4 +1,4 @@
-"""Read-only P4E preparation checks; general live readiness blocked (Python 3.12)."""
+"""Read-only P4I composition checks; all operational gates closed (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -17,26 +17,34 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "1a15840caab444637646e695467496e362f80bbb"
-BRANCH = "stage7-source-evidence-preparation"
+BASELINE = "b04f9a9a587a012d962a5f023558d8ff00c03aa1"
+BRANCH = "stage2-real-evidence-composition"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p4e_evidence_preparation.toml"
-TEMPLATE_PATH = "templates/p4e_builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p4e-builder-prompt.md"
+CONTRACT_PATH = "contracts/p4i_real_evidence_composition.toml"
+TEMPLATE_PATH = "templates/p4i_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p4i-builder-prompt.md"
 PREREQUISITE_PATH = "docs/evidence/live-integration-prerequisites.json"
 PREREQUISITE_HASH = "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3"
 SOURCE_PROBE_PATH = "docs/evidence/p4s-source-probe.json"
 SOURCE_PROBE_HASH = "d6169de44000cafe648fb87bc300de498f593bbfae11b24dd992e4c37d258af1"
 SOURCE_PROBE_DIGEST = "9d7225b06ff7ecc0631c94866e9fad6d932e062f00c7bd8017203282cbf279b4"
 SOURCE_SNAPSHOT = "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3c42"
-AUDIT_AGENT = "01a1e932-f790-7d30-9160-e4ebea7ef2bf"
-ATTESTATIONS = tuple([
-    "docs/reviews/p4e-bundle.json",
-    "docs/reviews/p4e-validation.json",
-    "docs/reviews/p4e-review.json",
-    "docs/reviews/p4e-release.json",
-    "docs/evidence/p4e-preparation.json"
+PREPARATION_PATH = "docs/evidence/p4e-preparation.json"
+PREPARATION_HASH = "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8"
+PREPARATION_SNAPSHOT = "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe"
+AUDIT_AGENT = "01a1e9de-cf60-7773-ae33-cf1eccca3246"
+CURRENT_ATTESTATIONS = tuple([
+    "docs/reviews/p4i-bundle.json",
+    "docs/reviews/p4i-validation.json",
+    "docs/reviews/p4i-review.json",
+    "docs/reviews/p4i-release.json"
 ])
+# Historical public bindings support pure P4E audits, never current exemptions.
+ATTESTATIONS = (
+    "docs/reviews/p4e-bundle.json", "docs/reviews/p4e-validation.json",
+    "docs/reviews/p4e-review.json", "docs/reviews/p4e-release.json",
+    "docs/evidence/p4e-preparation.json",
+)
 ALLOWED = tuple([
     ".gitattributes",
     ".github/workflows/governance.yml",
@@ -59,8 +67,176 @@ ALLOWED = tuple([
     "contracts/p4_publication.toml",
     "contracts/p4c_offline_workflow.toml",
     "contracts/p4e_evidence_preparation.toml",
+    "contracts/p4i_real_evidence_composition.toml",
     "contracts/p4s_free_sources.toml",
     "docs/CONSTRUCTION_LOG.md",
+    "docs/EVIDENCE_PREPARATION.md",
+    "docs/FREE_SOURCE_COLLECTION.md",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/LIVE_INTEGRATION_PLAN.md",
+    "docs/OFFLINE_WORKFLOW_PLAN.md",
+    "docs/P1_DESIGN.md",
+    "docs/P2_METHODS.md",
+    "docs/P3_METHODS.md",
+    "docs/P4_METHODS.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/REAL_EVIDENCE_COMPOSITION.md",
+    "docs/SOURCE_MATRIX.md",
+    "docs/evidence/live-integration-prerequisites.json",
+    "docs/evidence/p1-source-probe.json",
+    "docs/evidence/p2-demo.json",
+    "docs/evidence/p3-demo.json",
+    "docs/evidence/p4-demo.json",
+    "docs/evidence/p4-report.txt",
+    "docs/evidence/p4e-preparation.json",
+    "docs/evidence/p4s-source-probe.json",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-merge.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p1-builder-prompt.md",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-entrypoint-review.json",
+    "docs/reviews/p1-merge.json",
+    "docs/reviews/p1-prompt-audit.json",
+    "docs/reviews/p1-release.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-validation.json",
+    "docs/reviews/p2-builder-prompt.md",
+    "docs/reviews/p2-bundle.json",
+    "docs/reviews/p2-entrypoint-review.json",
+    "docs/reviews/p2-merge.json",
+    "docs/reviews/p2-prompt-audit.json",
+    "docs/reviews/p2-release.json",
+    "docs/reviews/p2-review.json",
+    "docs/reviews/p2-validation.json",
+    "docs/reviews/p3-builder-prompt.md",
+    "docs/reviews/p3-bundle.json",
+    "docs/reviews/p3-entrypoint-review.json",
+    "docs/reviews/p3-merge.json",
+    "docs/reviews/p3-prompt-audit.json",
+    "docs/reviews/p3-release.json",
+    "docs/reviews/p3-review.json",
+    "docs/reviews/p3-validation.json",
+    "docs/reviews/p4-builder-prompt.md",
+    "docs/reviews/p4-bundle.json",
+    "docs/reviews/p4-entrypoint-review.json",
+    "docs/reviews/p4-merge.json",
+    "docs/reviews/p4-prompt-audit.json",
+    "docs/reviews/p4-release.json",
+    "docs/reviews/p4-review.json",
+    "docs/reviews/p4-validation.json",
+    "docs/reviews/p4c-builder-prompt.md",
+    "docs/reviews/p4c-bundle.json",
+    "docs/reviews/p4c-entrypoint-review.json",
+    "docs/reviews/p4c-merge.json",
+    "docs/reviews/p4c-prompt-audit.json",
+    "docs/reviews/p4c-release.json",
+    "docs/reviews/p4c-review.json",
+    "docs/reviews/p4c-validation.json",
+    "docs/reviews/p4e-builder-prompt.md",
+    "docs/reviews/p4e-bundle.json",
+    "docs/reviews/p4e-entrypoint-review.json",
+    "docs/reviews/p4e-merge.json",
+    "docs/reviews/p4e-prompt-audit.json",
+    "docs/reviews/p4e-release.json",
+    "docs/reviews/p4e-review.json",
+    "docs/reviews/p4e-validation.json",
+    "docs/reviews/p4i-builder-prompt.md",
+    "docs/reviews/p4i-bundle.json",
+    "docs/reviews/p4i-entrypoint-review.json",
+    "docs/reviews/p4i-prompt-audit.json",
+    "docs/reviews/p4i-release.json",
+    "docs/reviews/p4i-review.json",
+    "docs/reviews/p4i-validation.json",
+    "docs/reviews/p4l-builder-prompt.md",
+    "docs/reviews/p4l-bundle.json",
+    "docs/reviews/p4l-entrypoint-review.json",
+    "docs/reviews/p4l-merge.json",
+    "docs/reviews/p4l-prompt-audit.json",
+    "docs/reviews/p4l-release.json",
+    "docs/reviews/p4l-review.json",
+    "docs/reviews/p4l-validation.json",
+    "docs/reviews/p4s-builder-prompt.md",
+    "docs/reviews/p4s-bundle.json",
+    "docs/reviews/p4s-entrypoint-review.json",
+    "docs/reviews/p4s-merge.json",
+    "docs/reviews/p4s-prompt-audit.json",
+    "docs/reviews/p4s-release.json",
+    "docs/reviews/p4s-review.json",
+    "docs/reviews/p4s-validation.json",
+    "governance/policy.toml",
+    "market_intelligence/__init__.py",
+    "market_intelligence/__main__.py",
+    "market_intelligence/collection.py",
+    "market_intelligence/cost_guard.py",
+    "market_intelligence/delivery.py",
+    "market_intelligence/evaluation.py",
+    "market_intelligence/gate.py",
+    "market_intelligence/intelligence.py",
+    "market_intelligence/ledger.py",
+    "market_intelligence/market_state.py",
+    "market_intelligence/models.py",
+    "market_intelligence/news_events.py",
+    "market_intelligence/preparation.py",
+    "market_intelligence/publication.py",
+    "market_intelligence/research.py",
+    "market_intelligence/runtime.py",
+    "market_intelligence/scenario.py",
+    "market_intelligence/source_policy.py",
+    "market_intelligence/sources.py",
+    "market_intelligence/store.py",
+    "market_intelligence/workflow.py",
+    "project-state/state.json",
+    "requirements.lock",
+    "templates/builder_prompt.md",
+    "templates/p1_builder_prompt.md",
+    "templates/p2_builder_prompt.md",
+    "templates/p3_builder_prompt.md",
+    "templates/p4_builder_prompt.md",
+    "templates/p4c_builder_prompt.md",
+    "templates/p4e_builder_prompt.md",
+    "templates/p4i_builder_prompt.md",
+    "templates/p4l_builder_prompt.md",
+    "templates/p4s_builder_prompt.md",
+    "tests/fixtures/p1_feed.xml",
+    "tests/fixtures/p1_market.csv",
+    "tests/fixtures/p2_input.json",
+    "tests/fixtures/p3_responses.json",
+    "tests/governance/test_governance.py",
+    "tests/product/test_collection.py",
+    "tests/product/test_p1.py",
+    "tests/product/test_p2.py",
+    "tests/product/test_p3.py",
+    "tests/product/test_p4.py",
+    "tests/product/test_preparation.py",
+    "tests/product/test_real_evidence.py",
+    "tests/product/test_scenario.py",
+    "tests/product/test_workflow.py",
+    "tools/governance.py"
+])
+IMMUTABLE = tuple([
+    ".gitattributes",
+    ".gitignore",
+    "config/p1_profile.toml",
+    "config/p2_entities.toml",
+    "config/p2_methods.toml",
+    "config/p3_research.toml",
+    "config/p4_publication.toml",
+    "config/sources.toml",
+    "contracts/p0_stage0.toml",
+    "contracts/p1_sources_evidence.toml",
+    "contracts/p2_intelligence.toml",
+    "contracts/p3_research.toml",
+    "contracts/p4_live_integration_entry.toml",
+    "contracts/p4_publication.toml",
+    "contracts/p4c_offline_workflow.toml",
+    "contracts/p4e_evidence_preparation.toml",
+    "contracts/p4s_free_sources.toml",
     "docs/EVIDENCE_PREPARATION.md",
     "docs/FREE_SOURCE_COLLECTION.md",
     "docs/LEGACY_REUSE_MANIFEST.md",
@@ -151,7 +327,6 @@ ALLOWED = tuple([
     "docs/reviews/p4s-release.json",
     "docs/reviews/p4s-review.json",
     "docs/reviews/p4s-validation.json",
-    "governance/policy.toml",
     "market_intelligence/__init__.py",
     "market_intelligence/__main__.py",
     "market_intelligence/collection.py",
@@ -159,9 +334,7 @@ ALLOWED = tuple([
     "market_intelligence/delivery.py",
     "market_intelligence/evaluation.py",
     "market_intelligence/gate.py",
-    "market_intelligence/intelligence.py",
     "market_intelligence/ledger.py",
-    "market_intelligence/market_state.py",
     "market_intelligence/models.py",
     "market_intelligence/news_events.py",
     "market_intelligence/preparation.py",
@@ -172,7 +345,6 @@ ALLOWED = tuple([
     "market_intelligence/sources.py",
     "market_intelligence/store.py",
     "market_intelligence/workflow.py",
-    "project-state/state.json",
     "requirements.lock",
     "templates/builder_prompt.md",
     "templates/p1_builder_prompt.md",
@@ -187,7 +359,6 @@ ALLOWED = tuple([
     "tests/fixtures/p1_market.csv",
     "tests/fixtures/p2_input.json",
     "tests/fixtures/p3_responses.json",
-    "tests/governance/test_governance.py",
     "tests/product/test_collection.py",
     "tests/product/test_p1.py",
     "tests/product/test_p2.py",
@@ -195,147 +366,9 @@ ALLOWED = tuple([
     "tests/product/test_p4.py",
     "tests/product/test_preparation.py",
     "tests/product/test_scenario.py",
-    "tests/product/test_workflow.py",
-    "tools/governance.py"
-])
-IMMUTABLE = tuple([
-    ".gitattributes",
-    ".gitignore",
-    "config/p1_profile.toml",
-    "config/p2_entities.toml",
-    "config/p2_methods.toml",
-    "config/p3_research.toml",
-    "config/p4_publication.toml",
-    "config/sources.toml",
-    "contracts/p0_stage0.toml",
-    "contracts/p1_sources_evidence.toml",
-    "contracts/p2_intelligence.toml",
-    "contracts/p3_research.toml",
-    "contracts/p4_live_integration_entry.toml",
-    "contracts/p4_publication.toml",
-    "contracts/p4c_offline_workflow.toml",
-    "contracts/p4s_free_sources.toml",
-    "docs/FREE_SOURCE_COLLECTION.md",
-    "docs/LEGACY_REUSE_MANIFEST.md",
-    "docs/LIVE_INTEGRATION_PLAN.md",
-    "docs/OFFLINE_WORKFLOW_PLAN.md",
-    "docs/P1_DESIGN.md",
-    "docs/P2_METHODS.md",
-    "docs/P3_METHODS.md",
-    "docs/P4_METHODS.md",
-    "docs/PUBLICATION_PROVENANCE.json",
-    "docs/SOURCE_MATRIX.md",
-    "docs/evidence/live-integration-prerequisites.json",
-    "docs/evidence/p1-source-probe.json",
-    "docs/evidence/p2-demo.json",
-    "docs/evidence/p3-demo.json",
-    "docs/evidence/p4-demo.json",
-    "docs/evidence/p4-report.txt",
-    "docs/evidence/p4s-source-probe.json",
-    "docs/reviews/blueprint-review.json",
-    "docs/reviews/p0-builder-prompt.md",
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-merge.json",
-    "docs/reviews/p0-prompt-audit.json",
-    "docs/reviews/p0-release.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-validation.json",
-    "docs/reviews/p1-builder-prompt.md",
-    "docs/reviews/p1-bundle.json",
-    "docs/reviews/p1-entrypoint-review.json",
-    "docs/reviews/p1-merge.json",
-    "docs/reviews/p1-prompt-audit.json",
-    "docs/reviews/p1-release.json",
-    "docs/reviews/p1-review.json",
-    "docs/reviews/p1-validation.json",
-    "docs/reviews/p2-builder-prompt.md",
-    "docs/reviews/p2-bundle.json",
-    "docs/reviews/p2-entrypoint-review.json",
-    "docs/reviews/p2-merge.json",
-    "docs/reviews/p2-prompt-audit.json",
-    "docs/reviews/p2-release.json",
-    "docs/reviews/p2-review.json",
-    "docs/reviews/p2-validation.json",
-    "docs/reviews/p3-builder-prompt.md",
-    "docs/reviews/p3-bundle.json",
-    "docs/reviews/p3-entrypoint-review.json",
-    "docs/reviews/p3-merge.json",
-    "docs/reviews/p3-prompt-audit.json",
-    "docs/reviews/p3-release.json",
-    "docs/reviews/p3-review.json",
-    "docs/reviews/p3-validation.json",
-    "docs/reviews/p4-builder-prompt.md",
-    "docs/reviews/p4-bundle.json",
-    "docs/reviews/p4-entrypoint-review.json",
-    "docs/reviews/p4-merge.json",
-    "docs/reviews/p4-prompt-audit.json",
-    "docs/reviews/p4-release.json",
-    "docs/reviews/p4-review.json",
-    "docs/reviews/p4-validation.json",
-    "docs/reviews/p4c-builder-prompt.md",
-    "docs/reviews/p4c-bundle.json",
-    "docs/reviews/p4c-entrypoint-review.json",
-    "docs/reviews/p4c-merge.json",
-    "docs/reviews/p4c-prompt-audit.json",
-    "docs/reviews/p4c-release.json",
-    "docs/reviews/p4c-review.json",
-    "docs/reviews/p4c-validation.json",
-    "docs/reviews/p4l-builder-prompt.md",
-    "docs/reviews/p4l-bundle.json",
-    "docs/reviews/p4l-entrypoint-review.json",
-    "docs/reviews/p4l-merge.json",
-    "docs/reviews/p4l-prompt-audit.json",
-    "docs/reviews/p4l-release.json",
-    "docs/reviews/p4l-review.json",
-    "docs/reviews/p4l-validation.json",
-    "docs/reviews/p4s-builder-prompt.md",
-    "docs/reviews/p4s-bundle.json",
-    "docs/reviews/p4s-entrypoint-review.json",
-    "docs/reviews/p4s-prompt-audit.json",
-    "docs/reviews/p4s-release.json",
-    "docs/reviews/p4s-review.json",
-    "docs/reviews/p4s-validation.json",
-    "market_intelligence/__init__.py",
-    "market_intelligence/__main__.py",
-    "market_intelligence/collection.py",
-    "market_intelligence/cost_guard.py",
-    "market_intelligence/delivery.py",
-    "market_intelligence/evaluation.py",
-    "market_intelligence/gate.py",
-    "market_intelligence/intelligence.py",
-    "market_intelligence/ledger.py",
-    "market_intelligence/market_state.py",
-    "market_intelligence/models.py",
-    "market_intelligence/news_events.py",
-    "market_intelligence/publication.py",
-    "market_intelligence/research.py",
-    "market_intelligence/runtime.py",
-    "market_intelligence/scenario.py",
-    "market_intelligence/sources.py",
-    "market_intelligence/store.py",
-    "market_intelligence/workflow.py",
-    "requirements.lock",
-    "templates/builder_prompt.md",
-    "templates/p1_builder_prompt.md",
-    "templates/p2_builder_prompt.md",
-    "templates/p3_builder_prompt.md",
-    "templates/p4_builder_prompt.md",
-    "templates/p4c_builder_prompt.md",
-    "templates/p4l_builder_prompt.md",
-    "templates/p4s_builder_prompt.md",
-    "tests/fixtures/p1_feed.xml",
-    "tests/fixtures/p1_market.csv",
-    "tests/fixtures/p2_input.json",
-    "tests/fixtures/p3_responses.json",
-    "tests/product/test_collection.py",
-    "tests/product/test_p1.py",
-    "tests/product/test_p2.py",
-    "tests/product/test_p3.py",
-    "tests/product/test_p4.py",
-    "tests/product/test_scenario.py",
     "tests/product/test_workflow.py"
 ])
-PROTECTED = tuple(sorted(set(ALLOWED) - set(ATTESTATIONS)))
+PROTECTED = tuple(sorted(set(ALLOWED) - set(CURRENT_ATTESTATIONS)))
 PERMISSIONS = {
     "research_only": True,
     "external_data_access_allowed": False,
@@ -362,62 +395,65 @@ VALIDATION_COMMANDS = [
     "git diff --check"
 ]
 AUDIT_INPUTS = (CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH,
-                "AGENTS.md", "docs/EVIDENCE_PREPARATION.md", PREREQUISITE_PATH, SOURCE_PROBE_PATH)
+                "AGENTS.md", "docs/REAL_EVIDENCE_COMPOSITION.md", PREREQUISITE_PATH,
+                SOURCE_PROBE_PATH, PREPARATION_PATH)
 # Approved independent audit inputs, not hashes supplied by a mutable receipt.
 FROZEN_INPUT_HASHES = {
-    "BLUEPRINT.md": "f4e8e76fbe446f745781edae63b9e91a5501307831ff62d67c25c8ef7c482116",
-    "START_CONSTRUCTION_PROMPT.md": "d51a911ca7a39c2cb76a5317e31b2b2b176b396494843a31cf343fc65e8f2735",
-    CONTRACT_PATH: "7e309eed45175a144dcdc72f0bef7a7fc3749639a39748b285a4ee06c29975aa",
-    "governance/policy.toml": "098bb80605c8ace96fcc09466f74ca405418ccc607b06799d8eb3aba947c32f4",
-    TEMPLATE_PATH: "f0414ffcd98955679d3571815f1e81e98ca4eb409e288c10cb45680728f95182",
-    PROMPT_PATH: "609dce6ea5959c03ae3d8d93b6b45de761635eca8e8ef0d5f468a4407e6473dd",
-    "AGENTS.md": "c6c865975fff34275e294516564c8ac9464463df63f9811293157acd376ce204",
-    "docs/EVIDENCE_PREPARATION.md": "c6f2ca72a4d3f9c45183e127d4988891fbf8e6d96c93764c124a76fef5500713",
+    "BLUEPRINT.md": "48805463dda90e590537ef6a48545b8aa1bfd9ff1387bcf38e61c5b8dd136236",
+    "START_CONSTRUCTION_PROMPT.md": "1938b7d29c619cebc70eb65fbe47564c5d37cd6b6ef3f1f23ba246e914b4eb70",
+    CONTRACT_PATH: "b594dda0870b1aabd033e0a09f6a04f35a6cbcc96ee7b5e69f80d8e4f5af67cc",
+    "governance/policy.toml": "e698bfafb3d51bb2b5b46920d31abd861685dea71733da7bb0ae6b124570f621",
+    TEMPLATE_PATH: "d15f745123199966944d1db440f4625ca649d15ea4ece25b299133bcc9866f12",
+    PROMPT_PATH: "ecd15f5d3c3a47230b9fb2ce5796f2c23f08bc92f334db38e57bde81778f2d01",
+    "AGENTS.md": "f0936705886fbea46b351ed8520cebd9808101a0ad50f9ea1cc6e414d7c22805",
+    "docs/REAL_EVIDENCE_COMPOSITION.md": "5ea32e3f7afec88796dbc017c283b5f595c777fdfebe8d3dbe2d88c6f2c07a31",
     PREREQUISITE_PATH: PREREQUISITE_HASH,
     SOURCE_PROBE_PATH: SOURCE_PROBE_HASH,
+    PREPARATION_PATH: PREPARATION_HASH,
 }
 
 
 def dependency():
     return {
-        "package_id": "P4S",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/8",
+        "package_id": "P4E",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/9",
         "merge_commit": BASELINE,
-        "merged_at": "2026-11-17T10:49:51Z",
-        "tested_head": "264a2cee207e4fdef400055551148d9117fcf306",
-        "pr_ci_run": 44043527840,
-        "merge_ci_run": 44068430541,
+        "merged_at": "2026-11-17T13:44:10Z",
+        "tested_head": "5dd2b67156d91b4edbfdcafa4c86c7debab158e4",
+        "pr_ci_run": 44092017656,
+        "merge_ci_run": 44095705459,
         "ci_status": "PASS",
         "merge_status": "merged"
     }
 
 
 POLICY = {
-    "schema_version": 1, "active_package": "P4E", "python_version": "3.12",
-    "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
+    "schema_version": 1, "active_package": "P4I", "python_version": "3.12",
+    "merge_tier": "C", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
     "remote_creation_authorized": False, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
     "repository": REPOSITORY, "max_repair_cycles": 1,
     "reviewer_must_be_independent": True, "construction_subagents_allowed": True,
     "permissions": PERMISSIONS,
 }
+CURRENT_RECEIPT_PATHS = {
+    "blueprint_review": "docs/reviews/p4i-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4i-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    **dict(zip(("bundle", "validation", "reviewer", "release"), CURRENT_ATTESTATIONS)),
+}
 RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4e-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4e-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    "prompt_audit": "docs/reviews/p4e-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p4e-builder-prompt.md",
     **dict(zip(("bundle", "validation", "reviewer", "release", "preparation"), ATTESTATIONS)),
 }
-NEXT_GATE = ("Human merge after exact-head CI and independent release; resolve five-index "
-             "rights/transport and real research integration; model remains deferred.")
+NEXT_GATE = ("Human merge after exact-head CI and independent release; select and verify "
+             "five-index sources and audited runtime input bindings, then model/report "
+             "integration; no operational permission inherited.")
 LOCAL_RELEASE = "LOCAL_READY_FOR_PR"
+# Historical receipt vocabulary only; no pre-preparation validator or capability.
 PRE_PREPARATION_RELEASE = "LOCAL_READY_FOR_LOCAL_PREPARATION"
-LOCAL_PREPARATION = {
-    "source": "fed_press", "input_store": "p4s-fed-probe.sqlite",
-    "source_receipt": SOURCE_PROBE_PATH, "source_snapshot": SOURCE_SNAPSHOT,
-    "source_probe_digest": SOURCE_PROBE_DIGEST, "read_only": True, "network_requests": 0,
-    "processing_mode": "historical_replay", "requires_independent_review": True,
-    "requires_preparation_release": True,
-}
-GOVERNANCE_ONLY = ("local-preparation governance only; model/live-readiness-blocked: "
+GOVERNANCE_ONLY = ("pure-composition governance only; model/live-readiness-blocked: "
                    "BLOCKED_EXTERNAL_PREREQUISITES")
 
 
@@ -465,21 +501,20 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P4E", "stage_ids": [2, 4, 7],
-        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
+        "schema_version": 1, "package_id": "P4I", "stage_ids": [2, 3, 4],
+        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "C",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
         "prompt_audit_required": True, "independent_review_required": True,
         "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
-        "immutable_paths": list(IMMUTABLE), "attestation_paths": list(ATTESTATIONS),
+        "immutable_paths": list(IMMUTABLE), "attestation_paths": list(CURRENT_ATTESTATIONS),
         "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
         "required_reads": ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
                            "governance/policy.toml", "project-state/state.json",
-                           "docs/reviews/p4s-merge.json", "docs/EVIDENCE_PREPARATION.md",
-                           SOURCE_PROBE_PATH, PREREQUISITE_PATH],
+                           "docs/reviews/p4e-merge.json", "docs/REAL_EVIDENCE_COMPOSITION.md",
+                           PREREQUISITE_PATH, SOURCE_PROBE_PATH, PREPARATION_PATH],
         "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
         "repository": REPOSITORY, "dependency": dependency(), "next_gate": NEXT_GATE,
-        "local_preparation": LOCAL_PREPARATION,
     }
     text_fields = ("title", "objective", "bootstrap_prompt", "rollback")
     list_fields = ("deliverables", "negative_tests", "receipt_rules")
@@ -495,7 +530,7 @@ def validate_contract(contract):
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P4E", "active_contract": CONTRACT_PATH,
+        "schema_version": 1, "active_package": "P4I", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
@@ -504,7 +539,7 @@ def validate_state(state):
                    "repository": "a-share-market-intelligence-public",
                    "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                    "merge_status": "not_merged"},
-        "receipts": RECEIPT_PATHS,
+        "receipts": CURRENT_RECEIPT_PATHS,
         "next_gate": NEXT_GATE,
     }
     keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated",
@@ -515,9 +550,9 @@ def validate_state(state):
     require(type(state["package_status"]) is str and state["package_status"] in
             ("contract_prepared_unreleased", "building", "implemented_unreleased"),
             "state: premature/unknown package status")
-    runtime_status = ("retained_evidence_preparation_model_deferred"
+    runtime_status = ("mode_safe_composition_model_deferred"
                       if state["package_status"] == "implemented_unreleased"
-                      else "retained_evidence_preparation_planned_model_deferred")
+                      else "mode_safe_composition_planned_model_deferred")
     exact(state["live_integration"], {
         "entry_status": "human_merged", "runtime_implementation": runtime_status,
         "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
@@ -845,7 +880,9 @@ def scan_secrets(name, text):
 
 
 def validate_prerequisite(receipt, role, names, contents):
-    require(type(receipt) is dict, f"{role}: expected receipt object")
+    fields = ("schema_version", "role", "verdict", "read_only", "independent", "agent_id",
+              "files", "findings", "repair_cycles")
+    keys(receipt, (*fields, "baseline") if role == "blueprint_reviewer" else fields, role)
     for key, value in {"schema_version": 1, "role": role, "verdict": "PASS",
                        "read_only": True, "independent": True}.items():
         exact(receipt.get(key), value, f"{role}.{key}")
@@ -862,7 +899,7 @@ def validate_prerequisite(receipt, role, names, contents):
         require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: repair bound")
     else:
         cycles = receipt.get("repair_cycles")
-        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4E repair bound")
+        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4I repair bound")
 
 
 def validate_historical_probe(text):
@@ -875,6 +912,15 @@ def validate_historical_probe(text):
     return value
 
 
+def validate_historical_preparation(text):
+    text = normalize_text(text)
+    exact(sha256(text), PREPARATION_HASH, "historical preparation frozen content")
+    value = parse_json(text)
+    exact(value["snapshot_id"], PREPARATION_SNAPSHOT, "historical preparation snapshot")
+    exact(value["status"], "RECORDED", "historical preparation status")
+    return value
+
+
 def check(root=ROOT, *, ci=False, complete_index=False):
     root = Path(root).resolve()
     contents = {name: read_text(root, name) for name in PROTECTED}
@@ -884,30 +930,31 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     validate_state(state)
     validate_live_prerequisites(contents[PREREQUISITE_PATH])
     validate_historical_probe(contents[SOURCE_PROBE_PATH])
-    prior = parse_json(contents["docs/reviews/p4s-merge.json"])
+    validate_historical_preparation(contents[PREPARATION_PATH])
+    prior = parse_json(contents["docs/reviews/p4e-merge.json"])
     expected_prior = {
         "schema_version": 1, "role": "historical_merge_observation",
         "observed_on": "2026-11-17", **dependency(),
-        "prior_snapshot": SOURCE_SNAPSHOT,
-        "prior_gate_check": "PASS on merged main using --ci; frozen local P4S receipt remains historical",
-        "authority": "Evidence of prior human merge, not authorization for new requests or live integration.",
+        "prior_snapshot": PREPARATION_SNAPSHOT,
+        "prior_gate_check": "PASS on merged main using --ci; frozen P4E receipts remain historical",
+        "authority": "Evidence of prior human merge, not authorization for any operational action.",
     }
     exact(prior, expected_prior, "prior merge evidence")
     exact(contents[PROMPT_PATH], render_prompt(contract, contents[TEMPLATE_PATH]), "builder prompt")
-    validate_prerequisite(parse_json(contents[RECEIPT_PATHS["blueprint_review"]]),
+    validate_prerequisite(parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]]),
                           "blueprint_reviewer", ("BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md"),
                           contents)
-    validate_prerequisite(parse_json(contents[RECEIPT_PATHS["prompt_audit"]]), "prompt_auditor",
+    validate_prerequisite(parse_json(contents[CURRENT_RECEIPT_PATHS["prompt_audit"]]), "prompt_auditor",
                           AUDIT_INPUTS, contents)
-    entrypoint_cycles = parse_json(contents[RECEIPT_PATHS["blueprint_review"]])["repair_cycles"]
-    audit_cycles = parse_json(contents[RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
-    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4E repair bound or reset")
+    entrypoint_cycles = parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]])["repair_cycles"]
+    audit_cycles = parse_json(contents[CURRENT_RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
+    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4I repair bound or reset")
     for role in ("blueprint_review", "prompt_audit"):
-        agent = parse_json(contents[RECEIPT_PATHS[role]])["agent_id"]
+        agent = parse_json(contents[CURRENT_RECEIPT_PATHS[role]])["agent_id"]
         require(agent == agent.strip() and agent not in state["builder_agents"],
                 f"{role}: builder self-review")
         exact(agent, AUDIT_AGENT, f"{role}: approved independent audit agent")
-    for name in ATTESTATIONS:
+    for name in CURRENT_ATTESTATIONS:
         path = safe_path(root, name)
         if path.exists():
             contents[name] = read_text(root, name)
@@ -932,10 +979,10 @@ def snapshot(contents):
 def make_bundle(checked):
     contract, _state, contents, changed = checked
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P4E", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P4I", "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
-            "attestation_paths": list(ATTESTATIONS), "scope_result": "PASS"}
+            "attestation_paths": list(CURRENT_ATTESTATIONS), "scope_result": "PASS"}
 
 
 def bundle(root=ROOT, *, ci=False):
@@ -1008,14 +1055,15 @@ def validate_preparation_record(value, snapshot_id, *, root=ROOT):
                 del sys.modules[name]
 
 
-def validate_attestations(checked, current, *, pre_preparation=False, root=ROOT):
+def _validate_review_attestations(checked, current, *, paths, audit_path, next_gate,
+                                  release_fields=()):
     contract, state, contents, _changed = checked
     require(state["package_status"] == "implemented_unreleased", "gate: state is still building")
     receipts = []
-    for name in ATTESTATIONS:
+    for name in paths:
         require(name in contents, f"missing required receipt: {name}")
         receipts.append(parse_json(contents[name]))
-    saved, validation, review, release, preparation = receipts
+    saved, validation, review, release = receipts
     keys(saved, current, "bundle receipt")
     # Paths may move from untracked to committed after review; neither status nor HEAD is approval.
     for key, value in current.items():
@@ -1037,52 +1085,67 @@ def validate_attestations(checked, current, *, pre_preparation=False, root=ROOT)
                        "findings": []}.items():
         exact(review[key], value, f"review receipt.{key}")
     cycles = review["repair_cycles"]
-    audit_cycles = parse_json(contents[RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
-    require(type(cycles) is int and audit_cycles <= cycles <= 1, "review receipt: P4E repair bound or reset")
+    audit_cycles = parse_json(contents[audit_path])["repair_cycles"]
+    require(type(audit_cycles) is int and type(cycles) is int and 0 <= audit_cycles <= cycles <= 1,
+            "review receipt: repair bound or reset")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
-                   "merge_status", "vps_sync", "next_gate", "pre_preparation", "preparation_digest"), "release receipt")
+                   "merge_status", "vps_sync", "next_gate", *release_fields), "release receipt")
     for key, value in {**common, "role": "release_checker", "read_only": True,
-                       "verdict": PRE_PREPARATION_RELEASE if pre_preparation else LOCAL_RELEASE,
+                       "verdict": LOCAL_RELEASE,
                        "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                        "pr_url": None, "merge_status": "not_merged", "vps_sync": "not_requested",
-                       "next_gate": NEXT_GATE}.items():
+                       "next_gate": next_gate}.items():
         exact(release[key], value, f"release receipt.{key}")
     for role, receipt in (("reviewer", review), ("release_checker", release)):
         nonempty(receipt["agent_id"], f"{role}.agent_id")
         require(receipt["agent_id"] == receipt["agent_id"].strip() and
                 receipt["agent_id"] not in state["builder_agents"], f"{role}: builder self-review")
     require(release["agent_id"] != review["agent_id"],
-            "release_checker: Tier D needs a separate independent release agent")
+            "release_checker: needs a separate independent release agent")
+    # Identity strings bind records, not authenticity. Actual independence needs external audit.
+    return release
+
+
+def validate_current_attestations(checked, current):
+    _validate_review_attestations(
+        checked, current, paths=CURRENT_ATTESTATIONS,
+        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE)
+
+
+def validate_attestations(checked, current, *, root=ROOT):
+    """Pure terminal P4E audit compatibility; never a P4I approval or preapproval."""
+    contract, state, contents, _changed = checked
+    require(all(package in (None, "P4E") for package in
+                (contract.get("package_id"), state.get("active_package"), current.get("package_id"))),
+            "historical preparation audit: P4E records only, not current P4I approval")
+    release = _validate_review_attestations(
+        checked, current, paths=ATTESTATIONS[:4], audit_path=RECEIPT_PATHS["prompt_audit"],
+        next_gate=contract.get("next_gate", NEXT_GATE),
+        release_fields=("pre_preparation", "preparation_digest"))
     exact(release["pre_preparation"], {
         "verdict": PRE_PREPARATION_RELEASE, "snapshot_id": current["snapshot_id"],
         "agent_id": release["agent_id"],
-    }, "release receipt.pre_preparation")
+    }, "historical release receipt.pre_preparation")
+    require(PREPARATION_PATH in contents, "missing historical preparation receipt")
+    preparation = parse_json(contents[PREPARATION_PATH])
     validate_preparation_record(preparation, current["snapshot_id"], root=root)
-    if pre_preparation:
-        exact(preparation["status"], "NOT_RUN", "pre-preparation observation status")
-        exact(release["preparation_digest"], None, "release receipt.preparation_digest")
-    else:
-        exact(preparation["status"], "RECORDED", "final release: terminal preparation required")
-        exact(release["preparation_digest"], preparation_digest(preparation),
-              "release receipt.preparation_digest")
-    # Identity strings bind records, not authenticity. Actual independence needs external audit.
+    exact(preparation["status"], "RECORDED", "historical terminal preparation required")
+    exact(release["preparation_digest"], preparation_digest(preparation),
+          "historical release receipt.preparation_digest")
 
 
 def gate(root=ROOT, *, ci=False):
     checked = check(root, ci=ci, complete_index=True)
-    validate_attestations(checked, make_bundle(checked), root=root)
+    validate_current_attestations(checked, make_bundle(checked))
     return LOCAL_RELEASE
 
 
-def probe_gate(root=ROOT):
-    raise Block("P4E: historical P4S probe capability is closed; no network request authorized")
+def probe_gate(root=ROOT, *, ci=False):
+    raise Block("P4I: historical P4S probe capability is closed; no network request authorized")
 
 
-def preparation_gate(root=ROOT):
-    checked = check(root, complete_index=True)
-    current = make_bundle(checked)
-    validate_attestations(checked, current, pre_preparation=True, root=root)
-    return current["snapshot_id"]
+def preparation_gate(root=ROOT, *, ci=False):
+    raise Block("P4I: historical P4E preparation capability is closed; no runtime-store access authorized")
 
 
 def main(argv=None, *, root=ROOT):
@@ -1094,8 +1157,9 @@ def main(argv=None, *, root=ROOT):
                                help="skip local branch identity only; retain baseline/scope/permission checks")
         if command == "prompt":
             subparser.add_argument("--verify", action="store_true")
-    subparsers.add_parser("probe-gate")
-    subparsers.add_parser("preparation-gate")
+    for command in ("probe-gate", "preparation-gate"):
+        subparsers.add_parser(command).add_argument(
+            "--ci", action="store_true", help="capability remains closed even in CI")
     args = parser.parse_args(argv)
     try:
         if args.command == "prompt":
@@ -1113,9 +1177,9 @@ def main(argv=None, *, root=ROOT):
         elif args.command == "bundle":
             print(json.dumps(bundle(root, ci=args.ci), indent=2, sort_keys=True))
         elif args.command == "probe-gate":
-            print(probe_gate(root))
+            print(probe_gate(root, ci=args.ci))
         elif args.command == "preparation-gate":
-            print(preparation_gate(root))
+            print(preparation_gate(root, ci=args.ci))
         else:
             print(f"{gate(root, ci=args.ci)} ({GOVERNANCE_ONLY})")
         return 0

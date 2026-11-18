@@ -10,7 +10,7 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P4S are human-merged in this public repository. Stage1 retains source gaps;
+P0-P4E are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
 simulated delivery safeguards. It does not complete the research MVP, full
@@ -39,7 +39,7 @@ status, including when it has not run. An RSS result cannot satisfy index covera
 
 P1's original official Federal Reserve press observation remains historical.
 P4S's one official-news request is completed and its allowance consumed. General
-retrieval stays disabled; P4E does not renew the historical probe capability.
+retrieval stays disabled. P4I closes both historical probe and preparation gates.
 BaoStock stays disabled pending rights/transport clarification; see the
 [bounded source plan](docs/FREE_SOURCE_COLLECTION.md). Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
@@ -55,7 +55,8 @@ receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json
 [P4 merge evidence](docs/reviews/p4-merge.json) and
 [P4L merge evidence](docs/reviews/p4l-merge.json) and
 [P4C merge evidence](docs/reviews/p4c-merge.json) and
-[P4S merge evidence](docs/reviews/p4s-merge.json) record actual public closeout.
+[P4S merge evidence](docs/reviews/p4s-merge.json) and
+[P4E merge evidence](docs/reviews/p4e-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -72,14 +73,11 @@ and capture/publication/first-seen times; local historical processing is not
 a new live observation. Typed Facts and deduplication do not produce an accepted
 research bundle or allow real data into the synthetic research/report APIs.
 
-After independent review and the separate local preparation release, the
-command reads only the fixed existing per-user P4S store, outside Git:
-
-```text
-python -m market_intelligence.preparation prepare
-```
-
-It never creates or changes that store, fetches content or reads credentials.
+P4E's separately reviewed local preparation ran before its human merge. Its
+[immutable result](docs/evidence/p4e-preparation.json) prepared20 inputs, with8
+eligible and12 stale at the original observation point. P4I does not repeat it:
+the historical `preparation prepare` command is now blocked by the active gate.
+The old command never creates or changes that store, fetches content or reads credentials.
 Expired or unavailable content remains unavailable; the public diagnostic output
 contains counts/IDs/hashes and limitations, not news titles or private paths.
 See the immutable [P4S observation](docs/evidence/p4s-source-probe.json): its feed
@@ -87,6 +85,34 @@ result is degraded, news freshness remains BLOCK and live benchmarks remain0/5.
 Do not delete the input store to renew a request allowance. P4E does not run
 retention cleanup; the historical collection tool's explicit sweep is separate
 from this read-only preparation operation. BaoStock has not been tested or enabled.
+
+## Mode-Safe Evidence Composition
+
+The [P4I plan](docs/REAL_EVIDENCE_COMPOSITION.md) adds a separate, pure in-memory
+composition boundary for caller-supplied real-source Facts. Their source mode
+remains `live_observation`, while processing is explicitly `historical_replay`.
+Original evidence times and source identities are preserved. This is not a new
+live run, a collector, a runtime-store importer or a research/report dispatcher.
+The legacy synthetic APIs, scenarios and demos remain separate and unchanged.
+
+Source-policy assessments are specific to a source, operation and personal local
+research purpose. Applicable retention and local-analysis rights must permit the
+current operation; unknown future model/delivery rights do not independently
+block local composition, but those operations remain disabled. A caller-supplied
+policy is an auditable specification, not proof of entitlement or authenticity.
+
+Retention is checked against actual processing time, including on verification.
+Missing mappings, calendars, constituents, benchmark data and flow remain visible
+gaps, not synthetic replacements or zero-filled successes. Input-domain results
+do not change operational readiness: it remains `BLOCKED_EXTERNAL_PREREQUISITES`,
+with no permission grant, no new live runs and0/5 live-verified benchmarks.
+
+There is no new CLI, export or persistent store for these bundles. Existing
+research and publication entrypoints reject their distinct schema. A later
+reviewed importer must bind actual acquisition, source identity and rejection
+records before genuine research can consume real evidence. Current tests use
+authored real-shaped inputs, not actual observations. Source selection and the
+final model/private-delivery integration remain outstanding.
 
 ## Configurable Offline Workflow
 
@@ -274,7 +300,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage7-source-evidence-preparation`. The gate checks
+The active construction branch is `stage2-real-evidence-composition`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

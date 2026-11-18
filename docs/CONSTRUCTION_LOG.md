@@ -1042,3 +1042,135 @@ The governance test file is explicitly mutable in this contract. The Reviewer
 was told to hold the formal second verdict before this fixture alignment; no
 second Reviewer verdict or Release approval has occurred. Full validation must
 be rerun on the final frozen snapshot; intermediate failures are not PASS.
+
+## 2026-11-17 P4E Merge and P4I Entry
+
+PR9 human-merged at2026-11-17T13:44:10Z, commit
+b04f9a9a587a012d962a5f023558d8ff00c03aa1. Exact PR head
+5dd2b67156d91b4edbfdcafa4c86c7debab158e4 passed run44092017656;
+merged-main run44095705459 passed both Ubuntu/Windows. Clean main synced and
+prior check --ci / gate --ci passed before new branch creation. Original P4E
+pending/failure text above is time-ordered history, not the current verdict.
+Final P4E snapshot2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe
+has actual Reviewer PASS after one R1, separate local/remote release PASS and
+recorded read-only preparation20/8eligible/12stale/8clusters. The full source
+readiness remains BLOCK and benchmarks0/5; no new operational grant follows.
+
+New branch stage2-real-evidence-composition starts P4I. Current pure P2 code
+accepts only synthetic inputs; P4I adds an explicit mode-safe historical replay
+composition boundary without rewriting historical synthetic behavior. Only
+intelligence.py and market_state.py may change among existing product files;
+new source_policy.py and test_real_evidence.py form the bounded extension.
+All429 prior product cases remain byte-identical;114 governance cases/protections
+are retained. Exact scope172 paths,147 immutable,168 protected,four attestations.
+
+Source researcher01a1e9d2-2026-7d53-a9b1-46ac1d430103 used primary documentation
+only. It confirmed the need to distinguish source x operation x purpose, not
+require unperformed future egress rights for every current local calculation.
+It did not establish allfive sources, select providers, inspect keys or perform
+market requests. BaoStock399006/transport and FSC/EODHD identity/usage/account
+questions remain explicit. The plan preserves links and limitations; old source
+registers remain frozen historical evidence, not retroactively rewritten.
+
+All operational permissions remain false. No actual runtime-store read, network,
+new source observation, SDK/model/Telegram/scheduler/trading or VPS. Old probe
+and preparation capabilities close under P4I. New input-domain eligibility is
+not runtime authorization, genuine source verification or MVP acceptance.
+Planning/state/prompt prepared; actual independent entrypoint/Prompt Auditor
+review is pending. Product/checker implementation has NOT started. One R0/R1
+repair total, unknown/R2+ or second BLOCK escalates; human merge only.
+
+### P4I Pre-Implementation Audit and Ownership
+
+Independent agent01a1e9de-cf60-7773-ae33-cf1eccca3246 returned actual entrypoint
+Reviewer PASS and Prompt Auditor PASS, findings empty, repair_cycles0. It
+independently checked the PR9/main CI bindings, clean pre-implementation product
+and checker bytes, exact scope and deterministic prompt, and all11 audited file
+hashes. The two receipts preserve these actual results; planning PASS is not
+implementation, source readiness or operational approval.
+
+Implementation began only after both PASS results. Product Builder
+01a1e9e5-7d2d-71a0-bc5f-d3b2fe7820db owns the four product/test paths; Governance
+Builder01a1e9e5-7fb9-7d53-8498-bf24cbc5e71e owns checker, governance tests and CI.
+Coordinator owns docs/state/attestations. README distinguishes closed historical
+commands from current pure APIs and preserves the future importer/rights/model
+gaps. No actual evidence store, source request or delivery is part of this work.
+
+### P4I Candidate Implementation Freeze
+
+Product Builder delivered the four owned paths. New build_replay_bundle and
+verify_replay_bundle reuse the shared domain engine while preserving the old
+synthetic entrypoints and demo hash. Bounded source-policy decisions distinguish
+current local rights from disabled future egress; reference documents can live
+on an official portal/licensor origin with bounded queries, without widening
+Fact origin/path matching. Actual-clock retention checks precede semantic use
+and return, including re-verification. Missing/partial real specifications keep
+the full five-index denominator and visible unavailable domains. New bundles
+remain private historical replay, blocked for legacy research/publication.
+
+Governance Builder delivered checker, governance tests and the two-line CI
+binding update. All114 prior governance test names/protections remain, with13
+new cases (127 total). Current gates use explicit four-record CURRENT bindings;
+the five-record legacy API remains a pure terminal historical auditor only.
+The first product regression run found one compatibility error in that old API.
+It was fixed within initial construction without changing old tests or granting
+old capabilities; the affected original test and74 selected governance cases
+passed. Initial new-product tests passed69, then expanded to79 and all passed.
+Final Builder product suite508 passed507/one host symlink-permission skip,
+zero failures/errors in155.676s. Old product files and demo hash remain unchanged.
+These are actual Builder results, not independent Reviewer approval.
+
+State now records implemented_unreleased / mode_safe_composition_model_deferred.
+This candidate is frozen before full final validation and independent Reviewer,
+then separate Release Checker. Actual final results belong in the four current
+content-bound attestations; none is fabricated here. Current formal repair_cycles0.
+Exact-head dual-platform CI and remote release must precede human merge.
+No actual source observation, runtime-store read, model/send/scheduling or VPS
+occurred. Five-index source coverage0/5, model deferred and MVP/live-readiness
+gaps remain. No source-to-research handoff or operational acceptance is claimed.
+
+### P4I Independent Reviewer BLOCK and One R1 Repair
+
+Final pre-review validation of snapshot
+2218de8072ce3e4581821b5c31dccf72537e67c57e6b5f85f0739cfc312918b5:
+governance127/127 PASS in1638.422s; product508 tests passed507/one host symlink
+skip in105.769s. Scope, prompt, bundle and both whitespace checks passed.
+Independent Reviewer01a1ea1a-3c65-7f21-a1c7-1953d5cfc29b returned BLOCK with one
+P1/R1 finding: the current-clock sample preceded additional static policy work.
+It reproduced actual expiry during that work with authored data and real UTC:
+expired content could enter composition, or final build/verify could succeed
+after expiry. Its79 new product,71 focused governance and45 legacy checks passed
+but did not cover that interval. Thus test success was not Reviewer PASS.
+
+Use the sole authorized R1 cycle, without scope or permission expansion:
+separate static source/retention validation from cheap fresh-clock/deadline
+guards after expensive validation, before semantic use and before return.
+Preserve clock rollback detection, add internal-validation expiry regressions,
+keep all429 original product tests immutable and rerun full validation. The
+SAME independent Reviewer must re-review the final frozen repair. Current repair
+cycle1; no Reviewer PASS, Release, PR or CI approval exists. A second BLOCK,
+unknown/R2+ finding or failed release/CI must escalate, not silently retry.
+
+### P4I R1 Repaired Candidate Freeze
+
+The same Product Builder repaired only intelligence.py, market_state.py and
+test_real_evidence.py. Static custody/rights validation now produces parsed
+time bounds and decisions, not a current-time verdict. A call-local constant-
+work guard refreshes actual UTC, checks the earliest retained deadline and
+detects rollback after expensive validation, at shared semantic boundaries and
+after all result/hash work immediately before return. Historical metadata
+validation cannot substitute for current retention checks. No policy parsing
+or hashing follows the final guard. Legacy synthetic calls remain unchanged.
+
+All79 prior new-product test names remain;16 added regressions cover internal
+validation delays, semantic-use/final-return expiry and rollback, including
+bounded real-clock cases that verify entry before expiry. Targeted95/95 passed
+in41.512s. Builder full product524 passed523/one host symlink-permission skip,
+zero failures/errors in162.892s. Original429 product cases, historical files,
+audited plan/contract/policy and the fixed demo hash remain unchanged.
+
+This repaired candidate is frozen for full final validation and the SAME
+Reviewer re-review. Repair_cycles1 is consumed; no second verdict, Release,
+remote CI or PR success is claimed here. Actual results must bind this new
+snapshot. All source/model/delivery/trading/VPS permissions and readiness gaps
+remain unchanged. The earlier BLOCK and test results above are preserved history.

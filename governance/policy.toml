@@ -1,7 +1,7 @@
 schema_version = 1
-active_package = "P4E"
+active_package = "P4I"
 python_version = "3.12"
-merge_tier = "D"
+merge_tier = "C"
 human_merge_required = true
 auto_merge_allowed = false
 direct_merge_allowed = false
