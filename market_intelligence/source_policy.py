@@ -152,7 +152,7 @@ def validate_source_policy(value):
             raise Invalid("source origin/prefix mismatch or synthetic registry")
         retention = row["retention"]
         exact(retention, {"class", "max_age_seconds", "basis_refs"})
-        if type(retention["class"]) is not str or retention["class"] not in RETENTIONS:
+        if type(retention["class"]) is not str or retention["class"] not in RETENTIONS | {"normalized_only"}:
             raise Invalid("unknown retention class")
         integer(retention["max_age_seconds"], 0, 31536000)
         if retention["class"] in {"metadata_only", "restricted"}:
@@ -162,6 +162,8 @@ def validate_source_policy(value):
             raise Invalid("payload retention duration required")
         if retention["class"] == "short_term_raw" and retention["max_age_seconds"] > 86400:
             raise Invalid("short term retention exceeds 24 hours")
+        if retention["class"] == "normalized_only" and retention["max_age_seconds"] > 86400:
+            raise Invalid("normalized retention exceeds 24 hours")
         _refs(retention["basis_refs"], 1)
         exact(row["rights"], RIGHTS)
         for name in RIGHTS:
@@ -170,6 +172,9 @@ def validate_source_policy(value):
             if type(right["state"]) is not str or right["state"] not in {"permitted", "denied", "unknown"}:
                 raise Invalid("unknown rights state")
             _refs(right["basis_refs"], int(right["state"] != "unknown"))
+            if (retention["class"] == "normalized_only" and name == "raw_retention"
+                    and right["state"] != "denied"):
+                raise Invalid("normalized-only retention must deny raw retention")
             if (name in {"raw_retention", "normalized_retention"}
                     and right["state"] == "permitted"
                     and retention["class"] in {"metadata_only", "restricted"}):

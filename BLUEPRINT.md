@@ -132,6 +132,8 @@ P4E follows human-merged P4S with local, read-only preparation of already retain
 
 P4I follows human-merged P4E with pure mode-safe real-source historical-replay composition and operation-scoped source-policy decisions. Legacy synthetic behavior remains unchanged; applicable local analysis rights are separated from disabled future model/delivery rights. It does not select sources, read runtime stores, dispatch research or grant operational permissions; live-verified benchmark coverage remains0/5.
 
+P4N follows human-merged P4I with a user-authorized single anonymous NBS RSS acquisition, bounded normalized metadata storage and provenance-bound composition. No registration or API keys are accepted for current sources. Unknown item attribution/time semantics remain rejected; no raw XML or linked article is retained. This news integration does not close any of the five benchmark gaps, enable model/delivery operations or satisfy MVP acceptance.
+
 Each package normally produces one coherent PR after review; split only for an actual dependency, risk, or reviewability reason. P4 acceptance does not mark all of Stage 8 or Stage 9 complete.
 
 ### Stage 0: Project and Governance

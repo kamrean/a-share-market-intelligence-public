@@ -1,0 +1,55 @@
+{
+  "observation": {
+    "attempt_id": "ed1abc3f35a1442399546c0f01d6afca",
+    "benchmark_coverage": {
+      "covered": 0,
+      "expected": 5,
+      "missing": [
+        "000001.SH",
+        "399001.SZ",
+        "399006.SZ",
+        "KOSPI",
+        "SP500"
+      ]
+    },
+    "capture": null,
+    "composition": {
+      "bundle_id": null,
+      "fingerprint": null,
+      "input_count": 0,
+      "processed_at": "2026-11-18T14:10:31.232177Z",
+      "reason": "no_eligible_metadata",
+      "reason_counts": {},
+      "rejected_count": 0,
+      "status": "UNAVAILABLE"
+    },
+    "finished_at": "2026-11-18T14:10:31.214601Z",
+    "limitations": [
+      "metadata_auditable_only",
+      "raw_replay_unavailable",
+      "remote_truth_not_authenticated",
+      "legal_entitlement_not_verified"
+    ],
+    "manifest_hash": null,
+    "new_live_research_runs": 0,
+    "observed_bytes": 0,
+    "parse": null,
+    "reason": "content_length",
+    "records": [],
+    "request_outcome": "failed",
+    "reserved_bytes": 512000,
+    "run_id": "51cad2b8b9324c5e863afd9baa0b384f",
+    "source_as_of": null,
+    "source_gate_id": "f48f5b2d9648fcc6d4488f167c8b7b47ca4655f7d85630abe80cb31d676ba218",
+    "source_id": "nbs_latest",
+    "source_policy_hash": "1575447f311b5851464c1ce6533227e2d609c3c36442805aef76ff5e1d11bf1b",
+    "started_at": "2026-11-18T14:10:27.609798Z",
+    "summary_hash": "54322288fc4a95d22944a8d03242da10437eea7489f6c85b3c53293f4b472a2a"
+  },
+  "observed_at": "2026-11-18T14:10:31.214601Z",
+  "package_id": "P4N",
+  "reason": "source_observation",
+  "schema_version": 1,
+  "snapshot_id": "8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361",
+  "status": "FAILED"
+}

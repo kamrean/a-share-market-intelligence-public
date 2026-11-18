@@ -1,34 +1,33 @@
 # Project Work Rules
 
-Use only this public repository. Read START_CONSTRUCTION_PROMPT.md, BLUEPRINT.md,
-active state/contract/policy, docs/REAL_EVIDENCE_COMPOSITION.md and named immutable
-source/prior-package evidence. Do not mutate archived/private projects.
+Use this public repository only. Read START_CONSTRUCTION_PROMPT.md, BLUEPRINT.md,
+active state/contract/policy, docs/NBS_EVIDENCE_INGESTION.md, PR10 merge and named
+historical prerequisites. Never mutate archived/private projects.
 
-P0-P4E are human-merged. P4I on stage2-real-evidence-composition implements pure
-mode-safe evidence composition and operation-scoped source-policy decisions.
-All operational flags remain false. No source selection, network, credentials,
-SDK/model/Telegram/scheduler/trading/VPS or actual runtime-store access.
-The prior probe and preparation capabilities are closed under P4I.
-Data eligibility is not operational authority, source acceptance or MVP PASS.
+P0-P4I are human-merged. P4N on stage1-nbs-evidence-ingestion implements one
+anonymous NBS metadata acquisition and provenance-bound composition. All general
+operational flags remain false; only the exact contract one-shot may run AFTER
+actual independent Reviewer and separate pre-probe Release, with --allow-network.
+User excludes registration/API keys. Old Fed probe/preparation stay closed.
+No models, Telegram, scheduler, trading, deployment or VPS. No inherited shutdown.
 
 Actual independent entrypoint and Prompt Auditor PASS precede product/checker.
-One writer owns each file set. Product Builder: intelligence.py, market_state.py,
-new source_policy.py and new test_real_evidence.py. Governance Builder: checker,
-governance tests and CI. Coordinator: docs/state/log/attestations.
-Preserve all429 old product tests byte-for-byte and114 governance cases/protections.
-Legacy synthetic behavior and samples stay unchanged; no real-to-synthetic relabel.
+One writer/file set: Product Builder nbs.py/source_policy.py/new test_nbs.py;
+Governance Builder checker/governance tests/CI; Coordinator docs/state/log.
+Preserve all524 prior product cases byte-for-byte and127 governance protections.
+The only prior product edit is additive normalized_only source-policy support.
 
 Independent read-only Reviewer and separate Release Checker are mandatory.
-One R0/R1 repair and re-review total; unknown/R2+ or second BLOCK escalates.
-Builder cannot self-review. CI is not independent Reviewer approval.
+Default one R0/R1 repair/re-review total. The exact current repair_exception
+records the user's single extra channel-rights R1, total2, same Reviewer.
+Another BLOCK/unknown/R2+ escalates; the exception is never inherited. Builder cannot
+self-review. CI is not Reviewer approval. Freeze protected state/log before review.
+Exactly six current attestations are exempt; every historical receipt immutable.
+Observation failure is recorded, never retried or relabeled success.
 
 Use apply_patch, named staging, branches without codex/ and verified noreply
-identity. Stop on unexpected dirty paths, secrets, forbidden scope or failed
-gates. Python3.12 stdlib only. No direct merge, admin bypass or force push.
-No shutdown action is carried forward from an old task.
-
-Freeze code/state/log before review. Exactly four current attestations are
-hash-exempt; every historical P4E/P4S receipt is immutable. No new operational
-preapproval or observation is needed or allowed. Actual validation/Reviewer/
-Release, exact-head Ubuntu/Windows CI and remote release precede human merge.
-Stop AWAITING_HUMAN_MERGE. Source coverage0/5 and model/acceptance gaps remain.
+identity. Python3.12 stdlib only. Stop on unexpected dirty paths/secrets/scope or
+failed gates. Never direct/auto merge, admin bypass or force push.
+Stop AWAITING_HUMAN_MERGE after exact-head dual-platform CI and remote release.
+Every final report includes prior completed/current completed/remaining progress.
+Source coverage0/5, model and MVP gaps stay explicit.
