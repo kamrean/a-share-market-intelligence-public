@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "role": "historical_merge_observation",
+  "observed_on": "2026-11-18",
+  "package_id": "P4N",
+  "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/11",
+  "merge_commit": "93f6fe87c723dba32225a4895788d8edeef0b539",
+  "merged_at": "2026-11-18T14:45:50Z",
+  "tested_head": "d35743371a12ae9c0f6e6d7be937fdac23408b2a",
+  "pr_ci_run": 44322275119,
+  "merge_ci_run": 44327850126,
+  "ci_status": "PASS",
+  "merge_status": "merged",
+  "pr_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44322275119",
+  "merge_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44327850126",
+  "merge_ci_head": "93f6fe87c723dba32225a4895788d8edeef0b539",
+  "merge_ci_jobs": [
+    {
+      "platform": "ubuntu-24.04",
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-11-18T14:50:32Z",
+      "duration_seconds": 276
+    },
+    {
+      "platform": "windows-2022",
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-11-18T15:07:06Z",
+      "duration_seconds": 1270
+    }
+  ],
+  "verification_basis": "Coordinator confirmed actual PR11 merge and successful exact-head PR/main CI; main run44327850126 completed successfully at the stated merge head.",
+  "prior_snapshot": "8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361",
+  "prior_gate_check": "Not rerun during P4M planning. Frozen P4N Reviewer PASS and LOCAL_READY_FOR_PR both bind prior_snapshot; their contents were read and verified.",
+  "prior_observation": {
+    "path": "docs/evidence/p4n-nbs-observation.json",
+    "status": "FAILED",
+    "reason": "content_length",
+    "observed_bytes": 0,
+    "capture": null,
+    "allowance_consumed": true,
+    "interpretation": "No capture or parse result; exact remote header cause unknown. Not proof of an empty feed or code failure, and not permission to retry."
+  },
+  "authority": "Evidence of prior human merge, not operational authorization."
+}

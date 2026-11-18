@@ -134,6 +134,8 @@ P4I follows human-merged P4E with pure mode-safe real-source historical-replay c
 
 P4N follows human-merged P4I with a user-authorized single anonymous NBS RSS acquisition, bounded normalized metadata storage and provenance-bound composition. No registration or API keys are accepted for current sources. Unknown item attribution/time semantics remain rejected; no raw XML or linked article is retained. This news integration does not close any of the five benchmark gaps, enable model/delivery operations or satisfy MVP acceptance.
 
+P4M follows human-merged P4N with a bounded, offline daily-market input-to-composition path. It keeps unknown publication time unknown and distinguishes a supplied observation of an already closed session from source publication. Actual transport provenance is separate from documentation links. Authored test responses can demonstrate partial input coverage without claiming live acquisition, finality, legal entitlement or five-index acceptance. Existing publication-required replay behavior remains unchanged. No source request, SDK, private-store access, model, delivery or VPS permission is inherited; the P4N one-shot is consumed and closed. This is one integration package, not a parser-only or contract-only PR.
+
 Each package normally produces one coherent PR after review; split only for an actual dependency, risk, or reviewability reason. P4 acceptance does not mark all of Stage 8 or Stage 9 complete.
 
 ### Stage 0: Project and Governance
