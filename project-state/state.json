@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "active_package": "P4I",
-  "active_contract": "contracts/p4i_real_evidence_composition.toml",
-  "branch": "stage2-real-evidence-composition",
-  "baseline": "b04f9a9a587a012d962a5f023558d8ff00c03aa1",
+  "active_package": "P4N",
+  "active_contract": "contracts/p4n_nbs_ingestion.toml",
+  "branch": "stage1-nbs-evidence-ingestion",
+  "baseline": "66be9c9705c5a9739f2beb5a3a9287f21703018d",
   "package_status": "implemented_unreleased",
   "builder_agents": [
     "coordinator",
-    "01a1e9e5-7d2d-71a0-bc5f-d3b2fe7820db",
-    "01a1e9e5-7fb9-7d53-8498-bf24cbc5e71e"
+    "01a1eea9-a742-7632-b262-d951448e66fa",
+    "01a1eea9-a8b2-7860-b564-be4f7b8dcb92"
   ],
   "stage_registry": [
     {
@@ -69,13 +69,13 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P4E",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/9",
-    "merge_commit": "b04f9a9a587a012d962a5f023558d8ff00c03aa1",
-    "merged_at": "2026-11-17T13:44:10Z",
-    "tested_head": "5dd2b67156d91b4edbfdcafa4c86c7debab158e4",
-    "pr_ci_run": 44092017656,
-    "merge_ci_run": 44095705459,
+    "package_id": "P4I",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/10",
+    "merge_commit": "66be9c9705c5a9739f2beb5a3a9287f21703018d",
+    "merged_at": "2026-11-18T08:47:03Z",
+    "tested_head": "2682f6683a3cc3d859eafd798748febcc9c9c12a",
+    "pr_ci_run": 44127995204,
+    "merge_ci_run": 44269968648,
     "ci_status": "PASS",
     "merge_status": "merged"
   },
@@ -88,21 +88,63 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p4i-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4i-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p4i-builder-prompt.md",
-    "bundle": "docs/reviews/p4i-bundle.json",
-    "validation": "docs/reviews/p4i-validation.json",
-    "reviewer": "docs/reviews/p4i-review.json",
-    "release": "docs/reviews/p4i-release.json"
+    "blueprint_review": "docs/reviews/p4n-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4n-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p4n-builder-prompt.md",
+    "bundle": "docs/reviews/p4n-bundle.json",
+    "validation": "docs/reviews/p4n-validation.json",
+    "reviewer": "docs/reviews/p4n-review.json",
+    "pre_probe_release": "docs/reviews/p4n-pre-probe-release.json",
+    "release": "docs/reviews/p4n-release.json",
+    "observation": "docs/evidence/p4n-nbs-observation.json"
   },
-  "next_gate": "Human merge after exact-head CI and independent release; select and verify five-index sources and audited runtime input bindings, then model/report integration; no operational permission inherited.",
-  "last_updated": "2026-11-17",
+  "next_gate": "Human merge after exact-head CI and independent remote release; retain anonymous-only five-index gaps, then separately audited model/report/private-delivery integration. No inherited network or VPS permission.",
+  "last_updated": "2026-11-18",
   "live_integration": {
     "entry_status": "human_merged",
-    "runtime_implementation": "mode_safe_composition_model_deferred",
+    "runtime_implementation": "nbs_ingestion_model_deferred",
     "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
     "prerequisite_register": "docs/evidence/live-integration-prerequisites.json",
     "permissions_enabled": false
+  },
+  "limited_ingestion": {
+    "source_id": "nbs_latest",
+    "endpoint": "https://www.stats.gov.cn/sj/zxfb/rss.xml",
+    "method": "GET",
+    "maximum_requests": 1,
+    "retries": 0,
+    "maximum_response_bytes": 512000,
+    "deadline_seconds": 10,
+    "maximum_items": 100,
+    "normalized_retention_seconds": 86400,
+    "input_store": "p4n-nbs-ingestion.sqlite",
+    "raw_payload_persistence": false,
+    "article_or_attachment_fetch": false,
+    "requires_key": false,
+    "requires_registration": false,
+    "paid": false,
+    "requires_user_opt_in": true,
+    "requires_independent_review": true,
+    "requires_pre_probe_release": true,
+    "source_as_of": "actual_capture_time",
+    "unknown_authorship": "reject_without_title_retention",
+    "unknown_publication_timezone": "reject",
+    "authorization_basis": "User explicitly authorized this one NBS RSS read-only test after Reviewer and Release Checker; anonymous sources only. No model/Telegram/trading/VPS."
+  },
+  "repair_exception": {
+    "id": "p4n-channel-rights-r1",
+    "authorized_by": "user",
+    "authorization": "User explicitly authorized one additional bounded R1 repair after the P4N channel-rights BLOCK.",
+    "additional_cycles": 1,
+    "maximum_total": 2,
+    "blocked_snapshot": "2ff1ca0f9a5e2dc97e81372a2c556707810fc03e7528ba90bb2a1566cee4d06d",
+    "blocked_review_digest": "8b57fc068fba730d89c706911a96b1cb5721ca47fe619ee23a6264f1362e23c2",
+    "reviewer_agent": "01a1eec4-2066-76f1-9ba5-7dad5674a563",
+    "finding": "P1: unknown namespaced or nested channel-level rights restrictions are ignored.",
+    "product_paths": [
+      "market_intelligence/nbs.py",
+      "tests/product/test_nbs.py"
+    ],
+    "scope": "Reject ambiguous channel-level rights without retaining titles; add regression tests. No operational permission, data-source, file allowlist or merge-policy expansion."
   }
 }

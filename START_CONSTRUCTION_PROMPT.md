@@ -1,42 +1,40 @@
 # Construction Entrypoint
 
-Use this public repository. Read AGENTS.md, BLUEPRINT.md, project-state/state.json,
-governance/policy.toml, contracts/p4i_real_evidence_composition.toml,
-docs/REAL_EVIDENCE_COMPOSITION.md, docs/reviews/p4e-merge.json,
+Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml,
+contracts/p4n_nbs_ingestion.toml, docs/NBS_EVIDENCE_INGESTION.md,
+docs/reviews/p4i-merge.json, docs/REAL_EVIDENCE_COMPOSITION.md,
 docs/evidence/live-integration-prerequisites.json, docs/evidence/p4s-source-probe.json
-and docs/evidence/p4e-preparation.json. Blueprint remains v1; no archived-project
-bulk reading or mutation.
+and docs/evidence/p4e-preparation.json. Blueprint stays v1; no old-project bulk reads.
 
 ## Current Package
 
-PR9 human-merged P4E; exact-head PR and merged-main CI passed. Its recorded local
-preparation is historical evidence, not renewed source access or research
-acceptance. P4I adds an explicit pure real-source historical-replay composition
-API, preserving legacy synthetic APIs, configuration, samples and429 old tests.
-Operation-scoped rights assessments do not enable operational permissions.
-Five exact benchmarks remain0/5 live-verified; model integration stays deferred.
+P4I PR10 human-merged; exact-head PR and main CI passed. P4N connects anonymous
+NBS metadata capture, bounded local storage and provenance-bound P4I composition.
+User permits only no-registration/no-key sources and one exact NBS feed GET after
+Reviewer and Release. No other operational permission; old Fed gates stay closed.
+Do not treat unverified attribution or timezone as known. No article followups.
 
 ## Work Sequence
 
-1. Verify clean main, PR9 merge and exact-head PR/main CI.
-2. Freeze bounded contract/policy/plan/template/rendered prompt; actual independent
-   entrypoint and Prompt Auditor PASS precede product/checker edits.
-3. Disjoint Builders implement only named paths. Preserve114 governance cases
-   and all old product tests; tests use authored fixtures and block external I/O.
-4. Run complete offline suites, scope/prompt/bundle/diff. Freeze protected state
-   and log before independent read-only Reviewer and separate Release Checker.
-   One R0/R1 repair total; second BLOCK/unknown/R2+ requires human escalation.
-5. Record actual four attestations, verify final gate and clean candidate,
-   commit/push/PR, wait exact-head Ubuntu/Windows CI and independent remote release.
-   No actual observation, operational preapproval or runtime-store read in P4I.
-6. Stop AWAITING_HUMAN_MERGE. Never direct/auto merge or bypass protection.
+1. Verify clean main and PR10 merge/CI.
+2. Freeze contract/policy/plan/template/rendered prompt. Actual independent
+   entrypoint and Prompt Auditor PASS before product/checker changes.
+3. Disjoint Builders implement named paths; keep524 product tests and127
+   governance protections. Full offline validation, scope/prompt/bundle/diff.
+4. Freeze code/state/log. Independent read-only Reviewer; separate pre-probe
+   Release. Default one R0/R1 cycle; only the pinned user-approved channel-rights
+   repair_exception allows total2 with the same Reviewer. Another BLOCK/unknown/
+   R2+ escalates. No permission or file allowlist changes.
+5. Exact reviewed one-shot observation only, with real failure/unknown/zero-item
+   outcomes retained. No retry, alternate source, title leakage or permissions
+   expanded through receipts. Final local Release checks the actual evidence.
+6. Commit/push/PR; wait exact-head Ubuntu/Windows CI and independent remote
+   release. Stop AWAITING_HUMAN_MERGE; no direct/auto merge or bypass.
 
 ## Next Gate
 
-After human merge, resolve selected source identities, applicable rights,
-authenticated transport, calendars and actual five-index validation, plus an
-audited runtime importer that binds real acquisition/provenance/rejections.
-Then model/research/report integration and private delivery require their own
-concrete authorization and evidence. No current source/model/send/scheduling/
-broker/order/portfolio/deploy/VPS permission. No inheritance of old one-shot
-probe/preparation gates. No completion claim from fixtures or hash agreement.
+Human merge after exact-head CI and independent remote release; retain anonymous-only five-index gaps, then separately audited model/report/private-delivery integration. No inherited network or VPS permission.
+No model, Telegram, trading, scheduler, VPS or account/key operation. Five indices
+remain0/5. News source observation is not a live research run or MVP acceptance.
+Final report always includes prior completed, this-package completed and remaining
+work, as well as branch/commit/PR/audits/validation/CI/merge/VPS/next gate.

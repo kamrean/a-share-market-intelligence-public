@@ -10,7 +10,7 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P4E are human-merged in this public repository. Stage1 retains source gaps;
+P0-P4I are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
 simulated delivery safeguards. It does not complete the research MVP, full
@@ -56,7 +56,8 @@ receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json
 [P4L merge evidence](docs/reviews/p4l-merge.json) and
 [P4C merge evidence](docs/reviews/p4c-merge.json) and
 [P4S merge evidence](docs/reviews/p4s-merge.json) and
-[P4E merge evidence](docs/reviews/p4e-merge.json) record actual public closeout.
+[P4E merge evidence](docs/reviews/p4e-merge.json) and
+[P4I merge evidence](docs/reviews/p4i-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -64,6 +65,42 @@ status. Subsequent exact-head runs, protection checks and merge evidence belong
 on the public pull request. Future live integration and MVP acceptance require
 this package's human merge and their own reviewed scope; no later external work
 is authorized implicitly.
+
+## Anonymous NBS Ingestion
+
+The [P4N plan](docs/NBS_EVIDENCE_INGESTION.md) groups anonymous official NBS RSS
+collection, bounded normalized metadata retention and provenance-bound evidence
+composition. The user excludes registration and API keys; keyed candidates are
+not current integrations. All five fixed benchmarks remain0/5 live-verified.
+
+Only one exact NBS feed request is authorized, after independent implementation
+review and a separate pre-probe release. The implementation is unreleased;
+validation and source outcomes are recorded separately in the current receipts.
+No source observation or release is implied by this description. General collection, old
+Fed probe/preparation, models, Telegram, trading, scheduler and VPS stay disabled.
+No article or attachment is followed. Raw XML and descriptions are not retained.
+Only explicitly attributed NBS items with known publication timezone and safe
+locators can enter retained normalized metadata. Missing attribution/time fields
+are rejection counts, not invented values or an accepted empty-event day.
+
+The new normalized_only policy class keeps normalized titles subject to an expiry
+while denying raw retention. Actual acquisition and request IDs remain bound to
+the subsequent private historical-replay composition. Metadata hashes cannot
+reconstruct the discarded raw feed or prove its underlying assertions. Actual
+observations, including failed requests or no eligible items, must remain visible
+and cannot authorize retries or promote index/research/MVP acceptance.
+
+The fixed local commands are `python -m market_intelligence.nbs collect --allow-network`,
+`status`, `compose` and `sweep`. The collection command requires the reviewed,
+staged candidate and explicit opt-in; any prior reservation consumes its sole
+allowance. The other commands never fetch. Missing, expired or corrupt stores
+are not recreated to renew collection. All public command output is sanitized;
+private evidence is not exported. Cleanup preserves request history and hashes.
+The [observation receipt](docs/evidence/p4n-nbs-observation.json) distinguishes
+NOT_RUN, RECORDED, FAILED and UNKNOWN without claiming source completeness.
+
+Every completion report now separates earlier completed work, this package's
+completed work and remaining work. See [PR10 merge evidence](docs/reviews/p4i-merge.json).
 
 ## Retained Evidence Preparation
 
@@ -300,7 +337,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage2-real-evidence-composition`. The gate checks
+The active construction branch is `stage1-nbs-evidence-ingestion`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

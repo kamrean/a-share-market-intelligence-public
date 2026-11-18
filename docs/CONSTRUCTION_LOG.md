@@ -1174,3 +1174,207 @@ Reviewer re-review. Repair_cycles1 is consumed; no second verdict, Release,
 remote CI or PR success is claimed here. Actual results must bind this new
 snapshot. All source/model/delivery/trading/VPS permissions and readiness gaps
 remain unchanged. The earlier BLOCK and test results above are preserved history.
+
+## P4N Anonymous NBS Ingestion Entry (2026-11-18)
+
+Verified PR10 human merge66be9c9705c5a9739f2beb5a3a9287f21703018d and
+exact-head PR44127995204/main44269968648 CI PASS on both platforms. Clean main
+governance and frozen-review gate passed. Branch stage1-nbs-evidence-ingestion.
+
+User requires free anonymous/keyless sources only; EODHD/FSC keyed candidates
+are excluded from this implementation. User explicitly permits ONE exact NBS
+RSS read after independent Reviewer and Release, with no bodies/attachments,
+models, Telegram, trading or VPS. Prior Fed allowance is not renewed; its old
+retained input has expired and is not reused. Source research consulted official
+documentation only, not feed contents or credentials.
+
+This grouped package connects safe NBS metadata acquisition/storage and original
+provenance to P4I composition. Unknown attribution/timezone is a rejection, not
+a reason to invent fields. All five index gaps remain0/5. Planning is prepared;
+entrypoint/Prompt Auditor are pending and product/checker implementation has not
+started. One R0/R1 repair total, unknown/second BLOCK escalates. Human merge only.
+
+Progress reporting now separates prior completed, current completed and remaining.
+
+### P4N Planning PASS and Disjoint Implementation
+
+Actual independent auditor01a1eea3-8019-7200-b0c2-d58feee3fb26 returned entrypoint
+and Prompt Auditor PASS, findings empty, repair_cycles0. Its hashes bind the
+frozen plan, contract, policy, template and complete rendered prompt. Its initial
+receipt path/agent-label serialization is normalized to the actual platform UUID
+and repository-relative keys without changing verdict or approved content.
+
+Product Builder01a1eea9-a742-7632-b262-d951448e66fa owns nbs.py,
+source_policy.py and new test_nbs.py. Governance Builder01a1eea9-a8b2-7860-b564-be4f7b8dcb92
+owns checker, governance tests and CI. Implementation begins only after audits.
+No network request or real runtime-store access has occurred. Actual source
+observation, Reviewer and pre-probe/final Release remain pending.
+
+### P4N Builder Validation and Bounded R1
+
+The implementation assembles fixed anonymous NBS transport, normalized-only
+retention, persistent one-shot reservations and acquisition-bound P4I composition.
+State records implemented_unreleased / nbs_ingestion_model_deferred, not source
+or research acceptance. README describes commands and remaining limitations.
+The old product code remains unchanged except additive source_policy.py support.
+
+Governance Builder reported85 targeted tests PASS in16.397s, prompt verification
+and whitespace PASS. Its141-case full run was interrupted for the changed product
+candidate; this is NOT a full regression PASS. The initial real-check mismatch
+was the expected unstaged index/worktree condition, never an approved gate.
+
+Product Builder's final initial run completed84 tests in5.705s with83 passing and
+one error: test_clock_rollback_during_composition. The composition correctly
+withheld private evidence, but its final read-close guard repeated the rollback
+exception instead of preserving sanitized UNAVAILABLE diagnostics. An attempted
+test addition was refused after the coordinator's premature no-more-edits handoff
+instruction; no refusal workaround was used. Coordinator explicitly reopened the
+same contracted Product Builder file set for the sole bounded R1 correction.
+
+Repair cycle1 is consumed. Preserve rollback/expiry refusal and final-return
+guards; correct only the diagnostic-return path and add close-time regressions.
+No plan, source, permissions or contract expansion is authorized. Full final
+validation must run against the repaired candidate before actual independent
+Reviewer and separate Release. Another repair requirement/BLOCK escalates.
+No real source request, user runtime-store access, model, Telegram or VPS action
+has occurred. All five index gaps, model deferral and MVP gaps remain unchanged.
+
+### P4N Repaired Candidate Freeze
+
+The same Product Builder corrected the diagnostic return within nbs.py and added
+two tests for expiry/clock rollback while closing the read-only store. Private
+content remains withheld; no time check, retention bound or gate was removed.
+Its single repaired targeted run passed86/86 with no skips in5.762s, exit0;
+whitespace passed. Earlier failure and consumed R1 remain recorded above.
+
+Both Builders have handed off their disjoint files and stopped editing. Freeze
+protected implementation/state/log for full141 governance and610 product tests,
+scope/prompt/bundle verification, actual independent Reviewer and separate Release.
+Those final results are pending at this snapshot and must be recorded truthfully
+in the six current attestations, not inferred from targeted tests. Repair_cycles1;
+no additional repair is preauthorized. Subsequent real observation may record
+FAILED/UNKNOWN without a retry; software failure still requires escalation.
+Later exact-head remote CI/release and human merge are recorded on the PR.
+
+### P4N Independent BLOCK and Explicit Extra R1 Authorization
+
+The frozen candidate's full product610 suite completed in114.858s:609 passed,
+one host symlink-permission skip, exit0. Scope/prompt/bundle/whitespace passed.
+Actual independent Reviewer found a P1 channel-level rights ambiguity bypass.
+The final141-case governance run was interrupted after BLOCK; no full PASS.
+Release/real source observation/commit/PR/CI did not run. The request allowance
+remains unconsumed. The implementation was preserved and escalated to the user.
+
+The user now explicitly authorizes one additional bounded R1. Record the exact
+exception in contract/policy/state; keep default limit1, effective current total2,
+same independent Reviewer and all operational permissions unchanged. Preserve
+historical planning approvals and BLOCK below before issuing replacement records.
+Changed planning is re-audited before disjoint repair work. No further cycle is
+preauthorized. This exception neither approves the implementation nor renews a
+source request. Protected candidate changes will invalidate the earlier snapshot.
+
+Prior entrypoint audit (superseded planning only):
+```json
+{
+  "schema_version": 1,
+  "verdict": "PASS",
+  "agent_id": "01a1eea3-8019-7200-b0c2-d58feee3fb26",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "role": "blueprint_reviewer",
+  "baseline": "66be9c9705c5a9739f2beb5a3a9287f21703018d",
+  "files": {
+    "BLUEPRINT.md": "b85bd714c601786372a049f142c5d580efd2dbb246a1e1da4f135c2b7a14ae22",
+    "START_CONSTRUCTION_PROMPT.md": "b4f1a7203f7607f49fd2ce9658834cd3b03f04e907ef9cabaef8eef0c3befdec"
+  }
+}
+```
+
+Prior Prompt Auditor record (superseded planning only):
+```json
+{
+  "schema_version": 1,
+  "verdict": "PASS",
+  "agent_id": "01a1eea3-8019-7200-b0c2-d58feee3fb26",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "role": "prompt_auditor",
+  "files": {
+    "contracts/p4n_nbs_ingestion.toml": "7d00e275d1a9158db54e351e228c6dbaad65c88b70dcdfe8763348abbab338cc",
+    "governance/policy.toml": "bf7b20251277d911318c974b17e58e19a4d403615933c2e6ea00b854149f0dd1",
+    "templates/p4n_builder_prompt.md": "186a3550dc7ee715056df4a0800025b5e00f2fa6d042ec34ea8da1553cb6aba7",
+    "docs/reviews/p4n-builder-prompt.md": "dfa56e57be4b2e958c0e16c51dd9fda5069979fb89b3c1ad6893da53398aa305",
+    "AGENTS.md": "156e869266987b1cbe021fe5454df74791200ccc2138cb66c3b6e706d5d1cafe",
+    "docs/NBS_EVIDENCE_INGESTION.md": "0f5a6f7c1465a3b004517ada1c80e01a7f4204b35cc0a0877e63898d801887be",
+    "docs/REAL_EVIDENCE_COMPOSITION.md": "5ea32e3f7afec88796dbc017c283b5f595c777fdfebe8d3dbe2d88c6f2c07a31",
+    "docs/evidence/live-integration-prerequisites.json": "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3",
+    "docs/evidence/p4s-source-probe.json": "d6169de44000cafe648fb87bc300de498f593bbfae11b24dd992e4c37d258af1",
+    "docs/evidence/p4e-preparation.json": "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8"
+  }
+}
+```
+
+Original independent BLOCK (preserved verbatim):
+```json
+{
+  "schema_version": 1,
+  "snapshot_id": "2ff1ca0f9a5e2dc97e81372a2c556707810fc03e7528ba90bb2a1566cee4d06d",
+  "role": "reviewer",
+  "verdict": "BLOCK",
+  "agent_id": "01a1eec4-2066-76f1-9ba5-7dad5674a563",
+  "read_only": true,
+  "findings": [
+    {
+      "priority": "P1",
+      "file": "market_intelligence/nbs.py",
+      "line": 279,
+      "finding": "Unknown namespaced or nested channel-level rights restrictions are ignored; restricted synthetic items are accepted with titles retained."
+    }
+  ],
+  "repair_cycles": 1
+}
+```
+
+### P4N Explicit Extra R1 Implementation
+
+Same independent planning auditor01a1eea3-8019-7200-b0c2-d58feee3fb26 reissued
+entrypoint and Prompt Auditor PASS after checking the exact exception, original
+BLOCK digest and preserved audits. Planning repair_cycles0 is distinct from
+implementation total2. Product/checker repair began only after these approvals.
+
+Same Product Builder changed only nbs.py/test_nbs.py: channel-level unknown
+namespaces and nested rights/copyright/license fields reject affected items
+before evidence creation, without applying item-local restrictions globally.
+Eight added tests cover rejection before title creation,100-item/no-retention
+counts, known direct terms and per-item isolation. All prior86 new-product cases
+and524 legacy cases remain unchanged; source_policy.py receives no extra edits.
+The repaired targeted suite94/94 passed with no skips in6.124s, exit0; whitespace
+passed. This is Builder evidence, not independent re-review approval.
+
+Total repair_cycles2 is now consumed by the explicit exception. No third cycle,
+source retry, new source, credential or operational permission is authorized.
+Full regression and same-Reviewer re-review are still required before separate
+Release and the already authorized single NBS observation. Until those results,
+the original implementation BLOCK remains the last actual Reviewer verdict.
+
+### P4N Extra R1 Candidate Freeze
+
+Same Governance Builder changed only checker/governance tests. The current
+P4N gate pins the complete audited exception and requires repair_cycles exactly2
+with the original Reviewer. Historical approval paths retain their default
+limit1 and reject inherited exceptions. All141 prior governance case names and
+protections remain;8 new cases bring the suite to149. CI is unchanged.
+Actual focused results:93 tests PASS in18.265s and4 targeted repository tests
+PASS in62.749s, both exit0. Prompt and whitespace checks passed. No full149-case
+governance result is claimed by these partial runs.
+
+Both Builders have stopped editing. Freeze this candidate before full149-case
+governance and618-case product regression, scope/prompt/bundle verification,
+same-Reviewer re-review and separate pre-probe/final Release. Those results are
+pending here and will be recorded in the current attestations. All operational
+flags, the sole unconsumed source allowance, five-index gaps and manual merge
+gate remain unchanged. No further repair cycle is authorized.

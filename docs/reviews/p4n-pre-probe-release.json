@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_NBS_PROBE",
+  "agent_id": "01a1eef1-49b7-75a0-9c9d-02bbd57d97ff",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "Human merge after exact-head CI and independent remote release; retain anonymous-only five-index gaps, then separately audited model/report/private-delivery integration. No inherited network or VPS permission."
+}
