@@ -1,0 +1,9 @@
+{
+  "snapshot_id": "b74bcd67accad2984612a56ed9562ad550a73efd35d685ff93ce7a722a686518",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "agent_id": "01a1f35d-d5fb-7101-8f7d-3dfc8c1f9c3e",
+  "read_only": true,
+  "findings": [],
+  "repair_cycles": 1
+}

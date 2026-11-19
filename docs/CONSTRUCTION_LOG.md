@@ -1878,3 +1878,23 @@ also now uses actual P4D path fields instead of an ineffective old prefix
 substitution. Checker and CI implementation bytes are unchanged by this repair.
 Inputs are frozen again for complete governance validation and independent
 re-review; focused test success is not yet full governance or Reviewer PASS.
+
+### Final Connection Diagnostic Authorization
+
+P4D diagnostic checkpoint5365ce7f9524e361758c45246f8a20a9ff61bde2 preserves
+the actual197/197 governance pass,854 product cases (853PASS,one platform skip),
+independent Reviewer PASS and diagnostic pre-release PASS. Its actual session
+c36fbfd2bcf64dd18cffdb3731ec28c9 sent one login request but received zero bytes;
+all five cleanup checks passed. The final release disposition is inconclusive,
+not PR-ready. No two-index verification ran; the original failure and quota stay.
+
+The user now explicitly authorized one final connection diagnostic and a switch
+of source if unsuccessful. The supplemental operation contract registers this
+separate one-use allowance and its exact local paths. It does not reset the old
+quota, relax parsing, change product permissions or spend the conditional Phase B
+allowance. Product, old checker/tests and historical approvals stay byte-identical
+to the checkpoint. New independent entry/prompt review, operator tests, Reviewer
+and separate Release must precede dispatch. Failure/UNKNOWN ends BaoStock work;
+only documentation research on free anonymous alternatives follows. No new source
+probe, publishing, model, Telegram, trading, deployment or VPS action is authorized.
+Actual approvals and terminal results belong in the named operation attestations.

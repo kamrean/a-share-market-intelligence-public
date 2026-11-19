@@ -1,0 +1,22 @@
+{
+  "snapshot_id": "b74bcd67accad2984612a56ed9562ad550a73efd35d685ff93ce7a722a686518",
+  "verdict": "PASS",
+  "commands": [
+    {
+      "command": "python -m unittest discover -s operations/p4d-final-connection -p test_run_once.py -v",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m pip check",
+      "exit_code": 0
+    },
+    {
+      "command": "python operations/p4d-final-connection/run_once.py check",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ]
+}

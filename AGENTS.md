@@ -1,5 +1,19 @@
 # Project Work Rules
 
+## Current Explicit Operator Supplement
+
+The user reauthorized exactly one final connection diagnostic on2026-11-19.
+For this operation only, read operations/p4d-final-connection/contract.json.
+Its named entry, scope check and fresh independent approvals govern the new
+one-use allowance. P4D and its old gates remain blocked, with no quota reset.
+Only the supplement's named additions and two documentation paths may change.
+No product code, old checker/test, state/policy, SDK or historical receipt changes.
+This is a local operator checkpoint, not a PR-ready construction package.
+Failure/UNKNOWN ends BaoStock candidate work; replacement research is documents
+only, with no alternate-source probe. After this operation stop for the next
+reviewed construction package. The rules below remain the historical P4D entry
+and do not authorize reusing its consumed diagnostic or conditional Phase B.
+
 Use only this public repository. Read START_CONSTRUCTION_PROMPT.md, BLUEPRINT.md,
 active state/policy, contracts/p4d_protocol_recovery.toml and its required inputs.
 Never access archived/private projects. Blueprint stays v1.

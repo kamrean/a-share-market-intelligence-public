@@ -1,0 +1,9 @@
+{
+  "snapshot_id": "b74bcd67accad2984612a56ed9562ad550a73efd35d685ff93ce7a722a686518",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_SINGLE_CONNECTION",
+  "agent_id": "01a1f31e-108d-7603-959f-604c54e690ea",
+  "read_only": true,
+  "findings": [],
+  "repair_cycles": 1
+}
