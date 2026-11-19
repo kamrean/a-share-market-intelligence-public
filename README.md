@@ -387,7 +387,14 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage1-baostock-live-evidence`. The gate checks
+P4B PR13 is merged. Its actual login failed before any validated response;
+its successful engineering checks are not a live data PASS. P4D investigates
+that failure with a separately authorized login-only diagnostic and, only after
+a supported repair and renewed independent release, one two-index verification.
+Old quota and failed evidence are immutable; payloads remain memory-only.
+See [the recovery plan](docs/BAOSTOCK_PROTOCOL_RECOVERY.md).
+
+The active construction branch is `stage1-baostock-protocol-recovery`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

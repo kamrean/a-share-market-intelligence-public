@@ -882,5 +882,150 @@ class TransportTests(unittest.TestCase):
             self.assertIsNone(state.plain_frame)
 
 
+class RecoveryTransportTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        TransportTests.setUpClass()
+
+    def run_diagnostic(self, frames=None, **kwargs):
+        views = []
+        with offline_session(frames, **kwargs) as raw:
+            receipt, diagnostic = transport.run_recovery(phase="diagnostic", accept_response=views.append)
+        self.assertTrue(receipt.socket_closed)
+        self.assertTrue(receipt.bindings_restored)
+        self.assertTrue(receipt.transport_payloads_disposed)
+        self.assertEqual(transport._sdk_names(), [])
+        self.assertLessEqual(receipt.requests_sent, 1)
+        self.assertEqual(set(diagnostic), set(transport.empty_diagnostic()))
+        return receipt, diagnostic, raw, views
+
+    def test_diagnostic_only_login_and_no_logout(self):
+        receipt, d, raw, views = self.run_diagnostic()
+        self.assertEqual(receipt.status, "COMPLETE")
+        self.assertEqual(len(raw.sent), 1)
+        self.assertEqual([v.method for v in views], ["login"])
+        self.assertIsNone(d["first_failure_point"])
+        for field in ("header_structure", "declared_length_syntax", "utf8", "crc_syntax",
+                      "crc_match", "length_bytes_match", "length_characters_match"):
+            self.assertEqual(d[field], "pass", field)
+
+    def test_version_failure_is_located_without_acceptance(self):
+        receipt, d, _, views = self.run_diagnostic([frame("01", response_parts("login"), version="99.9.99")])
+        self.assertEqual(receipt.reason, "protocol")
+        self.assertEqual(d["first_failure_point"], "response_version")
+        self.assertEqual(d["version"], "other")
+        self.assertEqual(d["crc_match"], "pass")
+        self.assertEqual(views, [])
+        self.assertNotIn("99.9.99", json.dumps(d))
+
+    def test_exception_response_is_category_not_error_text(self):
+        receipt, d, _, views = self.run_diagnostic([frame("04", ["7", "PRIVATE_ERROR_MESSAGE"])])
+        self.assertEqual(receipt.reason, "protocol")
+        self.assertEqual(d["first_failure_point"], "response_type")
+        self.assertEqual(d["response_type"], "exception_04")
+        self.assertNotIn("PRIVATE", json.dumps(d))
+        self.assertEqual(views, [])
+
+    def test_invalid_length_syntax_retains_unreached_distinction(self):
+        wire = frame("01", response_parts("login"))
+        receipt, d, _, _ = self.run_diagnostic([wire[:11] + b"XXXXXXXXXX" + wire[21:]])
+        self.assertEqual(receipt.reason, "protocol")
+        self.assertEqual(d["first_failure_point"], "length_syntax")
+        self.assertIsNone(d["declared_length"])
+        self.assertEqual(d["length_bytes_match"], "not_reached")
+
+    def test_actual_crc_mismatch_is_latched(self):
+        wire = frame("01", response_parts("login")).replace(b"success", b"succeSs")
+        receipt, d, _, _ = self.run_diagnostic([wire])
+        self.assertEqual(receipt.reason, "protocol")
+        self.assertEqual(d["first_failure_point"], "plain_crc")
+        self.assertEqual(d["crc_match"], "fail")
+
+    def test_body_length_mismatch_preserves_both_candidates(self):
+        wire = frame("01", response_parts("login"))
+        head_body = (wire[:11] + b"0000000000" + wire[21:]).split(transport.TERMINATOR)[0].rpartition(b"\x01")[0]
+        wire = head_body + b"\x01" + str(zlib.crc32(head_body)).encode() + transport.TERMINATOR
+        receipt, d, _, _ = self.run_diagnostic([wire])
+        self.assertEqual(receipt.reason, "protocol")
+        self.assertEqual(d["first_failure_point"], "plain_length")
+        self.assertEqual(d["crc_match"], "pass")
+        self.assertEqual(d["length_bytes_match"], "fail")
+        self.assertEqual(d["length_characters_match"], "fail")
+
+    def test_fragmented_diagnostic_has_same_closed_result(self):
+        _, expected, _, _ = self.run_diagnostic()
+        _, actual, _, _ = self.run_diagnostic(raw=FakeSocket(recv_size=1))
+        self.assertEqual(actual, expected)
+
+    def test_partial_response_does_not_fabricate_completed_checks(self):
+        receipt, d, _, _ = self.run_diagnostic([b"00.9"])
+        self.assertEqual(receipt.reason, "eof")
+        self.assertEqual(d["first_failure_point"], "transport_eof")
+        self.assertEqual(d["header_structure"], "not_reached")
+        self.assertEqual(d["crc_match"], "not_reached")
+        self.assertEqual(d["utf8"], "indeterminate")
+
+    def test_invalid_phase_never_loads_sdk(self):
+        with patch.object(transport._SDK, "load") as load:
+            with self.assertRaises(ValueError):
+                transport.run_recovery(phase="retry", accept_response=lambda _: None)
+            load.assert_not_called()
+
+    def test_verification_uses_seven_requests_and_unchanged_sdk(self):
+        views = []
+        with offline_session() as raw:
+            receipt, d = transport.run_recovery(phase="verification", accept_response=views.append)
+        self.assertEqual(receipt.status, "COMPLETE")
+        self.assertEqual((len(raw.sent), len(views)), (7, 7))
+        self.assertEqual(d["method"], "logout")
+
+    def test_failure_point_survives_cleanup_failure(self):
+        class BadClose(FakeSocket):
+            def close(self):
+                raise OSError("PRIVATE_CLEANUP_ERROR")
+        raw = BadClose([frame("04", ["7", "PRIVATE_PROVIDER_ERROR"])])
+        with offline_session(raw=raw):
+            receipt, d = transport.run_recovery(phase="diagnostic", accept_response=lambda _: None)
+        self.assertEqual(receipt.reason, "cleanup")
+        self.assertEqual(d["first_failure_point"], "response_type")
+        self.assertNotIn("PRIVATE", json.dumps(d))
+
+    def assert_direct_failure_survives_cleanup(self, error, expected):
+        def login():
+            raise error
+
+        def bind(sdk, state):
+            def close():
+                state.fail("cleanup")
+            state.socket = types.SimpleNamespace(closed=False, close=close)
+
+        with patch.object(transport._SDK, "load", return_value=types.SimpleNamespace(login=login)), \
+                patch.object(transport._SDK, "bind", bind), \
+                patch.object(transport._SDK, "close", return_value=True), \
+                patch.object(transport, "_create_socket") as connect:
+            receipt, d = transport.run_recovery(phase="diagnostic", accept_response=lambda _: None)
+        connect.assert_not_called()
+        self.assertEqual(receipt.status, "FAILED")
+        self.assertEqual(receipt.reason, "cleanup")
+        self.assertFalse(receipt.socket_closed)
+        self.assertTrue(receipt.bindings_restored)
+        self.assertTrue(receipt.transport_payloads_disposed)
+        self.assertEqual(receipt.requests_sent, 0)
+        self.assertEqual(d["first_failure_point"], expected)
+        self.assertEqual(d["header_structure"], "not_reached")
+        self.assertNotIn("PRIVATE", json.dumps(d))
+
+    def test_p4d_r1_direct_sdk_exception_precedes_cleanup_failure(self):
+        self.assert_direct_failure_survives_cleanup(IndexError("PRIVATE_SDK_ERROR"), "transport_protocol")
+
+    def test_p4d_r1_direct_fault_precedes_cleanup_failure(self):
+        self.assert_direct_failure_survives_cleanup(transport._Fault("sdk_integrity"), "transport_sdk_integrity")
+
+    def test_p4d_r1_direct_interruptions_precede_cleanup_failure(self):
+        for error in (KeyboardInterrupt("PRIVATE_INTERRUPT"), SystemExit("PRIVATE_EXIT")):
+            with self.subTest(error=type(error).__name__):
+                self.assert_direct_failure_survives_cleanup(error, "transport_interrupted")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "35bb665bc68a0a166e514a7ae29afab11eaf8ac7bc285770d198f2f80d100886",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PROTOCOL_DIAGNOSTIC",
+  "agent_id": "01a1f31e-108d-7603-959f-604c54e690ea",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "AWAITING_HUMAN_MERGE after truthful terminal results, independent final Release and exact-head CI; any inconclusive diagnosis or failed verification remains an explicit source gap. No new session, model, Telegram, schedule or VPS authority."
+}

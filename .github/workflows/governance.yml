@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
-    # P4B adds isolated dependency setup; all tests remain offline, never a product request.
+    # P4D retains locked setup; both checkpoints and all tests remain offline in CI.
     timeout-minutes: 30
     steps:
       - name: Checkout exact PR head
@@ -65,6 +65,8 @@ jobs:
         run: python -m unittest discover -s tests/product -p test_baostock_transport.py -v
       - name: Offline installed-SDK capture integration
         run: python -m unittest discover -s tests/product -p test_baostock_capture.py -v
+      - name: Offline two-checkpoint recovery integration
+        run: python -m unittest discover -s tests/product -p test_baostock_recovery.py -v
       - name: Offline governance tests
         run: python -m unittest discover -s tests/governance -p test_*.py -v
       - name: Offline source, evidence, research and publication tests
@@ -75,5 +77,15 @@ jobs:
         run: python tools/governance.py prompt --verify
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
+      - name: Confirm CI cannot authorize either recovery phase
+        shell: python
+        run: |
+          import subprocess
+          import sys
+          for phase in ('diagnostic', 'verification'):
+              result = subprocess.run([sys.executable, '-B', 'tools/governance.py',
+                                       phase + '-gate', '--ci'], capture_output=True, text=True)
+              assert result.returncode == 1 and not result.stdout
+              assert '--ci is not runtime authorization' in result.stderr
       - name: Check committed patch whitespace
-        run: git diff --check 58d88afdc3432f57bca8059025fddfda6bda2f95 HEAD
+        run: git diff --check 3cceca6e1534484b9001db16644a98b7b068897b HEAD

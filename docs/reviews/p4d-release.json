@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "package_id": "P4D",
+  "status": "NOT_RUN",
+  "reason": "HUMAN_ESCALATED/INCONCLUSIVE: diagnostic_digest=6f918295c9be6f4ffde1d6bf291e10184906998075cbba88881cd4a7116cc375; one login request, zero received bytes, transport_recv, all cleanup checks true. No protocol repair justified. Verification remains NOT_RUN and is not authorized. No retry or PR release. Await explicit human decision."
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "role": "historical_merge_observation",
+  "observed_on": "2026-11-19",
+  "package_id": "P4B",
+  "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/13",
+  "merge_commit": "3cceca6e1534484b9001db16644a98b7b068897b",
+  "merged_at": "2026-11-19T08:16:45Z",
+  "tested_head": "7454205f5a8737ea60aafe3469c96211659e8d66",
+  "pr_ci_run": 44481051951,
+  "merge_ci_run": 44486260610,
+  "ci_status": "PASS",
+  "merge_status": "merged",
+  "merged_by": "kamrean",
+  "same_tree": "8660f0860a7e6fb01fa6854f31a9d243db8e480b",
+  "merge_ci_head": "3cceca6e1534484b9001db16644a98b7b068897b",
+  "merge_ci_jobs": [
+    {
+      "platform": "ubuntu-24.04",
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-11-19T08:22:28Z"
+    },
+    {
+      "platform": "windows-2022",
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-11-19T08:35:21Z"
+    }
+  ],
+  "prior_snapshot": "2f730e0adc677518fff167371f34f74661b9e058de58d6d92bce2402bd043ff2",
+  "remote_release_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/13#issuecomment-7003439774",
+  "verification_basis": "Coordinator verified actual GitHub merge, matching tested/merged trees and exact-head PR/main CI; clean-main check and gate passed before P4D edits.",
+  "prior_gate_result": "LOCAL_READY_FOR_PR; governance only, not source readiness",
+  "prior_scope": "Actual P4B session failed: one request, 88 received bytes, zero validated responses, no composition, live coverage0/5; results-only cleanup verified. Old allowance consumed.",
+  "authority": "Historical human merge evidence only; new P4D authority is the distinct protected user authorization plus phase-specific contract and release."
+}

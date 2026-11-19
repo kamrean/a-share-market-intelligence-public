@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "role": "blueprint_reviewer",
+  "verdict": "PASS",
+  "agent_id": "01a1f31e-108d-7603-959f-604c54e690ea",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "baseline": "3cceca6e1534484b9001db16644a98b7b068897b",
+  "files": {
+    "AGENTS.md": "1bc93a9feb32e3d8d497220b17f46c47de785ee55f5d1aa5617ec4926f511fd9",
+    "START_CONSTRUCTION_PROMPT.md": "fd2b04e1dd5298bb7084a752ee379183e352a3edf438560c73e406c4a9b5227b",
+    "BLUEPRINT.md": "168111643ac2de093adba8ca852434a2e5fc161fb8e1e6e0e1b801ebd23d1138",
+    "governance/policy.toml": "df40f9f59d3b7a9ac157e729ec0fd36d263fd5f4af54f8e35dd5dc3e366d14fb",
+    "contracts/p4d_protocol_recovery.toml": "45474e00bc5aba39eb9c70489f858d2dd0859a59d7961669ce81723a86498f8b",
+    "docs/BAOSTOCK_PROTOCOL_RECOVERY.md": "7576d826f996d153c4562cfc144fcff915722deea1e111b9bb421f3995f5f7ec",
+    "docs/evidence/p4d-user-authorization.json": "7c0a027b9c293b76a7f7f67c14a6d17039c7cacdb5121535b4f4db8e2d8d5872",
+    "docs/reviews/p4b-merge.json": "87295b9435c27f076be1f38b49f0ff709cb8e40861bf07e5627bab69f19c3b36",
+    "docs/evidence/p4b-market-observation.json": "2d4d9ff1890e9df3de2203c349ee62ccac642a5cada2ba6eb164580e53d492ac",
+    "docs/reviews/p4b-review.json": "ac4942e976d778ed6df89e982d2703df6558932c5b611a82eb4a402e4b93c9f1",
+    "docs/reviews/p4b-release.json": "a4c261fe4b0fd5fd43a5c52223b1b84ece10c2ff4880edcd6d9abcd81dfade2d",
+    "requirements-baostock.lock": "cd6dc4771410af97e5dee2cee786936ba154aecc9d52194d9d3918a057d0e07a",
+    "config/p4b_sdk_manifest.json": "f4fa91e3cb84ca72e5ea106d131dba0550682c3c1f1e9cc28b2e7016ba15ea7f",
+    "templates/p4d_builder_prompt.md": "4d81745eed28fb425ece68e5602fe098883e57cb031bc31bf18da148dad25875",
+    "docs/reviews/p4d-builder-prompt.md": "0d0f39d9ced0bfa18294ff5e71f51895f48d9c822a2c02e495e0025eeb7a9202"
+  }
+}

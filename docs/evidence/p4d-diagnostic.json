@@ -1,0 +1,60 @@
+{
+  "observation": {
+    "attempt_id": "26f23e94bdc7464a9ab3f53d0c908a9d",
+    "cleanup": {
+      "bindings_restored": true,
+      "capture_payloads_disposed": true,
+      "checked_at": "2026-11-19T12:20:12.813724Z",
+      "payload_tables_empty": true,
+      "socket_closed": true,
+      "transport_payloads_disposed": true
+    },
+    "finished_at": "2026-11-19T12:20:12.813724Z",
+    "protocol": {
+      "body_bytes": null,
+      "body_characters": null,
+      "checksum_characters": null,
+      "crc_match": "not_reached",
+      "crc_syntax": "not_reached",
+      "declared_length": null,
+      "declared_length_syntax": "not_reached",
+      "first_failure_point": "transport_recv",
+      "frame_bytes": 0,
+      "header_bytes": 0,
+      "header_structure": "not_reached",
+      "length_bytes_match": "not_reached",
+      "length_characters_match": "not_reached",
+      "method": "login",
+      "request_index": 1,
+      "response_type": "unavailable",
+      "schema_version": 1,
+      "terminator": "not_seen",
+      "utf8": "not_reached",
+      "version": "unavailable"
+    },
+    "run_id": "c36fbfd2bcf64dd18cffdb3731ec28c9",
+    "sdk_version": "0.9.4",
+    "source_id": "baostock_standard_free",
+    "started_at": "2026-11-19T12:19:52.177477Z",
+    "transport": {
+      "bindings_restored": true,
+      "decoded_bytes": 0,
+      "finished_at": "2026-11-19T12:20:12.808637Z",
+      "reason": "recv",
+      "requests_sent": 1,
+      "socket_closed": true,
+      "started_at": "2026-11-19T12:19:52.801712Z",
+      "status": "FAILED",
+      "transport_payloads_disposed": true,
+      "validated_responses": 0,
+      "wire_bytes": 0,
+      "wire_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "package_id": "P4D",
+  "phase": "diagnostic",
+  "reason": "diagnostic_recorded",
+  "schema_version": 1,
+  "snapshot_id": "35bb665bc68a0a166e514a7ae29afab11eaf8ac7bc285770d198f2f80d100886",
+  "status": "RECORDED"
+}
