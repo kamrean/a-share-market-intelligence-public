@@ -1,4 +1,4 @@
-"""P4M exact-snapshot governance; all operational gates closed (Python 3.12)."""
+"""P4B exact-snapshot governance; one separately released market session (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -17,12 +17,12 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "93f6fe87c723dba32225a4895788d8edeef0b539"
-BRANCH = "stage3-daily-market-evidence"
+BASELINE = "58d88afdc3432f57bca8059025fddfda6bda2f95"
+BRANCH = "stage1-baostock-live-evidence"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p4m_daily_market_evidence.toml"
-TEMPLATE_PATH = "templates/p4m_builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p4m-builder-prompt.md"
+CONTRACT_PATH = "contracts/p4b_baostock_live_evidence.toml"
+TEMPLATE_PATH = "templates/p4b_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p4b-builder-prompt.md"
 PREREQUISITE_PATH = "docs/evidence/live-integration-prerequisites.json"
 PREREQUISITE_HASH = "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3"
 SOURCE_PROBE_PATH = "docs/evidence/p4s-source-probe.json"
@@ -32,12 +32,14 @@ SOURCE_SNAPSHOT = "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3
 PREPARATION_PATH = "docs/evidence/p4e-preparation.json"
 PREPARATION_HASH = "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8"
 PREPARATION_SNAPSHOT = "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe"
-AUDIT_AGENT = "01a1ef26-ac47-7d02-9fcb-8c3aa5403dad"
+AUDIT_AGENT = "01a1f1fb-db53-7252-8f46-f0999a854c66"
 CURRENT_ATTESTATIONS = (
-    "docs/reviews/p4m-bundle.json",
-    "docs/reviews/p4m-validation.json",
-    "docs/reviews/p4m-review.json",
-    "docs/reviews/p4m-release.json",
+    "docs/reviews/p4b-bundle.json",
+    "docs/reviews/p4b-validation.json",
+    "docs/reviews/p4b-review.json",
+    "docs/reviews/p4b-pre-probe-release.json",
+    "docs/reviews/p4b-release.json",
+    "docs/evidence/p4b-market-observation.json",
 )
 # Historical NBS records are audit inputs, never current exemptions or capabilities.
 NBS_ATTESTATIONS = tuple([
@@ -67,6 +69,223 @@ ALLOWED = (
     "config/p2_methods.toml",
     "config/p3_research.toml",
     "config/p4_publication.toml",
+    "config/p4b_sdk_manifest.json",
+    "config/sources.toml",
+    "contracts/p0_stage0.toml",
+    "contracts/p1_sources_evidence.toml",
+    "contracts/p2_intelligence.toml",
+    "contracts/p3_research.toml",
+    "contracts/p4_live_integration_entry.toml",
+    "contracts/p4_publication.toml",
+    "contracts/p4b_baostock_live_evidence.toml",
+    "contracts/p4c_offline_workflow.toml",
+    "contracts/p4e_evidence_preparation.toml",
+    "contracts/p4i_real_evidence_composition.toml",
+    "contracts/p4m_daily_market_evidence.toml",
+    "contracts/p4n_nbs_ingestion.toml",
+    "contracts/p4s_free_sources.toml",
+    "docs/BAOSTOCK_LIVE_EVIDENCE.md",
+    "docs/CONSTRUCTION_LOG.md",
+    "docs/DAILY_MARKET_EVIDENCE.md",
+    "docs/EVIDENCE_PREPARATION.md",
+    "docs/FREE_SOURCE_COLLECTION.md",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/LIVE_INTEGRATION_PLAN.md",
+    "docs/NBS_EVIDENCE_INGESTION.md",
+    "docs/OFFLINE_WORKFLOW_PLAN.md",
+    "docs/P1_DESIGN.md",
+    "docs/P2_METHODS.md",
+    "docs/P3_METHODS.md",
+    "docs/P4_METHODS.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/REAL_EVIDENCE_COMPOSITION.md",
+    "docs/SOURCE_MATRIX.md",
+    "docs/evidence/live-integration-prerequisites.json",
+    "docs/evidence/p1-source-probe.json",
+    "docs/evidence/p2-demo.json",
+    "docs/evidence/p3-demo.json",
+    "docs/evidence/p4-demo.json",
+    "docs/evidence/p4-report.txt",
+    "docs/evidence/p4b-market-observation.json",
+    "docs/evidence/p4b-user-authorization.json",
+    "docs/evidence/p4e-preparation.json",
+    "docs/evidence/p4n-nbs-observation.json",
+    "docs/evidence/p4s-source-probe.json",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-merge.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p1-builder-prompt.md",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-entrypoint-review.json",
+    "docs/reviews/p1-merge.json",
+    "docs/reviews/p1-prompt-audit.json",
+    "docs/reviews/p1-release.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-validation.json",
+    "docs/reviews/p2-builder-prompt.md",
+    "docs/reviews/p2-bundle.json",
+    "docs/reviews/p2-entrypoint-review.json",
+    "docs/reviews/p2-merge.json",
+    "docs/reviews/p2-prompt-audit.json",
+    "docs/reviews/p2-release.json",
+    "docs/reviews/p2-review.json",
+    "docs/reviews/p2-validation.json",
+    "docs/reviews/p3-builder-prompt.md",
+    "docs/reviews/p3-bundle.json",
+    "docs/reviews/p3-entrypoint-review.json",
+    "docs/reviews/p3-merge.json",
+    "docs/reviews/p3-prompt-audit.json",
+    "docs/reviews/p3-release.json",
+    "docs/reviews/p3-review.json",
+    "docs/reviews/p3-validation.json",
+    "docs/reviews/p4-builder-prompt.md",
+    "docs/reviews/p4-bundle.json",
+    "docs/reviews/p4-entrypoint-review.json",
+    "docs/reviews/p4-merge.json",
+    "docs/reviews/p4-prompt-audit.json",
+    "docs/reviews/p4-release.json",
+    "docs/reviews/p4-review.json",
+    "docs/reviews/p4-validation.json",
+    "docs/reviews/p4b-builder-prompt.md",
+    "docs/reviews/p4b-bundle.json",
+    "docs/reviews/p4b-entrypoint-review.json",
+    "docs/reviews/p4b-pre-probe-release.json",
+    "docs/reviews/p4b-prompt-audit.json",
+    "docs/reviews/p4b-release.json",
+    "docs/reviews/p4b-review.json",
+    "docs/reviews/p4b-validation.json",
+    "docs/reviews/p4c-builder-prompt.md",
+    "docs/reviews/p4c-bundle.json",
+    "docs/reviews/p4c-entrypoint-review.json",
+    "docs/reviews/p4c-merge.json",
+    "docs/reviews/p4c-prompt-audit.json",
+    "docs/reviews/p4c-release.json",
+    "docs/reviews/p4c-review.json",
+    "docs/reviews/p4c-validation.json",
+    "docs/reviews/p4e-builder-prompt.md",
+    "docs/reviews/p4e-bundle.json",
+    "docs/reviews/p4e-entrypoint-review.json",
+    "docs/reviews/p4e-merge.json",
+    "docs/reviews/p4e-prompt-audit.json",
+    "docs/reviews/p4e-release.json",
+    "docs/reviews/p4e-review.json",
+    "docs/reviews/p4e-validation.json",
+    "docs/reviews/p4i-builder-prompt.md",
+    "docs/reviews/p4i-bundle.json",
+    "docs/reviews/p4i-entrypoint-review.json",
+    "docs/reviews/p4i-merge.json",
+    "docs/reviews/p4i-prompt-audit.json",
+    "docs/reviews/p4i-release.json",
+    "docs/reviews/p4i-review.json",
+    "docs/reviews/p4i-validation.json",
+    "docs/reviews/p4l-builder-prompt.md",
+    "docs/reviews/p4l-bundle.json",
+    "docs/reviews/p4l-entrypoint-review.json",
+    "docs/reviews/p4l-merge.json",
+    "docs/reviews/p4l-prompt-audit.json",
+    "docs/reviews/p4l-release.json",
+    "docs/reviews/p4l-review.json",
+    "docs/reviews/p4l-validation.json",
+    "docs/reviews/p4m-builder-prompt.md",
+    "docs/reviews/p4m-bundle.json",
+    "docs/reviews/p4m-entrypoint-review.json",
+    "docs/reviews/p4m-merge.json",
+    "docs/reviews/p4m-prompt-audit.json",
+    "docs/reviews/p4m-release.json",
+    "docs/reviews/p4m-review.json",
+    "docs/reviews/p4m-validation.json",
+    "docs/reviews/p4n-builder-prompt.md",
+    "docs/reviews/p4n-bundle.json",
+    "docs/reviews/p4n-entrypoint-review.json",
+    "docs/reviews/p4n-merge.json",
+    "docs/reviews/p4n-pre-probe-release.json",
+    "docs/reviews/p4n-prompt-audit.json",
+    "docs/reviews/p4n-release.json",
+    "docs/reviews/p4n-review.json",
+    "docs/reviews/p4n-validation.json",
+    "docs/reviews/p4s-builder-prompt.md",
+    "docs/reviews/p4s-bundle.json",
+    "docs/reviews/p4s-entrypoint-review.json",
+    "docs/reviews/p4s-merge.json",
+    "docs/reviews/p4s-prompt-audit.json",
+    "docs/reviews/p4s-release.json",
+    "docs/reviews/p4s-review.json",
+    "docs/reviews/p4s-validation.json",
+    "governance/policy.toml",
+    "market_intelligence/__init__.py",
+    "market_intelligence/__main__.py",
+    "market_intelligence/baostock_capture.py",
+    "market_intelligence/baostock_transport.py",
+    "market_intelligence/collection.py",
+    "market_intelligence/cost_guard.py",
+    "market_intelligence/daily_market.py",
+    "market_intelligence/delivery.py",
+    "market_intelligence/evaluation.py",
+    "market_intelligence/gate.py",
+    "market_intelligence/intelligence.py",
+    "market_intelligence/ledger.py",
+    "market_intelligence/market_state.py",
+    "market_intelligence/models.py",
+    "market_intelligence/nbs.py",
+    "market_intelligence/news_events.py",
+    "market_intelligence/preparation.py",
+    "market_intelligence/publication.py",
+    "market_intelligence/research.py",
+    "market_intelligence/runtime.py",
+    "market_intelligence/scenario.py",
+    "market_intelligence/source_policy.py",
+    "market_intelligence/sources.py",
+    "market_intelligence/store.py",
+    "market_intelligence/workflow.py",
+    "project-state/state.json",
+    "requirements-baostock.lock",
+    "requirements.lock",
+    "templates/builder_prompt.md",
+    "templates/p1_builder_prompt.md",
+    "templates/p2_builder_prompt.md",
+    "templates/p3_builder_prompt.md",
+    "templates/p4_builder_prompt.md",
+    "templates/p4b_builder_prompt.md",
+    "templates/p4c_builder_prompt.md",
+    "templates/p4e_builder_prompt.md",
+    "templates/p4i_builder_prompt.md",
+    "templates/p4l_builder_prompt.md",
+    "templates/p4m_builder_prompt.md",
+    "templates/p4n_builder_prompt.md",
+    "templates/p4s_builder_prompt.md",
+    "tests/fixtures/p1_feed.xml",
+    "tests/fixtures/p1_market.csv",
+    "tests/fixtures/p2_input.json",
+    "tests/fixtures/p3_responses.json",
+    "tests/governance/test_governance.py",
+    "tests/product/test_baostock_capture.py",
+    "tests/product/test_baostock_transport.py",
+    "tests/product/test_collection.py",
+    "tests/product/test_daily_market.py",
+    "tests/product/test_nbs.py",
+    "tests/product/test_p1.py",
+    "tests/product/test_p2.py",
+    "tests/product/test_p3.py",
+    "tests/product/test_p4.py",
+    "tests/product/test_preparation.py",
+    "tests/product/test_real_evidence.py",
+    "tests/product/test_scenario.py",
+    "tests/product/test_workflow.py",
+    "tools/governance.py",
+)
+IMMUTABLE = (
+    ".gitattributes",
+    ".gitignore",
+    "config/p1_profile.toml",
+    "config/p2_entities.toml",
+    "config/p2_methods.toml",
+    "config/p3_research.toml",
+    "config/p4_publication.toml",
     "config/sources.toml",
     "contracts/p0_stage0.toml",
     "contracts/p1_sources_evidence.toml",
@@ -80,7 +299,6 @@ ALLOWED = (
     "contracts/p4m_daily_market_evidence.toml",
     "contracts/p4n_nbs_ingestion.toml",
     "contracts/p4s_free_sources.toml",
-    "docs/CONSTRUCTION_LOG.md",
     "docs/DAILY_MARKET_EVIDENCE.md",
     "docs/EVIDENCE_PREPARATION.md",
     "docs/FREE_SOURCE_COLLECTION.md",
@@ -200,7 +418,6 @@ ALLOWED = (
     "docs/reviews/p4s-release.json",
     "docs/reviews/p4s-review.json",
     "docs/reviews/p4s-validation.json",
-    "governance/policy.toml",
     "market_intelligence/__init__.py",
     "market_intelligence/__main__.py",
     "market_intelligence/collection.py",
@@ -224,7 +441,6 @@ ALLOWED = (
     "market_intelligence/sources.py",
     "market_intelligence/store.py",
     "market_intelligence/workflow.py",
-    "project-state/state.json",
     "requirements.lock",
     "templates/builder_prompt.md",
     "templates/p1_builder_prompt.md",
@@ -242,188 +458,8 @@ ALLOWED = (
     "tests/fixtures/p1_market.csv",
     "tests/fixtures/p2_input.json",
     "tests/fixtures/p3_responses.json",
-    "tests/governance/test_governance.py",
     "tests/product/test_collection.py",
     "tests/product/test_daily_market.py",
-    "tests/product/test_nbs.py",
-    "tests/product/test_p1.py",
-    "tests/product/test_p2.py",
-    "tests/product/test_p3.py",
-    "tests/product/test_p4.py",
-    "tests/product/test_preparation.py",
-    "tests/product/test_real_evidence.py",
-    "tests/product/test_scenario.py",
-    "tests/product/test_workflow.py",
-    "tools/governance.py",
-)
-IMMUTABLE = (
-    ".gitattributes",
-    ".gitignore",
-    "config/p1_profile.toml",
-    "config/p2_entities.toml",
-    "config/p2_methods.toml",
-    "config/p3_research.toml",
-    "config/p4_publication.toml",
-    "config/sources.toml",
-    "contracts/p0_stage0.toml",
-    "contracts/p1_sources_evidence.toml",
-    "contracts/p2_intelligence.toml",
-    "contracts/p3_research.toml",
-    "contracts/p4_live_integration_entry.toml",
-    "contracts/p4_publication.toml",
-    "contracts/p4c_offline_workflow.toml",
-    "contracts/p4e_evidence_preparation.toml",
-    "contracts/p4i_real_evidence_composition.toml",
-    "contracts/p4n_nbs_ingestion.toml",
-    "contracts/p4s_free_sources.toml",
-    "docs/EVIDENCE_PREPARATION.md",
-    "docs/FREE_SOURCE_COLLECTION.md",
-    "docs/LEGACY_REUSE_MANIFEST.md",
-    "docs/LIVE_INTEGRATION_PLAN.md",
-    "docs/NBS_EVIDENCE_INGESTION.md",
-    "docs/OFFLINE_WORKFLOW_PLAN.md",
-    "docs/P1_DESIGN.md",
-    "docs/P2_METHODS.md",
-    "docs/P3_METHODS.md",
-    "docs/P4_METHODS.md",
-    "docs/PUBLICATION_PROVENANCE.json",
-    "docs/REAL_EVIDENCE_COMPOSITION.md",
-    "docs/SOURCE_MATRIX.md",
-    "docs/evidence/live-integration-prerequisites.json",
-    "docs/evidence/p1-source-probe.json",
-    "docs/evidence/p2-demo.json",
-    "docs/evidence/p3-demo.json",
-    "docs/evidence/p4-demo.json",
-    "docs/evidence/p4-report.txt",
-    "docs/evidence/p4e-preparation.json",
-    "docs/evidence/p4n-nbs-observation.json",
-    "docs/evidence/p4s-source-probe.json",
-    "docs/reviews/blueprint-review.json",
-    "docs/reviews/p0-builder-prompt.md",
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-merge.json",
-    "docs/reviews/p0-prompt-audit.json",
-    "docs/reviews/p0-release.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-validation.json",
-    "docs/reviews/p1-builder-prompt.md",
-    "docs/reviews/p1-bundle.json",
-    "docs/reviews/p1-entrypoint-review.json",
-    "docs/reviews/p1-merge.json",
-    "docs/reviews/p1-prompt-audit.json",
-    "docs/reviews/p1-release.json",
-    "docs/reviews/p1-review.json",
-    "docs/reviews/p1-validation.json",
-    "docs/reviews/p2-builder-prompt.md",
-    "docs/reviews/p2-bundle.json",
-    "docs/reviews/p2-entrypoint-review.json",
-    "docs/reviews/p2-merge.json",
-    "docs/reviews/p2-prompt-audit.json",
-    "docs/reviews/p2-release.json",
-    "docs/reviews/p2-review.json",
-    "docs/reviews/p2-validation.json",
-    "docs/reviews/p3-builder-prompt.md",
-    "docs/reviews/p3-bundle.json",
-    "docs/reviews/p3-entrypoint-review.json",
-    "docs/reviews/p3-merge.json",
-    "docs/reviews/p3-prompt-audit.json",
-    "docs/reviews/p3-release.json",
-    "docs/reviews/p3-review.json",
-    "docs/reviews/p3-validation.json",
-    "docs/reviews/p4-builder-prompt.md",
-    "docs/reviews/p4-bundle.json",
-    "docs/reviews/p4-entrypoint-review.json",
-    "docs/reviews/p4-merge.json",
-    "docs/reviews/p4-prompt-audit.json",
-    "docs/reviews/p4-release.json",
-    "docs/reviews/p4-review.json",
-    "docs/reviews/p4-validation.json",
-    "docs/reviews/p4c-builder-prompt.md",
-    "docs/reviews/p4c-bundle.json",
-    "docs/reviews/p4c-entrypoint-review.json",
-    "docs/reviews/p4c-merge.json",
-    "docs/reviews/p4c-prompt-audit.json",
-    "docs/reviews/p4c-release.json",
-    "docs/reviews/p4c-review.json",
-    "docs/reviews/p4c-validation.json",
-    "docs/reviews/p4e-builder-prompt.md",
-    "docs/reviews/p4e-bundle.json",
-    "docs/reviews/p4e-entrypoint-review.json",
-    "docs/reviews/p4e-merge.json",
-    "docs/reviews/p4e-prompt-audit.json",
-    "docs/reviews/p4e-release.json",
-    "docs/reviews/p4e-review.json",
-    "docs/reviews/p4e-validation.json",
-    "docs/reviews/p4i-builder-prompt.md",
-    "docs/reviews/p4i-bundle.json",
-    "docs/reviews/p4i-entrypoint-review.json",
-    "docs/reviews/p4i-merge.json",
-    "docs/reviews/p4i-prompt-audit.json",
-    "docs/reviews/p4i-release.json",
-    "docs/reviews/p4i-review.json",
-    "docs/reviews/p4i-validation.json",
-    "docs/reviews/p4l-builder-prompt.md",
-    "docs/reviews/p4l-bundle.json",
-    "docs/reviews/p4l-entrypoint-review.json",
-    "docs/reviews/p4l-merge.json",
-    "docs/reviews/p4l-prompt-audit.json",
-    "docs/reviews/p4l-release.json",
-    "docs/reviews/p4l-review.json",
-    "docs/reviews/p4l-validation.json",
-    "docs/reviews/p4n-builder-prompt.md",
-    "docs/reviews/p4n-bundle.json",
-    "docs/reviews/p4n-entrypoint-review.json",
-    "docs/reviews/p4n-pre-probe-release.json",
-    "docs/reviews/p4n-prompt-audit.json",
-    "docs/reviews/p4n-release.json",
-    "docs/reviews/p4n-review.json",
-    "docs/reviews/p4n-validation.json",
-    "docs/reviews/p4s-builder-prompt.md",
-    "docs/reviews/p4s-bundle.json",
-    "docs/reviews/p4s-entrypoint-review.json",
-    "docs/reviews/p4s-merge.json",
-    "docs/reviews/p4s-prompt-audit.json",
-    "docs/reviews/p4s-release.json",
-    "docs/reviews/p4s-review.json",
-    "docs/reviews/p4s-validation.json",
-    "market_intelligence/__init__.py",
-    "market_intelligence/__main__.py",
-    "market_intelligence/collection.py",
-    "market_intelligence/cost_guard.py",
-    "market_intelligence/delivery.py",
-    "market_intelligence/evaluation.py",
-    "market_intelligence/gate.py",
-    "market_intelligence/ledger.py",
-    "market_intelligence/market_state.py",
-    "market_intelligence/models.py",
-    "market_intelligence/nbs.py",
-    "market_intelligence/news_events.py",
-    "market_intelligence/preparation.py",
-    "market_intelligence/publication.py",
-    "market_intelligence/research.py",
-    "market_intelligence/runtime.py",
-    "market_intelligence/scenario.py",
-    "market_intelligence/source_policy.py",
-    "market_intelligence/sources.py",
-    "market_intelligence/store.py",
-    "market_intelligence/workflow.py",
-    "requirements.lock",
-    "templates/builder_prompt.md",
-    "templates/p1_builder_prompt.md",
-    "templates/p2_builder_prompt.md",
-    "templates/p3_builder_prompt.md",
-    "templates/p4_builder_prompt.md",
-    "templates/p4c_builder_prompt.md",
-    "templates/p4e_builder_prompt.md",
-    "templates/p4i_builder_prompt.md",
-    "templates/p4l_builder_prompt.md",
-    "templates/p4n_builder_prompt.md",
-    "templates/p4s_builder_prompt.md",
-    "tests/fixtures/p1_feed.xml",
-    "tests/fixtures/p1_market.csv",
-    "tests/fixtures/p2_input.json",
-    "tests/fixtures/p3_responses.json",
-    "tests/product/test_collection.py",
     "tests/product/test_nbs.py",
     "tests/product/test_p1.py",
     "tests/product/test_p2.py",
@@ -453,24 +489,32 @@ REPOSITORY = {
     "visibility": "public"
 }
 VALIDATION_COMMANDS = [
+    "python -m pip check",
+    "python -m unittest discover -s tests/product -p test_baostock_transport.py -v",
+    "python -m unittest discover -s tests/product -p test_baostock_capture.py -v",
     "python -m unittest discover -s tests/governance -p test_*.py -v",
     "python -m unittest discover -s tests/product -p test_*.py -v",
     "python tools/governance.py check",
     "python tools/governance.py prompt --verify",
     "python tools/governance.py bundle",
-    "git diff --check"
+    "git diff --check",
 ]
-AUDIT_INPUTS = (
+REQUIRED_READS = [
     "AGENTS.md",
     "BLUEPRINT.md",
     "START_CONSTRUCTION_PROMPT.md",
-    "README.md",
-    "contracts/p4m_daily_market_evidence.toml",
+    "contracts/p4b_baostock_live_evidence.toml",
     "governance/policy.toml",
+    "project-state/state.json",
+    "docs/BAOSTOCK_LIVE_EVIDENCE.md",
+    "docs/evidence/p4b-user-authorization.json",
+    "requirements-baostock.lock",
+    "config/p4b_sdk_manifest.json",
+    "docs/reviews/p4m-merge.json",
+    "README.md",
+    "docs/CONSTRUCTION_LOG.md",
+    "contracts/p4m_daily_market_evidence.toml",
     "docs/DAILY_MARKET_EVIDENCE.md",
-    "templates/p4m_builder_prompt.md",
-    "docs/reviews/p4m-builder-prompt.md",
-    "docs/reviews/p4n-merge.json",
     "docs/REAL_EVIDENCE_COMPOSITION.md",
     "docs/FREE_SOURCE_COLLECTION.md",
     "docs/NBS_EVIDENCE_INGESTION.md",
@@ -478,22 +522,54 @@ AUDIT_INPUTS = (
     "docs/evidence/p4s-source-probe.json",
     "docs/evidence/p4e-preparation.json",
     "docs/evidence/p4n-nbs-observation.json",
-    "docs/reviews/p4n-review.json",
-    "docs/reviews/p4n-pre-probe-release.json",
-    "docs/reviews/p4n-release.json",
+    "docs/reviews/p4m-bundle.json",
+    "docs/reviews/p4m-validation.json",
+    "docs/reviews/p4m-review.json",
+    "docs/reviews/p4m-release.json",
+]
+AUDIT_INPUTS = (
+    "AGENTS.md",
+    "BLUEPRINT.md",
+    "START_CONSTRUCTION_PROMPT.md",
+    "contracts/p4b_baostock_live_evidence.toml",
+    "governance/policy.toml",
+    "docs/BAOSTOCK_LIVE_EVIDENCE.md",
+    "docs/evidence/p4b-user-authorization.json",
+    "requirements-baostock.lock",
+    "config/p4b_sdk_manifest.json",
+    "docs/reviews/p4m-merge.json",
+    "README.md",
+    "contracts/p4m_daily_market_evidence.toml",
+    "docs/DAILY_MARKET_EVIDENCE.md",
+    "docs/REAL_EVIDENCE_COMPOSITION.md",
+    "docs/FREE_SOURCE_COLLECTION.md",
+    "docs/NBS_EVIDENCE_INGESTION.md",
+    "docs/evidence/live-integration-prerequisites.json",
+    "docs/evidence/p4s-source-probe.json",
+    "docs/evidence/p4e-preparation.json",
+    "docs/evidence/p4n-nbs-observation.json",
+    "docs/reviews/p4m-bundle.json",
+    "docs/reviews/p4m-validation.json",
+    "docs/reviews/p4m-review.json",
+    "docs/reviews/p4m-release.json",
+    "templates/p4b_builder_prompt.md",
+    "docs/reviews/p4b-builder-prompt.md",
 )
-# Approved independent audit inputs, not hashes supplied by a mutable receipt.
+# Actual independently approved bytes, never hashes trusted from a mutable receipt.
 FROZEN_INPUT_HASHES = {
-    "AGENTS.md": "9213c01353d7e5ec0e22ad97d18086d1c670a4cdea94a02855203b50af95ec1e",
-    "BLUEPRINT.md": "c58e0b4f09775cc15bea3ead301bcee22d0fddfa2810c639f42249c93d11414e",
-    "START_CONSTRUCTION_PROMPT.md": "d74a28d34226f0010e924a2663d2e3e2cfb2fca95daeb072d032d68b63d8bb78",
-    "README.md": "a37954caaa8ca19127a1a4daae41da4255561e354f20a28f82e272b2538031ac",
+    "AGENTS.md": "d14de09f5007bf518b1d85ff55c18155117caa01582db0618871316b81b64a79",
+    "BLUEPRINT.md": "168111643ac2de093adba8ca852434a2e5fc161fb8e1e6e0e1b801ebd23d1138",
+    "START_CONSTRUCTION_PROMPT.md": "1daaa1a124a897eb71df07547e1b805cb5b2cac5917fe9e15a999b7d713f41d2",
+    "contracts/p4b_baostock_live_evidence.toml": "dc427afac2115f50246c2f50296fc9f777e7c8046b60b3c28434d13ea71d23c5",
+    "governance/policy.toml": "09750e0d673aa0cf5688975b5850c88bee5d963b8e4e84fb8cea6167aa798520",
+    "docs/BAOSTOCK_LIVE_EVIDENCE.md": "a91976c4c2f8bb2fe02fbca2dee6ff2a82d09b2c8060ee4bc1bec12dc769ac00",
+    "docs/evidence/p4b-user-authorization.json": "e335bd5f6f788dc8862ca7bcc509ee1cdb6b38f3460627f8af07312ee0ec28c1",
+    "requirements-baostock.lock": "cd6dc4771410af97e5dee2cee786936ba154aecc9d52194d9d3918a057d0e07a",
+    "config/p4b_sdk_manifest.json": "f4fa91e3cb84ca72e5ea106d131dba0550682c3c1f1e9cc28b2e7016ba15ea7f",
+    "docs/reviews/p4m-merge.json": "8eb19eae843bf994a135f048cf70e289b3e06fc35d0b8719d32caf323da5ba92",
+    "README.md": "814b8152fafce3b197ec87ea3436b5145edbcf6813dc9857c17b58a3a453d028",
     "contracts/p4m_daily_market_evidence.toml": "2a25c3d6fda001487a7785996d6fc635188b8d0e3e769645952d842de5ec42e2",
-    "governance/policy.toml": "0c6cd6f5ba3a48c8289e308be1af2574fefbe515ce3c983491a1b089ca499229",
     "docs/DAILY_MARKET_EVIDENCE.md": "d93bdbcd806b15063a70f56d454cb6fa39d5e4c8325a9538e1662ac03361660f",
-    "templates/p4m_builder_prompt.md": "13d1bbd49a7b3f6304deb778eb742c913488e211f102d0c49e5d3953746d6955",
-    "docs/reviews/p4m-builder-prompt.md": "3b66ed477397764e74b05a6633b879cff92e670dbe62bb1764e96d66319e424f",
-    "docs/reviews/p4n-merge.json": "d6aa586ecf6c1bc255bcb94d543d8945bf47b041ed4355d00e5c29f214294f69",
     "docs/REAL_EVIDENCE_COMPOSITION.md": "5ea32e3f7afec88796dbc017c283b5f595c777fdfebe8d3dbe2d88c6f2c07a31",
     "docs/FREE_SOURCE_COLLECTION.md": "76e2c6cfead182462d11a949f0cfec58ffad1b5bc66337921cc84074434780e5",
     "docs/NBS_EVIDENCE_INGESTION.md": "4556b010d1e0ea1e7879b297e92d904bc9b6c8dbbd47047561c28d10de082727",
@@ -501,21 +577,24 @@ FROZEN_INPUT_HASHES = {
     "docs/evidence/p4s-source-probe.json": "d6169de44000cafe648fb87bc300de498f593bbfae11b24dd992e4c37d258af1",
     "docs/evidence/p4e-preparation.json": "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8",
     "docs/evidence/p4n-nbs-observation.json": "d02bf2a4213874ff8057df2fdc8ec065fb700ca6cd2500970dd4feb589dd92a1",
-    "docs/reviews/p4n-review.json": "908bade6e245a8d54baa2a1501471c36088eb05e852faa26d228dad2093b99c3",
-    "docs/reviews/p4n-pre-probe-release.json": "dd941047a5bd1af3da5d1dc6560386f46abc61a087ad7c1c233812e719f935ef",
-    "docs/reviews/p4n-release.json": "d4aa37f00cae4bfc3735d689ca1608505080a43598e69ccc472175346539f524",
+    "docs/reviews/p4m-bundle.json": "d10529a55caa83eab4fc430848bfee7b48c7a6f9e44bd0c0c1c2c49f58cafabe",
+    "docs/reviews/p4m-validation.json": "51f588d307cea379b5919b4737c7660b00b4a2f1c2d8537caec97ce33d465bda",
+    "docs/reviews/p4m-review.json": "35ee63f03d166ac360678c26b69947077c14072b7fece9dd152261db291b2e3d",
+    "docs/reviews/p4m-release.json": "2b641a59bdfd4c356998c69e579d335648cfbdcaf2a9dc88c517601e8187ab07",
+    "templates/p4b_builder_prompt.md": "21e4cf74d382c99f1d264025ed8fbeb20b47f059fcc4b629c9af54ffa525b1d5",
+    "docs/reviews/p4b-builder-prompt.md": "d9f35ac355fe7a22c1cef19daa5d4302b5fa7610fd58dd91b781b10328b6da2f",
 }
 
 
 def dependency():
     return {
-        "package_id": "P4N",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/11",
+        "package_id": "P4M",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12",
         "merge_commit": BASELINE,
-        "merged_at": "2026-11-18T14:45:50Z",
-        "tested_head": "d35743371a12ae9c0f6e6d7be937fdac23408b2a",
-        "pr_ci_run": 44322275119,
-        "merge_ci_run": 44327850126,
+        "merged_at": "2026-11-19T04:03:58Z",
+        "tested_head": "49e9488b1ab586c8bfd24df3654a4e49bd2ef38b",
+        "pr_ci_run": 44345530691,
+        "merge_ci_run": 44455715479,
         "ci_status": "PASS",
         "merge_status": "merged",
     }
@@ -558,14 +637,78 @@ NBS_POLICY = {
     "permissions": PERMISSIONS, "limited_ingestion": LIMITED_INGESTION,
     "repair_exception": REPAIR_EXCEPTION,
 }
+LIMITED_MARKET_INGESTION = {
+    "source_id": "baostock_standard_free",
+    "endpoint": "tcp://public-api.baostock.com:10030",
+    "tls": False,
+    "peer_authenticated": False,
+    "sdk_version": "0.9.4",
+    "sdk_wheel_sha256": "0bf71c6069ab5890ff3596632f9c3f8f1fbc6bfcac582c2f9d6a5c11ab2cfaf8",
+    "dependency_lock": "requirements-baostock.lock",
+    "sdk_manifest": "config/p4b_sdk_manifest.json",
+    "user_authorization": "docs/evidence/p4b-user-authorization.json",
+    "symbols": [
+        "sh.000001",
+        "sz.399001",
+    ],
+    "benchmark_universe": [
+        "000001.SH",
+        "399001.SZ",
+        "399006.SZ",
+        "KOSPI",
+        "SP500",
+    ],
+    "allowed_operations": [
+        "login",
+        "query_trade_dates",
+        "query_stock_basic",
+        "query_history_k_data_plus",
+        "logout",
+    ],
+    "planned_requests": 7,
+    "maximum_requests": 12,
+    "maximum_sessions": 1,
+    "maximum_connections": 1,
+    "retries": 0,
+    "deadline_seconds": 20,
+    "deadline_includes_dns": True,
+    "maximum_wire_bytes": 512000,
+    "maximum_frame_bytes": 128000,
+    "maximum_decoded_bytes": 1048576,
+    "window_natural_days": 14,
+    "window_end": "prior_Asia_Shanghai_calendar_day",
+    "automatic_pagination": False,
+    "reconnect_allowed": False,
+    "endpoint_override_allowed": False,
+    "raw_payload_persistence": False,
+    "normalized_payload_persistence": False,
+    "derived_payload_persistence": False,
+    "payload_exports_allowed": False,
+    "payload_lifetime": "bounded_process_memory_only",
+    "journal_home_relative": ".a-share-market-intelligence/p4b-baostock-test.sqlite",
+    "journal_payload_tables_empty": True,
+    "journal_reset_allowed": False,
+    "allowance_consumed_on": "durable_session_reservation_before_any_dispatch",
+    "retained_results": "closed_schema_sanitized_metadata_only",
+    "requires_key": False,
+    "requires_registration": False,
+    "paid": False,
+    "requires_user_opt_in": True,
+    "requires_independent_review": True,
+    "requires_pre_probe_release": True,
+    "requires_exact_snapshot_market_gate": True,
+    "market_gate_accepts_ci": False,
+    "authorization_basis": "Current protected user authorization permits this one zero-paid anonymous session only after independent Reviewer and pre-probe Release; results only, all market payloads and intermediates RAM-only.",
+}
+
 POLICY = {
-    "schema_version": 1, "active_package": "P4M", "python_version": "3.12",
-    "merge_tier": "C", "human_merge_required": True, "auto_merge_allowed": False,
+    "schema_version": 1, "active_package": "P4B", "python_version": "3.12",
+    "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
     "remote_creation_authorized": False, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
     "repository": REPOSITORY, "max_repair_cycles": 1,
     "reviewer_must_be_independent": True, "construction_subagents_allowed": True,
-    "permissions": PERMISSIONS,
+    "permissions": PERMISSIONS, "limited_market_ingestion": LIMITED_MARKET_INGESTION,
 }
 NBS_RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4n-entrypoint-review.json",
@@ -574,9 +717,10 @@ NBS_RECEIPT_PATHS = {
                NBS_ATTESTATIONS)),
 }
 CURRENT_RECEIPT_PATHS = {
-    "blueprint_review": "docs/reviews/p4m-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4m-prompt-audit.json", "builder_prompt": PROMPT_PATH,
-    **dict(zip(("bundle", "validation", "reviewer", "release"), CURRENT_ATTESTATIONS)),
+    "blueprint_review": "docs/reviews/p4b-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4b-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    **dict(zip(("bundle", "validation", "reviewer", "pre_probe_release", "release", "observation"),
+               CURRENT_ATTESTATIONS)),
 }
 RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4e-entrypoint-review.json",
@@ -587,14 +731,13 @@ RECEIPT_PATHS = {
 NBS_NEXT_GATE = ("Human merge after exact-head CI and independent remote release; retain anonymous-only "
                  "five-index gaps, then separately audited model/report/private-delivery integration. "
                  "No inherited network or VPS permission.")
-NEXT_GATE = ("Human merge after exact-head CI and independent remote release; resolve anonymous-only "
-             "source acquisition and real temporal/provenance evidence, then separately audited "
-             "model/report/private-delivery integration. No inherited network or VPS permission.")
+NEXT_GATE = "Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS."
 LOCAL_RELEASE = "LOCAL_READY_FOR_PR"
-PRE_PROBE_RELEASE = "LOCAL_READY_FOR_NBS_PROBE"
+NBS_PRE_PROBE_RELEASE = "LOCAL_READY_FOR_NBS_PROBE"
+PRE_PROBE_RELEASE = "LOCAL_READY_FOR_BAOSTOCK_PROBE"
 # Historical receipt vocabulary only; no pre-preparation validator or capability.
 PRE_PREPARATION_RELEASE = "LOCAL_READY_FOR_LOCAL_PREPARATION"
-GOVERNANCE_ONLY = ("Daily-market offline governance only; model/live-readiness-blocked: "
+GOVERNANCE_ONLY = ("Bounded market governance only; model/live-readiness-blocked: "
                    "BLOCKED_EXTERNAL_PREREQUISITES")
 
 
@@ -642,26 +785,18 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P4M", "stage_ids": [1, 2, 3, 4],
-        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "C",
+        "schema_version": 1, "package_id": "P4B", "stage_ids": [1, 2, 3, 4],
+        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
         "prompt_audit_required": True, "independent_review_required": True,
         "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
         "immutable_paths": list(IMMUTABLE), "attestation_paths": list(CURRENT_ATTESTATIONS),
         "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
-        "required_reads": [
-            "AGENTS.md", "BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
-            "governance/policy.toml", "project-state/state.json", "docs/DAILY_MARKET_EVIDENCE.md",
-            "docs/reviews/p4n-merge.json", "README.md", "docs/CONSTRUCTION_LOG.md",
-            "docs/REAL_EVIDENCE_COMPOSITION.md", "docs/FREE_SOURCE_COLLECTION.md",
-            "docs/NBS_EVIDENCE_INGESTION.md", PREREQUISITE_PATH, SOURCE_PROBE_PATH,
-            PREPARATION_PATH, "docs/evidence/p4n-nbs-observation.json",
-            "docs/reviews/p4n-review.json", "docs/reviews/p4n-pre-probe-release.json",
-            "docs/reviews/p4n-release.json",
-        ],
-        "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
-        "repository": REPOSITORY, "dependency": dependency(), "next_gate": NEXT_GATE,
+        "required_reads": REQUIRED_READS, "required_validation": VALIDATION_COMMANDS,
+        "permissions": PERMISSIONS, "repository": REPOSITORY,
+        "dependency": dependency(), "next_gate": NEXT_GATE,
+        "limited_market_ingestion": LIMITED_MARKET_INGESTION,
     }
     text_fields = ("title", "objective", "bootstrap_prompt", "rollback")
     list_fields = ("deliverables", "negative_tests", "receipt_rules")
@@ -677,7 +812,7 @@ def validate_contract(contract):
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P4M", "active_contract": CONTRACT_PATH,
+        "schema_version": 1, "active_package": "P4B", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
@@ -687,7 +822,7 @@ def validate_state(state):
                    "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                    "merge_status": "not_merged"},
         "receipts": CURRENT_RECEIPT_PATHS,
-        "next_gate": NEXT_GATE,
+        "next_gate": NEXT_GATE, "limited_market_ingestion": LIMITED_MARKET_INGESTION,
     }
     keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated",
                  "live_integration"),
@@ -695,11 +830,11 @@ def validate_state(state):
     for key, value in pinned.items():
         exact(state[key], value, f"state.{key}")
     require(type(state["package_status"]) is str and state["package_status"] in
-            ("contract_prepared_unreleased", "building", "implemented_unreleased"),
+            ("awaiting_implementation", "building", "implemented_unreleased"),
             "state: premature/unknown package status")
-    runtime_status = ("daily_market_evidence_model_deferred"
+    runtime_status = ("baostock_evidence_model_deferred"
                       if state["package_status"] == "implemented_unreleased"
-                      else "daily_market_planned_model_deferred")
+                      else "baostock_planned_model_deferred")
     exact(state["live_integration"], {
         "entry_status": "human_merged", "runtime_implementation": runtime_status,
         "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
@@ -1046,7 +1181,7 @@ def validate_prerequisite(receipt, role, names, contents):
         require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: repair bound")
     else:
         cycles = receipt.get("repair_cycles")
-        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4M repair bound")
+        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4B repair bound")
 
 
 def validate_historical_probe(text):
@@ -1070,35 +1205,45 @@ def validate_historical_preparation(text):
 
 def prior_merge_evidence():
     return {
-        **dependency(),
         "schema_version": 1,
         "role": "historical_merge_observation",
-        "observed_on": "2026-11-18",
-        "pr_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44322275119",
-        "merge_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44327850126",
+        "observed_on": "2026-11-19",
+        "package_id": "P4M",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12",
+        "merge_commit": BASELINE,
+        "merged_at": "2026-11-19T04:03:58Z",
+        "merged_by": "kamrean",
+        "tested_head": "49e9488b1ab586c8bfd24df3654a4e49bd2ef38b",
+        "same_tree": "b047d1fb0fcb644cd5ea44545f464fcd896297d0",
+        "pr_ci_run": 44345530691,
+        "merge_ci_run": 44455715479,
+        "ci_status": "PASS",
+        "merge_status": "merged",
+        "pr_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44345530691",
+        "merge_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44455715479",
         "merge_ci_head": BASELINE,
         "merge_ci_jobs": [
-            {"platform": "ubuntu-24.04", "status": "completed", "conclusion": "success",
-             "completed_at": "2026-11-18T14:50:32Z", "duration_seconds": 276},
-            {"platform": "windows-2022", "status": "completed", "conclusion": "success",
-             "completed_at": "2026-11-18T15:07:06Z", "duration_seconds": 1270},
+            {
+                "platform": "ubuntu-24.04",
+                "status": "completed",
+                "conclusion": "success",
+                "completed_at": "2026-11-19T04:08:19Z",
+                "duration_seconds": 255,
+            },
+            {
+                "platform": "windows-2022",
+                "status": "completed",
+                "conclusion": "success",
+                "completed_at": "2026-11-19T04:26:03Z",
+                "duration_seconds": 1319,
+            },
         ],
-        "verification_basis": (
-            "Coordinator confirmed actual PR11 merge and successful exact-head PR/main CI; "
-            "main run44327850126 completed successfully at the stated merge head."),
-        "prior_snapshot": "8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361",
-        "prior_gate_check": (
-            "Not rerun during P4M planning. Frozen P4N Reviewer PASS and LOCAL_READY_FOR_PR "
-            "both bind prior_snapshot; their contents were read and verified."),
-        "prior_observation": {
-            "path": "docs/evidence/p4n-nbs-observation.json", "status": "FAILED",
-            "reason": "content_length", "observed_bytes": 0, "capture": None,
-            "allowance_consumed": True,
-            "interpretation": (
-                "No capture or parse result; exact remote header cause unknown. "
-                "Not proof of an empty feed or code failure, and not permission to retry."),
-        },
-        "authority": "Evidence of prior human merge, not operational authorization.",
+        "prior_snapshot": "7bd48541f337c3aaa26a488d19cbd47935d84f6b4640bd3df861f13bb07f98c1",
+        "remote_release_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12#issuecomment-6984949160",
+        "verification_basis": "Coordinator verified actual GitHub merge and exact-head PR/main CI. Independent merge reviewer 01a1f1fb-db53-7252-8f46-f0999a854c66 verified matching trees, snapshot, receipts, branch protection and passing check/prompt/bundle/gate with CI branch handling on clean merged main before P4B planning edits.",
+        "prior_gate_result": "LOCAL_READY_FOR_PR; governance-only, all historical operation gates closed",
+        "prior_scope": "P4M is offline supplied daily-market computation, not acquisition; authored input2/5 and live verification0/5 do not imply a new real observation or research run.",
+        "authority": "Evidence of prior human merge, not operational authorization. Current P4B authority comes only from its distinct protected user authorization, contract and exact-snapshot release.",
     }
 
 
@@ -1112,7 +1257,7 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     validate_live_prerequisites(contents[PREREQUISITE_PATH])
     validate_historical_probe(contents[SOURCE_PROBE_PATH])
     validate_historical_preparation(contents[PREPARATION_PATH])
-    prior = parse_json(contents["docs/reviews/p4n-merge.json"])
+    prior = parse_json(contents["docs/reviews/p4m-merge.json"])
     exact(prior, prior_merge_evidence(), "prior merge evidence")
     exact(contents[PROMPT_PATH], render_prompt(contract, contents[TEMPLATE_PATH]), "builder prompt")
     validate_prerequisite(parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]]),
@@ -1122,7 +1267,7 @@ def check(root=ROOT, *, ci=False, complete_index=False):
                           AUDIT_INPUTS, contents)
     entrypoint_cycles = parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]])["repair_cycles"]
     audit_cycles = parse_json(contents[CURRENT_RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
-    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4M repair bound or reset")
+    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4B repair bound or reset")
     for role in ("blueprint_review", "prompt_audit"):
         agent = parse_json(contents[CURRENT_RECEIPT_PATHS[role]])["agent_id"]
         require(agent == agent.strip() and agent not in state["builder_agents"],
@@ -1153,7 +1298,7 @@ def snapshot(contents):
 def make_bundle(checked):
     contract, _state, contents, changed = checked
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P4M", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P4B", "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
             "attestation_paths": list(CURRENT_ATTESTATIONS), "scope_result": "PASS"}
@@ -1261,7 +1406,7 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
     cycles = review["repair_cycles"]
     audit_cycles = parse_json(contents[audit_path])["repair_cycles"]
     if p4n_repair:
-        # This exact historical P4N exception cannot affect active P4M review.
+        # This exact historical P4N exception cannot affect active P4B review.
         exact(contract.get("package_id"), "P4N", "repair exception contract package")
         exact(state.get("active_package"), "P4N", "repair exception state package")
         exact(current.get("package_id"), "P4N", "repair exception bundle package")
@@ -1329,23 +1474,114 @@ def not_run_release(snapshot_id):
             "reason": "awaiting_terminal_observation_and_independent_release"}
 
 
-def validate_current_attestations(checked, current, *, root=ROOT):
+def _validate_market_bindings(checked, current):
     contract, state, contents, _changed = checked
-    exact(contract["package_id"], "P4M", "current contract package")
-    exact(state["active_package"], "P4M", "current state package")
-    exact(current["package_id"], "P4M", "current bundle package")
-    for binding in (contract, state):
+    exact(contract["package_id"], "P4B", "current contract package")
+    exact(state["active_package"], "P4B", "current state package")
+    exact(current["package_id"], "P4B", "current bundle package")
+    for label, binding in (("contract", contract), ("state", state)):
         require("repair_exception" not in binding and "limited_ingestion" not in binding,
-                "P4M: historical ingestion or repair exception cannot be inherited")
+                "P4B: historical ingestion or repair exception cannot be inherited")
+        exact(binding.get("limited_market_ingestion"), LIMITED_MARKET_INGESTION,
+              f"{label}.limited_market_ingestion")
     require("governance/policy.toml" in contents, "current approval: missing policy")
     exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "current approval policy")
+    for name in CURRENT_ATTESTATIONS:
+        require(name in contents, f"missing required receipt: {name}")
+
+
+def _market_validation_call(root, function, *args):
+    # Anchor pure validation to the inspected checkout, not a cached foreign package.
+    root = Path(root).resolve()
+    package_path = safe_path(root, "market_intelligence/__init__.py")
+    module_path = safe_path(root, "market_intelligence/baostock_capture.py")
+    namespace = "_p4b_market_validation_" + sha256(str(root))
+    require(not any(name == namespace or name.startswith(namespace + ".")
+                    for name in sys.modules), "market: recursive validation")
+    spec = importlib.util.spec_from_file_location(
+        namespace, package_path, submodule_search_locations=[str(package_path.parent)])
+    require(spec is not None and spec.loader is not None, "market: package unavailable")
+    package = importlib.util.module_from_spec(spec)
+    sys.modules[namespace] = package
+    try:
+        spec.loader.exec_module(package)
+        capture = importlib.import_module(namespace + ".baostock_capture")
+        exact(Path(capture.__file__).resolve(), module_path.resolve(), "market validation module")
+        return getattr(capture, function)(*args)
+    except (ValueError, ImportError, AttributeError, OSError, TypeError, RuntimeError):
+        raise Block("market: invalid record or unavailable safe journal validator") from None
+    finally:
+        for name in tuple(sys.modules):
+            if name == namespace or name.startswith(namespace + "."):
+                del sys.modules[name]
+
+
+def validate_market_observation(value, snapshot_id, *, root=ROOT):
+    validated = _market_validation_call(root, "validate_observation_receipt", value, snapshot_id)
+    require(validated is value, "market: observation validator changed the result")
+
+
+def assert_market_journal_unconsumed(snapshot_id, *, root=ROOT):
+    result = _market_validation_call(root, "assert_journal_unconsumed", snapshot_id)
+    exact(result, None, "market: journal check return")
+
+
+def not_run_market_release(snapshot_id):
+    """An inert pending-result record, never a Release Checker assertion."""
+    return {"schema_version": 1, "package_id": "P4B", "snapshot_id": snapshot_id,
+            "role": "release_checker", "verdict": "NOT_RUN",
+            "reason": "awaiting_terminal_observation_and_independent_release"}
+
+
+def validate_market_prerequisites(checked, current, *, root=ROOT):
+    _validate_market_bindings(checked, current)
+    contents = checked[2]
     _validate_review_attestations(
-        checked, current, paths=CURRENT_ATTESTATIONS,
-        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE)
+        checked, current, paths=CURRENT_ATTESTATIONS[:4],
+        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        release_verdict=PRE_PROBE_RELEASE)
+    observation = parse_json(contents[CURRENT_RECEIPT_PATHS["observation"]])
+    validate_market_observation(observation, current["snapshot_id"], root=root)
+    exact(observation["status"], "NOT_RUN", "market gate: allowance already observed")
+    exact(parse_json(contents[CURRENT_RECEIPT_PATHS["release"]]),
+          not_run_market_release(current["snapshot_id"]), "pending final release")
+
+
+def validate_current_attestations(checked, current, *, root=ROOT):
+    _validate_market_bindings(checked, current)
+    contents = checked[2]
+    pre_release = _validate_review_attestations(
+        checked, current, paths=CURRENT_ATTESTATIONS[:4],
+        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        release_verdict=PRE_PROBE_RELEASE)
+    observation = parse_json(contents[CURRENT_RECEIPT_PATHS["observation"]])
+    validate_market_observation(observation, current["snapshot_id"], root=root)
+    require(observation["status"] != "NOT_RUN", "final gate: terminal market observation required")
+    release = _validate_review_attestations(
+        checked, current,
+        paths=(*CURRENT_ATTESTATIONS[:3], CURRENT_RECEIPT_PATHS["release"]),
+        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        release_fields=("pre_probe_release_digest", "observation_digest"))
+    exact(release["pre_probe_release_digest"], probe_digest(pre_release),
+          "release receipt.pre_probe_release_digest")
+    exact(release["observation_digest"], probe_digest(observation),
+          "release receipt.observation_digest")
+    # Capture owns the closed observation schema; final cleanup checks follow its contract.
+    require_market_cleanup(observation)
+
+
+def require_market_cleanup(observation):
+    require(observation["observation"]["finished_at"] is not None,
+            "final gate: actual terminal completion required")
+    cleanup = observation["observation"]["cleanup"]
+    for field in ("socket_closed", "bindings_restored", "transport_payloads_disposed",
+                  "capture_payloads_disposed", "payload_tables_empty"):
+        exact(cleanup[field], True, f"final gate: cleanup.{field}")
+    require(cleanup["checked_at"] is not None, "final gate: actual cleanup check required")
 
 
 def validate_historical_nbs_attestations(checked, current, *, root=ROOT, pre_probe=False):
-    """Pure P4N receipt auditing only; never a capability or P4M approval."""
+    """Pure P4N receipt auditing only; never a capability or P4B approval."""
     contract, state, contents, _changed = checked
     exact(contract["package_id"], "P4N", "historical NBS contract package")
     exact(state["active_package"], "P4N", "historical NBS state package")
@@ -1357,7 +1593,7 @@ def validate_historical_nbs_attestations(checked, current, *, root=ROOT, pre_pro
     _validate_review_attestations(
         checked, current, paths=NBS_ATTESTATIONS[:4],
         audit_path=NBS_RECEIPT_PATHS["prompt_audit"], next_gate=NBS_NEXT_GATE,
-        release_verdict=PRE_PROBE_RELEASE, p4n_repair=True)
+        release_verdict=NBS_PRE_PROBE_RELEASE, p4n_repair=True)
     observation = parse_json(contents[NBS_RECEIPT_PATHS["observation"]])
     validate_nbs_observation(observation, current["snapshot_id"], root=root)
     require(observation["status"] in ("NOT_RUN", "RECORDED", "FAILED", "UNKNOWN"),
@@ -1403,16 +1639,27 @@ def gate(root=ROOT, *, ci=False):
     return LOCAL_RELEASE
 
 
+def market_gate(root=ROOT, *, ci=False):
+    exact(ci, False, "market-gate: --ci is not runtime authorization")
+    checked = check(root, complete_index=True)
+    current = make_bundle(checked)
+    validate_market_prerequisites(checked, current, root=root)
+    assert_market_journal_unconsumed(current["snapshot_id"], root=root)
+    return {"package_id": "P4B", "snapshot_id": current["snapshot_id"],
+            "verdict": PRE_PROBE_RELEASE,
+            "limited_market_ingestion": dict(LIMITED_MARKET_INGESTION)}
+
+
 def nbs_gate(root=ROOT, *, ci=False):
-    raise Block("P4M: historical NBS ingestion capability is closed; no network request authorized")
+    raise Block("P4B: historical NBS ingestion capability is closed; no network request authorized")
 
 
 def probe_gate(root=ROOT, *, ci=False):
-    raise Block("P4M: historical P4S probe capability is closed; no network request authorized")
+    raise Block("P4B: historical P4S probe capability is closed; no network request authorized")
 
 
 def preparation_gate(root=ROOT, *, ci=False):
-    raise Block("P4M: historical P4E preparation capability is closed; no runtime-store access authorized")
+    raise Block("P4B: historical P4E preparation capability is closed; no runtime-store access authorized")
 
 
 def main(argv=None, *, root=ROOT):
@@ -1424,7 +1671,7 @@ def main(argv=None, *, root=ROOT):
                                help="skip local branch identity only; retain baseline/scope/permission checks")
         if command == "prompt":
             subparser.add_argument("--verify", action="store_true")
-    for command in ("probe-gate", "preparation-gate", "nbs-gate"):
+    for command in ("probe-gate", "preparation-gate", "nbs-gate", "market-gate"):
         subparsers.add_parser(command).add_argument(
             "--ci", action="store_true", help="capability remains closed even in CI")
     args = parser.parse_args(argv)
@@ -1447,6 +1694,8 @@ def main(argv=None, *, root=ROOT):
             print(probe_gate(root, ci=args.ci))
         elif args.command == "preparation-gate":
             print(preparation_gate(root, ci=args.ci))
+        elif args.command == "market-gate":
+            print(json.dumps(market_gate(root, ci=args.ci), sort_keys=True))
         elif args.command == "nbs-gate":
             print(nbs_gate(root, ci=args.ci))
         else:

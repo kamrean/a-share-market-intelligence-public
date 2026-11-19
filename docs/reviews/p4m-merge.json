@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "role": "historical_merge_observation",
+  "observed_on": "2026-11-19",
+  "package_id": "P4M",
+  "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12",
+  "merge_commit": "58d88afdc3432f57bca8059025fddfda6bda2f95",
+  "merged_at": "2026-11-19T04:03:58Z",
+  "merged_by": "kamrean",
+  "tested_head": "49e9488b1ab586c8bfd24df3654a4e49bd2ef38b",
+  "same_tree": "b047d1fb0fcb644cd5ea44545f464fcd896297d0",
+  "pr_ci_run": 44345530691,
+  "merge_ci_run": 44455715479,
+  "ci_status": "PASS",
+  "merge_status": "merged",
+  "pr_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44345530691",
+  "merge_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44455715479",
+  "merge_ci_head": "58d88afdc3432f57bca8059025fddfda6bda2f95",
+  "merge_ci_jobs": [
+    {
+      "platform": "ubuntu-24.04",
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-11-19T04:08:19Z",
+      "duration_seconds": 255
+    },
+    {
+      "platform": "windows-2022",
+      "status": "completed",
+      "conclusion": "success",
+      "completed_at": "2026-11-19T04:26:03Z",
+      "duration_seconds": 1319
+    }
+  ],
+  "prior_snapshot": "7bd48541f337c3aaa26a488d19cbd47935d84f6b4640bd3df861f13bb07f98c1",
+  "remote_release_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12#issuecomment-6984949160",
+  "verification_basis": "Coordinator verified actual GitHub merge and exact-head PR/main CI. Independent merge reviewer 01a1f1fb-db53-7252-8f46-f0999a854c66 verified matching trees, snapshot, receipts, branch protection and passing check/prompt/bundle/gate with CI branch handling on clean merged main before P4B planning edits.",
+  "prior_gate_result": "LOCAL_READY_FOR_PR; governance-only, all historical operation gates closed",
+  "prior_scope": "P4M is offline supplied daily-market computation, not acquisition; authored input2/5 and live verification0/5 do not imply a new real observation or research run.",
+  "authority": "Evidence of prior human merge, not operational authorization. Current P4B authority comes only from its distinct protected user authorization, contract and exact-snapshot release."
+}

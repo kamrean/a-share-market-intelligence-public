@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "package_id": "P4B",
+  "record_type": "explicit_user_authorization",
+  "observed_on": "2026-11-19",
+  "basis": "Current user reply to the bounded BaoStock work-package question",
+  "authorization": "User authorizes this work and the single test, and requires keeping only test results and deleting all test data after testing completes.",
+  "scope": {
+    "isolated_pinned_official_sdk_and_dependencies": true,
+    "provider": "baostock_standard_free",
+    "symbols": ["sh.000001", "sz.399001"],
+    "max_sessions": 1,
+    "max_protocol_requests": 12,
+    "retry_allowed": false,
+    "personal_registration_or_keys": false,
+    "paid_access": false,
+    "purpose": "personal local read-only acquisition, computation and replay verification",
+    "transport_limit_acknowledged": "Unencrypted and unauthenticated public TCP; not authenticated market evidence",
+    "prerequisites": ["independent_reviewer_pass", "independent_pre_probe_release", "exact_snapshot_market_gate"],
+    "retention": "Results only after testing; implementation further restricts all market payloads and intermediates to bounded process memory and never persists them"
+  },
+  "excluded": ["raw_market_publication", "model", "telegram", "scheduler", "broker", "orders", "portfolio_control", "deployment", "vps", "shutdown"],
+  "authority": "Exact one-shot exception only; does not change general operational permissions or authorize provider terms on behalf of the provider"
+}

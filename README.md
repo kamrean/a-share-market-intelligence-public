@@ -10,7 +10,7 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-P0-P4N are human-merged in this public repository. Stage1 retains source gaps;
+P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
 simulated delivery safeguards. It does not complete the research MVP, full
@@ -31,7 +31,9 @@ See [Blueprint v1](BLUEPRINT.md), [P4 methods](docs/P4_METHODS.md) and
 The local foundation includes bounded RSS capture, offline market CSV parsing,
 an SQLite provenance store, strict timestamps, domain-specific evidence checks,
 immutable reference bundles, retention and hash-verified replay. A fixed five-index
-profile remains **BLOCKED_MARKET_SOURCES**: 0/5 benchmarks are live-verified.
+profile remains **BLOCKED_MARKET_SOURCES**. Before the P4B one-shot, the frozen
+source baseline is0/5 live-verified; its separate observation receipt records
+actual partial acquisition without changing full five-index/MVP acceptance.
 This is an unresolved access/rights/implementation gap, not five failed requests.
 The [source matrix](docs/SOURCE_MATRIX.md) records candidate sources and limits.
 The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
@@ -40,7 +42,8 @@ status, including when it has not run. An RSS result cannot satisfy index covera
 P1's original official Federal Reserve press observation remains historical.
 P4S's one official-news request is completed and its allowance consumed. General
 retrieval stays disabled. P4I closes both historical probe and preparation gates.
-BaoStock stays disabled pending rights/transport clarification; see the
+P4S left BaoStock disabled pending rights/transport clarification; the bounded
+P4B exception below does not reopen historical gates. See the historical
 [bounded source plan](docs/FREE_SOURCE_COLLECTION.md). Market normalization
 fixtures are synthetic. The paid-provider boundary is disabled, not connected.
 Scheduling, live models, real Telegram, trading and VPS remain outside P4.
@@ -58,7 +61,8 @@ receipts are preserved unchanged; [P0 merge evidence](docs/reviews/p0-merge.json
 [P4S merge evidence](docs/reviews/p4s-merge.json) and
 [P4E merge evidence](docs/reviews/p4e-merge.json) and
 [P4I merge evidence](docs/reviews/p4i-merge.json) and
-[P4N merge evidence](docs/reviews/p4n-merge.json) record actual public closeout.
+[P4N merge evidence](docs/reviews/p4n-merge.json) and
+[P4M merge evidence](docs/reviews/p4m-merge.json) record actual public closeout.
 
 [Canonical state](project-state/state.json) and local review receipts describe
 the frozen pre-publication snapshot. `NOT_RUN_AT_SNAPSHOT` is not the live GitHub
@@ -120,6 +124,33 @@ new source request, model or delivery permission. Authored test input coverage
 does not change0/5 live verification, and the existing synthetic consumers remain
 separate. Full MVP still needs genuine source/research/private-delivery evidence.
 
+## Bounded Mainland Observation
+
+The [P4B plan](docs/BAOSTOCK_LIVE_EVIDENCE.md) integrates an explicitly authorized
+anonymous two-index test, pinned optional SDK dependencies and the existing
+daily-market computation. It allows one independently reviewed/released session,
+at most12 protocol requests, no retry or paid/keyed access. The SDK's public TCP
+channel is unencrypted and unauthenticated; no HTTPS acquisition is claimed.
+
+The user's results-only retention requirement is enforced by keeping all market
+payloads and intermediate values in bounded memory, never disk/stdout/Git.
+After same-process calculation and verification they are discarded; only sanitized
+run IDs, counts, hashes, limitations and durable request-accounting metadata remain.
+These hashes cannot recreate a retained dataset. Unknown publication/finality and
+the other three index gaps remain explicit. This does not enable models, Telegram,
+scheduling, trading or VPS, or satisfy live research/MVP acceptance.
+
+The base offline application remains stdlib-only. P4B uses a separate optional
+[dependency lock](requirements-baostock.lock) and [SDK manifest](config/p4b_sdk_manifest.json)
+in an isolated CPython3.12 environment; do not install globally or use unpinned
+source distributions. Installation and offline tests do not authorize collection.
+The active contract, actual pre-probe release and CLI opt-in must all agree before
+`python -m market_intelligence.baostock_capture observe --allow-network` can run.
+`python -m market_intelligence.baostock_capture status` returns sanitized metadata
+only and never fetches. Deleting the journal to repeat a test is not supported.
+The actual [observation receipt](docs/evidence/p4b-market-observation.json), when
+present, records success, partial results, failure or unknown outcome honestly.
+
 ## Retained Evidence Preparation
 
 The [P4E preparation plan](docs/EVIDENCE_PREPARATION.md) defines a local boundary
@@ -139,7 +170,7 @@ See the immutable [P4S observation](docs/evidence/p4s-source-probe.json): its fe
 result is degraded, news freshness remains BLOCK and live benchmarks remain0/5.
 Do not delete the input store to renew a request allowance. P4E does not run
 retention cleanup; the historical collection tool's explicit sweep is separate
-from this read-only preparation operation. BaoStock has not been tested or enabled.
+from this read-only preparation operation. P4E did not test or enable BaoStock.
 
 ## Mode-Safe Evidence Composition
 
@@ -308,7 +339,8 @@ previous L totals. Rank ties use sector IDs; zero/missing baselines remain null.
 News priority uses authority points A=4/B=2/C=0, plus one for unambiguous mapping,
 times step decay 2^(-floor(age/half_life)). It is not a truth/profit probability.
 
-Prerequisites: Git and Python 3.12. There are no third-party dependencies.
+Prerequisites for these legacy offline workflows: Git and Python3.12, stdlib only.
+P4B's optional isolated SDK dependencies are separate, as described above.
 Run from the checkout, using an absolute SQLite **file** path outside every Git
 checkout. Use a separate persistent store for real observations so restarting a
 process cannot reset that store's daily accounting. Multiple independent stores
@@ -355,7 +387,7 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage3-daily-market-evidence`. The gate checks
+The active construction branch is `stage1-baostock-live-evidence`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

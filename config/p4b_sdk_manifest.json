@@ -1,0 +1,582 @@
+{
+  "schema_version": 1,
+  "package_id": "P4B",
+  "record_type": "dependency_lock_and_static_sdk_audit",
+  "status": "PHASE1_PLANNING_ONLY_AWAITING_AUDITS_AND_PARENT_HANDOFF",
+  "observed_on": "2026-11-19",
+  "repository": "kamrean/a-share-market-intelligence-public",
+  "branch": "stage1-baostock-live-evidence",
+  "baseline": "58d88afdc3432f57bca8059025fddfda6bda2f95",
+  "plan": "docs/BAOSTOCK_LIVE_EVIDENCE.md",
+  "user_authorization": "docs/evidence/p4b-user-authorization.json",
+  "dependency_lock": "requirements-baostock.lock",
+  "base_dependency_lock": "requirements.lock",
+  "permission_grant": false,
+  "supported_platforms": [
+    {
+      "id": "cpython312-win_amd64",
+      "implementation": "CPython",
+      "python_version": "3.12",
+      "abi": "cp312",
+      "sys_platform": "win32",
+      "architecture": "x86_64",
+      "wheel_platform": "win_amd64"
+    },
+    {
+      "id": "cpython312-manylinux_x86_64",
+      "implementation": "CPython",
+      "python_version": "3.12",
+      "abi": "cp312",
+      "sys_platform": "linux",
+      "architecture": "x86_64",
+      "libc": "glibc",
+      "minimum_glibc": "2.27",
+      "wheel_platforms": [
+        "manylinux_2_24_x86_64",
+        "manylinux_2_27_x86_64",
+        "manylinux_2_28_x86_64"
+      ],
+      "note": "pandas minimum tag is glibc 2.24; NumPy raises the complete closure minimum to 2.27. Both also publish the 2.28 tag on the same respective wheel."
+    }
+  ],
+  "unsupported_platforms": [
+    "other Python versions or implementations",
+    "32-bit Windows or Linux",
+    "ARM/aarch64",
+    "macOS",
+    "musl/Alpine",
+    "glibc older than 2.27"
+  ],
+  "selection": {
+    "rationale": "Use explicitly permitted conservative pandas 2.3.3 and NumPy 2.3.5, not floating latest. Pin dateutil/pytz/tzdata/six to complete the no-extras runtime closure. All releases and selected wheels were available and not yanked at inspection.",
+    "compatibility_claim": "Wheel tags, Requires-Python and active dependency constraints match CPython 3.12 on the two targets; runtime and offline SDK fixture compatibility remain NOT_RUN.",
+    "sdk_python_metadata_limit": "BaoStock declares no Requires-Python and only Python 3.6/3.9 classifiers. py3-none-any plus static CPython 3.12 parsing is not a publisher support guarantee.",
+    "pandas_api_limit": "ResultData.get_data uses removed DataFrame.append when fetching more pages. This path is prohibited; planned transport consumes bounded first-page ResultData.data without next/get_data. No whole-SDK pandas compatibility claim.",
+    "timezone_note": "Pinned pytz/tzdata versions are reproducibility choices, not a current global timezone-rule certification. Only Asia/Shanghai is in the planned acquisition scope."
+  },
+  "install_policy": {
+    "installed_during_phase1": false,
+    "sdk_imported_or_executed_during_phase1": false,
+    "isolated_environment_required": true,
+    "base_environment_mutation_allowed": false,
+    "index_url": "https://pypi.org/simple",
+    "archive_host": "files.pythonhosted.org",
+    "require_hashes": true,
+    "only_binary": ":all:",
+    "allow_source_distributions": false,
+    "allow_url_requirements": false,
+    "allow_fallback_indexes": false,
+    "allow_extras": false,
+    "after_handoff_arguments": [
+      "-I",
+      "-m",
+      "pip",
+      "--isolated",
+      "install",
+      "--no-cache-dir",
+      "--no-compile",
+      "--require-hashes",
+      "--only-binary=:all:",
+      "--index-url",
+      "https://pypi.org/simple",
+      "-r",
+      "requirements-baostock.lock"
+    ],
+    "configuration_precondition": "Parent controls the fresh environment and installer configuration. --isolated alone does not eliminate every global/site pip config: reject extra indexes, find-links, trusted-host overrides and requirement overlays. Do not reuse an installed dependency to bypass hashes.",
+    "execution_precondition": "Actual installation is parent-owned after audits and explicit handoff. No command in this manifest grants SDK execution or product network access."
+  },
+  "sdk": {
+    "distribution": "baostock",
+    "distribution_version": "0.9.4",
+    "module_version": "00.9.40",
+    "protocol_client_version": "00.9.40",
+    "version_constant": "baostock.common.contants.BAOSTOCK_CLIENT_VERSION",
+    "pypi_metadata_url": "https://pypi.org/pypi/baostock/0.9.4/json",
+    "wheel_filename": "baostock-0.9.4-py3-none-any.whl",
+    "wheel_url": "https://files.pythonhosted.org/packages/56/df/6984deaa036cc3467f85411d01a48018eb86ed7477e74f33aa5b012ace05/baostock-0.9.4-py3-none-any.whl",
+    "wheel_sha256": "0bf71c6069ab5890ff3596632f9c3f8f1fbc6bfcac582c2f9d6a5c11ab2cfaf8",
+    "wheel_bytes": 52424,
+    "wheel_metadata_sha256": "3026508eb6b81ca96e5f2b1a3b2866871898fa0c7bd9b2175076af461b358880",
+    "requires_python": null,
+    "requires_dist": [
+      "pandas>=0.18.0"
+    ],
+    "wheel_tag": "py3-none-any",
+    "license_metadata": "BSD License; software metadata is not a grant of API data rights",
+    "all_wheel_record_hashes_verified": true,
+    "python_file_count": 56,
+    "critical_file_root": "isolated environment site-packages",
+    "critical_file_hash_algorithm": "sha256-of-exact-wheel-member-raw-bytes-no-decoding-or-newline-normalization",
+    "critical_files": {
+      "baostock/__init__.py": "468873a54e40f1608ccd306e3742f69d4121a03d3aaee5b8e6f081409dc4b587",
+      "baostock/common/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/common/contants.py": "03db3240d1a7cc93fe7463a6162f3fe5de171e7f88b49a05f964d46acc6231bc",
+      "baostock/common/context.py": "1a76fe38c5ba69de779d791f7c277b9fc0e84f7e9701965c9fb5dd3f2af67d12",
+      "baostock/corpreport/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/corpreport/corp_performance.py": "fc68a032768477af812f33899c5d7ad034cd8c9f18eb800b3046228db7639b05",
+      "baostock/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/data/messageheader.py": "9dfe8c19a68b29d0422fe64fe7470a6d0575555a3c95bd861722ac0cfd1a106e",
+      "baostock/data/msg.py": "9d56a4bed06d65100b6cc2cbe2490f65a008b221c2dfdb0de2fa3a1de436269f",
+      "baostock/data/resultset.py": "70882a035bc9c20991255d5495c31f68fabc923d313cd35652c33563141797a6",
+      "baostock/demo/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/demo/demo_A_stock_5mk-data.py": "e57b5c1dd92accef7f2223eb84a58dc2a3ccd18091fcf87fd1b53390223ee403",
+      "baostock/demo/demo_A_stock_k_data.py": "bc297ebe87b7b6cd56c94283721fbbf125ab41ac0e925cdaf773b6eeae81630d",
+      "baostock/demo/demo_AllStock.py": "29e271074848aa1165e4a03315526153c0d2a2f25107b47981f3debf7ce461f6",
+      "baostock/demo/demo_Balance_data.py": "4f909f93c46281f339171cd631a8b0c770ee5bffa1aba11e60b1eb76b4071af2",
+      "baostock/demo/demo_CashFlow_data.py": "02a70068e178b8e0448f4c065037a6fd20a1f1d77a37b9a2001332c94b495a1e",
+      "baostock/demo/demo_Dividend_data.py": "3f197930b9425e2d8031b692bf7933f9df48cb87ff66dd05106a1cfbd3740743",
+      "baostock/demo/demo_Dupont_data.py": "050389f1e6fa54f09edda0d49049b3d2b33d8ab3947e15ffc18de112ce21b677",
+      "baostock/demo/demo_Forecast_report.py": "95120f17a2bde0af4a39f7f854c64b877e3d90ebb0ce47f8440242c70f3211ad",
+      "baostock/demo/demo_Growth_data.py": "7c228165e42af969c6c2f7792bf199133a84cd009df024a93231de1f2e6bfba7",
+      "baostock/demo/demo_Index_k_data.py": "304384e64b7268b3ed21e2c32755e012cfc3a16a49d962e09212b208c43467c1",
+      "baostock/demo/demo_Operation_data.py": "252b1d0cfebf590b8c1ef7860f350e5aca7ed7efc1eec0a788e49d4ebb390e31",
+      "baostock/demo/demo_PerformanceExpress_report.py": "7cbb8dd6ccdfa94d1f641133f325a29c4a3ce091f2353e82dc6818fd5dfc7529",
+      "baostock/demo/demo_Profit_data.py": "75d6128d24b79edfcb427f1ca34fddbcbd6c3ed2ec42442e06515e26c8fabfdb",
+      "baostock/demo/demo_TradeDates.py": "4bda5aac9a3e0079bd6cbdacac7f38e159e45c33fc4f7ccb7d51e288c40784ff",
+      "baostock/demo/demo_adjust_factor_data.py": "56fb2eaaeef23559ea7dbc8711e14e72226302b96c86c95409dce8c375f2e6ba",
+      "baostock/demo/demo_assignDayData.py": "07aeaa9ffc082a8652ce2cb2b3823c16d4cb86e132a4755373bebf5507e68011",
+      "baostock/demo/demo_daily_adjust_factor_data.py": "95b444df5435e1a375773689a95f65fef3ea3bfcd1b95a6adbb034be4ce9686f",
+      "baostock/demo/demo_daily_k_4_AStock.py": "9625466334bd9f709368f7190a1d7b38c0e715ad5ba6eefd479b5b8bef09787e",
+      "baostock/demo/demo_daily_k_4_ETF.py": "81e02bb6d79231189cb56f8cf0edfc5fe64f78d2d38032d51f5427ba92fa9f11",
+      "baostock/demo/demo_depositRate_data.py": "ac1a7490ad7004f514bbfc9b8e91ec3dee5107a08816a49b5cea3044d4da5c6d",
+      "baostock/demo/demo_hs300_stocks.py": "069fd426c4a294959ac7ef507e0e614ae8520347fa58e71796ed2762505e900b",
+      "baostock/demo/demo_loanRate_data.py": "c0f576e0e6813b1f065cdd933bc6c11bdc227f60c1191a3fe0c7635e06580ed7",
+      "baostock/demo/demo_moneySupplyDataMonth_data.py": "ebb4a2d74b9d40ed579bcbffd9c9cada081d69e182b6a73f887b8bfebff4f44d",
+      "baostock/demo/demo_moneySupplyDataYear_data.py": "4c802b16474da0c8c6d436e63d5c45f0130b3dbf9fb266b8bb980ac3cb2d61c0",
+      "baostock/demo/demo_requiredReserveRatio_data.py": "77e071db28ab2b50c682d6867f0d61aa92be01f8c90fb89b23283f0ad69110a2",
+      "baostock/demo/demo_set_API_key.py": "1c218575b0976f95d8bcfb5ba82f78f37c45e6dc230618e375e377608bb3ae52",
+      "baostock/demo/demo_stockBasic_data.py": "19e16b428d4a6e16a8636191b9f9dd2bdd85379aefabafda73d2b110745b2009",
+      "baostock/demo/demo_stock_Valuation_indicator_data.py": "42357983ed4534628fe66d255219b895889f879ff514243b442a7e370df6d61e",
+      "baostock/demo/demo_stock_industry.py": "53cd7f70524271c5ae1dcc577d65b279981e3f7531968c136e5259a67dbcfcd1",
+      "baostock/demo/demo_sz50stocks.py": "d1f271a9fd500a9bc8277740a86c732aacba7ea5a027e9690764c652f6802e9d",
+      "baostock/demo/demo_zz500_stock.py": "068ffd5ab41f2230fe4e12ca02e0f1b95642abd9ddd61a33f91189d13aa7d4b0",
+      "baostock/evaluation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/evaluation/season_index.py": "83c674c0e4c8b0052be2b52722cbbc8221ce2719bcff5914dc35bb7366b8c7f1",
+      "baostock/login/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/login/loginout.py": "52cdbce303c99bbe67b905e8b500ffaf9403290c0c9fdd3daecc13c714859dd2",
+      "baostock/macroscopic/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/macroscopic/economic_data.py": "df4596ce222057d7d8815e101a39d039710a6ae60fcde637b28421f97cdf35cf",
+      "baostock/metadata/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/metadata/stock_metadata.py": "f24ff4fd6586d1063ac5feeb0ebf8210705a0f139eb15dba1d871e8dd585a5da",
+      "baostock/security/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/security/history.py": "fe653aa09c0f07e9f9479407c8f2f5455b4ec60c3a9571c652cd9343f7d0094f",
+      "baostock/security/sectorinfo.py": "b20fdbde427fd14278013c91edd97f20d4fdf21e37a0419f2b19f227c0f5da8e",
+      "baostock/util/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baostock/util/socketutil.py": "6376fc85d124ba8e082b2b3f375441be2f2123d8cca3b7c545b1f8c88cc61b7e",
+      "baostock/util/stringutil.py": "98a9cf30f44d405d4549cbf044fddc5a4b38a5d07d5dea917caa05e341782765"
+    }
+  },
+  "dependencies": [
+    {
+      "name": "baostock",
+      "version": "0.9.4",
+      "pypi_metadata_url": "https://pypi.org/pypi/baostock/0.9.4/json",
+      "requires_python": null,
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [
+        "pandas>=0.18.0"
+      ],
+      "wheels": [
+        {
+          "filename": "baostock-0.9.4-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/56/df/6984deaa036cc3467f85411d01a48018eb86ed7477e74f33aa5b012ace05/baostock-0.9.4-py3-none-any.whl",
+          "sha256": "0bf71c6069ab5890ff3596632f9c3f8f1fbc6bfcac582c2f9d6a5c11ab2cfaf8",
+          "size": 52424,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": null,
+          "upload_time": "2026-09-21T09:52:04.263056Z",
+          "tags": [
+            "py3-none-any"
+          ],
+          "metadata_sha256": "3026508eb6b81ca96e5f2b1a3b2866871898fa0c7bd9b2175076af461b358880",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    },
+    {
+      "name": "pandas",
+      "version": "2.3.3",
+      "pypi_metadata_url": "https://pypi.org/pypi/pandas/2.3.3/json",
+      "requires_python": ">=3.9",
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ],
+      "wheels": [
+        {
+          "filename": "pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/e5/63/cd7d615331b328e287d8233ba9fdf191a9c2d11b6af0c7a59cfcec23de68/pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "b3d11d2fda7eb164ef27ffc14b4fcab16a80e1ce67e9f57e19ec0afaf715ba89",
+          "size": 12362693,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": ">=3.9",
+          "upload_time": "2025-09-29T23:20:14.098833Z",
+          "tags": [
+            "cp312-cp312-manylinux_2_24_x86_64",
+            "cp312-cp312-manylinux_2_28_x86_64"
+          ],
+          "metadata_sha256": "40ee953dc7ca155840b639a1881ff84578075187fce0ac20eeda55a7fa0d9a90",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        },
+        {
+          "filename": "pandas-2.3.3-cp312-cp312-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/86/41/585a168330ff063014880a80d744219dbf1dd7a1c706e75ab3425a987384/pandas-2.3.3-cp312-cp312-win_amd64.whl",
+          "sha256": "a16dcec078a01eeef8ee61bf64074b4e524a2a3f4b3be9326420cabe59c4778b",
+          "size": 10992722,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": ">=3.9",
+          "upload_time": "2025-09-29T23:20:54.139166Z",
+          "tags": [
+            "cp312-cp312-win_amd64"
+          ],
+          "metadata_sha256": "243674e606b51e70e5858596c7bfc9b58875d531d56577927c0a9944693f6c2f",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "pypi_metadata_url": "https://pypi.org/pypi/numpy/2.3.5/json",
+      "requires_python": ">=3.11",
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [],
+      "wheels": [
+        {
+          "filename": "numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/b6/23/2a1b231b8ff672b4c450dac27164a8b2ca7d9b7144f9c02d2396518352eb/numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28",
+          "size": 16606086,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": ">=3.11",
+          "upload_time": "2025-11-16T22:50:02.127337Z",
+          "tags": [
+            "cp312-cp312-manylinux_2_27_x86_64",
+            "cp312-cp312-manylinux_2_28_x86_64"
+          ],
+          "metadata_sha256": "6002f29765e5bc1a3be4a1b92ed56b64968a0fecba73e7f81cd536d0c40f4fa3",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        },
+        {
+          "filename": "numpy-2.3.5-cp312-cp312-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/2d/57/8aeaf160312f7f489dea47ab61e430b5cb051f59a98ae68b7133ce8fa06a/numpy-2.3.5-cp312-cp312-win_amd64.whl",
+          "sha256": "86945f2ee6d10cdfd67bcb4069c1662dd711f7e2a4343db5cecec06b87cf31aa",
+          "size": 12782922,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": ">=3.11",
+          "upload_time": "2025-11-16T22:50:12.811635Z",
+          "tags": [
+            "cp312-cp312-win_amd64"
+          ],
+          "metadata_sha256": "7f8a1bfc2b82fee89e1ceef1038aa174ee814832b54c39b4b1b93028ce3f27b1",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "pypi_metadata_url": "https://pypi.org/pypi/python-dateutil/2.9.0.post0/json",
+      "requires_python": "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7",
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [
+        "six>=1.5"
+      ],
+      "wheels": [
+        {
+          "filename": "python_dateutil-2.9.0.post0-py2.py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl",
+          "sha256": "a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427",
+          "size": 229892,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7",
+          "upload_time": "2024-03-01T18:36:18.570437Z",
+          "tags": [
+            "py2-none-any",
+            "py3-none-any"
+          ],
+          "metadata_sha256": "a9d436da322be808332f98d88325998e87cb693a678a9969feb4cfad729a6e93",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    },
+    {
+      "name": "pytz",
+      "version": "2025.2",
+      "pypi_metadata_url": "https://pypi.org/pypi/pytz/2025.2/json",
+      "requires_python": null,
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [],
+      "wheels": [
+        {
+          "filename": "pytz-2025.2-py2.py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl",
+          "sha256": "5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00",
+          "size": 509225,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": null,
+          "upload_time": "2025-03-25T02:24:58.468169Z",
+          "tags": [
+            "py2-none-any",
+            "py3-none-any"
+          ],
+          "metadata_sha256": "e620e4e1f9f1c8019619388d4da496eb02119a13f35aaad55f022694a3c81f6c",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    },
+    {
+      "name": "tzdata",
+      "version": "2025.2",
+      "pypi_metadata_url": "https://pypi.org/pypi/tzdata/2025.2/json",
+      "requires_python": ">=2",
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [],
+      "wheels": [
+        {
+          "filename": "tzdata-2025.2-py2.py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/5c/23/c7abc0ca0a1526a0774eca151daeb8de62ec457e77262b66b359c3c7679e/tzdata-2025.2-py2.py3-none-any.whl",
+          "sha256": "1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8",
+          "size": 347839,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": ">=2",
+          "upload_time": "2025-03-23T13:54:41.845043Z",
+          "tags": [
+            "py2-none-any",
+            "py3-none-any"
+          ],
+          "metadata_sha256": "c2cc876ee200b84d1b8bee22290bc673ae4cf8e8be1a85cd2909a2715215794b",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "pypi_metadata_url": "https://pypi.org/pypi/six/1.17.0/json",
+      "requires_python": "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7",
+      "release_yanked": false,
+      "active_requires_dist_cpython312": [],
+      "wheels": [
+        {
+          "filename": "six-1.17.0-py2.py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+          "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+          "size": 11050,
+          "yanked": false,
+          "yanked_reason": null,
+          "requires_python": "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7",
+          "upload_time": "2024-12-04T17:35:26.475808Z",
+          "tags": [
+            "py2-none-any",
+            "py3-none-any"
+          ],
+          "metadata_sha256": "562042078c2752549f6d8a7c86dbc5dd708088a7be6d80672ec7b07100b72468",
+          "archive_hash_verified_in_memory": true,
+          "metadata_hash_verified_in_memory": true
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "metadata_source": "Official version-specific PyPI JSON plus actual wheel METADATA/WHEEL/RECORD bytes; all package archives handled in memory only.",
+    "selected_distribution_count": 7,
+    "selected_wheel_count": 9,
+    "all_selected_releases_and_wheels_not_yanked": true,
+    "all_selected_archive_sha256_and_size_verified": true,
+    "all_selected_metadata_sha256_verified": true,
+    "requires_python_matches_cpython312": true,
+    "closure_complete_for_both_platforms_no_extras": true,
+    "method": "Parse actual wheel METADATA; evaluate PEP 508 markers for CPython 3.12 win32/AMD64 and linux/x86_64 with extra empty; every active dependency resolves to one exact pin satisfying its specifier. Parse every SDK .py with Python 3.12 ast without import or execution.",
+    "installation_test": "NOT_RUN",
+    "pip_check": "NOT_RUN",
+    "sdk_import_test": "NOT_RUN",
+    "offline_sdk_wire_fixture_test": "NOT_RUN",
+    "product_tests": "NOT_RUN",
+    "governance_tests": "NOT_RUN",
+    "ci": "NOT_RUN",
+    "independent_reviewer": "NOT_RUN",
+    "independent_release": "NOT_RUN",
+    "market_requests": 0,
+    "limitations": [
+      "No transitive-dependency source/security audit was performed; their wheel metadata and hashes were checked.",
+      "Metadata compatibility is not runtime compatibility, vulnerability clearance, provider availability, data authenticity or data-rights approval.",
+      "No market data was fetched, persisted, printed or deleted in this phase because none was acquired."
+    ]
+  },
+  "source_audit": {
+    "status": "STATIC_INSPECTION_COMPLETED_NOT_RELEASE_APPROVAL",
+    "scope": "All 56 Python files in the exact SDK wheel, including demos and empty package initializers; AST inventory of imports, top-level statements and every call, with manual reading of import, context, login, transport, result parsing, metadata and history paths.",
+    "third_party_sources_vendored": false,
+    "external_imports": [
+      "pandas"
+    ],
+    "stdlib_imports": [
+      "datetime",
+      "json",
+      "socket",
+      "threading",
+      "time",
+      "zlib"
+    ],
+    "findings": [
+      {
+        "id": "normal_import",
+        "locations": [
+          "baostock/__init__.py:8",
+          "baostock/data/resultset.py:9"
+        ],
+        "finding": "Normal SDK import eagerly imports all exported query modules and pandas. In SDK-owned normal import paths no top-level network, file write, process spawn, environment/credential-file read or thread start was found. This does not audit pandas/NumPy import side effects.",
+        "required_control": "Product module imports and pure receipt/governance validators must remain stdlib-only. Import SDK/pandas lazily only inside authorized isolated SDK preflight/collection, never at product module import or test discovery."
+      },
+      {
+        "id": "demo_import_side_effects",
+        "locations": [
+          "baostock/demo/"
+        ],
+        "finding": "31 demo scripts exist: 30 execute login/query/logout, print data and write CSV at import; demo_assignDayData guards its invocation with __main__ but performs the same actions when run. demo_set_API_key supplies a placeholder API key. Root SDK import does not import these demos.",
+        "required_control": "Hash demo files as part of the exact SDK inventory but never import or run any demo. No recursive import/discovery of the SDK package."
+      },
+      {
+        "id": "credential_context",
+        "locations": [
+          "baostock/common/context.py:3",
+          "baostock/login/loginout.py:19",
+          "baostock/login/loginout.py:45",
+          "baostock/login/loginout.py:161"
+        ],
+        "finding": "Default login uses the SDK's public anonymous defaults, not a personal credential. login reads context.apiKey if present; set_API_key writes it, and context stores user_id/default_socket. No SDK environment, credential-file or interactive-secret read was found.",
+        "required_control": "Reject unexpected preloaded SDK modules and any existing apiKey/user_id/default_socket before controlled first use. Do not print or inspect key values, call set_API_key, or reuse another session. Never infer clean state from the distribution version alone."
+      },
+      {
+        "id": "singleton_and_shadowing",
+        "locations": [
+          "baostock/util/socketutil.py:19",
+          "baostock/util/socketutil.py:23"
+        ],
+        "finding": "SocketUtil retains a process-wide SDK class instance/init_flag, while module aliases retain references to context/socket/zlib. Clean files do not authenticate already cached or replaced Python objects.",
+        "required_control": "Validate exact installed paths and all raw-byte hashes before first SDK import; reject symlink/reparse/zip/source-less/native shadows and unexpected SDK source files or bytecode caches. Use fresh isolated context, instance=None/init_flag=False, consistent module identities/spec origins and no concurrent SDK use. Restore SDK-local bindings/context in finally and terminate the live CLI."
+      },
+      {
+        "id": "unencrypted_transport_and_vip",
+        "locations": [
+          "baostock/common/contants.py:11",
+          "baostock/util/socketutil.py:34",
+          "baostock/util/socketutil.py:48"
+        ],
+        "finding": "AF_INET raw TCP connects to public-api.baostock.com:10030; a bs- key chooses vip-api.baostock.com. get_default_socket can independently create another connection. There is no TLS or peer authentication.",
+        "required_control": "Only one bounded public-host connection; reject VIP, alternate endpoints, reconnection, fallbacks and unexpected operations. SDK-local socket dependency proxy only, never mutate the process-wide socket module. DNS deadline/public-address validation/address pinning remain required."
+      },
+      {
+        "id": "send_receive_bounds",
+        "locations": [
+          "baostock/util/socketutil.py:69",
+          "baostock/util/socketutil.py:71",
+          "baostock/util/socketutil.py:93"
+        ],
+        "finding": "send return value is ignored; recv appends until the terminator with no EOF exit, total deadline, wire/frame bound or retry budget. Broad exception handling prints and swallows errors; connect failures also print and retain the socket.",
+        "required_control": "Complete short sends within the same operation, enforce monotonic deadline and byte/frame/request limits, fail on EOF and keep failure sticky outside SDK catches. Suppress/discard SDK output without retaining raw exceptions. No new cleanup protocol request after failure."
+      },
+      {
+        "id": "unbounded_decompression",
+        "locations": [
+          "baostock/util/socketutil.py:82",
+          "baostock/util/socketutil.py:85"
+        ],
+        "finding": "SDK uses unbounded zlib.decompress selected by the response header and does not validate trailing/concatenated/truncated streams or cumulative decoded size.",
+        "required_control": "Replace only the SDK module's zlib binding with a bounded dependency proxy while retaining official framing/response parsing. Reject malformed/trailing/concatenated streams before growth beyond the decoded limit; never globally monkeypatch zlib."
+      },
+      {
+        "id": "pagination_and_pandas_api",
+        "locations": [
+          "baostock/data/resultset.py:54",
+          "baostock/data/resultset.py:133",
+          "baostock/data/resultset.py:146",
+          "baostock/common/contants.py:189"
+        ],
+        "finding": "ResultData.next may send another request when a page has exactly 2000 records. get_data calls next and then DataFrame.append, removed in pandas 2.0; it is not compatible as a general multipage API with the selected pandas.",
+        "required_control": "Never use next/get_data in the planned path. Validate and consume only bounded first-page data; reject pagination/full pages. Seven planned operations and at most twelve protocol requests are not authorization for extra pages.",
+        "reference": "https://pandas.pydata.org/docs/whatsnew/v2.0.0.html"
+      },
+      {
+        "id": "response_validation_and_time",
+        "locations": [
+          "baostock/security/history.py:50",
+          "baostock/security/history.py:117",
+          "baostock/metadata/stock_metadata.py:58",
+          "baostock/data/resultset.py:154"
+        ],
+        "finding": "Queries default to broad date windows/local current date unless explicit. Parsers split untrusted fields and decode JSON records without complete schema, row, echo or date validation. History ignores response version/type in the returned ResultData. setData removes whitespace before JSON parsing, including whitespace within text values.",
+        "required_control": "Pass exact bounded dates, fields, symbols and daily frequency; validate genuine SDK results and response metadata under the later frozen contract. Do not infer publication/finality or authenticate a peer with CRC/hash. Preserve a validation path for response type/version that the SDK result alone does not expose; no handwritten business protocol replacement."
+      },
+      {
+        "id": "retention_and_output",
+        "locations": [
+          "baostock/data/resultset.py:42",
+          "baostock/util/socketutil.py:94",
+          "baostock/demo/"
+        ],
+        "finding": "Normal query/result paths retain raw/decoded values in objects and print statuses/errors; demos explicitly persist CSV. No non-demo SDK payload-file/database write was found.",
+        "required_control": "All frames/rows/CSV/identity names/calendars/derived values stay RAM-only. No payload files, database rows, stdout, logs or traceback strings. Existing Store may retain sanitized journal results only with capture/evidence/bundle tables empty. Dispose of references, close the socket and end the CLI process; no secure-RAM-wipe or OS-paging guarantee."
+      },
+      {
+        "id": "version_identity",
+        "locations": [
+          "baostock/__init__.py:9",
+          "baostock/common/contants.py:9"
+        ],
+        "finding": "Distribution METADATA Version is 0.9.4; package __version__ and protocol BAOSTOCK_CLIENT_VERSION are 00.9.40.",
+        "required_control": "Check each exact value in its own namespace. Do not compare package __version__ to 0.9.4 or trust a cached module version without source/path validation."
+      }
+    ],
+    "future_transport_constraints": {
+      "implementation_status": "NOT_IMPLEMENTED_INTERFACE_NOT_FROZEN",
+      "binding_policy": "SDK-local module dependency proxies, restored in finally; no process-wide monkeypatch and no handwritten business protocol",
+      "allowed_symbols": [
+        "sh.000001",
+        "sz.399001"
+      ],
+      "allowed_sdk_calls": [
+        "login",
+        "query_trade_dates",
+        "query_stock_basic",
+        "query_history_k_data_plus",
+        "logout"
+      ],
+      "planned_protocol_requests": 7,
+      "max_protocol_requests": 12,
+      "max_connections": 1,
+      "max_sessions": 1,
+      "retries": 0,
+      "total_deadline_seconds": 20,
+      "max_wire_bytes": 512000,
+      "max_frame_bytes": 128000,
+      "max_decoded_bytes": 1048576,
+      "pagination_allowed": false,
+      "calendar_natural_days": 14,
+      "market_payload_persistence_allowed": false,
+      "raw_stdout_allowed": false,
+      "fixture_requirement": "Later tests must use authored wire responses through the genuine pinned SDK with actual DNS/socket blocked, not a fake ResultData parser.",
+      "next_gate": "Freeze the callback/interface only through parent coordination after actual entrypoint/Prompt audits and explicit implementation handoff. Installation remains parent-owned; live dispatch additionally requires independent Reviewer, separate pre-probe Release and exact-snapshot market gate."
+    }
+  }
+}

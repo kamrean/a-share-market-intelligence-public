@@ -1,4 +1,4 @@
-"""Offline P4M regression tests; all mutations and commits use temporary repositories."""
+"""Offline P4B regression tests; all mutations and commits use temporary repositories."""
 
 from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
@@ -18,7 +18,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location("p4m_governance", ROOT / "tools/governance.py")
+SPEC = importlib.util.spec_from_file_location("p4b_governance", ROOT / "tools/governance.py")
 g = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(g)
 
@@ -85,6 +85,48 @@ def nbs_fixture(snapshot_id, *, status="FAILED"):
             "observation": observation, "reason": "source_observation"}
 
 
+def market_fixture(snapshot_id):
+    """Authored failed-session metadata, never an actual acquisition or approval."""
+    started, finished = "2020-01-01T00:00:00Z", "2020-01-01T00:00:01Z"
+    observation = {
+        "source_id": "baostock_standard_free", "implementation_version": "p4b-ephemeral-capture-v1",
+        "sdk_version": "0.9.4", "sdk_wheel_sha256": g.LIMITED_MARKET_INGESTION["sdk_wheel_sha256"],
+        "run_id": "1" * 32, "attempt_id": "2" * 32,
+        "started_at": started, "finished_at": finished,
+        "transport": {
+            "status": "FAILED", "reason": "connection", "started_at": started,
+            "finished_at": finished, "window_start": None, "window_end": None,
+            "requests_sent": 0, "wire_bytes": 0, "decoded_bytes": 0,
+            "wire_sha256": g.sha256(""), "responses": [],
+            "socket_closed": True, "bindings_restored": True, "transport_payloads_disposed": True,
+        },
+        "batch_possession_at": None,
+        "input": {
+            "observed_symbols": [], "validated_symbols": [], "session_start": None,
+            "session_end": None, "latest_expected_session": None, "latest_session_symbols": [],
+            "daily_rows_received": 0, "accepted_rows": None, "rejected_rows": None,
+            "rejection_counts": None, "observed_input_coverage": {"covered": 0, "expected": 5},
+        },
+        "composition": {
+            "status": "NOT_RUN", "verified": False, "bundle_sha256": None,
+            "normalized_sha256": None, "declaration_sha256": None, "methods_sha256": None,
+            "entities_sha256": None, "policy_sha256": None, "completed_at": None, "expires_at": None,
+        },
+        "cleanup": {
+            "socket_closed": True, "bindings_restored": True, "transport_payloads_disposed": True,
+            "capture_payloads_disposed": True, "payload_tables_empty": True, "checked_at": finished,
+        },
+        "live_market_coverage": {"covered": 0, "expected": 5,
+                                "missing": ["000001.SH", "399001.SZ", "399006.SZ", "KOSPI", "SP500"]},
+        "new_live_research_runs": 0,
+        "limitations": ["unauthenticated_unencrypted_tcp", "publication_time_unknown", "finality_unknown",
+                        "provider_calendar_not_independently_certified", "metadata_only_no_later_replay",
+                        "no_secure_ram_erasure_or_os_paging_claim", "not_live_research_or_mvp"],
+    }
+    return {"schema_version": 1, "package_id": "P4B", "snapshot_id": snapshot_id,
+            "status": "FAILED", "reason": "transport_failed", "observation": observation}
+
+
 class BatchBlobTests(unittest.TestCase):
     def test_empty_batch_does_not_start_git(self):
         with patch.object(g, "git_raw") as command:
@@ -147,8 +189,8 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.policy["repository"], expected)
         self.assertEqual(self.contract["dependency"], g.dependency())
         self.assertEqual(self.state["dependency"], g.dependency())
-        self.assertEqual(g.BASELINE, "93f6fe87c723dba32225a4895788d8edeef0b539")
-        self.assertEqual(g.BRANCH, "stage3-daily-market-evidence")
+        self.assertEqual(g.BASELINE, "58d88afdc3432f57bca8059025fddfda6bda2f95")
+        self.assertEqual(g.BRANCH, "stage1-baostock-live-evidence")
         self.assertNotIn("codex", g.BRANCH)
         g.validate_contract(self.contract)
         g.exact(self.policy, g.POLICY, "policy")
@@ -157,15 +199,13 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(self.state["stage_registry"][0]["status"], "complete")
 
     def test_p4_scope_keeps_historical_packages_immutable(self):
-        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (200, 176, 196))
+        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (220, 190, 214))
         self.assertEqual(tuple(self.contract["allowed_paths"]), g.ALLOWED)
         self.assertEqual(tuple(self.contract["immutable_paths"]), g.IMMUTABLE)
         self.assertEqual(tuple(self.contract["attestation_paths"]), g.CURRENT_ATTESTATIONS)
         self.assertEqual(set(g.ALLOWED) - set(g.PROTECTED), set(g.CURRENT_ATTESTATIONS))
-        self.assertEqual(g.CURRENT_ATTESTATIONS, (
-            "docs/reviews/p4m-bundle.json", "docs/reviews/p4m-validation.json",
-            "docs/reviews/p4m-review.json", "docs/reviews/p4m-release.json"))
-        for package in ("p0", "p1", "p2", "p3", "p4", "p4l", "p4c", "p4s", "p4e", "p4i", "p4n"):
+        self.assertEqual(g.CURRENT_ATTESTATIONS, tuple(["docs/reviews/p4b-bundle.json", "docs/reviews/p4b-validation.json", "docs/reviews/p4b-review.json", "docs/reviews/p4b-pre-probe-release.json", "docs/reviews/p4b-release.json", "docs/evidence/p4b-market-observation.json"]))
+        for package in ("p0", "p1", "p2", "p3", "p4", "p4l", "p4c", "p4s", "p4e", "p4i", "p4n", "p4m"):
             for receipt in ("builder-prompt.md", "bundle.json", "prompt-audit.json",
                             "release.json", "review.json", "validation.json"):
                 name = f"docs/reviews/{package}-{receipt}"
@@ -200,22 +240,13 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertIn("docs/reviews/p4e-merge.json", g.IMMUTABLE)
         self.assertIn("docs/reviews/p4i-merge.json", g.PROTECTED)
         self.assertIn("docs/reviews/p4i-merge.json", g.IMMUTABLE)
-        self.assertNotIn("docs/reviews/p4n-merge.json", g.IMMUTABLE)
+        self.assertIn("docs/reviews/p4n-merge.json", g.IMMUTABLE)
+        self.assertNotIn("docs/reviews/p4m-merge.json", g.IMMUTABLE)
 
     def test_p4_merge_identity_and_ci_are_exact(self):
-        self.assertEqual(g.dependency(), {
-            "package_id": "P4N",
-            "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/11",
-            "merge_commit": "93f6fe87c723dba32225a4895788d8edeef0b539",
-            "merged_at": "2026-11-18T14:45:50Z",
-            "tested_head": "d35743371a12ae9c0f6e6d7be937fdac23408b2a",
-            "pr_ci_run": 44322275119,
-            "merge_ci_run": 44327850126,
-            "ci_status": "PASS",
-            "merge_status": "merged"
-        })
+        self.assertEqual(g.dependency(), {"package_id": "P4M", "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12", "merge_commit": "58d88afdc3432f57bca8059025fddfda6bda2f95", "merged_at": "2026-11-19T04:03:58Z", "tested_head": "49e9488b1ab586c8bfd24df3654a4e49bd2ef38b", "pr_ci_run": 44345530691, "merge_ci_run": 44455715479, "ci_status": "PASS", "merge_status": "merged"})
         expected = g.prior_merge_evidence()
-        actual = g.parse_json(g.read_text(ROOT, "docs/reviews/p4n-merge.json"))
+        actual = g.parse_json(g.read_text(ROOT, "docs/reviews/p4m-merge.json"))
         g.exact(actual, expected, "prior merge evidence")
 
     def test_stage_history_and_source_model_gaps_cannot_advance(self):
@@ -262,9 +293,9 @@ class RepositoryBindingTests(unittest.TestCase):
 
     def test_p4_stage7_and_partial_stage8_lifecycle_binding(self):
         for status, runtime in (
-            ("contract_prepared_unreleased", "daily_market_planned_model_deferred"),
-            ("building", "daily_market_planned_model_deferred"),
-            ("implemented_unreleased", "daily_market_evidence_model_deferred"),
+            ("awaiting_implementation", "baostock_planned_model_deferred"),
+            ("building", "baostock_planned_model_deferred"),
+            ("implemented_unreleased", "baostock_evidence_model_deferred"),
         ):
             state = deepcopy(self.state)
             state["package_status"] = status
@@ -281,14 +312,11 @@ class RepositoryBindingTests(unittest.TestCase):
                         g.validate_state(changed)
 
     def test_p4_paths_and_next_gate_are_exact(self):
-        self.assertEqual(g.CONTRACT_PATH, "contracts/p4m_daily_market_evidence.toml")
-        self.assertEqual(g.TEMPLATE_PATH, "templates/p4m_builder_prompt.md")
-        self.assertEqual(g.PROMPT_PATH, "docs/reviews/p4m-builder-prompt.md")
+        self.assertEqual(g.CONTRACT_PATH, "contracts/p4b_baostock_live_evidence.toml")
+        self.assertEqual(g.TEMPLATE_PATH, "templates/p4b_builder_prompt.md")
+        self.assertEqual(g.PROMPT_PATH, "docs/reviews/p4b-builder-prompt.md")
         self.assertEqual(g.NEXT_GATE,
-                         "Human merge after exact-head CI and independent remote release; resolve anonymous-only "
-                         "source acquisition and real temporal/provenance evidence, then separately audited "
-                         "model/report/private-delivery integration. "
-                         "No inherited network or VPS permission.")
+                         "Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS.")
         self.assertEqual(self.state["next_gate"], g.NEXT_GATE)
         for field, bad in (("active_contract", "contracts/p3_research.toml"),
                            ("baseline", "e61f1cbfc41118deb13df421b927ace3d01c150e"),
@@ -296,7 +324,7 @@ class RepositoryBindingTests(unittest.TestCase):
             with self.subTest(field=field), self.assertRaises(g.Block):
                 g.validate_state({**self.state, field: bad})
         for field, bad in (("package_id", "P3"), ("stage_ids", [5, 6]),
-                           ("attestation_paths", [name.replace("p4m-", "p4-") for name in g.CURRENT_ATTESTATIONS])):
+                           ("attestation_paths", [name.replace("p4b-", "p4-") for name in g.CURRENT_ATTESTATIONS])):
             with self.subTest(field=field), self.assertRaises(g.Block):
                 g.validate_contract({**self.contract, field: bad})
 
@@ -318,8 +346,9 @@ class RepositoryBindingTests(unittest.TestCase):
             name for name in g.ALLOWED
             if name.startswith(("market_intelligence/", "config/", "tests/product/", "tests/fixtures/",
                                 "docs/reviews/p4-"))
-        } - {"market_intelligence/daily_market.py", "market_intelligence/intelligence.py",
-             "tests/product/test_daily_market.py"}
+        } - {"market_intelligence/baostock_transport.py", "market_intelligence/baostock_capture.py",
+             "tests/product/test_baostock_transport.py", "tests/product/test_baostock_capture.py",
+             "config/p4b_sdk_manifest.json"}
         artifacts.update(("contracts/p4_publication.toml", "templates/p4_builder_prompt.md",
                           "docs/P4_METHODS.md", "docs/evidence/p4-demo.json",
                           "docs/evidence/p4-report.txt", "requirements.lock",
@@ -407,8 +436,8 @@ class RepositoryBindingTests(unittest.TestCase):
         product_paths = {name for name in g.ALLOWED
                          if name.startswith(("market_intelligence/", "tests/product/"))}
         self.assertEqual(product_paths - set(g.IMMUTABLE), {
-            "market_intelligence/daily_market.py", "market_intelligence/intelligence.py",
-            "tests/product/test_daily_market.py",
+            "market_intelligence/baostock_transport.py", "market_intelligence/baostock_capture.py",
+            "tests/product/test_baostock_transport.py", "tests/product/test_baostock_capture.py",
         })
         for name in product_paths:
             self.assertIn(name, g.PROTECTED)
@@ -419,7 +448,7 @@ class RepositoryBindingTests(unittest.TestCase):
         self.assertEqual(g.FROZEN_INPUT_HASHES[g.PREREQUISITE_PATH], g.PREREQUISITE_HASH)
 
     def test_current_required_reads_and_contract_next_gate_are_pinned(self):
-        self.assertEqual(self.contract["required_reads"], ["AGENTS.md","BLUEPRINT.md","START_CONSTRUCTION_PROMPT.md","contracts/p4m_daily_market_evidence.toml","governance/policy.toml","project-state/state.json","docs/DAILY_MARKET_EVIDENCE.md","docs/reviews/p4n-merge.json","README.md","docs/CONSTRUCTION_LOG.md","docs/REAL_EVIDENCE_COMPOSITION.md","docs/FREE_SOURCE_COLLECTION.md","docs/NBS_EVIDENCE_INGESTION.md","docs/evidence/live-integration-prerequisites.json","docs/evidence/p4s-source-probe.json","docs/evidence/p4e-preparation.json","docs/evidence/p4n-nbs-observation.json","docs/reviews/p4n-review.json","docs/reviews/p4n-pre-probe-release.json","docs/reviews/p4n-release.json"])
+        self.assertEqual(self.contract["required_reads"], ["AGENTS.md", "BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", "contracts/p4b_baostock_live_evidence.toml", "governance/policy.toml", "project-state/state.json", "docs/BAOSTOCK_LIVE_EVIDENCE.md", "docs/evidence/p4b-user-authorization.json", "requirements-baostock.lock", "config/p4b_sdk_manifest.json", "docs/reviews/p4m-merge.json", "README.md", "docs/CONSTRUCTION_LOG.md", "contracts/p4m_daily_market_evidence.toml", "docs/DAILY_MARKET_EVIDENCE.md", "docs/REAL_EVIDENCE_COMPOSITION.md", "docs/FREE_SOURCE_COLLECTION.md", "docs/NBS_EVIDENCE_INGESTION.md", "docs/evidence/live-integration-prerequisites.json", "docs/evidence/p4s-source-probe.json", "docs/evidence/p4e-preparation.json", "docs/evidence/p4n-nbs-observation.json", "docs/reviews/p4m-bundle.json", "docs/reviews/p4m-validation.json", "docs/reviews/p4m-review.json", "docs/reviews/p4m-release.json"])
         for field, bad in (("required_reads", self.contract["required_reads"][:-1]),
                            ("next_gate", "start_model_integration"),
                            ("next_gate", g.NEXT_GATE + "; dispatch")):
@@ -429,11 +458,17 @@ class RepositoryBindingTests(unittest.TestCase):
     def test_ci_retains_action_pins_platforms_permissions_and_timeout(self):
         workflow = ".github/workflows/governance.yml"
         previous = g.normalize_text(g.git(ROOT, "show", f"{g.BASELINE}:{workflow}"))
+        # The measured 21m59s baseline needs construction-only setup/test margin.
+        install = "      - name: Install isolated hash-locked binary dependencies\n        shell: python\n        run: |\n          import os\n          from pathlib import Path\n          import subprocess\n          import venv\n\n          target = Path(os.environ['RUNNER_TEMP']) / 'p4b-sdk-venv'\n          if target.exists():\n              raise RuntimeError('Fresh isolated environment required')\n          venv.EnvBuilder(with_pip=True).create(target)\n          executable = target / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')\n          environment = {key: value for key, value in os.environ.items()\n                         if not key.upper().startswith('PIP_')\n                         and not key.upper().endswith('_PROXY')\n                         and key.upper() != 'NETRC'}\n          environment.update(PIP_CONFIG_FILE=os.devnull, NETRC=os.devnull,\n                             PYTHONDONTWRITEBYTECODE='1')\n          subprocess.run([str(executable), '-I', '-m', 'pip', '--isolated',\n                          '--disable-pip-version-check', '--no-input',\n                          '--keyring-provider', 'disabled', 'install', '--no-cache-dir',\n                          '--no-compile', '--require-hashes', '--only-binary=:all:',\n                          '--index-url', 'https://pypi.org/simple',\n                          '-r', 'requirements-baostock.lock'], env=environment, check=True)\n          with open(os.environ['GITHUB_PATH'], 'a', encoding='utf-8') as output:\n              output.write(str(executable.parent) + '\\n')\n          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as output:\n              for key in ('PIP_CONFIG_FILE', 'NETRC', 'PYTHONDONTWRITEBYTECODE'):\n                  output.write(key + '=' + environment[key] + '\\n')\n      - name: Verify optional dependency closure\n        run: python -m pip check\n      - name: Offline installed-SDK transport verification\n        run: python -m unittest discover -s tests/product -p test_baostock_transport.py -v\n      - name: Offline installed-SDK capture integration\n        run: python -m unittest discover -s tests/product -p test_baostock_capture.py -v\n"
         expected = previous.replace(
-            "# P4N bindings retain all offline regressions; CI never runs a product request.",
             "# P4M bindings retain all offline regressions; CI never runs a product request.",
-        ).replace("66be9c9705c5a9739f2beb5a3a9287f21703018d", g.BASELINE)
+            "# P4B adds isolated dependency setup; all tests remain offline, never a product request.",
+        ).replace("timeout-minutes: 25", "timeout-minutes: 30").replace(
+            "93f6fe87c723dba32225a4895788d8edeef0b539", g.BASELINE).replace(
+            "      - name: Offline governance tests\n",
+            install + "      - name: Offline governance tests\n")
         self.assertEqual(g.read_text(ROOT, workflow), expected)
+        self.assertEqual(g.LIMITED_MARKET_INGESTION["deadline_seconds"], 20)
 
     def test_frozen_inputs_match_actual_independent_zero_finding_audits(self):
         approved = {}
@@ -442,7 +477,7 @@ class RepositoryBindingTests(unittest.TestCase):
             self.assertEqual(receipt["findings"], [])
             self.assertEqual(receipt["verdict"], "PASS")
             self.assertIs(receipt["independent"], True)
-            self.assertEqual(receipt["agent_id"], "01a1ef26-ac47-7d02-9fcb-8c3aa5403dad")
+            self.assertEqual(receipt["agent_id"], "01a1f1fb-db53-7252-8f46-f0999a854c66")
             self.assertEqual(receipt["repair_cycles"], 0)
             approved.update(receipt["files"])
         self.assertEqual(g.FROZEN_INPUT_HASHES, approved)
@@ -464,7 +499,7 @@ class RepositoryBindingTests(unittest.TestCase):
                 del changed["dependency"][field]
                 with self.assertRaises(g.Block):
                     validator(changed)
-        self.assertEqual(len(g.FROZEN_INPUT_HASHES), 20)
+        self.assertEqual(len(g.FROZEN_INPUT_HASHES), 26)
 
     def test_p4i_historical_receipts_cannot_become_current_exemptions(self):
         for name in (g.PREPARATION_PATH, g.SOURCE_PROBE_PATH,
@@ -532,7 +567,7 @@ class PrerequisiteManifestTests(unittest.TestCase):
                           "model", "private_telegram", "engineering", "acceptance"])
 
     def test_current_audit_inputs_are_exact_and_snapshot_protected(self):
-        self.assertEqual(g.AUDIT_INPUTS, tuple(["AGENTS.md","BLUEPRINT.md","START_CONSTRUCTION_PROMPT.md","README.md","contracts/p4m_daily_market_evidence.toml","governance/policy.toml","docs/DAILY_MARKET_EVIDENCE.md","templates/p4m_builder_prompt.md","docs/reviews/p4m-builder-prompt.md","docs/reviews/p4n-merge.json","docs/REAL_EVIDENCE_COMPOSITION.md","docs/FREE_SOURCE_COLLECTION.md","docs/NBS_EVIDENCE_INGESTION.md","docs/evidence/live-integration-prerequisites.json","docs/evidence/p4s-source-probe.json","docs/evidence/p4e-preparation.json","docs/evidence/p4n-nbs-observation.json","docs/reviews/p4n-review.json","docs/reviews/p4n-pre-probe-release.json","docs/reviews/p4n-release.json"]))
+        self.assertEqual(g.AUDIT_INPUTS, tuple(["AGENTS.md", "BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", "contracts/p4b_baostock_live_evidence.toml", "governance/policy.toml", "docs/BAOSTOCK_LIVE_EVIDENCE.md", "docs/evidence/p4b-user-authorization.json", "requirements-baostock.lock", "config/p4b_sdk_manifest.json", "docs/reviews/p4m-merge.json", "README.md", "contracts/p4m_daily_market_evidence.toml", "docs/DAILY_MARKET_EVIDENCE.md", "docs/REAL_EVIDENCE_COMPOSITION.md", "docs/FREE_SOURCE_COLLECTION.md", "docs/NBS_EVIDENCE_INGESTION.md", "docs/evidence/live-integration-prerequisites.json", "docs/evidence/p4s-source-probe.json", "docs/evidence/p4e-preparation.json", "docs/evidence/p4n-nbs-observation.json", "docs/reviews/p4m-bundle.json", "docs/reviews/p4m-validation.json", "docs/reviews/p4m-review.json", "docs/reviews/p4m-release.json", "templates/p4b_builder_prompt.md", "docs/reviews/p4b-builder-prompt.md"]))
         self.assertTrue(set(g.AUDIT_INPUTS).issubset(g.PROTECTED))
         audit = g.parse_json(self.contents[g.CURRENT_RECEIPT_PATHS["prompt_audit"]])
         for name in g.AUDIT_INPUTS:
@@ -752,15 +787,15 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
         self.state = g.parse_json(g.read_text(ROOT, "project-state/state.json"))
 
     def test_only_matching_governance_entry_states_are_valid(self):
-        for package, runtime in (("building", "daily_market_planned_model_deferred"),
-                                 ("implemented_unreleased", "daily_market_evidence_model_deferred")):
+        for package, runtime in (("building", "baostock_planned_model_deferred"),
+                                 ("implemented_unreleased", "baostock_evidence_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
             g.validate_state(state)
             state["live_integration"]["runtime_implementation"] = (
-                "daily_market_evidence_model_deferred" if package == "building"
-                else "daily_market_planned_model_deferred")
+                "baostock_evidence_model_deferred" if package == "building"
+                else "baostock_planned_model_deferred")
             with self.assertRaisesRegex(g.Block, "runtime_implementation"):
                 g.validate_state(state)
 
@@ -808,8 +843,8 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             g.validate_state({**self.state, "permissions": {"external_data_access_allowed": True}})
 
     def test_historical_stage7_stage8_do_not_track_current_building(self):
-        for package, runtime in (("building", "daily_market_planned_model_deferred"),
-                                 ("implemented_unreleased", "daily_market_evidence_model_deferred")):
+        for package, runtime in (("building", "baostock_planned_model_deferred"),
+                                 ("implemented_unreleased", "baostock_evidence_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
@@ -817,7 +852,7 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             for stage, expected in ((7, "engineering_merged_live_gaps"),
                                     (8, "offline_subset_merged_live_gaps")):
                 self.assertEqual(state["stage_registry"][stage]["status"], expected)
-                for bad in ("in_progress", "implemented_unreleased", "contract_prepared_unreleased",
+                for bad in ("in_progress", "implemented_unreleased", "awaiting_implementation",
                             "offline_subset_in_progress", "offline_subset_implemented_unreleased", "complete"):
                     changed = deepcopy(state)
                     changed["stage_registry"][stage]["status"] = bad
@@ -830,14 +865,14 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
             with patch.object(g, "check"), patch.object(g, "gate", return_value="LOCAL_READY_FOR_PR"), \
                     redirect_stdout(output):
                 self.assertEqual(g.main(list(args)), 0)
-            self.assertIn("Daily-market offline governance only; model/live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES",
+                self.assertIn("Bounded market governance only; model/live-readiness-blocked: BLOCKED_EXTERNAL_PREREQUISITES",
                           output.getvalue())
             self.assertTrue(output.getvalue().startswith("PASS (" if args[0] == "check"
                                                         else "LOCAL_READY_FOR_PR ("))
 
     def test_both_offline_states_keep_human_merged_entry_and_closed_live_permissions(self):
-        for package, runtime in (("building", "daily_market_planned_model_deferred"),
-                                 ("implemented_unreleased", "daily_market_evidence_model_deferred")):
+        for package, runtime in (("building", "baostock_planned_model_deferred"),
+                                 ("implemented_unreleased", "baostock_evidence_model_deferred")):
             state = deepcopy(self.state)
             state["package_status"] = package
             state["live_integration"]["runtime_implementation"] = runtime
@@ -847,7 +882,7 @@ class LiveIntegrationLifecycleTests(unittest.TestCase):
                 "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
                 "prerequisite_register": g.PREREQUISITE_PATH, "permissions_enabled": False,
             })
-            for entry in ("in_progress", "contract_prepared_unreleased", "implemented_unreleased"):
+            for entry in ("in_progress", "awaiting_implementation", "implemented_unreleased"):
                 changed = deepcopy(state)
                 changed["live_integration"]["entry_status"] = entry
                 with self.subTest(package=package, entry=entry), self.assertRaises(g.Block):
@@ -862,7 +897,7 @@ class ProbeAttestationTests(unittest.TestCase):
         self.state = g.parse_json(g.read_text(ROOT, "project-state/state.json"))
         self.state["package_status"] = "implemented_unreleased"
         self.state["live_integration"]["runtime_implementation"] = (
-            "daily_market_evidence_model_deferred")
+            "baostock_evidence_model_deferred")
         self.contents = dict.fromkeys(g.PROTECTED, "offline snapshot fixture\n")
         for name in (*g.FROZEN_INPUT_HASHES, g.CURRENT_RECEIPT_PATHS["blueprint_review"],
                      g.CURRENT_RECEIPT_PATHS["prompt_audit"]):
@@ -885,7 +920,9 @@ class ProbeAttestationTests(unittest.TestCase):
             "vps_sync": "not_requested", "next_gate": g.NEXT_GATE,
         }]
         self.pre_release = {**self.receipts[3], "verdict": g.PRE_PROBE_RELEASE}
-        self.observation = nbs_fixture(self.snapshot)
+        self.observation = market_fixture(self.snapshot)
+        self.receipts[3]["pre_probe_release_digest"] = g.probe_digest(self.pre_release)
+        self.receipts[3]["observation_digest"] = g.probe_digest(self.observation)
         self.historical = {
             **common, "package_id": "P4E", "status": "NOT_RUN", "processed_at": None,
             "observation": None, "reason": "awaiting_release",
@@ -893,8 +930,9 @@ class ProbeAttestationTests(unittest.TestCase):
         self.sync()
 
     def sync(self):
+        records = [*self.receipts[:3], self.pre_release, self.receipts[3], self.observation]
         self.contents.update({name: json.dumps(value)
-                              for name, value in zip(g.CURRENT_ATTESTATIONS, self.receipts)})
+                              for name, value in zip(g.CURRENT_ATTESTATIONS, records)})
 
     def validate(self):
         self.sync()
@@ -1129,10 +1167,10 @@ class ProbeAttestationTests(unittest.TestCase):
             self.assertIn("no network request authorized", error.getvalue())
 
     def test_planned_or_building_state_never_authorizes_preparation_or_final_release(self):
-        for status in ("contract_prepared_unreleased", "building"):
+        for status in ("awaiting_implementation", "building"):
             self.state["package_status"] = status
             self.state["live_integration"]["runtime_implementation"] = (
-                "daily_market_planned_model_deferred")
+                "baostock_planned_model_deferred")
             g.validate_state(self.state)
             with self.subTest(status=status), self.assertRaisesRegex(g.Block, "still building"):
                 self.validate()
@@ -1218,6 +1256,7 @@ class ProbeAttestationTests(unittest.TestCase):
         self.assertEqual(set(original), {
             "schema_version", "snapshot_id", "role", "verdict", "agent_id", "read_only",
             "remote_ci", "pr_url", "merge_status", "vps_sync", "next_gate",
+            "pre_probe_release_digest", "observation_digest",
         })
         for field in original:
             self.receipts[3] = {key: value for key, value in original.items() if key != field}
@@ -1244,7 +1283,7 @@ class ProbeAttestationTests(unittest.TestCase):
                 for root in (ROOT, Path("absent-repository")):
                     for ci in (False, True):
                         with self.subTest(gate=gate.__name__, ci=ci), self.assertRaisesRegex(
-                                g.Block, "P4M: historical .* capability is closed"):
+                                g.Block, "P4B: historical .* capability is closed"):
                             gate(root, ci=ci)
 
     def test_p4i_four_attestations_do_not_invoke_historical_validators(self):
@@ -1261,14 +1300,16 @@ class ProbeAttestationTests(unittest.TestCase):
         record = preparation_fixture(self.snapshot, prepared=True)
         current = {"schema_version": 1, "package_id": "P4E", "snapshot_id": self.snapshot,
                    "changed_paths": []}
-        release = {**self.receipts[3], "preparation_digest": g.preparation_digest(record),
+        release = {**{k: v for k, v in self.receipts[3].items()
+                      if k not in ("pre_probe_release_digest", "observation_digest")},
+                   "preparation_digest": g.preparation_digest(record),
                    "pre_preparation": {"verdict": g.PRE_PREPARATION_RELEASE,
                                        "snapshot_id": self.snapshot, "agent_id": "fixture-release"}}
         review = {**self.receipts[2], "agent_id": "fixture-reviewer", "repair_cycles": 0}
         contents = dict(zip(g.ATTESTATIONS, map(json.dumps,
                         (current, self.receipts[1], review, release, record))))
         contents[g.RECEIPT_PATHS["prompt_audit"]] = json.dumps({"repair_cycles": 0})
-        checked = ({"package_id": "P4E", "required_validation": g.VALIDATION_COMMANDS,
+        checked = ({"package_id": "P4E", "required_validation": self.contract["required_validation"],
                     "next_gate": release["next_gate"]},
                    {"active_package": "P4E", "package_status": "implemented_unreleased",
                     "builder_agents": ["coordinator"]}, contents, [])
@@ -1279,7 +1320,7 @@ class ProbeAttestationTests(unittest.TestCase):
             "docs/reviews/p4e-bundle.json", "docs/reviews/p4e-validation.json",
             "docs/reviews/p4e-review.json", "docs/reviews/p4e-release.json",
             "docs/evidence/p4e-preparation.json"))
-        self.assertEqual(len(g.CURRENT_ATTESTATIONS), 4)
+        self.assertEqual(len(g.CURRENT_ATTESTATIONS), 6)
         self.assertTrue(set(g.ATTESTATIONS).issubset(g.IMMUTABLE))
         self.assertTrue(set(g.ATTESTATIONS).issubset(g.PROTECTED))
         self.assertFalse(set(g.ATTESTATIONS) & set(g.CURRENT_ATTESTATIONS))
@@ -1353,7 +1394,7 @@ class NbsAttestationTests(unittest.TestCase):
         for name in (*g.FROZEN_INPUT_HASHES, g.NBS_RECEIPT_PATHS["blueprint_review"],
                      g.NBS_RECEIPT_PATHS["prompt_audit"]):
             self.contents[name] = g.read_text(ROOT, name)
-        self.contents["governance/policy.toml"] = g.git(ROOT, "show", f"{g.BASELINE}:governance/policy.toml")
+        self.contents["governance/policy.toml"] = g.git(ROOT, "show", "93f6fe87c723dba32225a4895788d8edeef0b539:governance/policy.toml")
         self.checked = (self.contract, self.state, self.contents, [])
         self.current = {**g.make_bundle(self.checked), "package_id": "P4N",
                         "attestation_paths": list(g.NBS_ATTESTATIONS)}
@@ -1361,7 +1402,7 @@ class NbsAttestationTests(unittest.TestCase):
         common = {"schema_version": 1, "snapshot_id": self.snapshot}
         self.receipts = [self.current, {
             **common, "role": "builder_validation", "verdict": "PASS",
-            "commands": [{"command": command, "exit_code": 0} for command in g.VALIDATION_COMMANDS],
+            "commands": [{"command": command, "exit_code": 0} for command in self.contract["required_validation"]],
             "python_version": "3.12.10", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
         }, {
             **common, "role": "reviewer", "verdict": "PASS", "agent_id": g.REPAIR_EXCEPTION["reviewer_agent"],
@@ -1372,7 +1413,7 @@ class NbsAttestationTests(unittest.TestCase):
             "remote_ci": "NOT_RUN_AT_SNAPSHOT", "pr_url": None, "merge_status": "not_merged",
             "vps_sync": "not_requested", "next_gate": g.NBS_NEXT_GATE,
         }]
-        self.pre_release = {**self.receipts[3], "verdict": g.PRE_PROBE_RELEASE}
+        self.pre_release = {**self.receipts[3], "verdict": g.NBS_PRE_PROBE_RELEASE}
         self.observation = nbs_fixture(self.snapshot)
         self.historical = {
             **common, "package_id": "P4E", "status": "NOT_RUN", "processed_at": None,
@@ -1578,7 +1619,7 @@ class NbsAttestationTests(unittest.TestCase):
             with self.subTest(index=index, key=key), self.assertRaises(g.Block):
                 self.validate(pre_probe=True)
             self.receipts[index] = original
-        for status in ("building", "contract_prepared_unreleased"):
+        for status in ("building", "awaiting_implementation"):
             self.state["package_status"] = status
             with self.assertRaisesRegex(g.Block, "still building"):
                 self.validate(pre_probe=True)
@@ -1768,16 +1809,14 @@ class DailyMarketGovernanceTests(unittest.TestCase):
     validate = ProbeAttestationTests.validate
 
     def test_p4m_scope_and_four_current_receipts_are_exact(self):
-        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (200, 176, 196))
-        self.assertEqual(g.CURRENT_ATTESTATIONS, (
-            "docs/reviews/p4m-bundle.json", "docs/reviews/p4m-validation.json",
-            "docs/reviews/p4m-review.json", "docs/reviews/p4m-release.json"))
-        self.assertNotIn("observation", g.CURRENT_RECEIPT_PATHS)
-        self.assertNotIn("pre_probe_release", g.CURRENT_RECEIPT_PATHS)
+        self.assertEqual((len(g.ALLOWED), len(g.IMMUTABLE), len(g.PROTECTED)), (220, 190, 214))
+        self.assertEqual(g.CURRENT_ATTESTATIONS, tuple(["docs/reviews/p4b-bundle.json", "docs/reviews/p4b-validation.json", "docs/reviews/p4b-review.json", "docs/reviews/p4b-pre-probe-release.json", "docs/reviews/p4b-release.json", "docs/evidence/p4b-market-observation.json"]))
+        self.assertIn("observation", g.CURRENT_RECEIPT_PATHS)
+        self.assertIn("pre_probe_release", g.CURRENT_RECEIPT_PATHS)
         self.validate()
 
     def test_both_actual_audits_bind_all_twenty_frozen_references(self):
-        self.assertEqual(len(g.AUDIT_INPUTS), 20)
+        self.assertEqual(len(g.AUDIT_INPUTS), 26)
         for role, key in (("blueprint_reviewer", "blueprint_review"), ("prompt_auditor", "prompt_audit")):
             receipt = g.parse_json(g.read_text(ROOT, g.CURRENT_RECEIPT_PATHS[key]))
             self.assertEqual(set(receipt["files"]), set(g.AUDIT_INPUTS))
@@ -1870,14 +1909,14 @@ class DailyMarketGovernanceTests(unittest.TestCase):
                             gate(root, ci=ci)
 
     def test_current_readiness_waits_for_actual_implementation_and_receipts(self):
-        for status in ("contract_prepared_unreleased", "building"):
+        for status in ("awaiting_implementation", "building"):
             self.state["package_status"] = status
-            self.state["live_integration"]["runtime_implementation"] = "daily_market_planned_model_deferred"
+            self.state["live_integration"]["runtime_implementation"] = "baostock_planned_model_deferred"
             g.validate_state(self.state)
             with self.assertRaisesRegex(g.Block, "still building"):
                 self.validate()
         self.state["package_status"] = "implemented_unreleased"
-        self.state["live_integration"]["runtime_implementation"] = "daily_market_evidence_model_deferred"
+        self.state["live_integration"]["runtime_implementation"] = "baostock_evidence_model_deferred"
         g.validate_state(self.state)
         for name in g.CURRENT_ATTESTATIONS:
             contents = {key: value for key, value in self.contents.items() if key != name}
@@ -1894,16 +1933,235 @@ class DailyMarketGovernanceTests(unittest.TestCase):
         self.assertEqual(value["observation"]["observed_bytes"], 0)
         self.assertIsNone(value["observation"]["capture"])
         self.assertIsNone(value["observation"]["parse"])
-        self.assertEqual(value["snapshot_id"], g.prior_merge_evidence()["prior_snapshot"])
+        self.assertEqual(value["snapshot_id"], "8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361")
 
     def test_p4m_private_input_and_time_limits_remain_frozen_contract_requirements(self):
-        text = g.read_text(ROOT, g.CONTRACT_PATH)
+        path = "contracts/p4m_daily_market_evidence.toml"
+        text = g.read_text(ROOT, path)
         for term in ("512000 bytes", "1024 data rows", "10 columns", "128 characters",
                      "published_at=null", "calendar_completeness_verified=false",
                      "current_market_freshness=unverified", "input coverage2/5",
                      "live verification remains0/5", "documentation_endpoint_not_acquisition_endpoint"):
             self.assertIn(term, text)
-        self.assertEqual(g.sha256(text), g.FROZEN_INPUT_HASHES[g.CONTRACT_PATH])
+        self.assertEqual(g.sha256(text), g.FROZEN_INPUT_HASHES[path])
+
+
+class BaoStockGovernanceTests(unittest.TestCase):
+    """Authored governance metadata only; this class never dispatches a request."""
+
+    setUp = ProbeAttestationTests.setUp
+    sync = ProbeAttestationTests.sync
+    validate = ProbeAttestationTests.validate
+
+    def pending(self):
+        self.observation = {
+            "schema_version": 1, "package_id": "P4B", "snapshot_id": self.snapshot,
+            "status": "NOT_RUN", "reason": "awaiting_release", "observation": None,
+        }
+        self.receipts[3] = g.not_run_market_release(self.snapshot)
+        self.sync()
+
+    def refresh_digests(self):
+        self.receipts[3]["pre_probe_release_digest"] = g.probe_digest(self.pre_release)
+        self.receipts[3]["observation_digest"] = g.probe_digest(self.observation)
+        self.sync()
+
+    def test_p4b_exact_exception_types_never_expand_general_permissions(self):
+        for field, expected in g.LIMITED_MARKET_INGESTION.items():
+            bad_values = [None, {}, "different"]
+            if type(expected) is bool:
+                bad_values.extend((not expected, int(expected)))
+            elif type(expected) is int:
+                bad_values.extend((expected + 1, bool(expected)))
+            elif type(expected) is list:
+                bad_values.extend((expected[:-1], expected + ["unexpected"]))
+            for bad in bad_values:
+                for source, validator in ((self.contract, g.validate_contract),
+                                          (self.state, g.validate_state)):
+                    altered = deepcopy(source)
+                    altered["limited_market_ingestion"][field] = bad
+                    with self.subTest(field=field, bad=bad), self.assertRaises(g.Block):
+                        validator(altered)
+                altered = deepcopy(g.POLICY)
+                altered["limited_market_ingestion"][field] = bad
+                with self.assertRaises(g.Block):
+                    g.exact(altered, g.POLICY, "policy")
+        self.assertEqual(self.contract["merge_tier"], "D")
+        self.assertEqual(self.contract["permissions"], g.PERMISSIONS)
+        self.assertEqual(g.LIMITED_MARKET_INGESTION["maximum_requests"], 12)
+        self.assertEqual(g.LIMITED_MARKET_INGESTION["deadline_seconds"], 20)
+
+    def test_p4b_six_attestations_do_not_exempt_planning_or_previous_receipts(self):
+        self.assertEqual(len(g.CURRENT_ATTESTATIONS), 6)
+        for name in ("docs/evidence/p4b-user-authorization.json", "docs/reviews/p4m-merge.json",
+                     "requirements-baostock.lock", "config/p4b_sdk_manifest.json",
+                     g.CURRENT_RECEIPT_PATHS["blueprint_review"],
+                     g.CURRENT_RECEIPT_PATHS["prompt_audit"]):
+            self.assertIn(name, g.PROTECTED)
+            self.assertNotIn(name, g.CURRENT_ATTESTATIONS)
+        for kind in ("bundle", "validation", "review", "release"):
+            self.assertIn("docs/reviews/p4m-" + kind + ".json", g.IMMUTABLE)
+
+    def test_p4b_preprobe_accepts_pending_observation_without_final_release(self):
+        self.pending()
+        with (patch("sqlite3.connect", side_effect=AssertionError("store")),
+              patch("socket.socket", side_effect=AssertionError("network"))):
+            g.validate_market_prerequisites(self.checked, self.current)
+        with self.assertRaisesRegex(g.Block, "terminal market observation"):
+            self.validate()
+
+    def test_p4b_market_gate_preserves_scope_before_journal_and_returns_snapshot(self):
+        self.pending()
+        with (patch.object(g, "check", return_value=self.checked) as check,
+              patch.object(g, "assert_market_journal_unconsumed") as journal):
+            result = g.market_gate(ROOT)
+            check.assert_called_once_with(ROOT, complete_index=True)
+            journal.assert_called_once_with(self.snapshot, root=ROOT)
+        self.assertEqual(result, {"package_id": "P4B", "snapshot_id": self.snapshot,
+                                 "verdict": g.PRE_PROBE_RELEASE,
+                                 "limited_market_ingestion": g.LIMITED_MARKET_INGESTION})
+        with (patch.object(g, "check", side_effect=g.Block("index/worktree mismatch")),
+              patch.object(g, "assert_market_journal_unconsumed") as journal):
+            with self.assertRaisesRegex(g.Block, "index/worktree"):
+                g.market_gate(ROOT)
+            journal.assert_not_called()
+
+    def test_p4b_market_gate_rejects_ci_before_any_read(self):
+        with (patch.object(g, "check", side_effect=AssertionError("check")),
+              patch.object(g, "assert_market_journal_unconsumed", side_effect=AssertionError("store"))):
+            for value in (True, 0, 1, None, "false"):
+                with self.subTest(ci=value), self.assertRaises(g.Block):
+                    g.market_gate(ROOT, ci=value)
+            with redirect_stdout(io.StringIO()) as out, redirect_stderr(io.StringIO()) as err:
+                self.assertEqual(g.main(["market-gate", "--ci"]), 1)
+            self.assertEqual(out.getvalue(), "")
+            self.assertIn("--ci is not runtime authorization", err.getvalue())
+
+    def test_p4b_market_gate_rejects_used_or_unsafe_journal(self):
+        self.pending()
+        with patch.object(g, "check", return_value=self.checked):
+            for reason in ("reserved", "failed", "unknown", "completed", "unsafe", "corrupt"):
+                with (self.subTest(reason=reason),
+                      patch.object(g, "assert_market_journal_unconsumed", side_effect=g.Block(reason))):
+                    with self.assertRaises(g.Block):
+                        g.market_gate(ROOT)
+
+    def test_p4b_prerelease_rejects_wrong_stale_or_self_approval(self):
+        self.pending()
+        original = deepcopy(self.pre_release)
+        for key, bad in (("verdict", "PASS"), ("verdict", g.NBS_PRE_PROBE_RELEASE),
+                         ("snapshot_id", "0" * 64), ("role", "reviewer"), ("read_only", 1),
+                         ("agent_id", self.receipts[2]["agent_id"]),
+                         ("agent_id", self.state["builder_agents"][0]), ("allow_network", True)):
+            self.pre_release = {**original, key: bad}
+            self.sync()
+            with self.subTest(key=key, bad=bad), self.assertRaises(g.Block):
+                g.validate_market_prerequisites(self.checked, self.current)
+        self.pre_release = original
+        self.sync()
+        for name in g.CURRENT_ATTESTATIONS:
+            removed = {k: v for k, v in self.contents.items() if k != name}
+            with self.subTest(missing=name), self.assertRaises(g.Block):
+                g.validate_market_prerequisites((*self.checked[:2], removed, []), self.current)
+
+    def test_p4b_terminal_observation_cannot_authorize_another_attempt(self):
+        with (patch.object(g, "check", return_value=self.checked),
+              patch.object(g, "assert_market_journal_unconsumed") as journal):
+            with self.assertRaisesRegex(g.Block, "already observed"):
+                g.market_gate(ROOT)
+            journal.assert_not_called()
+
+    def test_p4b_final_release_binds_both_actual_receipts(self):
+        self.validate()
+        original = deepcopy(self.receipts[3])
+        for field in ("pre_probe_release_digest", "observation_digest"):
+            for bad in (None, "0" * 64, True, "", {}):
+                self.receipts[3] = {**original, field: bad}
+                with self.subTest(field=field, bad=bad), self.assertRaises(g.Block):
+                    self.validate()
+        self.receipts[3] = original
+        self.pre_release["agent_id"] = "another-independent-release"
+        self.sync()
+        with self.assertRaisesRegex(g.Block, "pre_probe_release_digest"):
+            self.validate()
+
+    def test_p4b_final_release_requires_all_actual_cleanup_checks(self):
+        original = deepcopy(self.observation)
+        for field in original["observation"]["cleanup"]:
+            for bad in (None, False, 1):
+                self.observation = deepcopy(original)
+                self.observation["observation"]["cleanup"][field] = bad
+                transport = self.observation["observation"]["transport"]
+                if field in transport:
+                    transport[field] = bad
+                self.refresh_digests()
+                with self.subTest(field=field, bad=bad), self.assertRaises(g.Block):
+                    self.validate()
+        self.observation = original
+        self.observation["observation"]["finished_at"] = None
+        self.refresh_digests()
+        with self.assertRaises(g.Block):
+            self.validate()
+
+    def test_p4b_unknown_usage_is_not_zero_or_completed_cleanup(self):
+        value = deepcopy(self.observation)
+        value.update(status="UNKNOWN", reason="prior_attempt_incomplete")
+        observation = value["observation"]
+        observation.update(transport=None, finished_at=None)
+        observation["input"]["daily_rows_received"] = None
+        observation["cleanup"] = dict.fromkeys(observation["cleanup"])
+        g.validate_market_observation(value, self.snapshot)
+        self.observation = value
+        self.refresh_digests()
+        with self.assertRaisesRegex(g.Block, "actual terminal completion"):
+            self.validate()
+        changed = deepcopy(value)
+        changed["observation"]["input"]["daily_rows_received"] = 0
+        with self.assertRaises(g.Block):
+            g.validate_market_observation(changed, self.snapshot)
+
+    def test_p4b_final_validation_is_pure_and_sdk_free(self):
+        with (patch("sqlite3.connect", side_effect=AssertionError("store")),
+              patch("socket.socket", side_effect=AssertionError("network")),
+              patch("socket.getaddrinfo", side_effect=AssertionError("DNS")),
+              patch.object(g, "assert_market_journal_unconsumed", side_effect=AssertionError("quota"))):
+            self.validate()
+        self.assertFalse(any(name.startswith(("baostock", "pandas", "numpy",
+                                              "_p4b_market_validation_")) for name in sys.modules))
+
+    def test_p4b_validator_uses_requested_checkout_and_fixed_errors(self):
+        with tempfile.TemporaryDirectory(prefix="p4b-validator-") as directory:
+            root = Path(directory)
+            package = root / "market_intelligence"
+            package.mkdir()
+            (package / "__init__.py").write_text("", encoding="utf-8")
+            path = package / "baostock_capture.py"
+            path.write_text("def validate_observation_receipt(value, snapshot_id):\n    return value\n"
+                            "def assert_journal_unconsumed(snapshot_id):\n    return None\n", encoding="utf-8")
+            with patch.dict(sys.modules, {"market_intelligence.baostock_capture": object()}):
+                g.validate_market_observation(self.observation, self.snapshot, root=root)
+                g.assert_market_journal_unconsumed(self.snapshot, root=root)
+            path.write_text("def validate_observation_receipt(value, snapshot_id):\n"
+                            "    raise ValueError('private payload must not escape')\n", encoding="utf-8")
+            with self.assertRaises(g.Block) as error:
+                g.validate_market_observation(self.observation, self.snapshot, root=root)
+            self.assertNotIn("private payload", str(error.exception))
+            self.assertIsNone(error.exception.__cause__)
+            namespace = "_p4b_market_validation_" + g.sha256(str(root.resolve()))
+            with patch.dict(sys.modules, {namespace: object()}), self.assertRaisesRegex(g.Block, "recursive"):
+                g.validate_market_observation(self.observation, self.snapshot, root=root)
+        self.assertFalse(any(name.startswith("_p4b_market_validation_") for name in sys.modules))
+
+    def test_p4b_payload_fields_and_rehashed_readiness_claims_fail(self):
+        for target, key, value in (("root", "payload", "private market values"),
+                                   ("observation", "raw_csv", "private market values"),
+                                   ("observation", "new_live_research_runs", 1),
+                                   ("observation", "live_market_coverage",
+                                    {"covered": 2, "expected": 5, "missing": []})):
+            altered = deepcopy(self.observation)
+            (altered if target == "root" else altered["observation"])[key] = value
+            with self.subTest(field=key), self.assertRaises(g.Block):
+                g.validate_market_observation(altered, self.snapshot)
 
 
 class GovernanceTests(unittest.TestCase):
@@ -1913,7 +2171,8 @@ class GovernanceTests(unittest.TestCase):
         cls.contract = tomllib.loads(cls.original_contract)
         cls.source_inputs = {
             name: ("# Authored temporary-repository fixture only.\n"
-                   if name in ("market_intelligence/daily_market.py", "tests/product/test_daily_market.py")
+                   if name in ("market_intelligence/baostock_transport.py", "market_intelligence/baostock_capture.py",
+                               "tests/product/test_baostock_transport.py", "tests/product/test_baostock_capture.py")
                    and not (ROOT / name).is_file() else (ROOT / name).read_text(encoding="utf-8"))
             for name in g.PROTECTED
         }
@@ -1940,13 +2199,13 @@ class GovernanceTests(unittest.TestCase):
         self.write(g.CONTRACT_PATH, self.original_contract.replace(self.contract["baseline"], baseline))
         self.write("governance/policy.toml", self.source_inputs["governance/policy.toml"]
                    .replace(self.contract["baseline"], baseline))
-        # Only the new P4N merge observation points at this temporary baseline.
+        # Only the new P4M merge observation points at this temporary baseline.
         # Historical contracts, products and receipts retain their bytes.
-        prior = json.loads(self.source_inputs["docs/reviews/p4n-merge.json"])
-        self.write_json("docs/reviews/p4n-merge.json", {**prior, "merge_commit": baseline,
+        prior = json.loads(self.source_inputs["docs/reviews/p4m-merge.json"])
+        self.write_json("docs/reviews/p4m-merge.json", {**prior, "merge_commit": baseline,
                                                        "merge_ci_head": baseline})
         self.state = {
-            "schema_version": 1, "active_package": "P4M", "active_contract": g.CONTRACT_PATH,
+            "schema_version": 1, "active_package": "P4B", "active_contract": g.CONTRACT_PATH,
             "branch": g.BRANCH, "baseline": baseline, "package_status": "implemented_unreleased",
             "builder_agents": ["coordinator", "implementation-builder"],
             "stage_registry": [
@@ -1964,10 +2223,11 @@ class GovernanceTests(unittest.TestCase):
                        "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT", "merge_status": "not_merged"},
             "receipts": g.CURRENT_RECEIPT_PATHS,
             "next_gate": g.NEXT_GATE,
+            "limited_market_ingestion": deepcopy(g.LIMITED_MARKET_INGESTION),
             "last_updated": "2026-11-13",
             "live_integration": {
                 "entry_status": "human_merged",
-                "runtime_implementation": "daily_market_evidence_model_deferred",
+                "runtime_implementation": "baostock_evidence_model_deferred",
                 "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
                 "prerequisite_register": g.PREREQUISITE_PATH, "permissions_enabled": False,
             },
@@ -2020,11 +2280,19 @@ class GovernanceTests(unittest.TestCase):
             **common, "role": "reviewer", "verdict": "PASS", "agent_id": "independent-reviewer",
             "read_only": True, "findings": [], "repair_cycles": 0,
         })
-        self.write_json(g.CURRENT_RECEIPT_PATHS["release"], {
-            **common, "role": "release_checker", "verdict": "LOCAL_READY_FOR_PR",
+        pre_release = {
+            **common, "role": "release_checker", "verdict": g.PRE_PROBE_RELEASE,
             "agent_id": "independent-release-checker", "read_only": True,
             "remote_ci": "NOT_RUN_AT_SNAPSHOT", "pr_url": None, "merge_status": "not_merged",
             "vps_sync": "not_requested", "next_gate": g.NEXT_GATE,
+        }
+        observation = market_fixture(current["snapshot_id"])
+        self.write_json(g.CURRENT_RECEIPT_PATHS["pre_probe_release"], pre_release)
+        self.write_json(g.CURRENT_RECEIPT_PATHS["observation"], observation)
+        self.write_json(g.CURRENT_RECEIPT_PATHS["release"], {
+            **pre_release, "verdict": g.LOCAL_RELEASE,
+            "pre_probe_release_digest": g.probe_digest(pre_release),
+            "observation_digest": g.probe_digest(observation),
         })
         self.run_git("add", ".")
         return current
@@ -2063,16 +2331,16 @@ class GovernanceTests(unittest.TestCase):
 
     def test_exact_scope_and_attestations(self):
         contract = tomllib.loads(g.read_text(self.root, g.CONTRACT_PATH))
-        self.assertEqual(len(g.ALLOWED), 200)
-        self.assertEqual(len(g.PROTECTED), 196)
-        self.assertEqual(len(g.IMMUTABLE), 176)
+        self.assertEqual(len(g.ALLOWED), 220)
+        self.assertEqual(len(g.PROTECTED), 214)
+        self.assertEqual(len(g.IMMUTABLE), 190)
         self.assertIn("docs/reviews/p0-review.json", g.PROTECTED)
         self.assertIn("docs/reviews/p0-review.json", g.IMMUTABLE)
         self.assertIn("docs/PUBLICATION_PROVENANCE.json", g.PROTECTED)
         for field, bad in (("allowed_paths", list(g.ALLOWED) + ["src/product.py"]),
                            ("attestation_paths", ["docs/"]), ("baseline", "0" * 40),
                            ("immutable_paths", list(g.IMMUTABLE[:-1])),
-                           ("attestation_paths", [name.replace("p4m-", "p4-") for name in g.CURRENT_ATTESTATIONS]),
+                           ("attestation_paths", [name.replace("p4b-", "p4-") for name in g.CURRENT_ATTESTATIONS]),
                            ("branch", "main"), ("stage_ids", [1]),
                            ("required_validation", ["echo PASS"])):
             with self.subTest(field=field):
@@ -2111,13 +2379,13 @@ class GovernanceTests(unittest.TestCase):
     def test_only_two_p4_lifecycle_states(self):
         g.validate_state(self.state)
         self.state["package_status"] = "building"
-        self.state["live_integration"]["runtime_implementation"] = "daily_market_planned_model_deferred"
+        self.state["live_integration"]["runtime_implementation"] = "baostock_planned_model_deferred"
         self.write_json("project-state/state.json", self.state)
         g.check(self.root)
         self.attest()
         with self.assertRaisesRegex(g.Block, "still building"):
             g.gate(self.root)
-        self.state["package_status"] = "contract_prepared_unreleased"
+        self.state["package_status"] = "awaiting_implementation"
         g.validate_state(self.state)
         for bad in ("contract_prepared", "implemented", "complete", "merged", None, True):
             self.state["package_status"] = bad
@@ -2639,13 +2907,13 @@ class GovernanceTests(unittest.TestCase):
         self.assertEqual(self.load_json("docs/reviews/p4-merge.json")["package_id"], "P4")
 
     def test_prior_merge_evidence_cannot_be_forged(self):
-        name = "docs/reviews/p4n-merge.json"
+        name = "docs/reviews/p4m-merge.json"
         original = self.load_json(name)
         for key, bad in (("merge_commit", "0" * 40), ("ci_status", "PENDING"),
                          ("merge_status", "not_merged"), ("prior_snapshot", "0" * 64),
                          ("package_id", "P1"), ("tested_head", "0" * 40),
                          ("pr_ci_run", 0), ("merge_ci_run", 0),
-                         ("prior_gate_check", "PASS")):
+                         ("prior_gate_result", "PASS")):
             self.write_json(name, {**original, key: bad})
             with self.assertRaisesRegex(g.Block, "prior merge evidence"):
                 g.check(self.root)
@@ -2726,8 +2994,8 @@ class GovernanceTests(unittest.TestCase):
 
     def test_new_offline_implementation_changes_stale_approval_without_thawing_history(self):
         approved = self.attest()
-        for name in ("market_intelligence/daily_market.py", "market_intelligence/intelligence.py",
-                     "tests/product/test_daily_market.py"):
+        for name in ("market_intelligence/baostock_transport.py", "market_intelligence/baostock_capture.py",
+                     "tests/product/test_baostock_transport.py", "tests/product/test_baostock_capture.py"):
             original = g.read_text(self.root, name)
             with self.subTest(path=name):
                 self.write(name, original + "\n# Changed offline implementation.\n")
@@ -2743,7 +3011,7 @@ class GovernanceTests(unittest.TestCase):
 
     def test_bundle_package_and_final_receipt_schema_are_p4c_only(self):
         current = self.attest()
-        self.assertEqual(current["package_id"], "P4M")
+        self.assertEqual(current["package_id"], "P4B")
         self.assertEqual(self.state["package_status"], "implemented_unreleased")
         checked = g.check(self.root)
         for package in ("P4", "P4L", "P4I", "P5", None):

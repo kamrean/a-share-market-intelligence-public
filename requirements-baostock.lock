@@ -1,0 +1,32 @@
+# Optional P4B dependency closure; base requirements.lock stays unchanged.
+# Planning only: no installation or SDK execution before audits and parent handoff.
+# CPython 3.12 only: Windows x64; Linux x86_64 with glibc >= 2.27.
+# All archives/metadata checked against official PyPI on 2026-11-19.
+# Only the listed wheels are allowed. No sdist, URL requirement or fallback.
+# Use a fresh isolated environment and a controlled pip configuration.
+--index-url https://pypi.org/simple
+--only-binary=:all:
+--require-hashes
+
+baostock==0.9.4 \
+    --hash=sha256:0bf71c6069ab5890ff3596632f9c3f8f1fbc6bfcac582c2f9d6a5c11ab2cfaf8
+
+pandas==2.3.3 \
+    --hash=sha256:b3d11d2fda7eb164ef27ffc14b4fcab16a80e1ce67e9f57e19ec0afaf715ba89 \
+    --hash=sha256:a16dcec078a01eeef8ee61bf64074b4e524a2a3f4b3be9326420cabe59c4778b
+
+numpy==2.3.5 \
+    --hash=sha256:0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28 \
+    --hash=sha256:86945f2ee6d10cdfd67bcb4069c1662dd711f7e2a4343db5cecec06b87cf31aa
+
+python-dateutil==2.9.0.post0 \
+    --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+
+pytz==2025.2 \
+    --hash=sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00
+
+tzdata==2025.2 \
+    --hash=sha256:1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8
+
+six==1.17.0 \
+    --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274
