@@ -112,7 +112,7 @@ class TencentCaptureTests(unittest.TestCase):
     def test_namespace_sync_happens_after_reservation_before_fetch(self):
         order = []
         def sync(path):
-            self.assertEqual(path, self.path)
+            self.assertEqual(path, self.path.resolve())
             self.assertEqual(json.loads(path.read_text())["reserved_requests"], 3)
             order.append("durable_namespace")
         def fetch(symbol, window):

@@ -6,7 +6,6 @@ import argparse
 import importlib
 import importlib.util
 import json
-import os
 from pathlib import Path
 import re
 import subprocess
@@ -52,15 +51,39 @@ MUTABLE_PATHS = (
     "tools/governance.py", "tests/governance/test_governance.py",
 )
 ENTRY_PATHS = ("docs/reviews/p4t-entrypoint-review.json", "docs/reviews/p4t-prompt-audit.json")
-CURRENT_ATTESTATIONS = (
+ORIGINAL_ATTESTATIONS = (
     "docs/reviews/p4t-bundle.json", "docs/reviews/p4t-validation.json",
     "docs/reviews/p4t-review.json", "docs/reviews/p4t-pre-probe-release.json",
     "docs/evidence/p4t-market-observation.json", "docs/reviews/p4t-release.json",
 )
+CURRENT_ATTESTATIONS = (*ORIGINAL_ATTESTATIONS[:3], ORIGINAL_ATTESTATIONS[5])
+REPAIR_CONTRACT_PATH = "contracts/p4t_post_probe_test_repair.toml"
+REPAIR_MANIFEST_PATH = "docs/evidence/p4t-post-probe-test-repair.json"
+REPAIR_ID = "post_probe_windows_path_r1"
+ORIGINAL_SNAPSHOT = "9b3f1d2c71431bcd3c794657f8bd9b8276ba38802010276e3513f6f610da774b"
+ORIGINAL_COMMIT = "ec362d84c7c3fa0a8d142ac83a8531a20bbe12e0"
+REPAIR_REVIEWER = "01a1f35d-d5fb-7101-8f7d-3dfc8c1f9c3e"
+REPAIR_PLANNING_SNAPSHOT = "cf626fb377eb07a30ed2f56e66c2cf51007c5b7831fdc471280dd75e9e90bda9"
+SUPPLEMENT_HASHES = {
+    REPAIR_CONTRACT_PATH: "85c1ee2343d9761a37166cbfe5557647a17884f15b71ac8959cbedb39ce35464",
+    REPAIR_MANIFEST_PATH: "d40c2d1f941d99e7f133cdcb9141dbbb4265332a00362dcb335f45332ef07ce5",
+}
+REPAIR_INPUT_HASHES = {**FROZEN_INPUT_HASHES, **SUPPLEMENT_HASHES}
+PRODUCT_TEST_PATH = "tests/product/test_tencent_capture.py"
+ARCHIVED_PROTECTED_PATHS = ("tools/governance.py", "tools/governance_p4t.py",
+                            "tests/governance/test_governance_p4t.py", PRODUCT_TEST_PATH, *ENTRY_PATHS)
+REPAIR_MUTABLE_PATHS = (PRODUCT_TEST_PATH, *ARCHIVED_PROTECTED_PATHS[:3],
+                        *ENTRY_PATHS, *CURRENT_ATTESTATIONS)
 PRE_RELEASE = "LOCAL_READY_FOR_TENCENT_DIAGNOSTIC"
 FINAL_RELEASE = "LOCAL_READY_FOR_PR"
 APPROVAL_VALUES = {"limited_technical_probe_exception_accepted": True,
                    "legal_entitlement_verified": False, "normal_source_operations_enabled": False}
+REPAIR_APPROVAL_VALUES = {
+    **APPROVAL_VALUES, "repair_id": REPAIR_ID, "approval_scope": "offline_post_probe_test_repair",
+    "required_total_repair_cycles": 2, "new_source_requests": 0,
+    "original_probe_snapshot": ORIGINAL_SNAPSHOT,
+    "repair_manifest_digest": SUPPLEMENT_HASHES[REPAIR_MANIFEST_PATH],
+}
 HISTORY_KEYS = (
     "schema_version", "package_id", "purpose", "baseline", "checkpoint_commit", "p4d_checkpoint_commit",
     "checkpoint_git_objects_required", "hash_algorithm", "baseline_path_count", "checkpoint_path_count",
@@ -80,7 +103,7 @@ ARCHIVE_TOTAL_BYTES = 2097152
 
 
 def read_text(root, name):
-    if name == HISTORY_PATH:
+    if name in (HISTORY_PATH, REPAIR_MANIFEST_PATH):
         require(g.safe_path(root, name).stat().st_size <= 3 * ARCHIVE_TOTAL_BYTES,
                 "history: oversized manifest")
     return g.read_text(root, name)
@@ -221,8 +244,9 @@ def historical_contents(root=ROOT):
     return reconstruct_history(proof, baseline, current)
 
 
-def planning_inputs(root=ROOT):
-    contents = {name: frozen_text(name, read_text(root, name)) for name in FROZEN_INPUT_HASHES}
+def validate_planning(contents, *, original=False):
+    for name in FROZEN_INPUT_HASHES:
+        frozen_text(name, contents[name])
     exact(g.snapshot_for_paths(contents, FROZEN_INPUT_HASHES)[0], PLANNING_SNAPSHOT, "planning snapshot")
     contract = validate_contract(contents[CONTRACT_PATH])
     state = g.parse_json(contents["project-state/state.json"])
@@ -239,18 +263,118 @@ def planning_inputs(root=ROOT):
               "baseline": BASELINE, "planning_snapshot_id": PLANNING_SNAPSHOT,
               "files": FROZEN_INPUT_HASHES, "limited_technical_probe_exception_accepted": True,
               "approval_scope": "implementation_only"}
+    if not original:
+        for name, digest in SUPPLEMENT_HASHES.items():
+            exact(g.sha256(contents[name]), digest, "frozen supplement: " + name)
+        exact(g.snapshot_for_paths(contents, REPAIR_INPUT_HASHES)[0], REPAIR_PLANNING_SNAPSHOT,
+              "repair planning snapshot")
+        del common["limited_technical_probe_exception_accepted"]
+        common.update(repair_id=REPAIR_ID, planning_snapshot_id=REPAIR_PLANNING_SNAPSHOT,
+                      files=REPAIR_INPUT_HASHES, approval_scope="offline_post_probe_test_repair",
+                      required_total_repair_cycles=2, new_source_requests=0)
     for name, role in zip(ENTRY_PATHS, ("blueprint_reviewer", "prompt_auditor")):
-        contents[name] = read_text(root, name)
         exact(g.parse_json(contents[name]), {**common, "role": role}, f"current entry receipt: {role}")
         require(AUDIT_AGENT not in state["builder_agents"], "entry: builder self-review")
+    return contract, state
+
+
+def planning_inputs(root=ROOT):
+    contents = {name: read_text(root, name) for name in (*REPAIR_INPUT_HASHES, *ENTRY_PATHS)}
+    contract, state = validate_planning(contents)
     return contract, state, contents
 
 
-def scope(contract, retained):
+def scope(contract, retained, *, original=False):
     allowed = tuple(sorted(set(retained) | set(contract["new_paths"])))
     require(not set(retained) & set(contract["new_paths"]), "new path already historical")
     exact(len(allowed), 274, "current path count")
+    if original:
+        return allowed, tuple(name for name in allowed if name not in ORIGINAL_ATTESTATIONS)
+    require(not set(allowed) & set(SUPPLEMENT_HASHES), "supplement path already historical")
+    allowed = tuple(sorted((*allowed, *SUPPLEMENT_HASHES)))
     return allowed, tuple(name for name in allowed if name not in CURRENT_ATTESTATIONS)
+
+
+def _repair_archives(proof):
+    keys(proof, ("schema_version", "package_id", "repair_id", "purpose", "authorization", "provenance",
+                 "allowed_product_test_patch", "original_receipts", "original_protected_inputs", "limits",
+                 "execution_policy"), "repair proof")
+    keys(proof["authorization"], ("source", "question_summary", "answer", "previous_cycles",
+                                 "additional_cycles", "required_total_cycles"), "repair authorization")
+    keys(proof["provenance"], ("commit", "pr_url", "git_object_required", "snapshot_id", "ci_run",
+                              "ubuntu", "windows", "failed_test", "failure"), "repair provenance")
+    exact(proof["limits"], {"per_file_utf8_bytes": ARCHIVE_FILE_BYTES,
+                            "total_utf8_bytes": ARCHIVE_TOTAL_BYTES}, "repair archive limits")
+    exact(proof["execution_policy"], {
+        "archived_python_executable": False, "new_source_requests": 0,
+        "original_observation_must_remain_byte_identical": True,
+        "original_pre_probe_release_must_remain_byte_identical": True,
+        "original_snapshot_must_not_be_rebound": True, "quota_reset_allowed": False,
+        "third_repair_cycle_allowed": False}, "repair execution policy")
+    archives = {}
+    total = 0
+    for section, names in (("original_receipts", ORIGINAL_ATTESTATIONS),
+                           ("original_protected_inputs", ARCHIVED_PROTECTED_PATHS)):
+        keys(proof[section], names, "repair archive paths")
+        for name, value in proof[section].items():
+            keys(value, ("text", "sha256"), "repair archived input")
+            text = value["text"]
+            require(type(text) is str and "\r" not in text, "repair: archive must be LF text")
+            size = len(text.encode("utf-8"))
+            total += size
+            require(size <= ARCHIVE_FILE_BYTES and total <= ARCHIVE_TOTAL_BYTES, "repair archive byte bound")
+            exact(g.sha256(text), value["sha256"], "repair archived file hash: " + name)
+            g.scan_secrets("repair archive:" + name, text)
+            archives[name] = text
+    return archives
+
+
+def reconstruct_probe(contents):
+    """Archived text is hashed and parsed as data, never imported or executed."""
+    contract, state = validate_planning(contents)
+    supplement = tomllib.loads(contents[REPAIR_CONTRACT_PATH])
+    exact(supplement["mutable_paths"], list(REPAIR_MUTABLE_PATHS), "repair mutable paths")
+    exact(supplement["new_paths"], list(SUPPLEMENT_HASHES), "repair new paths")
+    exact(supplement["current_result_paths"], list(CURRENT_ATTESTATIONS), "repair current results")
+    exact(supplement["required_validation"], contract["required_validation"], "repair validation commands")
+    exact(supplement["permissions"], g.PERMISSIONS, "repair permissions")
+    exact(supplement["review_flow"]["builder_agents"], state["builder_agents"], "repair builders")
+    proof = g.parse_json(contents[REPAIR_MANIFEST_PATH])
+    archives = _repair_archives(proof)
+    history = g.parse_json(contents[HISTORY_PATH])
+    retained = set(g.BASELINE_ALLOWED) | set(history["retained_delta"])
+    allowed, protected = scope(contract, retained, original=True)
+    original = {name: archives[name] if name in archives else contents[name] for name in allowed}
+    digest, hashes = g.snapshot_for_paths(original, protected)
+    exact(len(hashes), 268, "original probe protected count")
+    exact(digest, ORIGINAL_SNAPSHOT, "original probe aggregate")
+    saved = g.parse_json(original[ORIGINAL_ATTESTATIONS[0]])
+    expected = {"schema_version": 1, "package_id": "P4T", "baseline": BASELINE, "branch": BRANCH,
+                "snapshot_id": digest, "hash_algorithm": g.ALGORITHM, "protected_file_hashes": hashes,
+                "changed_paths": saved.get("changed_paths"), "attestation_paths": list(ORIGINAL_ATTESTATIONS),
+                "scope_result": "PASS"}
+    exact(saved, expected, "original probe bundle")
+    validate_planning(original, original=True)
+    original_checked = (contract, state, original, [])
+    pre = _original_reviews(original_checked, expected)
+    release = _original_reviews(original_checked, expected, final=True)
+    review = g.parse_json(original[ORIGINAL_ATTESTATIONS[2]])
+    exact(review["repair_cycles"], 1, "original consumed repair count")
+    exact(review["agent_id"], REPAIR_REVIEWER, "original independent reviewer")
+    observation = g.parse_json(original[ORIGINAL_ATTESTATIONS[4]])
+    _terminal(observation)
+    for field, value in (("pre_probe_release_digest", pre), ("observation_digest", observation)):
+        exact(release[field], g.probe_digest(value), "original release." + field)
+    for name in set(allowed) - set(REPAIR_MUTABLE_PATHS):
+        exact(contents[name], original[name], "post-probe immutable input: " + name)
+    change = proof["allowed_product_test_patch"]
+    exact(change, {"path": PRODUCT_TEST_PATH, "before": "            self.assertEqual(path, self.path)\n",
+                   "after": "            self.assertEqual(path, self.path.resolve())\n", "occurrences": 1,
+                   "other_product_or_runtime_changes_allowed": False}, "repair exact test patch")
+    exact(original[PRODUCT_TEST_PATH].count(change["before"]), 1, "repair original assertion count")
+    exact(contents[PRODUCT_TEST_PATH], original[PRODUCT_TEST_PATH].replace(change["before"], change["after"], 1),
+          "repair only permitted product test change")
+    return original
 
 
 def check(root=ROOT, *, ci=False, complete_index=False):
@@ -264,7 +388,13 @@ def check(root=ROOT, *, ci=False, complete_index=False):
             contents[name] = read_text(root, name)
     for name, text in contents.items():
         g.scan_secrets(name, text)
-    immutable = {name: g.sha256(text) for name, text in retained.items() if name not in MUTABLE_PATHS}
+    original = reconstruct_probe(contents)
+    for name in ORIGINAL_ATTESTATIONS[3:5]:
+        exact(g.safe_path(root, name).read_bytes(), original[name].encode("utf-8"),
+              "original runtime receipt bytes: " + name)
+    _receipt_call(root, "validate_observation_receipt", g.parse_json(original[ORIGINAL_ATTESTATIONS[4]]),
+                  ORIGINAL_SNAPSHOT)
+    immutable = {name: g.sha256(text) for name, text in original.items() if name not in REPAIR_MUTABLE_PATHS}
     changed = g.inspect_git(root, ci=ci, contents=contents, complete_index=complete_index,
                             baseline=BASELINE, branch=BRANCH, allowed=allowed, immutable_hashes=immutable)
     return contract, state, contents, changed
@@ -291,7 +421,7 @@ def bundle(root=ROOT, *, ci=False):
 
 
 def render_prompt(root=ROOT):
-    validate_contract(read_text(root, CONTRACT_PATH))
+    planning_inputs(root)
     return frozen_text(TEMPLATE_PATH, read_text(root, TEMPLATE_PATH))
 
 
@@ -321,15 +451,32 @@ def _receipt_call(root, function, *args):
                 del sys.modules[name]
 
 
-def _reviews(checked, current, *, final=False):
+def _original_reviews(checked, current, *, final=False):
     contract, _state, contents, _changed = checked
-    allowed = set(current["protected_file_hashes"]) | set(CURRENT_ATTESTATIONS)
+    allowed = set(current["protected_file_hashes"]) | set(ORIGINAL_ATTESTATIONS)
     return g._validate_review_attestations(
-        checked, current, paths=(*CURRENT_ATTESTATIONS[:3], CURRENT_ATTESTATIONS[5 if final else 3]),
+        checked, current, paths=(*ORIGINAL_ATTESTATIONS[:3], ORIGINAL_ATTESTATIONS[5 if final else 3]),
         audit_path=ENTRY_PATHS[1], next_gate=contract["next_gate"],
         release_fields=("pre_probe_release_digest", "observation_digest") if final else (),
         release_verdict=FINAL_RELEASE if final else PRE_RELEASE, allowed_paths=allowed,
         package_status="active_unreleased", approval_values=APPROVAL_VALUES)
+
+
+def _reviews(checked, current):
+    contract, _state, contents, _changed = checked
+    original = reconstruct_probe(contents)
+    review = g.parse_json(contents[CURRENT_ATTESTATIONS[2]])
+    exact(review.get("repair_cycles"), 2, "repair review: exact total cycles required")
+    exact(review.get("agent_id"), REPAIR_REVIEWER, "repair review: same independent Reviewer required")
+    release = g._validate_review_attestations(
+        checked, current, paths=CURRENT_ATTESTATIONS, audit_path=ENTRY_PATHS[1],
+        next_gate=contract["next_gate"], release_fields=("pre_probe_release_digest", "observation_digest"),
+        release_verdict=FINAL_RELEASE, allowed_paths=set(current["protected_file_hashes"]) | set(CURRENT_ATTESTATIONS),
+        package_status="active_unreleased", approval_values=REPAIR_APPROVAL_VALUES, repair_limit=2)
+    for field, path in (("pre_probe_release_digest", ORIGINAL_ATTESTATIONS[3]),
+                        ("observation_digest", ORIGINAL_ATTESTATIONS[4])):
+        exact(release[field], g.probe_digest(g.parse_json(original[path])), "repair release." + field)
+    return release
 
 
 def not_run_release(snapshot_id):
@@ -339,27 +486,11 @@ def not_run_release(snapshot_id):
 
 
 def tencent_gate(root=ROOT, *, ci=False):
-    exact(ci, False, "tencent-gate: --ci is not runtime authorization")
-    require("CI" not in os.environ and "GITHUB_ACTIONS" not in os.environ,
-            "tencent-gate: CI environment is not runtime authorization")
-    checked = check(root, complete_index=True)
-    current = make_bundle(checked)
-    _reviews(checked, current)
-    observation = g.parse_json(checked[2][CURRENT_ATTESTATIONS[4]])
-    expected = _receipt_call(root, "not_run_receipt", current["snapshot_id"])
-    _receipt_call(root, "validate_observation_receipt", observation, current["snapshot_id"])
-    exact(observation, expected, "probe observation must be NOT_RUN")
-    exact(g.parse_json(checked[2][CURRENT_ATTESTATIONS[5]]), not_run_release(current["snapshot_id"]),
-          "pending final release")
-    return current["snapshot_id"]
+    raise Block("tencent-gate: consumed allowance is permanently closed; --ci is not runtime authorization")
 
 
-def gate(root=ROOT, *, ci=False):
-    checked = check(root, ci=ci, complete_index=True)
-    current = make_bundle(checked)
-    pre_release = _reviews(checked, current)
-    observation = g.parse_json(checked[2][CURRENT_ATTESTATIONS[4]])
-    _receipt_call(root, "validate_observation_receipt", observation, current["snapshot_id"])
+def _terminal(observation):
+    exact(observation.get("snapshot_id"), ORIGINAL_SNAPSHOT, "original observation snapshot")
     exact(observation.get("status"), "RECORDED", "actual terminal observation required")
     result = observation["observation"]
     require(result["outcome"] in ("OBSERVED", "PARTIAL", "FAILED"), "terminal outcome remains unknown")
@@ -369,9 +500,15 @@ def gate(root=ROOT, *, ci=False):
                           "connections_closed": True, "upstream_rights": "unknown",
                           "normal_composition": "BLOCKED_SOURCE_RIGHTS", "live_verified_benchmark_count": 0}.items():
         exact(result[key], expected, "terminal observation." + key)
-    release = _reviews(checked, current, final=True)
-    for field, value in (("pre_probe_release_digest", pre_release), ("observation_digest", observation)):
-        exact(release[field], g.probe_digest(value), "final release." + field)
+
+
+def gate(root=ROOT, *, ci=False):
+    checked = check(root, ci=ci, complete_index=True)
+    current = make_bundle(checked)
+    original = reconstruct_probe(checked[2])
+    _receipt_call(root, "validate_observation_receipt", g.parse_json(original[ORIGINAL_ATTESTATIONS[4]]),
+                  ORIGINAL_SNAPSHOT)
+    _reviews(checked, current)
     return FINAL_RELEASE
 
 

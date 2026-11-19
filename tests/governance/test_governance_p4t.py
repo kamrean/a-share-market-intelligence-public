@@ -22,31 +22,24 @@ SPEC.loader.exec_module(p)
 g = p.g
 
 
-def records(checked, status="NOT_RUN"):
-    contract, _state, _contents, _changed = checked
+def records(checked, status="FAILED"):
+    contract, _state, contents, _changed = checked
     bundle = p.make_bundle(checked)
     common = {"schema_version": 1, "snapshot_id": bundle["snapshot_id"]}
     validation = {**common, "role": "builder_validation", "verdict": "PASS",
                   "commands": [{"command": c, "exit_code": 0} for c in contract["required_validation"]],
                   "python_version": "3.12.10", "remote_ci": "NOT_RUN_AT_SNAPSHOT"}
-    review = {**common, "role": "reviewer", "verdict": "PASS", "agent_id": "authored-reviewer",
-              "read_only": True, "findings": [], "repair_cycles": 0, **p.APPROVAL_VALUES}
-    pre = {**common, "role": "release_checker", "verdict": p.PRE_RELEASE,
+    review = {**common, "role": "reviewer", "verdict": "PASS", "agent_id": p.REPAIR_REVIEWER,
+              "read_only": True, "findings": [], "repair_cycles": 2, **p.REPAIR_APPROVAL_VALUES}
+    final = {**common, "role": "release_checker", "verdict": p.FINAL_RELEASE,
            "agent_id": "authored-release", "read_only": True, "remote_ci": "NOT_RUN_AT_SNAPSHOT",
            "pr_url": None, "merge_status": "not_merged", "vps_sync": "not_requested",
-           "next_gate": contract["next_gate"], **p.APPROVAL_VALUES}
-    observation = {**common, "package_id": "P4T", "status": "NOT_RUN", "observation": None}
-    if status != "NOT_RUN":
-        observation.update(status="RECORDED", observation={
-            "outcome": "OBSERVED" if status == "RECORDED" else status, "dispatch_attempts": 1,
-            "payloads_persisted": False, "payload_references_discarded": True, "connections_closed": True,
-            "upstream_rights": "unknown", "normal_composition": "BLOCKED_SOURCE_RIGHTS",
-            "live_verified_benchmark_count": 0})
-    final = p.not_run_release(bundle["snapshot_id"])
-    if status != "NOT_RUN":
-        final = {**pre, "verdict": p.FINAL_RELEASE, "pre_probe_release_digest": g.probe_digest(pre),
-                 "observation_digest": g.probe_digest(observation)}
-    return dict(zip(p.CURRENT_ATTESTATIONS, (bundle, validation, review, pre, observation, final)))
+           "next_gate": contract["next_gate"], **p.REPAIR_APPROVAL_VALUES,
+           "pre_probe_release_digest": g.probe_digest(g.parse_json(contents[p.ORIGINAL_ATTESTATIONS[3]])),
+           "observation_digest": g.probe_digest(g.parse_json(contents[p.ORIGINAL_ATTESTATIONS[4]]))}
+    if status == "NOT_RUN":
+        final = p.not_run_release(bundle["snapshot_id"])
+    return dict(zip(p.CURRENT_ATTESTATIONS, (bundle, validation, review, final)))
 
 
 def receipt_stub(_root, function, *args):
@@ -82,6 +75,8 @@ class TencentGovernanceTests(unittest.TestCase):
     def test_actual_entry_and_seventeen_frozen_inputs_match(self):
         self.assertEqual(len(p.FROZEN_INPUT_HASHES), 17)
         self.assertEqual(g.snapshot_for_paths(self.contents, p.FROZEN_INPUT_HASHES)[0], p.PLANNING_SNAPSHOT)
+        self.assertEqual(len(p.REPAIR_INPUT_HASHES), 19)
+        self.assertEqual(g.snapshot_for_paths(self.contents, p.REPAIR_INPUT_HASHES)[0], p.REPAIR_PLANNING_SNAPSHOT)
         p.planning_inputs(ROOT)
 
     def test_planning_input_changes_cannot_rehash_their_own_authority(self):
@@ -92,7 +87,8 @@ class TencentGovernanceTests(unittest.TestCase):
     def test_entry_missing_exception_wrong_agent_and_extra_field_fail(self):
         name = p.ENTRY_PATHS[0]
         original = g.parse_json(self.contents[name])
-        for field, value in (("limited_technical_probe_exception_accepted", False),
+        for field, value in (("approval_scope", "implementation_only"), ("new_source_requests", 1),
+                             ("required_total_repair_cycles", 1), ("repair_id", "another_repair"),
                              ("agent_id", "coordinator"), ("findings", ["BLOCK"]),
                              ("repair_cycles", True), ("planning_snapshot_id", "a" * 64), ("extra", True)):
             contents = {**self.contents, name: json.dumps({**original, field: value})}
@@ -112,9 +108,10 @@ class TencentGovernanceTests(unittest.TestCase):
                     key + " = " + ('"unknown"' if key == "upstream_rights" else "false"), key + " = true"))
 
     def test_exact_derived_scope_without_repeated_historical_allowlist(self):
-        self.assertEqual((len(self.allowed), len(self.protected)), (274, 268))
+        self.assertEqual((len(self.allowed), len(self.protected)), (276, 272))
         self.assertEqual(set(self.allowed) - set(self.protected), set(p.CURRENT_ATTESTATIONS))
         self.assertEqual(len(p.MUTABLE_PATHS), 9)
+        self.assertEqual(len(p.REPAIR_MUTABLE_PATHS), 10)
         self.assertEqual(set(self.contract["new_paths"]) & set(self.retained), set())
         for name in g.CURRENT_ATTESTATIONS:
             self.assertIn(name, self.protected)
@@ -222,12 +219,12 @@ class TencentGovernanceTests(unittest.TestCase):
         self.assertEqual(len(old), 197)
         self.assertEqual(old, new)
 
-    def test_current_snapshot_excludes_only_six_result_records(self):
+    def test_current_snapshot_excludes_only_four_result_records(self):
         digest = self.current["snapshot_id"]
         for name in p.CURRENT_ATTESTATIONS:
             self.assertEqual(p.snapshot({**self.contents, name: "changed result"})[0], digest)
         for name in ("tools/governance_p4t.py", "market_intelligence/tencent_capture.py",
-                     "docs/reviews/p4d-release.json", p.ENTRY_PATHS[0]):
+                     "docs/reviews/p4d-release.json", p.ENTRY_PATHS[0], *p.ORIGINAL_ATTESTATIONS[3:5]):
             self.assertNotEqual(p.snapshot({**self.contents, name: self.contents[name] + "\n"})[0], digest)
 
     def test_current_validation_commands_roles_and_actual_snapshot_are_required(self):
@@ -236,7 +233,7 @@ class TencentGovernanceTests(unittest.TestCase):
                                  (p.CURRENT_ATTESTATIONS[1], "verdict", "NOT_RUN"),
                                  (p.CURRENT_ATTESTATIONS[2], "snapshot_id", "a" * 64),
                                  (p.CURRENT_ATTESTATIONS[2], "role", "builder_validation"),
-                                 (p.CURRENT_ATTESTATIONS[3], "verdict", "LOCAL_READY_FOR_PR")):
+                                 (p.CURRENT_ATTESTATIONS[3], "verdict", p.PRE_RELEASE)):
             original = self.contents[path]
             self.contents[path] = json.dumps({**g.parse_json(original), key: value})
             with self.subTest(path=path, key=key), self.assertRaises(p.Block):
@@ -246,7 +243,7 @@ class TencentGovernanceTests(unittest.TestCase):
     def test_exception_acceptance_and_no_entitlement_are_explicit_in_both_roles(self):
         for path in p.CURRENT_ATTESTATIONS[2:4]:
             original = self.contents[path]
-            for key, expected in p.APPROVAL_VALUES.items():
+            for key, expected in p.REPAIR_APPROVAL_VALUES.items():
                 self.contents[path] = json.dumps({**g.parse_json(original), key: not expected})
                 with self.subTest(path=path, key=key), self.assertRaises(p.Block):
                     p._reviews(self.checked, self.current)
@@ -255,9 +252,11 @@ class TencentGovernanceTests(unittest.TestCase):
     def test_current_roles_cannot_self_review_or_hide_findings(self):
         for path, key, value in ((p.CURRENT_ATTESTATIONS[2], "agent_id", "coordinator"),
                                  (p.CURRENT_ATTESTATIONS[2], "findings", ["BLOCK"]),
-                                 (p.CURRENT_ATTESTATIONS[2], "repair_cycles", 2),
+                                 (p.CURRENT_ATTESTATIONS[2], "repair_cycles", 0),
+                                 (p.CURRENT_ATTESTATIONS[2], "repair_cycles", 1),
+                                 (p.CURRENT_ATTESTATIONS[2], "repair_cycles", 3),
                                  (p.CURRENT_ATTESTATIONS[2], "repair_cycles", True),
-                                 (p.CURRENT_ATTESTATIONS[3], "agent_id", "authored-reviewer")):
+                                 (p.CURRENT_ATTESTATIONS[3], "agent_id", p.REPAIR_REVIEWER)):
             original = self.contents[path]
             self.contents[path] = json.dumps({**g.parse_json(original), key: value})
             with self.subTest(path=path, key=key), self.assertRaises(p.Block):
@@ -283,20 +282,21 @@ class TencentGovernanceTests(unittest.TestCase):
                 with patch.dict(os.environ, {variable: ""}), self.assertRaises(p.Block):
                     p.tencent_gate(ROOT)
 
-    def test_probe_returns_scalar_and_only_calls_pure_receipt_api_repeatedly(self):
+    def test_probe_permanently_closed_before_any_file_or_validator_access(self):
         with patch.dict(os.environ, {}, clear=True), patch.object(p, "check", return_value=self.checked) as check, \
-                patch.object(p, "_receipt_call", side_effect=receipt_stub) as call:
+                patch.object(p, "_receipt_call", side_effect=receipt_stub) as call, \
+                patch.object(Path, "resolve", side_effect=AssertionError("filesystem access")), \
+                patch.object(p, "read_text", side_effect=AssertionError("file read")):
             for _ in range(3):
-                self.assertEqual(p.tencent_gate(ROOT), self.current["snapshot_id"])
-            self.assertEqual(call.call_count, 6)
-            check.assert_called_with(ROOT, complete_index=True)
-            self.assertEqual({c.args[1] for c in call.call_args_list},
-                             {"not_run_receipt", "validate_observation_receipt"})
+                with self.assertRaisesRegex(p.Block, "permanently closed"):
+                    p.tencent_gate(ROOT)
+            call.assert_not_called()
+            check.assert_not_called()
 
     def test_probe_rejects_actual_observation_and_premature_final_release(self):
-        for path in (p.CURRENT_ATTESTATIONS[4], p.CURRENT_ATTESTATIONS[5]):
+        for path in (p.ORIGINAL_ATTESTATIONS[4], p.CURRENT_ATTESTATIONS[3]):
             old = self.contents[path]
-            self.contents[path] = json.dumps(records(self.checked, "FAILED")[path])
+            self.contents[path] = json.dumps({"status": "NOT_RUN", "snapshot_id": self.current["snapshot_id"]})
             with patch.dict(os.environ, {}, clear=True), patch.object(p, "check", return_value=self.checked), \
                     patch.object(p, "_receipt_call", side_effect=receipt_stub), self.assertRaises(p.Block):
                 p.tencent_gate(ROOT)
@@ -304,17 +304,22 @@ class TencentGovernanceTests(unittest.TestCase):
 
     def test_final_gate_requires_terminal_and_binds_actual_results(self):
         for status in ("RECORDED", "PARTIAL", "FAILED", "NOT_RUN", "UNKNOWN"):
-            self.contents.update({name: json.dumps(v) for name, v in records(self.checked, status).items()})
-            with self.subTest(status=status), patch.object(p, "check", return_value=self.checked), \
-                    patch.object(p, "_receipt_call", side_effect=receipt_stub):
+            record = g.parse_json(self.contents[p.ORIGINAL_ATTESTATIONS[4]])
+            record["status"] = "NOT_RUN" if status == "NOT_RUN" else "RECORDED"
+            record["observation"]["outcome"] = "OBSERVED" if status == "RECORDED" else status
+            with self.subTest(status=status):
                 if status in ("RECORDED", "PARTIAL", "FAILED"):
-                    self.assertEqual(p.gate(ROOT, ci=True), p.FINAL_RELEASE)
+                    p._terminal(record)
                 else:
                     with self.assertRaises(p.Block):
-                        p.gate(ROOT, ci=True)
-        self.contents.update({name: json.dumps(v) for name, v in records(self.checked, "FAILED").items()})
-        for key in ("pre_probe_release_digest", "observation_digest"):
-            path = p.CURRENT_ATTESTATIONS[5]
+                        p._terminal(record)
+        with patch.object(p, "check", return_value=self.checked), \
+                patch.object(p, "_receipt_call", side_effect=receipt_stub) as validator:
+            self.assertEqual(p.gate(ROOT, ci=True), p.FINAL_RELEASE)
+            self.assertEqual(validator.call_args.args[3], p.ORIGINAL_SNAPSHOT)
+        for key in ("pre_probe_release_digest", "observation_digest", "repair_manifest_digest",
+                    "original_probe_snapshot"):
+            path = p.CURRENT_ATTESTATIONS[3]
             original = self.contents[path]
             self.contents[path] = json.dumps({**g.parse_json(original), key: "f" * 64})
             with patch.object(p, "check", return_value=self.checked), \
@@ -324,7 +329,7 @@ class TencentGovernanceTests(unittest.TestCase):
 
     def test_final_gate_rejects_unfinished_cleanup_and_premature_rights(self):
         self.contents.update({name: json.dumps(v) for name, v in records(self.checked, "FAILED").items()})
-        path = p.CURRENT_ATTESTATIONS[4]
+        path = p.ORIGINAL_ATTESTATIONS[4]
         original = g.parse_json(self.contents[path])
         for key, value in (("dispatch_attempts", 0), ("dispatch_attempts", True),
                            ("payloads_persisted", True), ("payload_references_discarded", False),
@@ -332,6 +337,8 @@ class TencentGovernanceTests(unittest.TestCase):
                            ("normal_composition", "PASS"), ("live_verified_benchmark_count", 3)):
             record = deepcopy(original)
             record["observation"][key] = value
+            with self.subTest(terminal=key), self.assertRaises(p.Block):
+                p._terminal(record)
             self.contents[path] = json.dumps(record)
             with self.subTest(key=key), patch.object(p, "check", return_value=self.checked), \
                     patch.object(p, "_receipt_call", side_effect=receipt_stub), self.assertRaises(p.Block):
@@ -371,7 +378,8 @@ class TencentGovernanceTests(unittest.TestCase):
         self.assertEqual((g.ALLOWED, g.BASELINE, g.BRANCH, g.IMMUTABLE), before)
         self.assertEqual(inspect.call_args.kwargs["allowed"], self.allowed)
         self.assertEqual(inspect.call_args.kwargs["baseline"], p.BASELINE)
-        self.assertEqual(set(inspect.call_args.kwargs["immutable_hashes"]), set(self.retained) - set(p.MUTABLE_PATHS))
+        self.assertEqual(set(inspect.call_args.kwargs["immutable_hashes"]),
+                         set(self.allowed) - set(p.REPAIR_MUTABLE_PATHS) - set(p.SUPPLEMENT_HASHES))
 
     def test_current_and_legacy_operational_commands_stay_closed(self):
         names = ("market-gate", "nbs-gate", "probe-gate", "preparation-gate", "diagnostic-gate", "verification-gate")
@@ -407,6 +415,122 @@ class TencentGovernanceTests(unittest.TestCase):
                      "'tencent-gate', '--ci'"):
             self.assertIn(text, workflow)
 
+    def test_original_probe_content_proof_needs_no_git_or_archived_code_execution(self):
+        with patch.object(g, "git", side_effect=AssertionError("Git access")), \
+                patch.object(g, "read_blobs", side_effect=AssertionError("Git access")), \
+                patch.object(p.importlib.util, "spec_from_file_location", side_effect=AssertionError("import")), \
+                patch("builtins.exec", side_effect=AssertionError("archive execution")), \
+                patch("builtins.eval", side_effect=AssertionError("archive evaluation")):
+            original = p.reconstruct_probe(self.contents)
+        self.assertEqual(len(original), 274)
+        saved = g.parse_json(original[p.ORIGINAL_ATTESTATIONS[0]])
+        self.assertEqual(len(saved["protected_file_hashes"]), 268)
+        self.assertEqual(g.snapshot_for_paths(original, saved["protected_file_hashes"]),
+                         (p.ORIGINAL_SNAPSHOT, saved["protected_file_hashes"]))
+        self.assertEqual(g.parse_json(original[p.ORIGINAL_ATTESTATIONS[4]])["observation"]["outcome"], "FAILED")
+
+    def test_repair_archive_closed_schema_exact_paths_and_entry_shapes(self):
+        proof = g.parse_json(self.contents[p.REPAIR_MANIFEST_PATH])
+        for key in proof:
+            bad = deepcopy(proof)
+            del bad[key]
+            with self.subTest(missing=key), self.assertRaises(p.Block):
+                p._repair_archives(bad)
+        for section in ("original_receipts", "original_protected_inputs"):
+            for path in ("../escape.py", "unknown.py", "market_intelligence/tencent_capture.py"):
+                bad = deepcopy(proof)
+                bad[section][path] = {"text": "untrusted", "sha256": g.sha256("untrusted")}
+                with self.subTest(section=section, path=path), self.assertRaises(p.Block):
+                    p._repair_archives(bad)
+            path = next(iter(proof[section]))
+            bad = deepcopy(proof)
+            del bad[section][path]
+            with self.assertRaises(p.Block):
+                p._repair_archives(bad)
+            bad = deepcopy(proof)
+            bad[section][path]["execute"] = True
+            with self.assertRaises(p.Block):
+                p._repair_archives(bad)
+
+    def test_repair_archive_hash_type_lf_and_utf8_bounds(self):
+        proof = g.parse_json(self.contents[p.REPAIR_MANIFEST_PATH])
+        name = p.ARCHIVED_PROTECTED_PATHS[0]
+        for value in (None, False, "tampered", "bad\r\n", "\u4e2d" * 350000):
+            bad = deepcopy(proof)
+            bad["original_protected_inputs"][name]["text"] = value
+            with self.subTest(value_type=type(value).__name__), self.assertRaises(p.Block):
+                p._repair_archives(bad)
+        bad = deepcopy(proof)
+        for name in p.ARCHIVED_PROTECTED_PATHS[:3]:
+            text = "x" * 800000
+            bad["original_protected_inputs"][name] = {"text": text, "sha256": g.sha256(text)}
+        with self.assertRaisesRegex(p.Block, "archive byte bound"):
+            p._repair_archives(bad)
+
+    def test_supplement_cannot_rehash_its_own_repair_authority(self):
+        for name in p.SUPPLEMENT_HASHES:
+            with self.subTest(path=name), self.assertRaisesRegex(p.Block, "frozen supplement"):
+                p.reconstruct_probe({**self.contents, name: self.contents[name] + "\n"})
+        proof = g.parse_json(self.contents[p.REPAIR_MANIFEST_PATH])
+        path = p.ARCHIVED_PROTECTED_PATHS[0]
+        proof["original_protected_inputs"][path]["text"] += "\n"
+        proof["original_protected_inputs"][path]["sha256"] = g.sha256(
+            proof["original_protected_inputs"][path]["text"])
+        with self.assertRaisesRegex(p.Block, "frozen supplement"):
+            p.reconstruct_probe({**self.contents, p.REPAIR_MANIFEST_PATH: json.dumps(proof)})
+
+    def test_original_runtime_all_product_files_and_other_frozen_inputs_cannot_drift(self):
+        names = [n for n in self.allowed if n.startswith("market_intelligence/")]
+        names += ["tests/product/test_tencent_daily.py", "tests/governance/test_governance.py",
+                  "tests/governance/p4d_fixture.py", ".github/workflows/governance.yml"]
+        for name in names:
+            with self.subTest(path=name), self.assertRaises(p.Block):
+                p.reconstruct_probe({**self.contents, name: self.contents[name] + "\n"})
+
+    def test_only_exact_single_product_assertion_repair_is_allowed(self):
+        original = p.reconstruct_probe(self.contents)[p.PRODUCT_TEST_PATH]
+        for value in (original, self.contents[p.PRODUCT_TEST_PATH] + "\n",
+                      self.contents[p.PRODUCT_TEST_PATH].replace("self.path.resolve()", "path.resolve()")):
+            with self.subTest(length=len(value)), self.assertRaisesRegex(p.Block, "only permitted product test"):
+                p.reconstruct_probe({**self.contents, p.PRODUCT_TEST_PATH: value})
+
+    def test_original_runtime_receipts_cannot_be_rebound_reset_or_replaced(self):
+        for path in p.ORIGINAL_ATTESTATIONS[3:5]:
+            record = g.parse_json(self.contents[path])
+            for value in (self.contents[path] + "\n", json.dumps({**record, "snapshot_id": self.current["snapshot_id"]}),
+                          json.dumps({**record, "status": "NOT_RUN"})):
+                with self.subTest(path=path), self.assertRaisesRegex(p.Block, "post-probe immutable"):
+                    p.reconstruct_probe({**self.contents, path: value})
+
+    def test_original_approvals_do_not_approve_current_snapshot(self):
+        original = p.reconstruct_probe(self.contents)
+        for path in p.CURRENT_ATTESTATIONS:
+            saved = self.contents[path]
+            self.contents[path] = original[path]
+            with self.subTest(path=path), self.assertRaises(p.Block):
+                p._reviews(self.checked, self.current)
+            self.contents[path] = saved
+
+    def test_shared_helper_retains_default_one_cycle_limit(self):
+        original = p.reconstruct_probe(self.contents)
+        current = g.parse_json(original[p.ORIGINAL_ATTESTATIONS[0]])
+        checked = (self.contract, self.state, original, [])
+        p._original_reviews(checked, current)
+        path = p.ORIGINAL_ATTESTATIONS[2]
+        review = g.parse_json(original[path])
+        for cycles in (2, 3, True):
+            original[path] = json.dumps({**review, "repair_cycles": cycles})
+            with self.subTest(cycles=cycles), self.assertRaisesRegex(p.Block, "repair bound"):
+                p._original_reviews(checked, current)
+
+    def test_raw_runtime_receipt_bytes_are_checked_before_validator(self):
+        with patch.object(p, "read_text", side_effect=lambda _r, name: self.contents[name]), \
+                patch.object(p, "historical_contents", return_value=(self.retained, self.historical)), \
+                patch.object(Path, "read_bytes", return_value=b"changed bytes\r\n"), \
+                patch.object(p, "_receipt_call", side_effect=AssertionError("validator before byte proof")), \
+                self.assertRaisesRegex(p.Block, "original runtime receipt bytes"):
+            p.check(ROOT)
+
 
 class TencentCandidateTests(unittest.TestCase):
     """One bounded local-only repository, with no unpublished checkpoint objects."""
@@ -440,7 +564,8 @@ class TencentCandidateTests(unittest.TestCase):
                 write(name, json.dumps(value))
             g.git(root, "add", "--", *p.CURRENT_ATTESTATIONS)
             g.git(root, "commit", "-m", "Authored P4T squash candidate")
-            for commit in ("4d1ec45645a25f2ccbb7a065c95a5a9d5ec77903", "5365ce7f9524e361758c45246f8a20a9ff61bde2"):
+            for commit in ("4d1ec45645a25f2ccbb7a065c95a5a9d5ec77903",
+                           "5365ce7f9524e361758c45246f8a20a9ff61bde2", p.ORIGINAL_COMMIT):
                 with self.assertRaises(g.Block):
                     g.git(root, "cat-file", "-e", commit)
             g.git(root, "checkout", "--detach", "HEAD")
@@ -453,7 +578,7 @@ class TencentCandidateTests(unittest.TestCase):
             with self.assertRaisesRegex(p.Block, "history retained file"):
                 p.check(root, ci=True)
             write(path, original)
-            path = p.CURRENT_ATTESTATIONS[5]
+            path = p.CURRENT_ATTESTATIONS[3]
             original = g.read_text(root, path)
             write(path, original + "\n")
             with self.assertRaisesRegex(p.Block, "index/worktree mismatch"):

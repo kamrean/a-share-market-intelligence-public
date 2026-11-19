@@ -1272,10 +1272,11 @@ def validate_preparation_record(value, snapshot_id, *, root=ROOT):
 def _validate_review_attestations(checked, current, *, paths, audit_path, next_gate,
                                   release_fields=(), release_verdict=LOCAL_RELEASE, p4n_repair=False,
                                   allowed_paths=None, package_status="implemented_unreleased",
-                                  approval_values=None):
+                                  approval_values=None, repair_limit=1):
     contract, state, contents, _changed = checked
     allowed = ALLOWED if allowed_paths is None else allowed_paths
     approval_values = {} if approval_values is None else approval_values
+    require(type(repair_limit) is int and repair_limit in (1, 2), "review: invalid repair limit")
     require(state["package_status"] == package_status, "gate: state is still building")
     receipts = []
     for name in paths:
@@ -1320,7 +1321,7 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
         exact(review["agent_id"], REPAIR_EXCEPTION["reviewer_agent"],
               "review receipt: same approved repair Reviewer")
     else:
-        require(type(audit_cycles) is int and type(cycles) is int and 0 <= audit_cycles <= cycles <= 1,
+        require(type(audit_cycles) is int and type(cycles) is int and 0 <= audit_cycles <= cycles <= repair_limit,
                 "review receipt: repair bound or reset")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
                    "merge_status", "vps_sync", "next_gate", *release_fields, *approval_values), "release receipt")
