@@ -1898,3 +1898,28 @@ and separate Release must precede dispatch. Failure/UNKNOWN ends BaoStock work;
 only documentation research on free anonymous alternatives follows. No new source
 probe, publishing, model, Telegram, trading, deployment or VPS action is authorized.
 Actual approvals and terminal results belong in the named operation attestations.
+
+### P4T Tencent Daily Index Replacement
+
+On2026-11-19 the user requested one coherent source-replacement work package:
+source verification, adapter integration, freshness/deduplication validation,
+full independent review and an attempt to retrieve Tencent daily indices.
+The final BaoStock diagnostic received88bytes but failed response_version;
+its recorded disposition retires that candidate. Neither local diagnostic
+checkpoint was human-merged. All old results and consumed quotas remain intact.
+
+Located/pinned AKShare technical documentation identifies the Tencent HTTPS
+daily endpoint, but does not establish upstream data rights. P4T therefore
+proposes a narrow, independently accepted technical-probe exception only:
+three fixed mainland indices, one run and at most three requests, no retries,
+fixed dates/limits, RAM-only payloads and sanitized results. Unknown rights
+remain unknown; ordinary source operations, model, Telegram, scheduler,
+trading and VPS remain disabled. A successful probe cannot close the five-index
+or MVP gate. Official2026 calendars support separate expected-session checks.
+
+The new content-bound history manifest preserves local P4D/operator evidence
+without requiring their unpublished commits after squash. The current package
+will retain197 historical governance tests and854 product cases, adding focused
+source/transport/temporal/deduplication/rights/approval tests. These are required
+checks, not results yet. Actual entry, validation, Reviewer, Release, observation
+and CI outcomes belong in the named P4T attestations; human merge is mandatory.

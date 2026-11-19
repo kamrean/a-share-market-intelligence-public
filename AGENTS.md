@@ -1,6 +1,27 @@
 # Project Work Rules
 
-## Current Explicit Operator Supplement
+## Active P4T Construction Entry
+
+The current user requests one coherent Tencent daily-index replacement package.
+Read START_CONSTRUCTION_PROMPT.md, BLUEPRINT.md, project-state/state.json,
+governance/policy.toml and contracts/p4t_tencent_daily_index.toml with its named
+inputs. That contract supersedes the historical instructions below for current
+construction only. It does not reopen BaoStock or reset any old allowance.
+
+Only its nine mutable and 23 new paths may change against the content-bound
+historical view. Independent entry/Prompt Auditor PASS precede implementation.
+Independent read-only Reviewer and separate Release precede the one bounded
+technical probe. Unknown upstream rights stay unknown; normal source-policy
+operations stay blocked. The proposed probe exception is inactive until reviewed.
+All general model, Telegram, scheduler, trading and VPS permissions stay false.
+Current checks use tools/governance_p4t.py; old gates and receipts are historical,
+not current approvals. Preserve old tests and failed results, no quota resets.
+The one-cycle P4T repair bound is separate from the consumed P4D repair history.
+Never treat the unpublished diagnostic checkpoints as human-merged dependencies.
+Only named result receipts may be appended after snapshot approval. Stop on
+unexpected changes, failed gates or unknown scope. Human merge is mandatory.
+
+## Historical Explicit Operator Supplement (Closed)
 
 The user reauthorized exactly one final connection diagnostic on2026-11-19.
 For this operation only, read operations/p4d-final-connection/contract.json.

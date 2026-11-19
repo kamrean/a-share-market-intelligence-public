@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "9b3f1d2c71431bcd3c794657f8bd9b8276ba38802010276e3513f6f610da774b",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "agent_id": "01a1f35d-d5fb-7101-8f7d-3dfc8c1f9c3e",
+  "read_only": true,
+  "findings": [],
+  "repair_cycles": 1,
+  "limited_technical_probe_exception_accepted": true,
+  "legal_entitlement_verified": false,
+  "normal_source_operations_enabled": false
+}

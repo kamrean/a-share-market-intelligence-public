@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "9b3f1d2c71431bcd3c794657f8bd9b8276ba38802010276e3513f6f610da774b",
+  "role": "builder_validation",
+  "verdict": "PASS",
+  "commands": [
+    {
+      "command": "python -m pip check",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests/product -p test_tencent_*.py -v",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests/governance -p test_*.py -v",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s tests/product -p test_*.py -v",
+      "exit_code": 0
+    },
+    {
+      "command": "python tools/governance_p4t.py check",
+      "exit_code": 0
+    },
+    {
+      "command": "python tools/governance_p4t.py prompt --verify",
+      "exit_code": 0
+    },
+    {
+      "command": "python tools/governance_p4t.py bundle",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check 3cceca6e1534484b9001db16644a98b7b068897b",
+      "exit_code": 0
+    }
+  ],
+  "python_version": "3.12.10",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT"
+}

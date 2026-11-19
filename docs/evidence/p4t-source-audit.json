@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "package_id": "P4T",
+  "verified_on": "2026-11-19",
+  "status": "TECHNICAL_REFERENCE_LOCATED_RIGHTS_UNKNOWN",
+  "quote_requests_performed": 0,
+  "source_id": "tencent_daily_index",
+  "endpoint": "https://proxy.finance.qq.com/ifzqgtimg/appstock/app/newfqkline/get",
+  "reference": "https://github.com/akfamily/akshare/blob/738eef017571cca4fe298b272f3a65eb39d1dc12/akshare/index/index_stock_zh.py",
+  "reference_blob": "62ecd09f6d638d5ab739b350af8af28376ab1164",
+  "reference_sha256": "5aeda05413b73864cf49e96e489ab44fac4d9f7d75d407d3b608b7bdaf4b473a",
+  "adapter_is_data_licensor": false,
+  "default_library_request_scope_suitable": false,
+  "upstream_automated_retrieval_rights": "unknown",
+  "upstream_derived_analysis_rights": "unknown",
+  "upstream_redistribution_rights": "unknown",
+  "legal_entitlement_verified": false,
+  "normal_source_operations_enabled": false,
+  "technical_probe_exception": "Proposed only in the active P4T contract; requires actual independent entry, Reviewer and pre-probe Release acceptance. It grants no upstream rights.",
+  "provider_delay": "unknown",
+  "publication_time": "unknown",
+  "finality": "unknown",
+  "unit_dependent_metrics": "unavailable_pending_primary_specification",
+  "calendars": [
+    "https://www.sse.com.cn/disclosure/dealinstruc/closed/",
+    "https://www.szse.cn/disclosure/notice/t20251222_618087.html"
+  ],
+  "calendar_year": 2026,
+  "runtime_verified_symbols": [],
+  "unresolved_benchmarks": ["KOSPI", "SP500"],
+  "result_visibility": "Only sanitized test metadata; no market payloads or numeric observations in Git or logs",
+  "details": "docs/TENCENT_DAILY_SOURCE.md"
+}

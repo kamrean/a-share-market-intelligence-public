@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "active_package": "P4D",
-  "active_contract": "contracts/p4d_protocol_recovery.toml",
-  "branch": "stage1-baostock-protocol-recovery",
+  "active_package": "P4T",
+  "active_contract": "contracts/p4t_tencent_daily_index.toml",
+  "branch": "stage1-tencent-index-replacement",
   "baseline": "3cceca6e1534484b9001db16644a98b7b068897b",
-  "package_status": "implemented_unreleased",
+  "package_status": "active_unreleased",
   "builder_agents": [
     "coordinator",
     "01a1f32f-752e-7d53-a38f-ff19b0c23586"
@@ -87,69 +87,42 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "blueprint_review": "docs/reviews/p4d-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4d-prompt-audit.json",
-    "builder_prompt": "docs/reviews/p4d-builder-prompt.md",
-    "diagnostic_bundle": "docs/reviews/p4d-diagnostic-bundle.json",
-    "diagnostic_validation": "docs/reviews/p4d-diagnostic-validation.json",
-    "diagnostic_review": "docs/reviews/p4d-diagnostic-review.json",
-    "diagnostic_release": "docs/reviews/p4d-diagnostic-release.json",
-    "diagnostic": "docs/evidence/p4d-diagnostic.json",
-    "repair_basis": "docs/evidence/p4d-repair-basis.json",
-    "bundle": "docs/reviews/p4d-bundle.json",
-    "validation": "docs/reviews/p4d-validation.json",
-    "reviewer": "docs/reviews/p4d-review.json",
-    "pre_probe_release": "docs/reviews/p4d-pre-probe-release.json",
-    "observation": "docs/evidence/p4d-market-observation.json",
-    "release": "docs/reviews/p4d-release.json"
+    "blueprint_review": "docs/reviews/p4t-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4t-prompt-audit.json",
+    "builder_prompt": "docs/reviews/p4t-builder-prompt.md",
+    "bundle": "docs/reviews/p4t-bundle.json",
+    "validation": "docs/reviews/p4t-validation.json",
+    "reviewer": "docs/reviews/p4t-review.json",
+    "pre_probe_release": "docs/reviews/p4t-pre-probe-release.json",
+    "observation": "docs/evidence/p4t-market-observation.json",
+    "release": "docs/reviews/p4t-release.json"
   },
-  "next_gate": "AWAITING_HUMAN_MERGE after truthful terminal results, independent final Release and exact-head CI; any inconclusive diagnosis or failed verification remains an explicit source gap. No new session, model, Telegram, schedule or VPS authority.",
+  "next_gate": "AWAITING_HUMAN_MERGE only after truthful terminal observation, independent final Release, one PR and exact-head offline CI. Missing source rights, foreign indices, models, Telegram and MVP acceptance remain explicit gaps.",
   "last_updated": "2026-11-19",
   "live_integration": {
     "entry_status": "human_merged",
-    "runtime_implementation": "protocol_recovery_implemented_model_deferred",
+    "runtime_implementation": "tencent_replacement_active_model_deferred",
     "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
     "prerequisite_register": "docs/evidence/live-integration-prerequisites.json",
     "permissions_enabled": false
   },
-  "phase": "diagnostic",
-  "limited_protocol_recovery": {
-    "user_authorization": "docs/evidence/p4d-user-authorization.json",
-    "source_id": "baostock_standard_free",
-    "endpoint": "tcp://public-api.baostock.com:10030",
-    "sdk_version": "0.9.4",
-    "dependency_lock": "requirements-baostock.lock",
-    "sdk_manifest": "config/p4b_sdk_manifest.json",
-    "tls": false,
-    "peer_authenticated": false,
-    "maximum_sessions": 2,
-    "maximum_total_requests": 9,
-    "diagnostic_requests": 1,
-    "verification_requests": 7,
-    "maximum_connections_per_session": 1,
-    "retries": 0,
-    "deadline_seconds": 20,
-    "maximum_wire_bytes": 512000,
-    "maximum_frame_bytes": 128000,
-    "maximum_decoded_bytes": 1048576,
-    "symbols": [
-      "sh.000001",
-      "sz.399001"
-    ],
-    "window_natural_days": 14,
-    "window_end": "prior_Asia_Shanghai_calendar_day",
-    "requires_key": false,
-    "requires_registration": false,
-    "paid": false,
-    "payload_lifetime": "bounded_process_memory_only",
-    "retained_results": "closed_schema_sanitized_metadata_only",
-    "journal_home_relative": ".a-share-market-intelligence/p4d-baostock-recovery.sqlite",
-    "journal_reset_allowed": false,
-    "old_journal_mutation_allowed": false,
-    "allowance_consumed_on": "durable_phase_reservation_before_any_dispatch",
-    "unknown_consumes_allowance": true,
-    "unused_capacity_authorizes_extra_requests": false,
-    "phase_transition_automatic": false,
+  "phase": "bounded_source_validation",
+  "limited_source_probe": {
+    "contract": "contracts/p4t_tencent_daily_index.toml",
+    "mode": "technical_probe_only",
+    "upstream_rights": "unknown",
+    "normal_source_operations_enabled": false,
+    "historical_gates_closed": true,
     "ci_network_gate_allowed": false
+  },
+  "historical_checkpoints": {
+    "p4d": "closed_inconclusive_not_merged",
+    "final_connection": "failed_source_plan_switch_not_merged",
+    "provenance_only_commits": [
+      "5365ce7f9524e361758c45246f8a20a9ff61bde2",
+      "4d1ec45645a25f2ccbb7a065c95a5a9d5ec77903"
+    ],
+    "content_manifest": "governance/p4t-history.json",
+    "old_allowances_reopened": false
   }
 }

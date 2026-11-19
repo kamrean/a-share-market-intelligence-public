@@ -1,0 +1,123 @@
+schema_version = 1
+package_id = "P4T"
+stage_ids = [1, 2, 3]
+title = "Bounded Tencent daily index replacement and validation"
+objective = "Verify the replacement source, integrate a disabled-by-default daily adapter, validate freshness and duplicates, and independently release one user-requested technical observation without promoting unknown source rights."
+branch = "stage1-tencent-index-replacement"
+baseline = "3cceca6e1534484b9001db16644a98b7b068897b"
+merge_tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+max_repair_cycles = 1
+blueprint_review_required = true
+prompt_audit_required = true
+independent_review_required = true
+snapshot_algorithm = "sha256-path-and-lf-normalized-utf8-v1"
+history_manifest = "governance/p4t-history.json"
+immutable_rule = "Preserve the content-bound P4D and final-connection historical view; only the named mutable paths may differ from that view, and only named additions are allowed. Local checkpoint commit objects are provenance, never required ancestors after squash."
+mutable_paths = [
+  "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "README.md",
+  "docs/CONSTRUCTION_LOG.md", "governance/policy.toml", "project-state/state.json",
+  ".github/workflows/governance.yml", "tools/governance.py",
+  "tests/governance/test_governance.py",
+]
+new_paths = [
+  "contracts/p4t_tencent_daily_index.toml", "governance/p4t-history.json",
+  "tools/governance_p4t.py", "tests/governance/p4d_fixture.py",
+  "tests/governance/test_governance_p4t.py", "templates/p4t_builder_prompt.md",
+  "docs/evidence/p4t-user-authorization.json", "docs/evidence/p4t-source-audit.json",
+  "docs/evidence/p4t-market-observation.json", "docs/reviews/p4t-builder-prompt.md",
+  "docs/reviews/p4t-entrypoint-review.json", "docs/reviews/p4t-prompt-audit.json",
+  "docs/reviews/p4t-bundle.json", "docs/reviews/p4t-validation.json",
+  "docs/reviews/p4t-review.json", "docs/reviews/p4t-pre-probe-release.json",
+  "docs/reviews/p4t-release.json", "market_intelligence/tencent_daily.py",
+  "market_intelligence/tencent_capture.py", "tests/product/test_tencent_daily.py",
+  "tests/product/test_tencent_capture.py", "config/tencent_daily.toml",
+  "docs/TENCENT_DAILY_SOURCE.md",
+]
+required_reads = [
+  "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "BLUEPRINT.md",
+  "project-state/state.json", "governance/policy.toml",
+  "contracts/p4t_tencent_daily_index.toml", "governance/p4t-history.json",
+  "docs/TENCENT_DAILY_SOURCE.md", "config/tencent_daily.toml",
+  "docs/evidence/p4t-user-authorization.json", "docs/evidence/p4t-source-audit.json",
+  "operations/p4d-final-connection/disposition.json", "docs/reviews/p4b-merge.json",
+]
+required_validation = [
+  "python -m pip check",
+  "python -m unittest discover -s tests/product -p test_tencent_*.py -v",
+  "python -m unittest discover -s tests/governance -p test_*.py -v",
+  "python -m unittest discover -s tests/product -p test_*.py -v",
+  "python tools/governance_p4t.py check",
+  "python tools/governance_p4t.py prompt --verify",
+  "python tools/governance_p4t.py bundle",
+  "git diff --check 3cceca6e1534484b9001db16644a98b7b068897b",
+]
+next_gate = "AWAITING_HUMAN_MERGE only after truthful terminal observation, independent final Release, one PR and exact-head offline CI. Missing source rights, foreign indices, models, Telegram and MVP acceptance remain explicit gaps."
+rollback = "Close connections, discard RAM payloads and keep the consumed journal and sanitized failure. Never retry, change endpoints, reset historical allowances, publish raw data, merge or bypass."
+
+[permissions]
+research_only = true
+external_data_access_allowed = false
+scheduled_collection_allowed = false
+llm_research_allowed = false
+telegram_delivery_allowed = false
+vps_deployment_allowed = false
+vps_mutation_allowed = false
+broker_allowed = false
+order_execution_allowed = false
+portfolio_control_allowed = false
+
+[limited_source_probe]
+user_authorization = "docs/evidence/p4t-user-authorization.json"
+source_audit = "docs/evidence/p4t-source-audit.json"
+mode = "technical_probe_only"
+exception_basis = "The current user explicitly requests a bounded Tencent source attempt. Fresh independent entry, Reviewer and Release must accept this narrow technical test despite unverified upstream rights; consent is not a data license and normal source-policy operations stay blocked."
+source_id = "tencent_daily_index"
+endpoint = "https://proxy.finance.qq.com/ifzqgtimg/appstock/app/newfqkline/get"
+symbols = ["sh000001", "sz399001", "sz399006"]
+maximum_runs = 1
+maximum_total_requests = 3
+maximum_connections = 3
+retries = 0
+concurrency = 1
+deadline_seconds = 20
+maximum_bytes_per_request = 512000
+maximum_rows_per_symbol = 32
+window_natural_days = 14
+window_end = "latest_expected_completed_Asia_Shanghai_session"
+calendar_year = 2026
+tls_verified = true
+redirects_allowed = false
+fallback_allowed = false
+requires_key = false
+requires_registration = false
+paid = false
+payload_lifetime = "bounded_process_memory_only"
+retained_results = "closed_schema_sanitized_metadata_only"
+journal_home_relative = ".a-share-market-intelligence/p4t-tencent-daily.jsonl"
+journal_reset_allowed = false
+old_journal_mutation_allowed = false
+allowance_consumed_on = "exclusive_durable_whole_run_reservation_before_any_dispatch"
+unknown_consumes_allowance = true
+stop_remaining_requests_on_failure = true
+ci_network_gate_allowed = false
+upstream_rights = "unknown"
+legal_entitlement_verified = false
+normal_source_operations_enabled = false
+
+[implementation]
+ownership = "Coordinator owns product integration; bounded disjoint Builder owns governance after entry PASS. Independent Reviewer and separate Release Checker do not implement."
+adapter = "New modules only, reusing safe core validators where appropriate; fixed HTTPS origin and path, bounded JSON parsing without evaluation, explicit adjustment mode, source/symbol identity binding, no SDK installation or secrets."
+integration = "Normalize observations into existing bar/fact shapes in RAM and exercise existing operation-scoped source-policy rejection. Unknown rights keep normal composition and publication blocked. Technical diagnostics never impersonate research or source-policy permission."
+time = "Pin official calendar sources/year; report latest returned versus latest expected completed session, missing sessions, future/incomplete rejection. Publication, provider delay and finality remain unknown."
+duplicates = "Collapse identical provider/symbol/adjustment/session duplicates with counts; quarantine all conflicting same-key observations. Deterministic same-process replay and missing/stale/holiday/year-boundary tests are mandatory."
+units = "Use validated OHLC only; volume, amount, turnover and net-flow metrics stay unavailable until primary specifications verify their semantics. No zero filling."
+preservation = "Keep all 197 historical governance test methods and 854 existing product cases. Scope helpers may be parameterized with unchanged defaults; historical fixtures use bounded content reconstruction, not local commit ancestry. Old source gates cannot approve P4T."
+truthfulness = "Separate technical acquisition, freshness, normal source rights, retained benchmark coverage and research MVP acceptance. A three-index response does not satisfy the five-index target or authorize model/delivery."
+
+[review_flow]
+entry = "Actual independent entry and Prompt Auditor PASS on frozen planning inputs precede implementation. No proposed exception is active before this acceptance."
+probe = "Complete validation, freeze implementation inputs and obtain independent Reviewer plus separate pre-probe Release PASS; runtime rechecks the exact snapshot and unused allowance before dispatch."
+final = "Record actual observations and disposal, final independent Release, named staging/noreply commit, push one PR, exact-head Ubuntu/Windows offline CI and final remote release confirmation; human merge only."
+repairs = "One P4T R0/R1 consolidated findings repair cycle; another BLOCK or R2+ requires human escalation. Previous P4D repair history is preserved and never reset or reused."

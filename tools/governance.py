@@ -955,16 +955,18 @@ def git_paths(output):
     return output[:-1].split("\0") if output else []
 
 
-def harmless_cache(name):
+def harmless_cache(name, *, allowed=None):
+    allowed = ALLOWED if allowed is None else allowed
     known = {
         (Path(path).parent / "__pycache__" / Path(path).stem).as_posix()
-        for path in ALLOWED if path.endswith(".py")
+        for path in allowed if path.endswith(".py")
     }
     match = re.fullmatch(r"(.+)\.cpython-312(?:\.opt-[12])?\.pyc", name)
     return bool(match and match.group(1) in known)
 
 
-def read_index(root):
+def read_index(root, *, allowed=None):
+    allowed = ALLOWED if allowed is None else allowed
     entries = {}
     for record in git_paths(git(root, "ls-files", "--stage", "-z")):
         metadata, separator, name = record.partition("\t")
@@ -972,7 +974,7 @@ def read_index(root):
         require(separator and len(fields) == 3, "Git returned malformed index entry")
         mode, oid, stage = fields
         safe_path(root, name)
-        require(name in ALLOWED, f"out-of-scope path: {name}")
+        require(name in allowed, f"out-of-scope path: {name}")
         require(stage == "0" and name not in entries, f"index: unresolved entry: {name}")
         require(mode in ("100644", "100755"), f"index: non-regular file: {name}")
         require(re.fullmatch(r"[0-9a-f]{40}", oid), f"index: invalid blob ID: {name}")
@@ -980,33 +982,37 @@ def read_index(root):
     return entries
 
 
-def inspect_git(root, *, ci=False, contents=None, complete_index=False):
+def inspect_git(root, *, ci=False, contents=None, complete_index=False,
+                baseline=None, branch=None, allowed=None, immutable_hashes=None):
+    baseline = BASELINE if baseline is None else baseline
+    branch = BRANCH if branch is None else branch
+    allowed = ALLOWED if allowed is None else allowed
     root = Path(root).resolve()
     require(Path(git(root, "rev-parse", "--show-toplevel").strip()).resolve() == root,
             "Git root differs from requested root")
-    exact(git(root, "rev-parse", "--verify", f"{BASELINE}^{{commit}}").strip(), BASELINE,
+    exact(git(root, "rev-parse", "--verify", f"{baseline}^{{commit}}").strip(), baseline,
           "Git baseline")
-    git(root, "merge-base", "--is-ancestor", BASELINE, "HEAD")
+    git(root, "merge-base", "--is-ancestor", baseline, "HEAD")
     if not ci:
-        exact(git(root, "symbolic-ref", "--quiet", "--short", "HEAD").strip(), BRANCH,
+        exact(git(root, "symbolic-ref", "--quiet", "--short", "HEAD").strip(), branch,
               "Git branch")
     diff_flags = ("--no-ext-diff", "--no-textconv", "--no-renames", "--name-only", "-z")
-    committed = git_paths(git(root, "diff", *diff_flags, BASELINE, "HEAD", "--"))
+    committed = git_paths(git(root, "diff", *diff_flags, baseline, "HEAD", "--"))
     staged = git_paths(git(root, "diff", *diff_flags, "--cached", "--ita-invisible-in-index", "HEAD", "--"))
     removed = git_paths(git(root, "diff", *diff_flags, "--cached", "--ita-invisible-in-index",
                            "--diff-filter=D", "HEAD", "--"))
     working = git_paths(git(root, "diff", *diff_flags, "--"))
-    entries = read_index(root)
+    entries = read_index(root, allowed=allowed)
     tracked = list(entries)
     head = git_paths(git(root, "ls-tree", "-r", "--name-only", "-z", "HEAD", "--"))
     untracked = git_paths(git(root, "ls-files", "--others", "--exclude-standard", "-z"))
     ignored = git_paths(git(root, "ls-files", "--others", "--ignored", "--exclude-standard", "-z"))
     for name in set(committed + staged + working + tracked + head + untracked + ignored):
         safe_path(root, name)
-        if name in ignored and harmless_cache(name):
+        if name in ignored and harmless_cache(name, allowed=allowed):
             continue
-        require(name in ALLOWED, f"out-of-scope path: {name}")
-    required = set(ALLOWED) if complete_index else set(head)
+        require(name in allowed, f"out-of-scope path: {name}")
+    required = set(allowed) if complete_index else set(head)
     missing = (required - entries.keys()) | set(removed)
     require(not missing, f"index: missing commit candidate files: {', '.join(sorted(missing))}")
     indexed_blobs = read_blobs(root, entries.values())
@@ -1022,18 +1028,23 @@ def inspect_git(root, *, ci=False, contents=None, complete_index=False):
             working_text = contents[name]
         require(indexed == working_text, f"index/worktree mismatch: {name}; stage the final working content")
     # Historical evidence is not just in scope: its exact baseline content is immutable.
-    baseline_entries = {}
-    for record in git_paths(git(root, "ls-tree", "-r", "-z", BASELINE, "--", *IMMUTABLE)):
-        metadata, separator, name = record.partition("\t")
-        fields = metadata.split()
-        require(separator and len(fields) == 3 and fields[1] == "blob",
-                "immutable baseline: malformed entry")
-        baseline_entries[name] = fields[2]
-    exact(sorted(baseline_entries), sorted(IMMUTABLE), "immutable baseline paths")
-    baseline_blobs = read_blobs(root, baseline_entries.values())
-    for name, oid in baseline_entries.items():
-        require(read_text(root, name) == baseline_blobs[oid],
-                f"immutable historical input changed: {name}")
+    if immutable_hashes is None:
+        baseline_entries = {}
+        for record in git_paths(git(root, "ls-tree", "-r", "-z", baseline, "--", *IMMUTABLE)):
+            metadata, separator, name = record.partition("\t")
+            fields = metadata.split()
+            require(separator and len(fields) == 3 and fields[1] == "blob",
+                    "immutable baseline: malformed entry")
+            baseline_entries[name] = fields[2]
+        exact(sorted(baseline_entries), sorted(IMMUTABLE), "immutable baseline paths")
+        baseline_blobs = read_blobs(root, baseline_entries.values())
+        for name, oid in baseline_entries.items():
+            require(read_text(root, name) == baseline_blobs[oid],
+                    f"immutable historical input changed: {name}")
+    else:
+        for name, digest in immutable_hashes.items():
+            require(name in allowed, f"immutable path outside scope: {name}")
+            exact(sha256(read_text(root, name)), digest, f"immutable historical input changed: {name}")
     # Git can omit an empty directory junction. Inspect links before descending,
     # excluding only Git's own metadata, which is not a construction input.
     directories = [root]
@@ -1161,10 +1172,14 @@ def check(root=ROOT, *, ci=False, complete_index=False):
 
 
 def snapshot(contents):
+    state = parse_json(contents["project-state/state.json"])
+    return snapshot_for_paths(contents, protected_paths(state))
+
+
+def snapshot_for_paths(contents, paths):
     aggregate = hashlib.sha256()
     hashes = {}
-    state = parse_json(contents["project-state/state.json"])
-    for name in protected_paths(state):
+    for name in sorted(paths):
         content = contents[name].encode("utf-8")
         hashes[name] = hashlib.sha256(content).hexdigest()
         # Length framing makes even embedded NULs unambiguous; Git HEAD is not an input.
@@ -1255,9 +1270,13 @@ def validate_preparation_record(value, snapshot_id, *, root=ROOT):
 
 
 def _validate_review_attestations(checked, current, *, paths, audit_path, next_gate,
-                                  release_fields=(), release_verdict=LOCAL_RELEASE, p4n_repair=False):
+                                  release_fields=(), release_verdict=LOCAL_RELEASE, p4n_repair=False,
+                                  allowed_paths=None, package_status="implemented_unreleased",
+                                  approval_values=None):
     contract, state, contents, _changed = checked
-    require(state["package_status"] == "implemented_unreleased", "gate: state is still building")
+    allowed = ALLOWED if allowed_paths is None else allowed_paths
+    approval_values = {} if approval_values is None else approval_values
+    require(state["package_status"] == package_status, "gate: state is still building")
     receipts = []
     for name in paths:
         require(name in contents, f"missing required receipt: {name}")
@@ -1269,7 +1288,7 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
         if key != "changed_paths":
             exact(saved[key], value, f"bundle receipt.{key}")
     require(type(saved["changed_paths"]) is list, "bundle receipt.changed_paths: expected list")
-    require(all(type(name) is str and name in ALLOWED for name in saved["changed_paths"]),
+    require(all(type(name) is str and name in allowed for name in saved["changed_paths"]),
             "bundle receipt.changed_paths: out of scope")
     exact(saved["changed_paths"], sorted(set(saved["changed_paths"])), "bundle receipt.changed_paths")
     common = {"schema_version": 1, "snapshot_id": current["snapshot_id"]}
@@ -1278,10 +1297,11 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
                                     for command in contract["required_validation"]],
                        "python_version": "3.12.10", "remote_ci": "NOT_RUN_AT_SNAPSHOT"},
           "validation receipt")
-    keys(review, (*common, "role", "verdict", "agent_id", "read_only", "findings", "repair_cycles"),
+    keys(review, (*common, "role", "verdict", "agent_id", "read_only", "findings", "repair_cycles",
+                  *approval_values),
          "review receipt")
     for key, value in {**common, "role": "reviewer", "verdict": "PASS", "read_only": True,
-                       "findings": []}.items():
+                       "findings": [], **approval_values}.items():
         exact(review[key], value, f"review receipt.{key}")
     cycles = review["repair_cycles"]
     audit_cycles = parse_json(contents[audit_path])["repair_cycles"]
@@ -1303,12 +1323,12 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
         require(type(audit_cycles) is int and type(cycles) is int and 0 <= audit_cycles <= cycles <= 1,
                 "review receipt: repair bound or reset")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
-                   "merge_status", "vps_sync", "next_gate", *release_fields), "release receipt")
+                   "merge_status", "vps_sync", "next_gate", *release_fields, *approval_values), "release receipt")
     for key, value in {**common, "role": "release_checker", "read_only": True,
                        "verdict": release_verdict,
                        "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                        "pr_url": None, "merge_status": "not_merged", "vps_sync": "not_requested",
-                       "next_gate": next_gate}.items():
+                       "next_gate": next_gate, **approval_values}.items():
         exact(release[key], value, f"release receipt.{key}")
     for role, receipt in (("reviewer", review), ("release_checker", release)):
         nonempty(receipt["agent_id"], f"{role}.agent_id")

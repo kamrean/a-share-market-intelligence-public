@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "package_id": "P4T",
+  "source": "current user request on 2026-11-19",
+  "request_summary": "Complete Tencent Finance daily index source verification, adapter integration, freshness and deduplication validation, independent review and a bounded attempt to obtain indices in one coherent work package.",
+  "authorization_type": "project_operation_consent_not_upstream_data_license",
+  "proposed_interpretation": "One independent-snapshot-released technical test of three fixed mainland indices; unknown upstream rights remain unknown and ordinary source-policy operations remain blocked.",
+  "maximum_requests": 3,
+  "symbols": ["sh000001", "sz399001", "sz399006"],
+  "window_natural_days": 14,
+  "retries": 0,
+  "requires_new_independent_approvals": true,
+  "permissions_unchanged": ["model", "telegram", "scheduler", "broker", "orders", "portfolio", "deploy", "vps"],
+  "historical_allowance_reset": false,
+  "payload_persistence_allowed": false,
+  "paid_or_keyed_access_allowed": false,
+  "upstream_rights_granted_by_user": false,
+  "human_merge_required": true
+}

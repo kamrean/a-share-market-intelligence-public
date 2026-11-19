@@ -1,5 +1,28 @@
 # Construction Entrypoint
 
+## Active P4T Entry
+
+Use only kamrean/a-share-market-intelligence-public and the active P4T contract:
+contracts/p4t_tencent_daily_index.toml. Read AGENTS.md, Blueprint v1, canonical
+state/policy and the contract's named inputs. No archived/private project access.
+Main is PR13; later P4D/final-connection checkpoints are local, not merged.
+
+One medium work package covers source verification, Tencent adapter integration,
+calendar freshness and duplicate tests, source-policy BLOCK preservation, bounded
+technical acquisition and review/PR/CI. Unknown rights are not legal permission.
+Actual entry/Prompt PASS must accept the exact limited test exception before
+implementation; fresh independent Reviewer and separate Release precede requests.
+All old quotas/gates remain closed. Payloads stay in RAM; only sanitized results
+persist. Use the active checker tools/governance_p4t.py, not a historical PASS.
+
+Sequence: planning audit -> implementation -> full offline validation -> frozen
+review -> separate pre-probe release -> one bounded attempt -> final Release ->
+named commit/push/PR -> exact-head offline CI -> independent remote Release ->
+AWAITING_HUMAN_MERGE. Failure is recorded, never retried or hidden. Report previous,
+current and remaining progress plus actual latestness, duplicates and cleanup.
+
+## Historical P4D Entry (Closed)
+
 Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml
 and contracts/p4d_protocol_recovery.toml with its named required inputs.
 Active repository: kamrean/a-share-market-intelligence-public. No archived or

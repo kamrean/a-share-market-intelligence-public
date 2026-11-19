@@ -16,9 +16,12 @@ import tomllib
 import unittest
 from unittest.mock import patch
 
+import p4d_fixture
 
-ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location("p4b_governance", ROOT / "tools/governance.py")
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+ROOT = p4d_fixture.view()
+SPEC = importlib.util.spec_from_file_location("p4d_governance", REPO_ROOT / "tools/governance.py")
 g = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(g)
 
@@ -459,7 +462,7 @@ class RepositoryBindingTests(unittest.TestCase):
 
     def test_ci_retains_action_pins_platforms_permissions_and_timeout(self):
         workflow = g.read_text(ROOT, ".github/workflows/governance.yml")
-        previous = g.normalize_text(g.git(ROOT, "show", f"{g.BASELINE}:.github/workflows/governance.yml"))
+        previous = g.normalize_text(g.git(REPO_ROOT, "show", f"{g.BASELINE}:.github/workflows/governance.yml"))
         for line in previous.splitlines():
             if any(marker in line for marker in ("uses:", "os: [", "python-version:",
                                                  "timeout-minutes:", "contents: read",
@@ -1427,7 +1430,7 @@ class NbsAttestationTests(unittest.TestCase):
         for name in (*g.FROZEN_INPUT_HASHES, g.NBS_RECEIPT_PATHS["blueprint_review"],
                      g.NBS_RECEIPT_PATHS["prompt_audit"]):
             self.contents[name] = g.read_text(ROOT, name)
-        self.contents["governance/policy.toml"] = g.git(ROOT, "show", "93f6fe87c723dba32225a4895788d8edeef0b539:governance/policy.toml")
+        self.contents["governance/policy.toml"] = g.git(REPO_ROOT, "show", "93f6fe87c723dba32225a4895788d8edeef0b539:governance/policy.toml")
         self.checked = (self.contract, self.state, self.contents, [])
         self.current = {**historical_market_bundle(self.checked), "package_id": "P4N",
                         "attestation_paths": list(g.NBS_ATTESTATIONS)}
