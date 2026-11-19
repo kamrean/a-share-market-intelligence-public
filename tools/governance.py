@@ -1,4 +1,4 @@
-"""P4N exact-snapshot governance; general operational gates closed (Python 3.12)."""
+"""P4M exact-snapshot governance; all operational gates closed (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -17,12 +17,12 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "66be9c9705c5a9739f2beb5a3a9287f21703018d"
-BRANCH = "stage1-nbs-evidence-ingestion"
+BASELINE = "93f6fe87c723dba32225a4895788d8edeef0b539"
+BRANCH = "stage3-daily-market-evidence"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p4n_nbs_ingestion.toml"
-TEMPLATE_PATH = "templates/p4n_builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p4n-builder-prompt.md"
+CONTRACT_PATH = "contracts/p4m_daily_market_evidence.toml"
+TEMPLATE_PATH = "templates/p4m_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p4m-builder-prompt.md"
 PREREQUISITE_PATH = "docs/evidence/live-integration-prerequisites.json"
 PREREQUISITE_HASH = "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3"
 SOURCE_PROBE_PATH = "docs/evidence/p4s-source-probe.json"
@@ -32,8 +32,15 @@ SOURCE_SNAPSHOT = "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3
 PREPARATION_PATH = "docs/evidence/p4e-preparation.json"
 PREPARATION_HASH = "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8"
 PREPARATION_SNAPSHOT = "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe"
-AUDIT_AGENT = "01a1eea3-8019-7200-b0c2-d58feee3fb26"
-CURRENT_ATTESTATIONS = tuple([
+AUDIT_AGENT = "01a1ef26-ac47-7d02-9fcb-8c3aa5403dad"
+CURRENT_ATTESTATIONS = (
+    "docs/reviews/p4m-bundle.json",
+    "docs/reviews/p4m-validation.json",
+    "docs/reviews/p4m-review.json",
+    "docs/reviews/p4m-release.json",
+)
+# Historical NBS records are audit inputs, never current exemptions or capabilities.
+NBS_ATTESTATIONS = tuple([
     "docs/reviews/p4n-bundle.json",
     "docs/reviews/p4n-validation.json",
     "docs/reviews/p4n-review.json",
@@ -47,7 +54,7 @@ ATTESTATIONS = (
     "docs/reviews/p4e-review.json", "docs/reviews/p4e-release.json",
     "docs/evidence/p4e-preparation.json",
 )
-ALLOWED = tuple([
+ALLOWED = (
     ".gitattributes",
     ".github/workflows/governance.yml",
     ".gitignore",
@@ -70,9 +77,205 @@ ALLOWED = tuple([
     "contracts/p4c_offline_workflow.toml",
     "contracts/p4e_evidence_preparation.toml",
     "contracts/p4i_real_evidence_composition.toml",
+    "contracts/p4m_daily_market_evidence.toml",
     "contracts/p4n_nbs_ingestion.toml",
     "contracts/p4s_free_sources.toml",
     "docs/CONSTRUCTION_LOG.md",
+    "docs/DAILY_MARKET_EVIDENCE.md",
+    "docs/EVIDENCE_PREPARATION.md",
+    "docs/FREE_SOURCE_COLLECTION.md",
+    "docs/LEGACY_REUSE_MANIFEST.md",
+    "docs/LIVE_INTEGRATION_PLAN.md",
+    "docs/NBS_EVIDENCE_INGESTION.md",
+    "docs/OFFLINE_WORKFLOW_PLAN.md",
+    "docs/P1_DESIGN.md",
+    "docs/P2_METHODS.md",
+    "docs/P3_METHODS.md",
+    "docs/P4_METHODS.md",
+    "docs/PUBLICATION_PROVENANCE.json",
+    "docs/REAL_EVIDENCE_COMPOSITION.md",
+    "docs/SOURCE_MATRIX.md",
+    "docs/evidence/live-integration-prerequisites.json",
+    "docs/evidence/p1-source-probe.json",
+    "docs/evidence/p2-demo.json",
+    "docs/evidence/p3-demo.json",
+    "docs/evidence/p4-demo.json",
+    "docs/evidence/p4-report.txt",
+    "docs/evidence/p4e-preparation.json",
+    "docs/evidence/p4n-nbs-observation.json",
+    "docs/evidence/p4s-source-probe.json",
+    "docs/reviews/blueprint-review.json",
+    "docs/reviews/p0-builder-prompt.md",
+    "docs/reviews/p0-bundle.json",
+    "docs/reviews/p0-merge.json",
+    "docs/reviews/p0-prompt-audit.json",
+    "docs/reviews/p0-release.json",
+    "docs/reviews/p0-review.json",
+    "docs/reviews/p0-validation.json",
+    "docs/reviews/p1-builder-prompt.md",
+    "docs/reviews/p1-bundle.json",
+    "docs/reviews/p1-entrypoint-review.json",
+    "docs/reviews/p1-merge.json",
+    "docs/reviews/p1-prompt-audit.json",
+    "docs/reviews/p1-release.json",
+    "docs/reviews/p1-review.json",
+    "docs/reviews/p1-validation.json",
+    "docs/reviews/p2-builder-prompt.md",
+    "docs/reviews/p2-bundle.json",
+    "docs/reviews/p2-entrypoint-review.json",
+    "docs/reviews/p2-merge.json",
+    "docs/reviews/p2-prompt-audit.json",
+    "docs/reviews/p2-release.json",
+    "docs/reviews/p2-review.json",
+    "docs/reviews/p2-validation.json",
+    "docs/reviews/p3-builder-prompt.md",
+    "docs/reviews/p3-bundle.json",
+    "docs/reviews/p3-entrypoint-review.json",
+    "docs/reviews/p3-merge.json",
+    "docs/reviews/p3-prompt-audit.json",
+    "docs/reviews/p3-release.json",
+    "docs/reviews/p3-review.json",
+    "docs/reviews/p3-validation.json",
+    "docs/reviews/p4-builder-prompt.md",
+    "docs/reviews/p4-bundle.json",
+    "docs/reviews/p4-entrypoint-review.json",
+    "docs/reviews/p4-merge.json",
+    "docs/reviews/p4-prompt-audit.json",
+    "docs/reviews/p4-release.json",
+    "docs/reviews/p4-review.json",
+    "docs/reviews/p4-validation.json",
+    "docs/reviews/p4c-builder-prompt.md",
+    "docs/reviews/p4c-bundle.json",
+    "docs/reviews/p4c-entrypoint-review.json",
+    "docs/reviews/p4c-merge.json",
+    "docs/reviews/p4c-prompt-audit.json",
+    "docs/reviews/p4c-release.json",
+    "docs/reviews/p4c-review.json",
+    "docs/reviews/p4c-validation.json",
+    "docs/reviews/p4e-builder-prompt.md",
+    "docs/reviews/p4e-bundle.json",
+    "docs/reviews/p4e-entrypoint-review.json",
+    "docs/reviews/p4e-merge.json",
+    "docs/reviews/p4e-prompt-audit.json",
+    "docs/reviews/p4e-release.json",
+    "docs/reviews/p4e-review.json",
+    "docs/reviews/p4e-validation.json",
+    "docs/reviews/p4i-builder-prompt.md",
+    "docs/reviews/p4i-bundle.json",
+    "docs/reviews/p4i-entrypoint-review.json",
+    "docs/reviews/p4i-merge.json",
+    "docs/reviews/p4i-prompt-audit.json",
+    "docs/reviews/p4i-release.json",
+    "docs/reviews/p4i-review.json",
+    "docs/reviews/p4i-validation.json",
+    "docs/reviews/p4l-builder-prompt.md",
+    "docs/reviews/p4l-bundle.json",
+    "docs/reviews/p4l-entrypoint-review.json",
+    "docs/reviews/p4l-merge.json",
+    "docs/reviews/p4l-prompt-audit.json",
+    "docs/reviews/p4l-release.json",
+    "docs/reviews/p4l-review.json",
+    "docs/reviews/p4l-validation.json",
+    "docs/reviews/p4m-builder-prompt.md",
+    "docs/reviews/p4m-bundle.json",
+    "docs/reviews/p4m-entrypoint-review.json",
+    "docs/reviews/p4m-prompt-audit.json",
+    "docs/reviews/p4m-release.json",
+    "docs/reviews/p4m-review.json",
+    "docs/reviews/p4m-validation.json",
+    "docs/reviews/p4n-builder-prompt.md",
+    "docs/reviews/p4n-bundle.json",
+    "docs/reviews/p4n-entrypoint-review.json",
+    "docs/reviews/p4n-merge.json",
+    "docs/reviews/p4n-pre-probe-release.json",
+    "docs/reviews/p4n-prompt-audit.json",
+    "docs/reviews/p4n-release.json",
+    "docs/reviews/p4n-review.json",
+    "docs/reviews/p4n-validation.json",
+    "docs/reviews/p4s-builder-prompt.md",
+    "docs/reviews/p4s-bundle.json",
+    "docs/reviews/p4s-entrypoint-review.json",
+    "docs/reviews/p4s-merge.json",
+    "docs/reviews/p4s-prompt-audit.json",
+    "docs/reviews/p4s-release.json",
+    "docs/reviews/p4s-review.json",
+    "docs/reviews/p4s-validation.json",
+    "governance/policy.toml",
+    "market_intelligence/__init__.py",
+    "market_intelligence/__main__.py",
+    "market_intelligence/collection.py",
+    "market_intelligence/cost_guard.py",
+    "market_intelligence/daily_market.py",
+    "market_intelligence/delivery.py",
+    "market_intelligence/evaluation.py",
+    "market_intelligence/gate.py",
+    "market_intelligence/intelligence.py",
+    "market_intelligence/ledger.py",
+    "market_intelligence/market_state.py",
+    "market_intelligence/models.py",
+    "market_intelligence/nbs.py",
+    "market_intelligence/news_events.py",
+    "market_intelligence/preparation.py",
+    "market_intelligence/publication.py",
+    "market_intelligence/research.py",
+    "market_intelligence/runtime.py",
+    "market_intelligence/scenario.py",
+    "market_intelligence/source_policy.py",
+    "market_intelligence/sources.py",
+    "market_intelligence/store.py",
+    "market_intelligence/workflow.py",
+    "project-state/state.json",
+    "requirements.lock",
+    "templates/builder_prompt.md",
+    "templates/p1_builder_prompt.md",
+    "templates/p2_builder_prompt.md",
+    "templates/p3_builder_prompt.md",
+    "templates/p4_builder_prompt.md",
+    "templates/p4c_builder_prompt.md",
+    "templates/p4e_builder_prompt.md",
+    "templates/p4i_builder_prompt.md",
+    "templates/p4l_builder_prompt.md",
+    "templates/p4m_builder_prompt.md",
+    "templates/p4n_builder_prompt.md",
+    "templates/p4s_builder_prompt.md",
+    "tests/fixtures/p1_feed.xml",
+    "tests/fixtures/p1_market.csv",
+    "tests/fixtures/p2_input.json",
+    "tests/fixtures/p3_responses.json",
+    "tests/governance/test_governance.py",
+    "tests/product/test_collection.py",
+    "tests/product/test_daily_market.py",
+    "tests/product/test_nbs.py",
+    "tests/product/test_p1.py",
+    "tests/product/test_p2.py",
+    "tests/product/test_p3.py",
+    "tests/product/test_p4.py",
+    "tests/product/test_preparation.py",
+    "tests/product/test_real_evidence.py",
+    "tests/product/test_scenario.py",
+    "tests/product/test_workflow.py",
+    "tools/governance.py",
+)
+IMMUTABLE = (
+    ".gitattributes",
+    ".gitignore",
+    "config/p1_profile.toml",
+    "config/p2_entities.toml",
+    "config/p2_methods.toml",
+    "config/p3_research.toml",
+    "config/p4_publication.toml",
+    "config/sources.toml",
+    "contracts/p0_stage0.toml",
+    "contracts/p1_sources_evidence.toml",
+    "contracts/p2_intelligence.toml",
+    "contracts/p3_research.toml",
+    "contracts/p4_live_integration_entry.toml",
+    "contracts/p4_publication.toml",
+    "contracts/p4c_offline_workflow.toml",
+    "contracts/p4e_evidence_preparation.toml",
+    "contracts/p4i_real_evidence_composition.toml",
+    "contracts/p4n_nbs_ingestion.toml",
+    "contracts/p4s_free_sources.toml",
     "docs/EVIDENCE_PREPARATION.md",
     "docs/FREE_SOURCE_COLLECTION.md",
     "docs/LEGACY_REUSE_MANIFEST.md",
@@ -183,7 +386,6 @@ ALLOWED = tuple([
     "docs/reviews/p4s-release.json",
     "docs/reviews/p4s-review.json",
     "docs/reviews/p4s-validation.json",
-    "governance/policy.toml",
     "market_intelligence/__init__.py",
     "market_intelligence/__main__.py",
     "market_intelligence/collection.py",
@@ -191,7 +393,6 @@ ALLOWED = tuple([
     "market_intelligence/delivery.py",
     "market_intelligence/evaluation.py",
     "market_intelligence/gate.py",
-    "market_intelligence/intelligence.py",
     "market_intelligence/ledger.py",
     "market_intelligence/market_state.py",
     "market_intelligence/models.py",
@@ -206,7 +407,6 @@ ALLOWED = tuple([
     "market_intelligence/sources.py",
     "market_intelligence/store.py",
     "market_intelligence/workflow.py",
-    "project-state/state.json",
     "requirements.lock",
     "templates/builder_prompt.md",
     "templates/p1_builder_prompt.md",
@@ -223,7 +423,6 @@ ALLOWED = tuple([
     "tests/fixtures/p1_market.csv",
     "tests/fixtures/p2_input.json",
     "tests/fixtures/p3_responses.json",
-    "tests/governance/test_governance.py",
     "tests/product/test_collection.py",
     "tests/product/test_nbs.py",
     "tests/product/test_p1.py",
@@ -234,171 +433,7 @@ ALLOWED = tuple([
     "tests/product/test_real_evidence.py",
     "tests/product/test_scenario.py",
     "tests/product/test_workflow.py",
-    "tools/governance.py"
-])
-IMMUTABLE = tuple([
-    ".gitattributes",
-    ".gitignore",
-    "config/p1_profile.toml",
-    "config/p2_entities.toml",
-    "config/p2_methods.toml",
-    "config/p3_research.toml",
-    "config/p4_publication.toml",
-    "config/sources.toml",
-    "contracts/p0_stage0.toml",
-    "contracts/p1_sources_evidence.toml",
-    "contracts/p2_intelligence.toml",
-    "contracts/p3_research.toml",
-    "contracts/p4_live_integration_entry.toml",
-    "contracts/p4_publication.toml",
-    "contracts/p4c_offline_workflow.toml",
-    "contracts/p4e_evidence_preparation.toml",
-    "contracts/p4i_real_evidence_composition.toml",
-    "contracts/p4s_free_sources.toml",
-    "docs/EVIDENCE_PREPARATION.md",
-    "docs/FREE_SOURCE_COLLECTION.md",
-    "docs/LEGACY_REUSE_MANIFEST.md",
-    "docs/LIVE_INTEGRATION_PLAN.md",
-    "docs/OFFLINE_WORKFLOW_PLAN.md",
-    "docs/P1_DESIGN.md",
-    "docs/P2_METHODS.md",
-    "docs/P3_METHODS.md",
-    "docs/P4_METHODS.md",
-    "docs/PUBLICATION_PROVENANCE.json",
-    "docs/REAL_EVIDENCE_COMPOSITION.md",
-    "docs/SOURCE_MATRIX.md",
-    "docs/evidence/live-integration-prerequisites.json",
-    "docs/evidence/p1-source-probe.json",
-    "docs/evidence/p2-demo.json",
-    "docs/evidence/p3-demo.json",
-    "docs/evidence/p4-demo.json",
-    "docs/evidence/p4-report.txt",
-    "docs/evidence/p4e-preparation.json",
-    "docs/evidence/p4s-source-probe.json",
-    "docs/reviews/blueprint-review.json",
-    "docs/reviews/p0-builder-prompt.md",
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-merge.json",
-    "docs/reviews/p0-prompt-audit.json",
-    "docs/reviews/p0-release.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-validation.json",
-    "docs/reviews/p1-builder-prompt.md",
-    "docs/reviews/p1-bundle.json",
-    "docs/reviews/p1-entrypoint-review.json",
-    "docs/reviews/p1-merge.json",
-    "docs/reviews/p1-prompt-audit.json",
-    "docs/reviews/p1-release.json",
-    "docs/reviews/p1-review.json",
-    "docs/reviews/p1-validation.json",
-    "docs/reviews/p2-builder-prompt.md",
-    "docs/reviews/p2-bundle.json",
-    "docs/reviews/p2-entrypoint-review.json",
-    "docs/reviews/p2-merge.json",
-    "docs/reviews/p2-prompt-audit.json",
-    "docs/reviews/p2-release.json",
-    "docs/reviews/p2-review.json",
-    "docs/reviews/p2-validation.json",
-    "docs/reviews/p3-builder-prompt.md",
-    "docs/reviews/p3-bundle.json",
-    "docs/reviews/p3-entrypoint-review.json",
-    "docs/reviews/p3-merge.json",
-    "docs/reviews/p3-prompt-audit.json",
-    "docs/reviews/p3-release.json",
-    "docs/reviews/p3-review.json",
-    "docs/reviews/p3-validation.json",
-    "docs/reviews/p4-builder-prompt.md",
-    "docs/reviews/p4-bundle.json",
-    "docs/reviews/p4-entrypoint-review.json",
-    "docs/reviews/p4-merge.json",
-    "docs/reviews/p4-prompt-audit.json",
-    "docs/reviews/p4-release.json",
-    "docs/reviews/p4-review.json",
-    "docs/reviews/p4-validation.json",
-    "docs/reviews/p4c-builder-prompt.md",
-    "docs/reviews/p4c-bundle.json",
-    "docs/reviews/p4c-entrypoint-review.json",
-    "docs/reviews/p4c-merge.json",
-    "docs/reviews/p4c-prompt-audit.json",
-    "docs/reviews/p4c-release.json",
-    "docs/reviews/p4c-review.json",
-    "docs/reviews/p4c-validation.json",
-    "docs/reviews/p4e-builder-prompt.md",
-    "docs/reviews/p4e-bundle.json",
-    "docs/reviews/p4e-entrypoint-review.json",
-    "docs/reviews/p4e-merge.json",
-    "docs/reviews/p4e-prompt-audit.json",
-    "docs/reviews/p4e-release.json",
-    "docs/reviews/p4e-review.json",
-    "docs/reviews/p4e-validation.json",
-    "docs/reviews/p4i-builder-prompt.md",
-    "docs/reviews/p4i-bundle.json",
-    "docs/reviews/p4i-entrypoint-review.json",
-    "docs/reviews/p4i-prompt-audit.json",
-    "docs/reviews/p4i-release.json",
-    "docs/reviews/p4i-review.json",
-    "docs/reviews/p4i-validation.json",
-    "docs/reviews/p4l-builder-prompt.md",
-    "docs/reviews/p4l-bundle.json",
-    "docs/reviews/p4l-entrypoint-review.json",
-    "docs/reviews/p4l-merge.json",
-    "docs/reviews/p4l-prompt-audit.json",
-    "docs/reviews/p4l-release.json",
-    "docs/reviews/p4l-review.json",
-    "docs/reviews/p4l-validation.json",
-    "docs/reviews/p4s-builder-prompt.md",
-    "docs/reviews/p4s-bundle.json",
-    "docs/reviews/p4s-entrypoint-review.json",
-    "docs/reviews/p4s-merge.json",
-    "docs/reviews/p4s-prompt-audit.json",
-    "docs/reviews/p4s-release.json",
-    "docs/reviews/p4s-review.json",
-    "docs/reviews/p4s-validation.json",
-    "market_intelligence/__init__.py",
-    "market_intelligence/__main__.py",
-    "market_intelligence/collection.py",
-    "market_intelligence/cost_guard.py",
-    "market_intelligence/delivery.py",
-    "market_intelligence/evaluation.py",
-    "market_intelligence/gate.py",
-    "market_intelligence/intelligence.py",
-    "market_intelligence/ledger.py",
-    "market_intelligence/market_state.py",
-    "market_intelligence/models.py",
-    "market_intelligence/news_events.py",
-    "market_intelligence/preparation.py",
-    "market_intelligence/publication.py",
-    "market_intelligence/research.py",
-    "market_intelligence/runtime.py",
-    "market_intelligence/scenario.py",
-    "market_intelligence/sources.py",
-    "market_intelligence/store.py",
-    "market_intelligence/workflow.py",
-    "requirements.lock",
-    "templates/builder_prompt.md",
-    "templates/p1_builder_prompt.md",
-    "templates/p2_builder_prompt.md",
-    "templates/p3_builder_prompt.md",
-    "templates/p4_builder_prompt.md",
-    "templates/p4c_builder_prompt.md",
-    "templates/p4e_builder_prompt.md",
-    "templates/p4i_builder_prompt.md",
-    "templates/p4l_builder_prompt.md",
-    "templates/p4s_builder_prompt.md",
-    "tests/fixtures/p1_feed.xml",
-    "tests/fixtures/p1_market.csv",
-    "tests/fixtures/p2_input.json",
-    "tests/fixtures/p3_responses.json",
-    "tests/product/test_collection.py",
-    "tests/product/test_p1.py",
-    "tests/product/test_p2.py",
-    "tests/product/test_p3.py",
-    "tests/product/test_p4.py",
-    "tests/product/test_preparation.py",
-    "tests/product/test_real_evidence.py",
-    "tests/product/test_scenario.py",
-    "tests/product/test_workflow.py"
-])
+)
 PROTECTED = tuple(sorted(set(ALLOWED) - set(CURRENT_ATTESTATIONS)))
 PERMISSIONS = {
     "research_only": True,
@@ -425,38 +460,64 @@ VALIDATION_COMMANDS = [
     "python tools/governance.py bundle",
     "git diff --check"
 ]
-AUDIT_INPUTS = (CONTRACT_PATH, "governance/policy.toml", TEMPLATE_PATH, PROMPT_PATH,
-                "AGENTS.md", "docs/NBS_EVIDENCE_INGESTION.md",
-                "docs/REAL_EVIDENCE_COMPOSITION.md", PREREQUISITE_PATH,
-                SOURCE_PROBE_PATH, PREPARATION_PATH)
+AUDIT_INPUTS = (
+    "AGENTS.md",
+    "BLUEPRINT.md",
+    "START_CONSTRUCTION_PROMPT.md",
+    "README.md",
+    "contracts/p4m_daily_market_evidence.toml",
+    "governance/policy.toml",
+    "docs/DAILY_MARKET_EVIDENCE.md",
+    "templates/p4m_builder_prompt.md",
+    "docs/reviews/p4m-builder-prompt.md",
+    "docs/reviews/p4n-merge.json",
+    "docs/REAL_EVIDENCE_COMPOSITION.md",
+    "docs/FREE_SOURCE_COLLECTION.md",
+    "docs/NBS_EVIDENCE_INGESTION.md",
+    "docs/evidence/live-integration-prerequisites.json",
+    "docs/evidence/p4s-source-probe.json",
+    "docs/evidence/p4e-preparation.json",
+    "docs/evidence/p4n-nbs-observation.json",
+    "docs/reviews/p4n-review.json",
+    "docs/reviews/p4n-pre-probe-release.json",
+    "docs/reviews/p4n-release.json",
+)
 # Approved independent audit inputs, not hashes supplied by a mutable receipt.
 FROZEN_INPUT_HASHES = {
-    "BLUEPRINT.md": "b85bd714c601786372a049f142c5d580efd2dbb246a1e1da4f135c2b7a14ae22",
-    "START_CONSTRUCTION_PROMPT.md": "181c5c10794f40bed40860312a62eb6d3ecfa7d4b0a6e8e17460d1d730c736b7",
-    CONTRACT_PATH: "efff02d7150167002aa3429811e4447cdfc13526a8505d3efb9e70aa4053ddd4",
-    "governance/policy.toml": "8d15578c3d6c208d447d9ef09d04ef4f5cc58a94c7016a863881f9a5438dcf45",
-    TEMPLATE_PATH: "545d50dcea94d7cafbf21ffb72759417fc5d94cdcda464617c2e97ecd3aff9a9",
-    PROMPT_PATH: "1f6d4b75514cf9f4551c6bfe68daf9bb0ef07d93523e4b781b9076f1f1f18b79",
-    "AGENTS.md": "323760ad809f25822aba25fb143d7f0e2d6364f287c5ac3bb3d4526dd940b299",
-    "docs/NBS_EVIDENCE_INGESTION.md": "4556b010d1e0ea1e7879b297e92d904bc9b6c8dbbd47047561c28d10de082727",
+    "AGENTS.md": "9213c01353d7e5ec0e22ad97d18086d1c670a4cdea94a02855203b50af95ec1e",
+    "BLUEPRINT.md": "c58e0b4f09775cc15bea3ead301bcee22d0fddfa2810c639f42249c93d11414e",
+    "START_CONSTRUCTION_PROMPT.md": "d74a28d34226f0010e924a2663d2e3e2cfb2fca95daeb072d032d68b63d8bb78",
+    "README.md": "a37954caaa8ca19127a1a4daae41da4255561e354f20a28f82e272b2538031ac",
+    "contracts/p4m_daily_market_evidence.toml": "2a25c3d6fda001487a7785996d6fc635188b8d0e3e769645952d842de5ec42e2",
+    "governance/policy.toml": "0c6cd6f5ba3a48c8289e308be1af2574fefbe515ce3c983491a1b089ca499229",
+    "docs/DAILY_MARKET_EVIDENCE.md": "d93bdbcd806b15063a70f56d454cb6fa39d5e4c8325a9538e1662ac03361660f",
+    "templates/p4m_builder_prompt.md": "13d1bbd49a7b3f6304deb778eb742c913488e211f102d0c49e5d3953746d6955",
+    "docs/reviews/p4m-builder-prompt.md": "3b66ed477397764e74b05a6633b879cff92e670dbe62bb1764e96d66319e424f",
+    "docs/reviews/p4n-merge.json": "d6aa586ecf6c1bc255bcb94d543d8945bf47b041ed4355d00e5c29f214294f69",
     "docs/REAL_EVIDENCE_COMPOSITION.md": "5ea32e3f7afec88796dbc017c283b5f595c777fdfebe8d3dbe2d88c6f2c07a31",
-    PREREQUISITE_PATH: PREREQUISITE_HASH,
-    SOURCE_PROBE_PATH: SOURCE_PROBE_HASH,
-    PREPARATION_PATH: PREPARATION_HASH,
+    "docs/FREE_SOURCE_COLLECTION.md": "76e2c6cfead182462d11a949f0cfec58ffad1b5bc66337921cc84074434780e5",
+    "docs/NBS_EVIDENCE_INGESTION.md": "4556b010d1e0ea1e7879b297e92d904bc9b6c8dbbd47047561c28d10de082727",
+    "docs/evidence/live-integration-prerequisites.json": "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3",
+    "docs/evidence/p4s-source-probe.json": "d6169de44000cafe648fb87bc300de498f593bbfae11b24dd992e4c37d258af1",
+    "docs/evidence/p4e-preparation.json": "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8",
+    "docs/evidence/p4n-nbs-observation.json": "d02bf2a4213874ff8057df2fdc8ec065fb700ca6cd2500970dd4feb589dd92a1",
+    "docs/reviews/p4n-review.json": "908bade6e245a8d54baa2a1501471c36088eb05e852faa26d228dad2093b99c3",
+    "docs/reviews/p4n-pre-probe-release.json": "dd941047a5bd1af3da5d1dc6560386f46abc61a087ad7c1c233812e719f935ef",
+    "docs/reviews/p4n-release.json": "d4aa37f00cae4bfc3735d689ca1608505080a43598e69ccc472175346539f524",
 }
 
 
 def dependency():
     return {
-        "package_id": "P4I",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/10",
+        "package_id": "P4N",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/11",
         "merge_commit": BASELINE,
-        "merged_at": "2026-11-18T08:47:03Z",
-        "tested_head": "2682f6683a3cc3d859eafd798748febcc9c9c12a",
-        "pr_ci_run": 44127995204,
-        "merge_ci_run": 44269968648,
+        "merged_at": "2026-11-18T14:45:50Z",
+        "tested_head": "d35743371a12ae9c0f6e6d7be937fdac23408b2a",
+        "pr_ci_run": 44322275119,
+        "merge_ci_run": 44327850126,
         "ci_status": "PASS",
-        "merge_status": "merged"
+        "merge_status": "merged",
     }
 
 
@@ -487,7 +548,7 @@ REPAIR_EXCEPTION = {
              "No operational permission, data-source, file allowlist or merge-policy expansion.",
 }
 
-POLICY = {
+NBS_POLICY = {
     "schema_version": 1, "active_package": "P4N", "python_version": "3.12",
     "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
@@ -497,11 +558,25 @@ POLICY = {
     "permissions": PERMISSIONS, "limited_ingestion": LIMITED_INGESTION,
     "repair_exception": REPAIR_EXCEPTION,
 }
-CURRENT_RECEIPT_PATHS = {
+POLICY = {
+    "schema_version": 1, "active_package": "P4M", "python_version": "3.12",
+    "merge_tier": "C", "human_merge_required": True, "auto_merge_allowed": False,
+    "direct_merge_allowed": False, "admin_bypass_allowed": False,
+    "remote_creation_authorized": False, "remote_ci_status": "NOT_RUN_AT_SNAPSHOT",
+    "repository": REPOSITORY, "max_repair_cycles": 1,
+    "reviewer_must_be_independent": True, "construction_subagents_allowed": True,
+    "permissions": PERMISSIONS,
+}
+NBS_RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4n-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4n-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    "prompt_audit": "docs/reviews/p4n-prompt-audit.json", "builder_prompt": "docs/reviews/p4n-builder-prompt.md",
     **dict(zip(("bundle", "validation", "reviewer", "pre_probe_release", "release", "observation"),
-               CURRENT_ATTESTATIONS)),
+               NBS_ATTESTATIONS)),
+}
+CURRENT_RECEIPT_PATHS = {
+    "blueprint_review": "docs/reviews/p4m-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4m-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    **dict(zip(("bundle", "validation", "reviewer", "release"), CURRENT_ATTESTATIONS)),
 }
 RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4e-entrypoint-review.json",
@@ -509,14 +584,17 @@ RECEIPT_PATHS = {
     "builder_prompt": "docs/reviews/p4e-builder-prompt.md",
     **dict(zip(("bundle", "validation", "reviewer", "release", "preparation"), ATTESTATIONS)),
 }
-NEXT_GATE = ("Human merge after exact-head CI and independent remote release; retain anonymous-only "
-             "five-index gaps, then separately audited model/report/private-delivery integration. "
-             "No inherited network or VPS permission.")
+NBS_NEXT_GATE = ("Human merge after exact-head CI and independent remote release; retain anonymous-only "
+                 "five-index gaps, then separately audited model/report/private-delivery integration. "
+                 "No inherited network or VPS permission.")
+NEXT_GATE = ("Human merge after exact-head CI and independent remote release; resolve anonymous-only "
+             "source acquisition and real temporal/provenance evidence, then separately audited "
+             "model/report/private-delivery integration. No inherited network or VPS permission.")
 LOCAL_RELEASE = "LOCAL_READY_FOR_PR"
 PRE_PROBE_RELEASE = "LOCAL_READY_FOR_NBS_PROBE"
 # Historical receipt vocabulary only; no pre-preparation validator or capability.
 PRE_PREPARATION_RELEASE = "LOCAL_READY_FOR_LOCAL_PREPARATION"
-GOVERNANCE_ONLY = ("NBS-ingestion governance only; model/live-readiness-blocked: "
+GOVERNANCE_ONLY = ("Daily-market offline governance only; model/live-readiness-blocked: "
                    "BLOCKED_EXTERNAL_PREREQUISITES")
 
 
@@ -564,23 +642,26 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P4N", "stage_ids": [1, 2, 3, 4],
-        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
+        "schema_version": 1, "package_id": "P4M", "stage_ids": [1, 2, 3, 4],
+        "branch": BRANCH, "baseline": BASELINE, "merge_tier": "C",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
         "prompt_audit_required": True, "independent_review_required": True,
         "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
         "immutable_paths": list(IMMUTABLE), "attestation_paths": list(CURRENT_ATTESTATIONS),
         "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
-        "required_reads": ["BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
-                           "governance/policy.toml", "project-state/state.json",
-                           "docs/reviews/p4i-merge.json", "docs/NBS_EVIDENCE_INGESTION.md",
-                           "docs/REAL_EVIDENCE_COMPOSITION.md",
-                           PREREQUISITE_PATH, SOURCE_PROBE_PATH, PREPARATION_PATH],
+        "required_reads": [
+            "AGENTS.md", "BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md", CONTRACT_PATH,
+            "governance/policy.toml", "project-state/state.json", "docs/DAILY_MARKET_EVIDENCE.md",
+            "docs/reviews/p4n-merge.json", "README.md", "docs/CONSTRUCTION_LOG.md",
+            "docs/REAL_EVIDENCE_COMPOSITION.md", "docs/FREE_SOURCE_COLLECTION.md",
+            "docs/NBS_EVIDENCE_INGESTION.md", PREREQUISITE_PATH, SOURCE_PROBE_PATH,
+            PREPARATION_PATH, "docs/evidence/p4n-nbs-observation.json",
+            "docs/reviews/p4n-review.json", "docs/reviews/p4n-pre-probe-release.json",
+            "docs/reviews/p4n-release.json",
+        ],
         "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
         "repository": REPOSITORY, "dependency": dependency(), "next_gate": NEXT_GATE,
-        "limited_ingestion": LIMITED_INGESTION,
-        "repair_exception": REPAIR_EXCEPTION,
     }
     text_fields = ("title", "objective", "bootstrap_prompt", "rollback")
     list_fields = ("deliverables", "negative_tests", "receipt_rules")
@@ -596,7 +677,7 @@ def validate_contract(contract):
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P4N", "active_contract": CONTRACT_PATH,
+        "schema_version": 1, "active_package": "P4M", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
@@ -605,8 +686,7 @@ def validate_state(state):
                    "repository": "a-share-market-intelligence-public",
                    "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                    "merge_status": "not_merged"},
-        "receipts": CURRENT_RECEIPT_PATHS, "limited_ingestion": LIMITED_INGESTION,
-        "repair_exception": REPAIR_EXCEPTION,
+        "receipts": CURRENT_RECEIPT_PATHS,
         "next_gate": NEXT_GATE,
     }
     keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated",
@@ -617,9 +697,9 @@ def validate_state(state):
     require(type(state["package_status"]) is str and state["package_status"] in
             ("contract_prepared_unreleased", "building", "implemented_unreleased"),
             "state: premature/unknown package status")
-    runtime_status = ("nbs_ingestion_model_deferred"
+    runtime_status = ("daily_market_evidence_model_deferred"
                       if state["package_status"] == "implemented_unreleased"
-                      else "nbs_ingestion_planned_model_deferred")
+                      else "daily_market_planned_model_deferred")
     exact(state["live_integration"], {
         "entry_status": "human_merged", "runtime_implementation": runtime_status,
         "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
@@ -966,7 +1046,7 @@ def validate_prerequisite(receipt, role, names, contents):
         require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: repair bound")
     else:
         cycles = receipt.get("repair_cycles")
-        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4N repair bound")
+        require(type(cycles) is int and 0 <= cycles <= 1, f"{role}: P4M repair bound")
 
 
 def validate_historical_probe(text):
@@ -988,6 +1068,40 @@ def validate_historical_preparation(text):
     return value
 
 
+def prior_merge_evidence():
+    return {
+        **dependency(),
+        "schema_version": 1,
+        "role": "historical_merge_observation",
+        "observed_on": "2026-11-18",
+        "pr_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44322275119",
+        "merge_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44327850126",
+        "merge_ci_head": BASELINE,
+        "merge_ci_jobs": [
+            {"platform": "ubuntu-24.04", "status": "completed", "conclusion": "success",
+             "completed_at": "2026-11-18T14:50:32Z", "duration_seconds": 276},
+            {"platform": "windows-2022", "status": "completed", "conclusion": "success",
+             "completed_at": "2026-11-18T15:07:06Z", "duration_seconds": 1270},
+        ],
+        "verification_basis": (
+            "Coordinator confirmed actual PR11 merge and successful exact-head PR/main CI; "
+            "main run44327850126 completed successfully at the stated merge head."),
+        "prior_snapshot": "8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361",
+        "prior_gate_check": (
+            "Not rerun during P4M planning. Frozen P4N Reviewer PASS and LOCAL_READY_FOR_PR "
+            "both bind prior_snapshot; their contents were read and verified."),
+        "prior_observation": {
+            "path": "docs/evidence/p4n-nbs-observation.json", "status": "FAILED",
+            "reason": "content_length", "observed_bytes": 0, "capture": None,
+            "allowance_consumed": True,
+            "interpretation": (
+                "No capture or parse result; exact remote header cause unknown. "
+                "Not proof of an empty feed or code failure, and not permission to retry."),
+        },
+        "authority": "Evidence of prior human merge, not operational authorization.",
+    }
+
+
 def check(root=ROOT, *, ci=False, complete_index=False):
     root = Path(root).resolve()
     contents = {name: read_text(root, name) for name in PROTECTED}
@@ -998,24 +1112,17 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     validate_live_prerequisites(contents[PREREQUISITE_PATH])
     validate_historical_probe(contents[SOURCE_PROBE_PATH])
     validate_historical_preparation(contents[PREPARATION_PATH])
-    prior = parse_json(contents["docs/reviews/p4i-merge.json"])
-    expected_prior = {
-        "schema_version": 1, "role": "historical_merge_observation",
-        "observed_on": "2026-11-18", **dependency(),
-        "prior_snapshot": "60a38cef20921ff5096d7144dbb11c2d3a7b0b9aad24410cb1a2723b4878e307",
-        "prior_gate_check": "PASS on clean merged main using --ci; frozen P4I receipts remain historical",
-        "authority": "Evidence of prior human merge, not operational authorization.",
-    }
-    exact(prior, expected_prior, "prior merge evidence")
+    prior = parse_json(contents["docs/reviews/p4n-merge.json"])
+    exact(prior, prior_merge_evidence(), "prior merge evidence")
     exact(contents[PROMPT_PATH], render_prompt(contract, contents[TEMPLATE_PATH]), "builder prompt")
     validate_prerequisite(parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]]),
-                          "blueprint_reviewer", ("BLUEPRINT.md", "START_CONSTRUCTION_PROMPT.md"),
+                          "blueprint_reviewer", AUDIT_INPUTS,
                           contents)
     validate_prerequisite(parse_json(contents[CURRENT_RECEIPT_PATHS["prompt_audit"]]), "prompt_auditor",
                           AUDIT_INPUTS, contents)
     entrypoint_cycles = parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]])["repair_cycles"]
     audit_cycles = parse_json(contents[CURRENT_RECEIPT_PATHS["prompt_audit"]])["repair_cycles"]
-    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4N repair bound or reset")
+    require(entrypoint_cycles <= audit_cycles, "prompt_auditor: P4M repair bound or reset")
     for role in ("blueprint_review", "prompt_audit"):
         agent = parse_json(contents[CURRENT_RECEIPT_PATHS[role]])["agent_id"]
         require(agent == agent.strip() and agent not in state["builder_agents"],
@@ -1046,7 +1153,7 @@ def snapshot(contents):
 def make_bundle(checked):
     contract, _state, contents, changed = checked
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P4N", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P4M", "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
             "attestation_paths": list(CURRENT_ATTESTATIONS), "scope_result": "PASS"}
@@ -1154,14 +1261,14 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
     cycles = review["repair_cycles"]
     audit_cycles = parse_json(contents[audit_path])["repair_cycles"]
     if p4n_repair:
-        # This named current-package exception never changes the historical default.
+        # This exact historical P4N exception cannot affect active P4M review.
         exact(contract.get("package_id"), "P4N", "repair exception contract package")
         exact(state.get("active_package"), "P4N", "repair exception state package")
         exact(current.get("package_id"), "P4N", "repair exception bundle package")
         for label, binding in (("contract", contract), ("state", state)):
             exact(binding.get("repair_exception"), REPAIR_EXCEPTION, f"{label}.repair_exception")
         require("governance/policy.toml" in contents, "repair exception: missing policy")
-        exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "repair exception policy")
+        exact(tomllib.loads(contents["governance/policy.toml"]), NBS_POLICY, "repair exception policy")
         require(type(audit_cycles) is int and 0 <= audit_cycles <= 1,
                 "review receipt: planning repair bound or reset")
         exact(cycles, 2, "review receipt: repair bound or reset")
@@ -1222,30 +1329,48 @@ def not_run_release(snapshot_id):
             "reason": "awaiting_terminal_observation_and_independent_release"}
 
 
-def validate_current_attestations(checked, current, *, root=ROOT, pre_probe=False):
+def validate_current_attestations(checked, current, *, root=ROOT):
     contract, state, contents, _changed = checked
-    exact(contract["package_id"], "P4N", "current contract package")
-    exact(state["active_package"], "P4N", "current state package")
-    exact(current["package_id"], "P4N", "current bundle package")
-    for name in CURRENT_ATTESTATIONS:
+    exact(contract["package_id"], "P4M", "current contract package")
+    exact(state["active_package"], "P4M", "current state package")
+    exact(current["package_id"], "P4M", "current bundle package")
+    for binding in (contract, state):
+        require("repair_exception" not in binding and "limited_ingestion" not in binding,
+                "P4M: historical ingestion or repair exception cannot be inherited")
+    require("governance/policy.toml" in contents, "current approval: missing policy")
+    exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "current approval policy")
+    _validate_review_attestations(
+        checked, current, paths=CURRENT_ATTESTATIONS,
+        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE)
+
+
+def validate_historical_nbs_attestations(checked, current, *, root=ROOT, pre_probe=False):
+    """Pure P4N receipt auditing only; never a capability or P4M approval."""
+    contract, state, contents, _changed = checked
+    exact(contract["package_id"], "P4N", "historical NBS contract package")
+    exact(state["active_package"], "P4N", "historical NBS state package")
+    exact(current["package_id"], "P4N", "historical NBS bundle package")
+    for label, binding in (("historical contract", contract), ("historical state", state)):
+        exact(binding.get("limited_ingestion"), LIMITED_INGESTION, f"{label}.limited_ingestion")
+    for name in NBS_ATTESTATIONS:
         require(name in contents, f"missing required receipt: {name}")
     _validate_review_attestations(
-        checked, current, paths=CURRENT_ATTESTATIONS[:4],
-        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        checked, current, paths=NBS_ATTESTATIONS[:4],
+        audit_path=NBS_RECEIPT_PATHS["prompt_audit"], next_gate=NBS_NEXT_GATE,
         release_verdict=PRE_PROBE_RELEASE, p4n_repair=True)
-    observation = parse_json(contents[CURRENT_RECEIPT_PATHS["observation"]])
+    observation = parse_json(contents[NBS_RECEIPT_PATHS["observation"]])
     validate_nbs_observation(observation, current["snapshot_id"], root=root)
     require(observation["status"] in ("NOT_RUN", "RECORDED", "FAILED", "UNKNOWN"),
             "NBS observation: unknown status")
-    release = parse_json(contents[CURRENT_RECEIPT_PATHS["release"]])
+    release = parse_json(contents[NBS_RECEIPT_PATHS["release"]])
     if pre_probe and type(release) is dict and release.get("verdict") == "NOT_RUN":
         exact(release, not_run_release(current["snapshot_id"]), "pending final release")
         return
     require(observation["status"] in ("RECORDED", "FAILED", "UNKNOWN"),
             "final gate: terminal NBS observation required")
     _validate_review_attestations(
-        checked, current, paths=(*CURRENT_ATTESTATIONS[:3], CURRENT_RECEIPT_PATHS["release"]),
-        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE, p4n_repair=True)
+        checked, current, paths=(*NBS_ATTESTATIONS[:3], NBS_RECEIPT_PATHS["release"]),
+        audit_path=NBS_RECEIPT_PATHS["prompt_audit"], next_gate=NBS_NEXT_GATE, p4n_repair=True)
 
 
 def validate_attestations(checked, current, *, root=ROOT):
@@ -1278,19 +1403,16 @@ def gate(root=ROOT, *, ci=False):
     return LOCAL_RELEASE
 
 
-def nbs_gate(root=ROOT):
-    checked = check(root, complete_index=True)
-    current = make_bundle(checked)
-    validate_current_attestations(checked, current, root=root, pre_probe=True)
-    return current["snapshot_id"]
+def nbs_gate(root=ROOT, *, ci=False):
+    raise Block("P4M: historical NBS ingestion capability is closed; no network request authorized")
 
 
 def probe_gate(root=ROOT, *, ci=False):
-    raise Block("P4N: historical P4S probe capability is closed; no network request authorized")
+    raise Block("P4M: historical P4S probe capability is closed; no network request authorized")
 
 
 def preparation_gate(root=ROOT, *, ci=False):
-    raise Block("P4N: historical P4E preparation capability is closed; no runtime-store access authorized")
+    raise Block("P4M: historical P4E preparation capability is closed; no runtime-store access authorized")
 
 
 def main(argv=None, *, root=ROOT):
@@ -1302,10 +1424,9 @@ def main(argv=None, *, root=ROOT):
                                help="skip local branch identity only; retain baseline/scope/permission checks")
         if command == "prompt":
             subparser.add_argument("--verify", action="store_true")
-    for command in ("probe-gate", "preparation-gate"):
+    for command in ("probe-gate", "preparation-gate", "nbs-gate"):
         subparsers.add_parser(command).add_argument(
             "--ci", action="store_true", help="capability remains closed even in CI")
-    subparsers.add_parser("nbs-gate")
     args = parser.parse_args(argv)
     try:
         if args.command == "prompt":
@@ -1327,7 +1448,7 @@ def main(argv=None, *, root=ROOT):
         elif args.command == "preparation-gate":
             print(preparation_gate(root, ci=args.ci))
         elif args.command == "nbs-gate":
-            print(nbs_gate(root))
+            print(nbs_gate(root, ci=args.ci))
         else:
             print(f"{gate(root, ci=args.ci)} ({GOVERNANCE_ONLY})")
         return 0

@@ -1378,3 +1378,137 @@ same-Reviewer re-review and separate pre-probe/final Release. Those results are
 pending here and will be recorded in the current attestations. All operational
 flags, the sole unconsumed source allowance, five-index gaps and manual merge
 gate remain unchanged. No further repair cycle is authorized.
+
+## P4M Entry and PR11 Verification (2026-11-18)
+
+The user confirmed PR11 merged and requested the next blueprint work package,
+with progress reporting and shutdown after this turn's final report. Shutdown
+is a current user action, not a repository permission or inherited future task.
+The coordinator fetched origin, verified a clean checkout, switched to main and
+fast-forwarded to93f6fe87c723dba32225a4895788d8edeef0b539. PR11's reviewed head was
+d35743371a12ae9c0f6e6d7be937fdac23408b2a, merged2026-11-18T14:45:50Z. Actual remote
+release comment6981752781 and exact-head CI44322275119 were independently verified.
+Merged-main CI44327850126 was still running during planning; its terminal result
+must be recorded in the new PR11 merge receipt before implementation entry.
+
+P4N's prior protected snapshot was8f50157cb39134aa75895a930abda3e13c055e0db6609df12a4cab9a6ae4b361.
+Its original Reviewer PASS and separate Release accepted engineering and a
+truthful failed source observation, not source readiness. The NBS run failed
+content_length with0 observed bytes, no capture/parse and no eligible metadata.
+The exact response-header cause was not retained. No retry or size-limit change
+was made; the one-shot and its exceptional R1 allowance are consumed history.
+Earlier pending prose remains an immutable pre-review checkpoint, not current
+GitHub status. No prior receipt was rewritten to suggest otherwise.
+
+Source researcher01a1ef21-7950-7670-885d-59bafbd4a345 reviewed primary KR/US
+documentation only and did not establish a selected anonymous source. KRX/FSC
+need registration/keys; FRED and S&P terms leave relevant retention/use gaps;
+Stooq remains unresolved. This is not an exhaustive impossibility claim.
+Coordinator reread BaoStock's public official API/local-analysis introduction,
+daily-index fields and V1.0.0 disclaimer without any market request. Its positive
+local-use description is not erased by unresolved scope; future model/delivery
+permissions are separate. No credentials, runtime store or archived project read.
+
+Independent next-entry reviewer01a1ef26-ac47-7d02-9fcb-8c3aa5403dad concluded
+ENTRY_READY for a medium package's scope/audit, but no immediate product/probe
+authorization. Five-source completeness is a final MVP condition, not a ban on
+partial offline engineering. The recommendation is a connected daily-response
+to evidence-composition core, not another isolated parser or source list.
+It identified publication-time, actual-transport and legacy-schema constraints
+that must be solved explicitly without fabricating HTTPS acquisition or times.
+This entry assessment is not an implementation Reviewer PASS.
+
+Separate post-merge Release Checker01a1ef2a-5406-7250-8eeb-be63da194d55 independently
+verified PR11 merge/head contents, protected main settings, prior exact-head CI,
+remote release and unchanged protected snapshot. It kept merged-main CI pending
+until actual completion and granted no new source or runtime permission.
+
+Created stage3-daily-market-evidence from the clean merged main. P4M planning
+groups bounded supplied daily-response validation, truthful custody/time
+semantics, existing-engine integration, replay verification and regressions.
+Product Builder01a1ef2d-0d9e-7aa1-b948-28de4aee1386 owns only daily_market.py,
+intelligence.py and new test_daily_market.py. Governance Builder
+01a1ef2d-f7df-72b2-bafa-59e400394891 owns planning contract/policy/state/template/
+prompt and PR11 merge receipt, then checker/tests/CI after actual entry audits.
+Coordinator owns other planning docs/log and records actual attestations.
+No product/checker implementation has started at this checkpoint. All operational
+permissions stay false; old source gates and repair exceptions are not inherited.
+
+### P4M Dependency CI Completion
+
+Merged-main CI44327850126 completed SUCCESS on exact head93f6fe87c723dba32225a4895788d8edeef0b539.
+Ubuntu completed2026-11-18T14:50:32Z in4m36s; Windows completed2026-11-18T15:07:06Z
+in21m10s. The planning-time pending status above is historical, not the current
+result. No product/checker edits preceded this dependency confirmation or the
+still-required independent planning audits.
+
+Separate post-merge Release Checker01a1ef2a-5406-7250-8eeb-be63da194d55 independently
+confirmed the exact merged-main run and returned POST_MERGE_CLOSURE:PASS for PR11
+engineering only. It did not approve P4M's contract/implementation or grant any
+runtime/MVP permission. P4M planning also explicitly marks declared calendar
+completeness and actual market freshness unverified, preventing a newly received
+old daily row from being described as a verified current quote.
+
+### P4M Actual Entry Audits and Implementation Handoff
+
+Independent auditor01a1ef26-ac47-7d02-9fcb-8c3aa5403dad returned actual
+blueprint_reviewer:PASS and prompt_auditor:PASS, repair_cycles0 and no findings.
+Both receipts bind all20 frozen planning references with LF-normalized UTF-8
+SHA256. The auditor verified the deterministic prompt and unchanged product/
+checker surfaces, and did not claim implementation testing or runtime approval.
+The coordinator recorded the actual receipts, then explicitly handed off the
+three product paths and the disjoint checker/test/CI paths to their Builders.
+Planning references remain frozen. State/log will be finalized before independent
+implementation review. No request, source verification or external capability
+is enabled by these entry approvals.
+
+### P4M Product Implementation Checkpoint
+
+Product Builder01a1ef2d-0d9e-7aa1-b948-28de4aee1386 completed only daily_market.py,
+the additive intelligence.py connection and new test_daily_market.py, then stopped
+editing. The pure path parses bounded daily rows, preserves mutual-exclusive
+rejection counts and duplicate/conflict groups, and connects admitted values to
+the existing engine. The positive authored case yields input coverage2/5 while
+live verification stays0/5. Unknown publication, actual transport versus document
+roles, unverified calendar/freshness and original session dates remain explicit.
+Expired input is checked before CSV hashing/parsing; verification repeats full
+parsing/computation and checks time after serialization/comparison. No source,
+private store, dependency, model or delivery was used.
+
+Actual Builder commands used python -B -m unittest discover -s tests/product
+-p <filename> -v. test_daily_market.py:70 PASS; test_real_evidence.py:95 PASS;
+test_p2.py:44 PASS; test_nbs.py:94 run,93 PASS and1 hardlink-unavailable skip.
+All Builder test sessions ended, and whitespace checks passed. These are scoped
+Builder results, not full-suite validation or independent implementation review.
+The coordinator authorized Governance Builder to change active state from
+contract_prepared_unreleased to implemented_unreleased and runtime_implementation
+to daily_market_evidence_model_deferred after this actual product completion.
+All acceptance gaps and operational permissions remain unchanged. The20 audited
+planning references were independently rehashed with no drift before this step.
+
+### P4M Governance Completion and Candidate Freeze
+
+Governance Builder01a1ef2d-f7df-72b2-bafa-59e400394891 completed the active checker,
+governance tests, necessary CI baseline/comment bindings and authorized state
+transition, then stopped editing. All149 prior governance case names/protections
+remain with11 new cases,160 total. Twenty-four low-level protection functions
+remain byte-identical. Scope is200 allowed,176 immutable,196 protected, with
+exactly4 current attestations. All20 planning-reference hashes remain unchanged.
+NBS/probe/preparation gates are unconditionally closed, including CI mode; the
+current repair bound is1 with no inherited exception. CI keeps both platforms,
+pinned actions, read-only permissions and25-minute timeout.
+
+Actual focused Builder verification covered118 distinct governance cases; final
+batch107/107 PASS plus11 previously completed cases, including full200-path
+staging checks in temporary test repositories. This is not a claim that the
+complete160-case suite ran. Product implementation has70 new cases plus618 old
+cases,688 total. No Builder sessions remain running.
+
+Freeze protected code/state/log here before full160-case governance and688-case
+product validation, exact scope/prompt/bundle/whitespace checks and independent
+Reviewer. The four current attestations initially say NOT_RUN, never fabricated
+PASS. Actual full results and verdicts are recorded only there. Later exact-head
+CI and independent remote release belong on the PR; this frozen checkpoint's
+pending wording is historical, not the current external result. Separate Release
+and human merge remain mandatory. No source request, runtime read, model,
+Telegram, trading, deployment, VPS or extra repair permission is granted.

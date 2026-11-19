@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
-    # P4N bindings retain all offline regressions; CI never runs a product request.
+    # P4M bindings retain all offline regressions; CI never runs a product request.
     timeout-minutes: 25
     steps:
       - name: Checkout exact PR head
@@ -40,4 +40,4 @@ jobs:
       - name: Validate local review attestations
         run: python tools/governance.py gate --ci
       - name: Check committed patch whitespace
-        run: git diff --check 66be9c9705c5a9739f2beb5a3a9287f21703018d HEAD
+        run: git diff --check 93f6fe87c723dba32225a4895788d8edeef0b539 HEAD

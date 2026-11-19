@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "role": "prompt_auditor",
+  "verdict": "PASS",
+  "agent_id": "01a1ef26-ac47-7d02-9fcb-8c3aa5403dad",
+  "read_only": true,
+  "independent": true,
+  "repair_cycles": 0,
+  "findings": [],
+  "files": {
+    "AGENTS.md": "9213c01353d7e5ec0e22ad97d18086d1c670a4cdea94a02855203b50af95ec1e",
+    "BLUEPRINT.md": "c58e0b4f09775cc15bea3ead301bcee22d0fddfa2810c639f42249c93d11414e",
+    "START_CONSTRUCTION_PROMPT.md": "d74a28d34226f0010e924a2663d2e3e2cfb2fca95daeb072d032d68b63d8bb78",
+    "README.md": "a37954caaa8ca19127a1a4daae41da4255561e354f20a28f82e272b2538031ac",
+    "contracts/p4m_daily_market_evidence.toml": "2a25c3d6fda001487a7785996d6fc635188b8d0e3e769645952d842de5ec42e2",
+    "governance/policy.toml": "0c6cd6f5ba3a48c8289e308be1af2574fefbe515ce3c983491a1b089ca499229",
+    "docs/DAILY_MARKET_EVIDENCE.md": "d93bdbcd806b15063a70f56d454cb6fa39d5e4c8325a9538e1662ac03361660f",
+    "templates/p4m_builder_prompt.md": "13d1bbd49a7b3f6304deb778eb742c913488e211f102d0c49e5d3953746d6955",
+    "docs/reviews/p4m-builder-prompt.md": "3b66ed477397764e74b05a6633b879cff92e670dbe62bb1764e96d66319e424f",
+    "docs/reviews/p4n-merge.json": "d6aa586ecf6c1bc255bcb94d543d8945bf47b041ed4355d00e5c29f214294f69",
+    "docs/REAL_EVIDENCE_COMPOSITION.md": "5ea32e3f7afec88796dbc017c283b5f595c777fdfebe8d3dbe2d88c6f2c07a31",
+    "docs/FREE_SOURCE_COLLECTION.md": "76e2c6cfead182462d11a949f0cfec58ffad1b5bc66337921cc84074434780e5",
+    "docs/NBS_EVIDENCE_INGESTION.md": "4556b010d1e0ea1e7879b297e92d904bc9b6c8dbbd47047561c28d10de082727",
+    "docs/evidence/live-integration-prerequisites.json": "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3",
+    "docs/evidence/p4s-source-probe.json": "d6169de44000cafe648fb87bc300de498f593bbfae11b24dd992e4c37d258af1",
+    "docs/evidence/p4e-preparation.json": "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8",
+    "docs/evidence/p4n-nbs-observation.json": "d02bf2a4213874ff8057df2fdc8ec065fb700ca6cd2500970dd4feb589dd92a1",
+    "docs/reviews/p4n-review.json": "908bade6e245a8d54baa2a1501471c36088eb05e852faa26d228dad2093b99c3",
+    "docs/reviews/p4n-pre-probe-release.json": "dd941047a5bd1af3da5d1dc6560386f46abc61a087ad7c1c233812e719f935ef",
+    "docs/reviews/p4n-release.json": "d4aa37f00cae4bfc3735d689ca1608505080a43598e69ccc472175346539f524"
+  }
+}

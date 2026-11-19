@@ -1,7 +1,7 @@
 schema_version = 1
-active_package = "P4N"
+active_package = "P4M"
 python_version = "3.12"
-merge_tier = "D"
+merge_tier = "C"
 human_merge_required = true
 auto_merge_allowed = false
 direct_merge_allowed = false
@@ -28,40 +28,3 @@ vps_mutation_allowed = false
 broker_allowed = false
 order_execution_allowed = false
 portfolio_control_allowed = false
-
-[limited_ingestion]
-source_id = "nbs_latest"
-endpoint = "https://www.stats.gov.cn/sj/zxfb/rss.xml"
-method = "GET"
-maximum_requests = 1
-retries = 0
-maximum_response_bytes = 512000
-deadline_seconds = 10
-maximum_items = 100
-normalized_retention_seconds = 86400
-input_store = "p4n-nbs-ingestion.sqlite"
-raw_payload_persistence = false
-article_or_attachment_fetch = false
-requires_key = false
-requires_registration = false
-paid = false
-requires_user_opt_in = true
-requires_independent_review = true
-requires_pre_probe_release = true
-source_as_of = "actual_capture_time"
-unknown_authorship = "reject_without_title_retention"
-unknown_publication_timezone = "reject"
-authorization_basis = "User explicitly authorized this one NBS RSS read-only test after Reviewer and Release Checker; anonymous sources only. No model/Telegram/trading/VPS."
-
-[repair_exception]
-id = "p4n-channel-rights-r1"
-authorized_by = "user"
-authorization = "User explicitly authorized one additional bounded R1 repair after the P4N channel-rights BLOCK."
-additional_cycles = 1
-maximum_total = 2
-blocked_snapshot = "2ff1ca0f9a5e2dc97e81372a2c556707810fc03e7528ba90bb2a1566cee4d06d"
-blocked_review_digest = "8b57fc068fba730d89c706911a96b1cb5721ca47fe619ee23a6264f1362e23c2"
-reviewer_agent = "01a1eec4-2066-76f1-9ba5-7dad5674a563"
-finding = "P1: unknown namespaced or nested channel-level rights restrictions are ignored."
-product_paths = ["market_intelligence/nbs.py","tests/product/test_nbs.py"]
-scope = "Reject ambiguous channel-level rights without retaining titles; add regression tests. No operational permission, data-source, file allowlist or merge-policy expansion."

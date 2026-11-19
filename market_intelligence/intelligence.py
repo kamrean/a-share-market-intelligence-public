@@ -84,7 +84,8 @@ class Fact:
         return digest(asdict(self))
 
 
-def _prepare(payload, methods, entities, *, real=False, processing_at=None, guard=None):
+def _prepare(payload, methods, entities, *, real=False, processing_at=None, guard=None,
+             observed_daily=None):
     mode_key = "source_mode" if real else "mode"
     exact(payload, {"schema_version", mode_key, "as_of", "calendar", "facts"})
     integer(payload["schema_version"], 2 if real else 1, 2 if real else 1)
@@ -190,7 +191,13 @@ def _prepare(payload, methods, entities, *, real=False, processing_at=None, guar
                 reason = reason or "series_provider_mismatch"
                 additional_reasons.append("series_provider_mismatch")
             if real:
-                if published is None:
+                if observed_daily is not None:
+                    observed = instant(observed_daily["observed_at"])
+                    if (published is not None or fact.fact_id not in observed_daily["fact_ids"]
+                            or not first_seen <= retrieved <= observed <= cutoff
+                            or (session is not None and instant(session.close_at) > first_seen)):
+                        raise Invalid("invalid closed-session daily observation")
+                elif published is None:
                     reason = reason or "unknown_publication_time"
                     additional_reasons.append("unknown_publication_time")
                 elif session is not None:
@@ -236,12 +243,13 @@ def build_bundle(payload, methods, entities):
     return _compose(payload, methods, entities)
 
 
-def _compose(payload, methods, entities, *, real=False, source_policy=None, processing_at=None, guard=None):
+def _compose(payload, methods, entities, *, real=False, source_policy=None, processing_at=None, guard=None,
+             observed_daily=None):
     """The shared domain engine; the public legacy route remains synthetic-only."""
     if guard is not None:
         guard()
     eligible, rejected, all_facts = _prepare(payload, methods, entities, real=real,
-                                            processing_at=processing_at, guard=guard)
+                                            processing_at=processing_at, guard=guard, observed_daily=observed_daily)
     if guard is not None:
         guard()
     market = _evaluate_market(eligible, methods, entities, payload["calendar"], payload["as_of"],
@@ -324,6 +332,27 @@ def _compose(payload, methods, entities, *, real=False, source_policy=None, proc
     if len(canonical(content).encode()) > 2 * MAX_BYTES:
         raise Invalid("output byte limit")
     return {"bundle_id": digest(content), "content": content}
+
+
+def _compose_observed_daily(payload, methods, entities, policy, observation, processing_at, guard):
+    """Internal, explicit daily-only bridge; legacy public routes cannot select it."""
+    exact(observation, {"source_id", "observed_at", "fact_ids", "locator", "locator_role"})
+    if observation["locator_role"] != "documentation_endpoint_not_acquisition_endpoint":
+        raise Invalid("daily documentation role required")
+    array(observation["fact_ids"], 1024, "daily identities")
+    if observation["fact_ids"] != [digest(row) for row in payload["facts"]]:
+        raise Invalid("daily fact identity binding mismatch")
+    for row in payload["facts"]:
+        if (row["payload"].get("kind") != "bar" or row["published_at"] is not None
+                or row["source_id"] != observation["source_id"]
+                or row["locator"] != observation["locator"]):
+            raise Invalid("daily-only observation binding required")
+    guard()
+    content = _compose(payload, methods, entities, real=True, source_policy=policy,
+                       processing_at=processing_at, guard=guard, observed_daily=observation)["content"]
+    for row in content["references"]:
+        row["locator_role"] = observation["locator_role"]
+    return content
 
 
 def _replay_clock(not_before=None):
