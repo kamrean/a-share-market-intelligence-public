@@ -1,0 +1,91 @@
+{
+  "observation": {
+    "attempt_id": "d1ebd63dd08b48218297b0bd1ef9a6c5",
+    "batch_possession_at": null,
+    "cleanup": {
+      "bindings_restored": true,
+      "capture_payloads_disposed": true,
+      "checked_at": "2026-11-19T07:32:01.622996Z",
+      "payload_tables_empty": true,
+      "socket_closed": true,
+      "transport_payloads_disposed": true
+    },
+    "composition": {
+      "bundle_sha256": null,
+      "completed_at": null,
+      "declaration_sha256": null,
+      "entities_sha256": null,
+      "expires_at": null,
+      "methods_sha256": null,
+      "normalized_sha256": null,
+      "policy_sha256": null,
+      "status": "NOT_RUN",
+      "verified": false
+    },
+    "finished_at": "2026-11-19T07:32:01.622996Z",
+    "implementation_version": "p4b-ephemeral-capture-v1",
+    "input": {
+      "accepted_rows": null,
+      "daily_rows_received": 0,
+      "latest_expected_session": null,
+      "latest_session_symbols": [],
+      "observed_input_coverage": {
+        "covered": 0,
+        "expected": 5
+      },
+      "observed_symbols": [],
+      "rejected_rows": null,
+      "rejection_counts": null,
+      "session_end": null,
+      "session_start": null,
+      "validated_symbols": []
+    },
+    "limitations": [
+      "unauthenticated_unencrypted_tcp",
+      "publication_time_unknown",
+      "finality_unknown",
+      "provider_calendar_not_independently_certified",
+      "metadata_only_no_later_replay",
+      "no_secure_ram_erasure_or_os_paging_claim",
+      "not_live_research_or_mvp"
+    ],
+    "live_market_coverage": {
+      "covered": 0,
+      "expected": 5,
+      "missing": [
+        "000001.SH",
+        "399001.SZ",
+        "399006.SZ",
+        "KOSPI",
+        "SP500"
+      ]
+    },
+    "new_live_research_runs": 0,
+    "run_id": "25cac05e63234ffd954a06db58ccb9f3",
+    "sdk_version": "0.9.4",
+    "sdk_wheel_sha256": "0bf71c6069ab5890ff3596632f9c3f8f1fbc6bfcac582c2f9d6a5c11ab2cfaf8",
+    "source_id": "baostock_standard_free",
+    "started_at": "2026-11-19T07:31:56.349928Z",
+    "transport": {
+      "bindings_restored": true,
+      "decoded_bytes": 0,
+      "finished_at": "2026-11-19T07:32:01.602200Z",
+      "reason": "protocol",
+      "requests_sent": 1,
+      "responses": [],
+      "socket_closed": true,
+      "started_at": "2026-11-19T07:31:57.277292Z",
+      "status": "FAILED",
+      "transport_payloads_disposed": true,
+      "window_end": "2026-11-18",
+      "window_start": "2026-11-05",
+      "wire_bytes": 88,
+      "wire_sha256": "33704d1fecb110ef67656e62bca15ebe9e74e074101aa049c7b3b5ea9f715652"
+    }
+  },
+  "package_id": "P4B",
+  "reason": "transport_failed",
+  "schema_version": 1,
+  "snapshot_id": "2f730e0adc677518fff167371f34f74661b9e058de58d6d92bce2402bd043ff2",
+  "status": "FAILED"
+}

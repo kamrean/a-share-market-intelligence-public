@@ -1,43 +1,44 @@
 # Construction Entrypoint
 
 Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml,
-contracts/p4m_daily_market_evidence.toml, docs/DAILY_MARKET_EVIDENCE.md,
-docs/reviews/p4n-merge.json, docs/REAL_EVIDENCE_COMPOSITION.md,
-docs/FREE_SOURCE_COLLECTION.md, docs/evidence/live-integration-prerequisites.json
-and docs/evidence/p4n-nbs-observation.json. Blueprint stays v1; no old-project bulk reads.
+contracts/p4b_baostock_live_evidence.toml, docs/BAOSTOCK_LIVE_EVIDENCE.md,
+docs/evidence/p4b-user-authorization.json, requirements-baostock.lock,
+config/p4b_sdk_manifest.json, docs/reviews/p4m-merge.json and the contract's
+named prerequisites. Blueprint stays v1; never access archived/private projects.
 
 ## Current Package
 
-P4N PR11 human-merged. Verify its exact-head PR and merged-main CI evidence before
-product edits. P4M connects bounded supplied daily-market records, custody
-diagnostics and existing domain computation in one offline package. Unknown
-publication time remains unknown; an observed closed-session value is not an
-asserted publication timestamp or verified final close. Actual transport and
-documentation references are distinct. Only no-registration/no-key sources are
-candidates. NBS's FAILED observation consumed its allowance; all old operation
-gates remain closed. No new network, private-store or model permission.
+P4M PR12 is human-merged. P4B groups pinned optional SDK dependencies, bounded
+two-index acquisition, existing daily computation, ephemeral replay and truthful
+test/disposal evidence. The user authorized one anonymous session after review
+and release, at most12 protocol requests, no retry, and results-only retention.
+Market payloads/intermediates must never reach disk/stdout/Git and are discarded
+after testing. Keep the durable sanitized quota/result journal. Unencrypted TCP
+is explicitly unauthenticated. General permissions and all historical probe
+gates remain closed. No model/Telegram/trading/scheduler/VPS or shutdown.
 
 ## Work Sequence
 
-1. Verify clean main and PR11 merge/CI.
-2. Freeze contract/policy/plan/template/rendered prompt. Actual independent
-   entrypoint and Prompt Auditor PASS before product/checker changes.
-3. Disjoint Builders implement named paths; keep618 product tests and149
-   governance protections. Full offline validation, scope/prompt/bundle/diff.
-4. Freeze code/state/log. Independent read-only Reviewer and separate Release.
-   Default one R0/R1 cycle; P4N's exception is not inherited. Another BLOCK/unknown/
-   R2+ escalates. No permission or file allowlist changes.
-5. All validation is offline and uses authored inputs. Preserve actual prior
-   source failures unchanged; no new probe, capture or live research is claimed.
-   Unknown publication, source authenticity, index finality and coverage stay
-   explicit. Do not make every input fail merely to avoid integration work.
-6. Commit/push/PR; wait exact-head Ubuntu/Windows CI and independent remote
-   release. Stop AWAITING_HUMAN_MERGE; no direct/auto merge or bypass.
+1. Verify clean main, PR12 human merge and successful exact-head PR/main CI.
+2. Freeze planning, user authorization and SDK lock/manifest. Actual independent
+   entrypoint and Prompt Auditor PASS precede product/checker implementation.
+3. Disjoint Builders implement only new product/test files. Keep688 old product
+   cases/modules/fixtures byte-identical and all160 governance protections.
+4. Validate offline, including authored wire responses through pinned SDK;
+   full suites, dependency checks, scope/prompt/bundle/diff. Freeze code/state/log.
+5. Independent Reviewer, then separate exact-snapshot pre-probe Release and
+   market gate. One R0/R1 total; unknown/R2+ or second BLOCK escalates. Never
+   inherit old repair exceptions or probe allowances.
+6. Perform the single authorized bounded session. Failures/unknown/interrupted
+   outcomes consume it. Compose and verify in memory, discard all payloads,
+   inspect cleanup evidence, and record only actual sanitized terminal results.
+7. Independent final Release, commit/push/one PR, exact-head Ubuntu/Windows CI
+   and remote Release. Stop AWAITING_HUMAN_MERGE. Never merge or bypass.
 
 ## Next Gate
 
-Human merge after exact-head CI and independent remote release; resolve anonymous-only source acquisition and real temporal/provenance evidence, then separately audited model/report/private-delivery integration. No inherited network or VPS permission.
-No model, Telegram, trading, scheduler, VPS or account/key operation. Five indices
-remain0/5. News source observation is not a live research run or MVP acceptance.
+Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS.
+Observed acquisition/input coverage is separate from authenticated data, accepted
+five-index coverage, genuine live research and MVP completion. Keep gaps explicit.
 Final report always includes prior completed, this-package completed and remaining
 work, as well as branch/commit/PR/audits/validation/CI/merge/VPS/next gate.

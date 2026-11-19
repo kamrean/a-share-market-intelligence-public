@@ -1512,3 +1512,207 @@ CI and independent remote release belong on the PR; this frozen checkpoint's
 pending wording is historical, not the current external result. Separate Release
 and human merge remain mandatory. No source request, runtime read, model,
 Telegram, trading, deployment, VPS or extra repair permission is granted.
+
+## 2026-11-19: P4B Mainland Acquisition Planning
+
+The coordinator started from a clean worktree, fetched origin, switched main and
+fast-forwarded to58d88afdc3432f57bca8059025fddfda6bda2f95. GitHub confirms PR12
+was human-merged by kamrean at2026-11-19T04:03:58Z, with tested head
+49e9488b1ab586c8bfd24df3654a4e49bd2ef38b. PR CI44345530691 succeeded on both
+platforms. Main CI44455715479 was still running at this planning checkpoint;
+no merged-main PASS or implementation handoff is claimed here.
+
+Independent read-only merge reviewer01a1f1fb-db53-7252-8f46-f0999a854c66
+confirmed matching merge/head trees, snapshot7bd48541f337c3aaa26a488d19cbd47935d84f6b4640bd3df861f13bb07f98c1,
+actual prior receipts/remote release, main protection, and passing lightweight
+check/prompt/bundle/gate checks with CI branch handling. Historical operation
+gates reject as intended. Its post-merge verdict remains PENDING until actual
+main CI completion. Old frozen pending wording is not rewritten into later PASS.
+
+The coordinator reread the official BaoStock introduction, index, trading-day,
+security identity and V1.0.0 disclaimer documentation, plus the hash-verified
+SDK0.9.4 wheel in memory without installation/execution. API local analysis has
+positive documentation; website copying and API redistribution scope remain
+distinct. Public TCP is unencrypted/unauthenticated. SDK transport lacks required
+deadlines/size/decompression/partial-send bounds; pagination can add requests.
+The new plan contains these behaviors while reusing official SDK protocol logic.
+
+Independent source researcher01a1f1fb-d9c4-7b00-aef1-133c3d50b2a6 investigated
+primary KR/US documentation only. FRED anonymous website downloads are distinct
+from its keyed API, but storage/automation scope remains unresolved. Stooq's
+current rules were not obtained; KRX download and API routes have different
+conditions. No KR/US candidate was selected or probed and no absence/illegality
+claim was inferred from missing evidence. Five-index goals remain unchanged.
+
+The user explicitly authorized this bounded BaoStock package and one post-review
+test, at most12 protocol requests, two documented indices, no registration/key,
+zero payment and no retry. The user additionally required retaining RESULTS ONLY
+and deleting all market test data/intermediates after completion. P4B therefore
+keeps all payloads in bounded RAM and never persists them. Only sanitized results
+and durable quota metadata remain; no later replay from hashes is promised.
+The protected authorization record and plan state the exact scope. The prior
+turn's shutdown request is not renewed. Model/Telegram/trading/scheduler/VPS
+remain closed, and old NBS/Fed allowances are never inherited or reset.
+
+Branch stage1-baostock-live-evidence was created from the clean merged main.
+Phase1 ownership: Coordinator docs/log/user authorization/merge facts; dependency
+Builder01a1f202-2693-75b2-8760-363c91875562 optional SDK lock/manifest; Governance
+Builder01a1f202-2837-7611-91b5-ea0f69a86a74 contract/policy/state/template/prompt.
+No product/checker/test/CI edits, dependency installation or market request is
+authorized before actual merged-main CI, frozen planning entry audits and an
+explicit implementation handoff. This is one coherent implementation/test/review
+PR, not a separate contract-only micro-package. Existing688 product cases/modules
+and160 governance protections remain required.
+
+### P4B Dependency Audit and Main-CI Completion
+
+Main CI44455715479 actually completed SUCCESS at the exact PR12 merge head.
+Ubuntu completed2026-11-19T04:08:19Z in255 seconds; Windows completed
+2026-11-19T04:26:03Z in1319 seconds. The coordinator's watch exited0 and the
+GitHub job/step results were read directly. docs/reviews/p4m-merge.json records
+these facts separately from P4M's immutable pre-publication approvals.
+
+Dependency Builder completed only requirements-baostock.lock and
+config/p4b_sdk_manifest.json: official BaoStock0.9.4, pandas2.3.3, numpy2.3.5,
+python-dateutil2.9.0.post0, pytz/tzdata2025.2 and six1.17.0. It verified official
+metadata,9 selected binary-wheel hashes, unyanked availability, CPython3.12
+Windows/Linux dependency closure and56 raw SDK Python-file hashes. No package
+was installed or executed. Cached keys/VIP routing, SDK singleton state,
+unbounded transport, swallowed/printed errors, automatic paging, removed pandas
+API usage and side-effectful demo imports are documented constraints, not proof
+of runtime compatibility. Installation and installed-SDK tests still await audits.
+
+Before freezing planning, the coordinator set the P4B construction CI job limit
+to30 minutes, because the measured unchanged Windows baseline already used
+21m59s and this package adds isolated dependency setup and SDK tests. Existing
+CI timeout protection is retained with the new explicit value; pinned actions,
+platforms, read-only permissions and required checks remain unchanged. This
+does not alter the20-second product session, one-shot quota or no-retry rule.
+
+Capture Builder01a1f20d-5c19-7b71-ab27-13bb4300395d is assigned only the future
+new baostock_capture.py and its new test. Its initial task is read-only interface
+preparation, not implementation. All four Builder-owned product/test files and
+the checker/CI remain untouched until actual independent planning audits PASS.
+
+### P4B Actual Entry Audits and Implementation Handoff
+
+Independent agent01a1f1fb-db53-7252-8f46-f0999a854c66 completed both actual
+entrypoint and Prompt Auditor reviews: PASS, no findings, repair_cycles0.
+It read the26 frozen inputs plus state/log and confirmed no hash drift.
+The coordinator recorded its actual receipts without inventing approval.
+This permits explicit disjoint implementation handoff, not a market request.
+Transport/Capture/Governance Builders now own only their named new product/test
+files and checker/test/CI files respectively. The coordinator owns isolated
+dependency installation, integration, actual validation evidence and publication.
+SDK installation must not read personal package configuration or credentials;
+no source data request occurs until later actual Reviewer and pre-probe Release.
+
+### P4B Isolated Dependency Setup
+
+The coordinator created a fresh external CPython3.12.10 environment after the
+actual audits and handoff. All seven packages installed from the optional lock
+with required archive hashes and binary wheels only; no dependency source builds,
+global environment changes, bytecode compilation or persistent download cache.
+The installer ignored personal/global/site package configuration using the
+platform null configuration path, disabled credential helpers, used a null netrc
+and cleared proxy overrides without reading or printing personal credentials.
+Dependency consistency check completed successfully. All26 planning receipt
+hashes were recomputed and matched. This is construction setup only, not a
+BaoStock request, runtime compatibility verdict or source acceptance.
+
+### P4B Product Implementation and Offline Regression
+
+Transport Builder delivered only the new transport module/test; Capture Builder
+delivered only the new capture module/test. Their56 and46 targeted cases passed,
+including actual pinned SDK parsing of authored wire fixtures and the unchanged
+daily-market build/verify path. The coordinator separately reran both suites:
+56 tests in21.825 seconds and46 tests in10.258 seconds, no skips or failures.
+The full product suite ran790 tests in250.137 seconds with no failures and one
+explicit existing Windows skip: test_preparation.test_symlink_refused cannot
+create an unprivileged symbolic link on this host. A focused rerun confirmed
+that platform reason; the privilege-independent link/junction guard tests pass.
+All102 new cases ran, and no synthetic fixture is described as a live result.
+
+The coordinator verified all190 immutable historical paths unchanged and all160
+baseline governance test names retained. Dependency consistency and patch
+whitespace checks passed. State is implemented_unreleased, not approved for
+observation or publication. Full governance validation and actual independent
+Reviewer/pre-probe Release remain pending at this checkpoint. Six current
+attestation files were created as explicit NOT_RUN placeholders only. The fixed
+private market journal does not yet exist, no real market attempt has occurred,
+and source/MVP/observation/VPS milestones remain unchanged.
+
+### P4B Governance Handoff and Review Freeze
+
+Governance Builder delivered only tools/governance.py, its governance tests and
+the pinned dual-platform CI workflow, then returned write ownership to the
+coordinator. Actual focused results were39/39 receipt/daily governance cases,
+42/42 market/historical/lifecycle cases and6/6 temporary-repository integration
+cases. The latter took981.667 seconds and exercised every allowed path. These
+are focused checks, not a substitute for the complete174-case governance suite.
+No known unresolved focused-test failure remains; no execution was left running.
+
+The coordinator is running the full governance suite and freezes the protected
+implementation/state/log for independent review. Actual full-suite outcomes go
+in the current validation attestation, not anticipated PASS text here. The
+independent Reviewer must wait for all required validation results before its
+verdict. Any decision-affecting change invalidates this review snapshot. Source
+observation and both release gates remain pending; later actual results belong
+only in the six named current attestations and exact-head remote PR records.
+
+### P4B Independent Review BLOCK and One R1 Cycle
+
+Full governance completed174/174 with exit0 in3167.332 seconds; final product
+regression completed790 cases in245.735 seconds with only the documented old
+Windows symbolic-link skip. All nine required validation commands completed.
+Independent Reviewer01a1f23b-6839-7ae3-9b3c-1f378e3749aa nevertheless returned
+BLOCK at repair_cycles0 on snapshot
+014a93d0ab69dc433f35d5e96f09fa3809fb15467a00d3e9ee01fe088610a865.
+Validation success is not independent review success.
+
+P4B-R1-01 (P1/R1): SDK setData removes spaces inside JSON strings before the
+wrapper validates cells. Authored raw code 'sh. 000001' and close '10 1' were
+normalized into accepted values, allowing a VERIFIED fixture composition.
+P4B-R1-02 (P2/R1): an authored login frame declaring zero body length but
+carrying25 actual body bytes with a valid CRC was accepted through seven steps.
+The Reviewer reproduced both; no actual source request or fixed journal access
+occurred. These exact findings are retained here when the current verdict is
+later superseded by an actual re-review.
+
+The coordinator starts the single contract-permitted R1 repair cycle for both
+findings together: preserve original JSON cell semantics before SDK mutation,
+strictly validate response body/trailer boundaries with correct Unicode length
+semantics, retain the official SDK, and add wire-level and capture integration
+regressions. No scope, permissions, source count, quota or planning input changes.
+Old approvals are not runtime authority. Revalidation and the same independent
+Reviewer are required; another BLOCK or any unknown/R2+ trigger escalates.
+
+The coordinator added five capture-chain regressions before the transport fix.
+Four expected RED cases reproduced normalization of malformed symbol/numeric
+cells and acceptance of zero-length/extra-tail login frames. Each requires
+failure before composition or further requests and checks disposal. The valid
+unescaped Unicode identity case already passed and remains a required positive
+control; identity names must never persist. All cases use authored wire data,
+the actual pinned SDK and temporary results-only journals, never a live source.
+
+### P4B R1 Repair and Re-review Freeze
+
+The Transport Builder completed the single grouped R1 repair in its two assigned
+files. The SDK-selected original JSON is checked before lossy normalization;
+duplicate keys, illegal constants and whitespace-contaminated typed cells fail
+closed. Legitimate opaque name spacing is preserved through the official SDK.
+Uncompressed frames now require exact declared body length, legal CRC/trailer
+and bounded original bytes. Unicode length accepts only exact UTF-8 octets or
+exact Unicode character count; this is conservative parser compatibility, not
+independently verified server documentation or authenticated transport.
+
+All56 previous transport tests remain, with16 new regressions:72/72 passed in
+35.714 seconds. The coordinator reran all five capture-chain R1 regressions
+against the repaired implementation:5/5 passed in4.318 seconds, including the
+four previously RED cases and the Unicode positive control. The Builder
+confirmed all26 planning hashes unchanged. No actual market request occurred.
+
+This protected log and implementation are frozen for complete revalidation and
+the same independent Reviewer's single re-review. Actual final counts/verdicts
+belong in the current attestations. No pre-probe release is anticipated. Another
+BLOCK requires escalation; no second repair cycle or source retry is granted.

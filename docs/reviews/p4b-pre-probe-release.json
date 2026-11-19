@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "2f730e0adc677518fff167371f34f74661b9e058de58d6d92bce2402bd043ff2",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_BAOSTOCK_PROBE",
+  "agent_id": "01a1f1fb-db53-7252-8f46-f0999a854c66",
+  "read_only": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "pr_url": null,
+  "merge_status": "not_merged",
+  "vps_sync": "not_requested",
+  "next_gate": "Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS."
+}
