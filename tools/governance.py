@@ -1,4 +1,4 @@
-"""P4B exact-snapshot governance; one separately released market session (Python 3.12)."""
+"""P4D exact-snapshot governance; two separately released checkpoints (Python 3.12)."""
 
 from __future__ import annotations
 
@@ -17,12 +17,12 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = "58d88afdc3432f57bca8059025fddfda6bda2f95"
-BRANCH = "stage1-baostock-live-evidence"
+BASELINE = "3cceca6e1534484b9001db16644a98b7b068897b"
+BRANCH = "stage1-baostock-protocol-recovery"
 ALGORITHM = "sha256-path-and-lf-normalized-utf8-v1"
-CONTRACT_PATH = "contracts/p4b_baostock_live_evidence.toml"
-TEMPLATE_PATH = "templates/p4b_builder_prompt.md"
-PROMPT_PATH = "docs/reviews/p4b-builder-prompt.md"
+CONTRACT_PATH = "contracts/p4d_protocol_recovery.toml"
+TEMPLATE_PATH = "templates/p4d_builder_prompt.md"
+PROMPT_PATH = "docs/reviews/p4d-builder-prompt.md"
 PREREQUISITE_PATH = "docs/evidence/live-integration-prerequisites.json"
 PREREQUISITE_HASH = "55fd89e11f1b771c40805ef58eed2b8dedbdbb7686cedf6f3b183526aaa3f2e3"
 SOURCE_PROBE_PATH = "docs/evidence/p4s-source-probe.json"
@@ -32,8 +32,8 @@ SOURCE_SNAPSHOT = "5f3ddda6f07ed608b59bf57c3e58add7b5caf7904613d9a4d3efa2c7afdb3
 PREPARATION_PATH = "docs/evidence/p4e-preparation.json"
 PREPARATION_HASH = "609501a5e1a085dd060637a53048df802b69e4ffe80a0acb4a3155ba3542f5a8"
 PREPARATION_SNAPSHOT = "2acc872a09ae032b2ceb1cb7b031cfb562672e3e4ac0f7a2adc14de8aa877dfe"
-AUDIT_AGENT = "01a1f1fb-db53-7252-8f46-f0999a854c66"
-CURRENT_ATTESTATIONS = (
+AUDIT_AGENT = "01a1f31e-108d-7603-959f-604c54e690ea"
+MARKET_ATTESTATIONS = (
     "docs/reviews/p4b-bundle.json",
     "docs/reviews/p4b-validation.json",
     "docs/reviews/p4b-review.json",
@@ -56,7 +56,7 @@ ATTESTATIONS = (
     "docs/reviews/p4e-review.json", "docs/reviews/p4e-release.json",
     "docs/evidence/p4e-preparation.json",
 )
-ALLOWED = (
+BASELINE_ALLOWED = (
     ".gitattributes",
     ".github/workflows/governance.yml",
     ".gitignore",
@@ -278,199 +278,6 @@ ALLOWED = (
     "tests/product/test_workflow.py",
     "tools/governance.py",
 )
-IMMUTABLE = (
-    ".gitattributes",
-    ".gitignore",
-    "config/p1_profile.toml",
-    "config/p2_entities.toml",
-    "config/p2_methods.toml",
-    "config/p3_research.toml",
-    "config/p4_publication.toml",
-    "config/sources.toml",
-    "contracts/p0_stage0.toml",
-    "contracts/p1_sources_evidence.toml",
-    "contracts/p2_intelligence.toml",
-    "contracts/p3_research.toml",
-    "contracts/p4_live_integration_entry.toml",
-    "contracts/p4_publication.toml",
-    "contracts/p4c_offline_workflow.toml",
-    "contracts/p4e_evidence_preparation.toml",
-    "contracts/p4i_real_evidence_composition.toml",
-    "contracts/p4m_daily_market_evidence.toml",
-    "contracts/p4n_nbs_ingestion.toml",
-    "contracts/p4s_free_sources.toml",
-    "docs/DAILY_MARKET_EVIDENCE.md",
-    "docs/EVIDENCE_PREPARATION.md",
-    "docs/FREE_SOURCE_COLLECTION.md",
-    "docs/LEGACY_REUSE_MANIFEST.md",
-    "docs/LIVE_INTEGRATION_PLAN.md",
-    "docs/NBS_EVIDENCE_INGESTION.md",
-    "docs/OFFLINE_WORKFLOW_PLAN.md",
-    "docs/P1_DESIGN.md",
-    "docs/P2_METHODS.md",
-    "docs/P3_METHODS.md",
-    "docs/P4_METHODS.md",
-    "docs/PUBLICATION_PROVENANCE.json",
-    "docs/REAL_EVIDENCE_COMPOSITION.md",
-    "docs/SOURCE_MATRIX.md",
-    "docs/evidence/live-integration-prerequisites.json",
-    "docs/evidence/p1-source-probe.json",
-    "docs/evidence/p2-demo.json",
-    "docs/evidence/p3-demo.json",
-    "docs/evidence/p4-demo.json",
-    "docs/evidence/p4-report.txt",
-    "docs/evidence/p4e-preparation.json",
-    "docs/evidence/p4n-nbs-observation.json",
-    "docs/evidence/p4s-source-probe.json",
-    "docs/reviews/blueprint-review.json",
-    "docs/reviews/p0-builder-prompt.md",
-    "docs/reviews/p0-bundle.json",
-    "docs/reviews/p0-merge.json",
-    "docs/reviews/p0-prompt-audit.json",
-    "docs/reviews/p0-release.json",
-    "docs/reviews/p0-review.json",
-    "docs/reviews/p0-validation.json",
-    "docs/reviews/p1-builder-prompt.md",
-    "docs/reviews/p1-bundle.json",
-    "docs/reviews/p1-entrypoint-review.json",
-    "docs/reviews/p1-merge.json",
-    "docs/reviews/p1-prompt-audit.json",
-    "docs/reviews/p1-release.json",
-    "docs/reviews/p1-review.json",
-    "docs/reviews/p1-validation.json",
-    "docs/reviews/p2-builder-prompt.md",
-    "docs/reviews/p2-bundle.json",
-    "docs/reviews/p2-entrypoint-review.json",
-    "docs/reviews/p2-merge.json",
-    "docs/reviews/p2-prompt-audit.json",
-    "docs/reviews/p2-release.json",
-    "docs/reviews/p2-review.json",
-    "docs/reviews/p2-validation.json",
-    "docs/reviews/p3-builder-prompt.md",
-    "docs/reviews/p3-bundle.json",
-    "docs/reviews/p3-entrypoint-review.json",
-    "docs/reviews/p3-merge.json",
-    "docs/reviews/p3-prompt-audit.json",
-    "docs/reviews/p3-release.json",
-    "docs/reviews/p3-review.json",
-    "docs/reviews/p3-validation.json",
-    "docs/reviews/p4-builder-prompt.md",
-    "docs/reviews/p4-bundle.json",
-    "docs/reviews/p4-entrypoint-review.json",
-    "docs/reviews/p4-merge.json",
-    "docs/reviews/p4-prompt-audit.json",
-    "docs/reviews/p4-release.json",
-    "docs/reviews/p4-review.json",
-    "docs/reviews/p4-validation.json",
-    "docs/reviews/p4c-builder-prompt.md",
-    "docs/reviews/p4c-bundle.json",
-    "docs/reviews/p4c-entrypoint-review.json",
-    "docs/reviews/p4c-merge.json",
-    "docs/reviews/p4c-prompt-audit.json",
-    "docs/reviews/p4c-release.json",
-    "docs/reviews/p4c-review.json",
-    "docs/reviews/p4c-validation.json",
-    "docs/reviews/p4e-builder-prompt.md",
-    "docs/reviews/p4e-bundle.json",
-    "docs/reviews/p4e-entrypoint-review.json",
-    "docs/reviews/p4e-merge.json",
-    "docs/reviews/p4e-prompt-audit.json",
-    "docs/reviews/p4e-release.json",
-    "docs/reviews/p4e-review.json",
-    "docs/reviews/p4e-validation.json",
-    "docs/reviews/p4i-builder-prompt.md",
-    "docs/reviews/p4i-bundle.json",
-    "docs/reviews/p4i-entrypoint-review.json",
-    "docs/reviews/p4i-merge.json",
-    "docs/reviews/p4i-prompt-audit.json",
-    "docs/reviews/p4i-release.json",
-    "docs/reviews/p4i-review.json",
-    "docs/reviews/p4i-validation.json",
-    "docs/reviews/p4l-builder-prompt.md",
-    "docs/reviews/p4l-bundle.json",
-    "docs/reviews/p4l-entrypoint-review.json",
-    "docs/reviews/p4l-merge.json",
-    "docs/reviews/p4l-prompt-audit.json",
-    "docs/reviews/p4l-release.json",
-    "docs/reviews/p4l-review.json",
-    "docs/reviews/p4l-validation.json",
-    "docs/reviews/p4m-builder-prompt.md",
-    "docs/reviews/p4m-bundle.json",
-    "docs/reviews/p4m-entrypoint-review.json",
-    "docs/reviews/p4m-prompt-audit.json",
-    "docs/reviews/p4m-release.json",
-    "docs/reviews/p4m-review.json",
-    "docs/reviews/p4m-validation.json",
-    "docs/reviews/p4n-builder-prompt.md",
-    "docs/reviews/p4n-bundle.json",
-    "docs/reviews/p4n-entrypoint-review.json",
-    "docs/reviews/p4n-merge.json",
-    "docs/reviews/p4n-pre-probe-release.json",
-    "docs/reviews/p4n-prompt-audit.json",
-    "docs/reviews/p4n-release.json",
-    "docs/reviews/p4n-review.json",
-    "docs/reviews/p4n-validation.json",
-    "docs/reviews/p4s-builder-prompt.md",
-    "docs/reviews/p4s-bundle.json",
-    "docs/reviews/p4s-entrypoint-review.json",
-    "docs/reviews/p4s-merge.json",
-    "docs/reviews/p4s-prompt-audit.json",
-    "docs/reviews/p4s-release.json",
-    "docs/reviews/p4s-review.json",
-    "docs/reviews/p4s-validation.json",
-    "market_intelligence/__init__.py",
-    "market_intelligence/__main__.py",
-    "market_intelligence/collection.py",
-    "market_intelligence/cost_guard.py",
-    "market_intelligence/daily_market.py",
-    "market_intelligence/delivery.py",
-    "market_intelligence/evaluation.py",
-    "market_intelligence/gate.py",
-    "market_intelligence/intelligence.py",
-    "market_intelligence/ledger.py",
-    "market_intelligence/market_state.py",
-    "market_intelligence/models.py",
-    "market_intelligence/nbs.py",
-    "market_intelligence/news_events.py",
-    "market_intelligence/preparation.py",
-    "market_intelligence/publication.py",
-    "market_intelligence/research.py",
-    "market_intelligence/runtime.py",
-    "market_intelligence/scenario.py",
-    "market_intelligence/source_policy.py",
-    "market_intelligence/sources.py",
-    "market_intelligence/store.py",
-    "market_intelligence/workflow.py",
-    "requirements.lock",
-    "templates/builder_prompt.md",
-    "templates/p1_builder_prompt.md",
-    "templates/p2_builder_prompt.md",
-    "templates/p3_builder_prompt.md",
-    "templates/p4_builder_prompt.md",
-    "templates/p4c_builder_prompt.md",
-    "templates/p4e_builder_prompt.md",
-    "templates/p4i_builder_prompt.md",
-    "templates/p4l_builder_prompt.md",
-    "templates/p4m_builder_prompt.md",
-    "templates/p4n_builder_prompt.md",
-    "templates/p4s_builder_prompt.md",
-    "tests/fixtures/p1_feed.xml",
-    "tests/fixtures/p1_market.csv",
-    "tests/fixtures/p2_input.json",
-    "tests/fixtures/p3_responses.json",
-    "tests/product/test_collection.py",
-    "tests/product/test_daily_market.py",
-    "tests/product/test_nbs.py",
-    "tests/product/test_p1.py",
-    "tests/product/test_p2.py",
-    "tests/product/test_p3.py",
-    "tests/product/test_p4.py",
-    "tests/product/test_preparation.py",
-    "tests/product/test_real_evidence.py",
-    "tests/product/test_scenario.py",
-    "tests/product/test_workflow.py",
-)
-PROTECTED = tuple(sorted(set(ALLOWED) - set(CURRENT_ATTESTATIONS)))
 PERMISSIONS = {
     "research_only": True,
     "external_data_access_allowed": False,
@@ -488,7 +295,7 @@ REPOSITORY = {
     "name": "a-share-market-intelligence-public",
     "visibility": "public"
 }
-VALIDATION_COMMANDS = [
+MARKET_VALIDATION_COMMANDS = [
     "python -m pip check",
     "python -m unittest discover -s tests/product -p test_baostock_transport.py -v",
     "python -m unittest discover -s tests/product -p test_baostock_capture.py -v",
@@ -499,7 +306,7 @@ VALIDATION_COMMANDS = [
     "python tools/governance.py bundle",
     "git diff --check",
 ]
-REQUIRED_READS = [
+MARKET_REQUIRED_READS = [
     "AGENTS.md",
     "BLUEPRINT.md",
     "START_CONSTRUCTION_PROMPT.md",
@@ -527,7 +334,7 @@ REQUIRED_READS = [
     "docs/reviews/p4m-review.json",
     "docs/reviews/p4m-release.json",
 ]
-AUDIT_INPUTS = (
+MARKET_AUDIT_INPUTS = (
     "AGENTS.md",
     "BLUEPRINT.md",
     "START_CONSTRUCTION_PROMPT.md",
@@ -556,7 +363,7 @@ AUDIT_INPUTS = (
     "docs/reviews/p4b-builder-prompt.md",
 )
 # Actual independently approved bytes, never hashes trusted from a mutable receipt.
-FROZEN_INPUT_HASHES = {
+MARKET_FROZEN_INPUT_HASHES = {
     "AGENTS.md": "d14de09f5007bf518b1d85ff55c18155117caa01582db0618871316b81b64a79",
     "BLUEPRINT.md": "168111643ac2de093adba8ca852434a2e5fc161fb8e1e6e0e1b801ebd23d1138",
     "START_CONSTRUCTION_PROMPT.md": "1daaa1a124a897eb71df07547e1b805cb5b2cac5917fe9e15a999b7d713f41d2",
@@ -588,13 +395,13 @@ FROZEN_INPUT_HASHES = {
 
 def dependency():
     return {
-        "package_id": "P4M",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12",
+        "package_id": "P4B",
+        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/13",
         "merge_commit": BASELINE,
-        "merged_at": "2026-11-19T04:03:58Z",
-        "tested_head": "49e9488b1ab586c8bfd24df3654a4e49bd2ef38b",
-        "pr_ci_run": 44345530691,
-        "merge_ci_run": 44455715479,
+        "merged_at": "2026-11-19T08:16:45Z",
+        "tested_head": "7454205f5a8737ea60aafe3469c96211659e8d66",
+        "pr_ci_run": 44481051951,
+        "merge_ci_run": 44486260610,
         "ci_status": "PASS",
         "merge_status": "merged",
     }
@@ -701,7 +508,7 @@ LIMITED_MARKET_INGESTION = {
     "authorization_basis": "Current protected user authorization permits this one zero-paid anonymous session only after independent Reviewer and pre-probe Release; results only, all market payloads and intermediates RAM-only.",
 }
 
-POLICY = {
+MARKET_POLICY = {
     "schema_version": 1, "active_package": "P4B", "python_version": "3.12",
     "merge_tier": "D", "human_merge_required": True, "auto_merge_allowed": False,
     "direct_merge_allowed": False, "admin_bypass_allowed": False,
@@ -716,11 +523,11 @@ NBS_RECEIPT_PATHS = {
     **dict(zip(("bundle", "validation", "reviewer", "pre_probe_release", "release", "observation"),
                NBS_ATTESTATIONS)),
 }
-CURRENT_RECEIPT_PATHS = {
+MARKET_RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4b-entrypoint-review.json",
-    "prompt_audit": "docs/reviews/p4b-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    "prompt_audit": "docs/reviews/p4b-prompt-audit.json", "builder_prompt": "docs/reviews/p4b-builder-prompt.md",
     **dict(zip(("bundle", "validation", "reviewer", "pre_probe_release", "release", "observation"),
-               CURRENT_ATTESTATIONS)),
+               MARKET_ATTESTATIONS)),
 }
 RECEIPT_PATHS = {
     "blueprint_review": "docs/reviews/p4e-entrypoint-review.json",
@@ -731,7 +538,7 @@ RECEIPT_PATHS = {
 NBS_NEXT_GATE = ("Human merge after exact-head CI and independent remote release; retain anonymous-only "
                  "five-index gaps, then separately audited model/report/private-delivery integration. "
                  "No inherited network or VPS permission.")
-NEXT_GATE = "Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS."
+MARKET_NEXT_GATE = "Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS."
 LOCAL_RELEASE = "LOCAL_READY_FOR_PR"
 NBS_PRE_PROBE_RELEASE = "LOCAL_READY_FOR_NBS_PROBE"
 PRE_PROBE_RELEASE = "LOCAL_READY_FOR_BAOSTOCK_PROBE"
@@ -739,6 +546,113 @@ PRE_PROBE_RELEASE = "LOCAL_READY_FOR_BAOSTOCK_PROBE"
 PRE_PREPARATION_RELEASE = "LOCAL_READY_FOR_LOCAL_PREPARATION"
 GOVERNANCE_ONLY = ("Bounded market governance only; model/live-readiness-blocked: "
                    "BLOCKED_EXTERNAL_PREREQUISITES")
+
+
+# P4D scope is pinned in code, never granted by a mutable contract.
+MUTABLE_PATHS = (
+    "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "README.md",
+    "docs/CONSTRUCTION_LOG.md", "governance/policy.toml", "project-state/state.json",
+    ".github/workflows/governance.yml", "tools/governance.py",
+    "tests/governance/test_governance.py", "market_intelligence/baostock_transport.py",
+    "tests/product/test_baostock_transport.py",
+)
+NEW_PATHS = (
+    "contracts/p4d_protocol_recovery.toml", "docs/BAOSTOCK_PROTOCOL_RECOVERY.md",
+    "docs/evidence/p4d-user-authorization.json", "docs/reviews/p4b-merge.json",
+    "templates/p4d_builder_prompt.md", "docs/reviews/p4d-builder-prompt.md",
+    "docs/reviews/p4d-entrypoint-review.json", "docs/reviews/p4d-prompt-audit.json",
+    "market_intelligence/baostock_recovery.py", "tests/product/test_baostock_recovery.py",
+    "docs/reviews/p4d-diagnostic-bundle.json", "docs/reviews/p4d-diagnostic-validation.json",
+    "docs/reviews/p4d-diagnostic-review.json", "docs/reviews/p4d-diagnostic-release.json",
+    "docs/evidence/p4d-diagnostic.json", "docs/evidence/p4d-repair-basis.json",
+    "docs/reviews/p4d-bundle.json", "docs/reviews/p4d-validation.json",
+    "docs/reviews/p4d-review.json", "docs/reviews/p4d-pre-probe-release.json",
+    "docs/evidence/p4d-market-observation.json", "docs/reviews/p4d-release.json",
+)
+DIAGNOSTIC_ATTESTATIONS = NEW_PATHS[10:15]
+REPAIR_BASIS_PATH = NEW_PATHS[15]
+VERIFICATION_ATTESTATIONS = NEW_PATHS[16:]
+# Compatibility name denotes all non-decision artifacts during phase A.
+CURRENT_ATTESTATIONS = (*DIAGNOSTIC_ATTESTATIONS, REPAIR_BASIS_PATH,
+                        *VERIFICATION_ATTESTATIONS)
+ALLOWED = tuple(sorted((*BASELINE_ALLOWED, *NEW_PATHS)))
+IMMUTABLE = tuple(sorted(set(BASELINE_ALLOWED) - set(MUTABLE_PATHS)))
+PROTECTED = tuple(sorted(set(ALLOWED) - set(CURRENT_ATTESTATIONS)))
+CURRENT_RECEIPT_PATHS = {
+    "blueprint_review": "docs/reviews/p4d-entrypoint-review.json",
+    "prompt_audit": "docs/reviews/p4d-prompt-audit.json", "builder_prompt": PROMPT_PATH,
+    **dict(zip(("diagnostic_bundle", "diagnostic_validation", "diagnostic_review",
+                "diagnostic_release", "diagnostic"), DIAGNOSTIC_ATTESTATIONS)),
+    "repair_basis": REPAIR_BASIS_PATH,
+    **dict(zip(("bundle", "validation", "reviewer", "pre_probe_release",
+                "observation", "release"), VERIFICATION_ATTESTATIONS)),
+}
+LIMITED_PROTOCOL_RECOVERY = {
+    "user_authorization": "docs/evidence/p4d-user-authorization.json",
+    "source_id": "baostock_standard_free", "endpoint": "tcp://public-api.baostock.com:10030",
+    "sdk_version": "0.9.4", "dependency_lock": "requirements-baostock.lock",
+    "sdk_manifest": "config/p4b_sdk_manifest.json", "tls": False, "peer_authenticated": False,
+    "maximum_sessions": 2, "maximum_total_requests": 9, "diagnostic_requests": 1,
+    "verification_requests": 7, "maximum_connections_per_session": 1, "retries": 0,
+    "deadline_seconds": 20, "maximum_wire_bytes": 512000, "maximum_frame_bytes": 128000,
+    "maximum_decoded_bytes": 1048576, "symbols": ["sh.000001", "sz.399001"],
+    "window_natural_days": 14, "window_end": "prior_Asia_Shanghai_calendar_day",
+    "requires_key": False, "requires_registration": False, "paid": False,
+    "payload_lifetime": "bounded_process_memory_only",
+    "retained_results": "closed_schema_sanitized_metadata_only",
+    "journal_home_relative": ".a-share-market-intelligence/p4d-baostock-recovery.sqlite",
+    "journal_reset_allowed": False, "old_journal_mutation_allowed": False,
+    "allowance_consumed_on": "durable_phase_reservation_before_any_dispatch",
+    "unknown_consumes_allowance": True, "unused_capacity_authorizes_extra_requests": False,
+    "phase_transition_automatic": False, "ci_network_gate_allowed": False,
+}
+POLICY = {key: value for key, value in MARKET_POLICY.items()
+          if key != "limited_market_ingestion"}
+POLICY.update(active_package="P4D", limited_protocol_recovery=LIMITED_PROTOCOL_RECOVERY)
+NEXT_GATE = ("AWAITING_HUMAN_MERGE after truthful terminal results, independent final Release "
+             "and exact-head CI; any inconclusive diagnosis or failed verification remains an "
+             "explicit source gap. No new session, model, Telegram, schedule or VPS authority.")
+PHASE_RELEASE = {
+    "diagnostic": "LOCAL_READY_FOR_PROTOCOL_DIAGNOSTIC",
+    "verification": "LOCAL_READY_FOR_RECOVERY_VERIFICATION",
+}
+REQUIRED_READS = [
+    "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "BLUEPRINT.md",
+    "project-state/state.json", "governance/policy.toml", CONTRACT_PATH,
+    "docs/BAOSTOCK_PROTOCOL_RECOVERY.md", "docs/evidence/p4d-user-authorization.json",
+    "docs/reviews/p4b-merge.json", "docs/evidence/p4b-market-observation.json",
+    "docs/reviews/p4b-review.json", "docs/reviews/p4b-release.json",
+    "requirements-baostock.lock", "config/p4b_sdk_manifest.json",
+]
+VALIDATION_COMMANDS = [
+    "python -m pip check",
+    "python -m unittest discover -s tests/product -p test_baostock_transport.py -v",
+    "python -m unittest discover -s tests/product -p test_baostock_recovery.py -v",
+    "python -m unittest discover -s tests/governance -p test_*.py -v",
+    "python -m unittest discover -s tests/product -p test_*.py -v",
+    "python tools/governance.py check", "python tools/governance.py prompt --verify",
+    "python tools/governance.py bundle",
+    "git diff --check 3cceca6e1534484b9001db16644a98b7b068897b",
+]
+CONTRACT_DIGEST = "8443d82d3870eef117bdcd1f9ceafcfb35f449bbc38a0f864a73259babf23d86"
+FROZEN_INPUT_HASHES = {
+    "AGENTS.md": "1bc93a9feb32e3d8d497220b17f46c47de785ee55f5d1aa5617ec4926f511fd9",
+    "START_CONSTRUCTION_PROMPT.md": "fd2b04e1dd5298bb7084a752ee379183e352a3edf438560c73e406c4a9b5227b",
+    "BLUEPRINT.md": "168111643ac2de093adba8ca852434a2e5fc161fb8e1e6e0e1b801ebd23d1138",
+    "governance/policy.toml": "df40f9f59d3b7a9ac157e729ec0fd36d263fd5f4af54f8e35dd5dc3e366d14fb",
+    "contracts/p4d_protocol_recovery.toml": "45474e00bc5aba39eb9c70489f858d2dd0859a59d7961669ce81723a86498f8b",
+    "docs/BAOSTOCK_PROTOCOL_RECOVERY.md": "7576d826f996d153c4562cfc144fcff915722deea1e111b9bb421f3995f5f7ec",
+    "docs/evidence/p4d-user-authorization.json": "7c0a027b9c293b76a7f7f67c14a6d17039c7cacdb5121535b4f4db8e2d8d5872",
+    "docs/reviews/p4b-merge.json": "87295b9435c27f076be1f38b49f0ff709cb8e40861bf07e5627bab69f19c3b36",
+    "docs/evidence/p4b-market-observation.json": "2d4d9ff1890e9df3de2203c349ee62ccac642a5cada2ba6eb164580e53d492ac",
+    "docs/reviews/p4b-review.json": "ac4942e976d778ed6df89e982d2703df6558932c5b611a82eb4a402e4b93c9f1",
+    "docs/reviews/p4b-release.json": "a4c261fe4b0fd5fd43a5c52223b1b84ece10c2ff4880edcd6d9abcd81dfade2d",
+    "requirements-baostock.lock": "cd6dc4771410af97e5dee2cee786936ba154aecc9d52194d9d3918a057d0e07a",
+    "config/p4b_sdk_manifest.json": "f4fa91e3cb84ca72e5ea106d131dba0550682c3c1f1e9cc28b2e7016ba15ea7f",
+    "templates/p4d_builder_prompt.md": "4d81745eed28fb425ece68e5602fe098883e57cb031bc31bf18da148dad25875",
+    "docs/reviews/p4d-builder-prompt.md": "0d0f39d9ced0bfa18294ff5e71f51895f48d9c822a2c02e495e0025eeb7a9202",
+}
+AUDIT_INPUTS = tuple(FROZEN_INPUT_HASHES)
 
 
 class Block(ValueError):
@@ -785,34 +699,27 @@ def string_list(value, label):
 
 def validate_contract(contract):
     pinned = {
-        "schema_version": 1, "package_id": "P4B", "stage_ids": [1, 2, 3, 4],
+        "schema_version": 1, "package_id": "P4D", "stage_ids": [1, 2, 3, 4],
         "branch": BRANCH, "baseline": BASELINE, "merge_tier": "D",
         "human_merge_required": True, "auto_merge_allowed": False,
         "max_repair_cycles": 1, "blueprint_review_required": True,
         "prompt_audit_required": True, "independent_review_required": True,
-        "snapshot_algorithm": ALGORITHM, "allowed_paths": list(ALLOWED),
-        "immutable_paths": list(IMMUTABLE), "attestation_paths": list(CURRENT_ATTESTATIONS),
-        "forbidden_prefixes": ["apps/", "src/", "deploy/", "data/", "runtime/", "secrets/"],
-        "required_reads": REQUIRED_READS, "required_validation": VALIDATION_COMMANDS,
-        "permissions": PERMISSIONS, "repository": REPOSITORY,
-        "dependency": dependency(), "next_gate": NEXT_GATE,
-        "limited_market_ingestion": LIMITED_MARKET_INGESTION,
+        "snapshot_algorithm": ALGORITHM, "mutable_paths": list(MUTABLE_PATHS),
+        "new_paths": list(NEW_PATHS), "required_reads": REQUIRED_READS,
+        "required_validation": VALIDATION_COMMANDS, "permissions": PERMISSIONS,
+        "next_gate": NEXT_GATE, "limited_protocol_recovery": LIMITED_PROTOCOL_RECOVERY,
     }
-    text_fields = ("title", "objective", "bootstrap_prompt", "rollback")
-    list_fields = ("deliverables", "negative_tests", "receipt_rules")
-    keys(contract, (*pinned, *text_fields, *list_fields), "contract")
+    fields = ("title", "objective", "immutable_rule", "diagnostic_validation", "rollback",
+              "review_flow", "implementation")
+    keys(contract, (*pinned, *fields), "contract")
     for key, value in pinned.items():
         exact(contract[key], value, f"contract.{key}")
-    for key in text_fields:
-        nonempty(contract[key], f"contract.{key}")
-    for key in list_fields:
-        string_list(contract[key], f"contract.{key}")
+    exact(probe_digest(contract), CONTRACT_DIGEST, "contract approved content")
     return contract
-
 
 def validate_state(state):
     pinned = {
-        "schema_version": 1, "active_package": "P4B", "active_contract": CONTRACT_PATH,
+"schema_version": 1, "active_package": "P4D", "active_contract": CONTRACT_PATH,
         "branch": BRANCH, "baseline": BASELINE,
         "milestones": {"research_mvp": "not_implemented",
                        "forward_observation": "not_started", "vps_release": "not_authorized"},
@@ -822,19 +729,21 @@ def validate_state(state):
                    "visibility": "public", "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                    "merge_status": "not_merged"},
         "receipts": CURRENT_RECEIPT_PATHS,
-        "next_gate": NEXT_GATE, "limited_market_ingestion": LIMITED_MARKET_INGESTION,
+"next_gate": NEXT_GATE, "limited_protocol_recovery": LIMITED_PROTOCOL_RECOVERY,
     }
     keys(state, (*pinned, "package_status", "builder_agents", "stage_registry", "last_updated",
-                 "live_integration"),
+"live_integration", "phase"),
          "state")
     for key, value in pinned.items():
         exact(state[key], value, f"state.{key}")
     require(type(state["package_status"]) is str and state["package_status"] in
             ("awaiting_implementation", "building", "implemented_unreleased"),
             "state: premature/unknown package status")
-    runtime_status = ("baostock_evidence_model_deferred"
+    require(type(state["phase"]) is str and state["phase"] in PHASE_RELEASE,
+            "state: invalid recovery phase")
+    runtime_status = ("protocol_recovery_implemented_model_deferred"
                       if state["package_status"] == "implemented_unreleased"
-                      else "baostock_planned_model_deferred")
+                      else "protocol_recovery_planned_model_deferred")
     exact(state["live_integration"], {
         "entry_status": "human_merged", "runtime_implementation": runtime_status,
         "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
@@ -988,15 +897,11 @@ def validate_live_prerequisites(text):
 
 def render_prompt(contract, template):
     validate_contract(contract)
-    try:
-        result = string.Template(template).substitute(
-            contract_json=json.dumps(contract, indent=2, sort_keys=True))
-    except (KeyError, ValueError) as error:
-        raise Block("builder template: invalid substitution") from error
-    require("$contract_json" in template or "${contract_json}" in template,
-            "builder template: missing contract substitution")
+    marker = "{{CONTRACT_SHA256}}"
+    require(template.count(marker) == 1, "builder template: missing contract substitution")
+    result = template.replace(marker, FROZEN_INPUT_HASHES[CONTRACT_PATH])
+    require("{{" not in result and "}}" not in result, "builder template: invalid substitution")
     return result.rstrip("\n") + "\n"
-
 
 def git_raw(root, *args, input_bytes=None):
     environment = os.environ.copy()
@@ -1050,16 +955,18 @@ def git_paths(output):
     return output[:-1].split("\0") if output else []
 
 
-def harmless_cache(name):
+def harmless_cache(name, *, allowed=None):
+    allowed = ALLOWED if allowed is None else allowed
     known = {
         (Path(path).parent / "__pycache__" / Path(path).stem).as_posix()
-        for path in ALLOWED if path.endswith(".py")
+        for path in allowed if path.endswith(".py")
     }
     match = re.fullmatch(r"(.+)\.cpython-312(?:\.opt-[12])?\.pyc", name)
     return bool(match and match.group(1) in known)
 
 
-def read_index(root):
+def read_index(root, *, allowed=None):
+    allowed = ALLOWED if allowed is None else allowed
     entries = {}
     for record in git_paths(git(root, "ls-files", "--stage", "-z")):
         metadata, separator, name = record.partition("\t")
@@ -1067,7 +974,7 @@ def read_index(root):
         require(separator and len(fields) == 3, "Git returned malformed index entry")
         mode, oid, stage = fields
         safe_path(root, name)
-        require(name in ALLOWED, f"out-of-scope path: {name}")
+        require(name in allowed, f"out-of-scope path: {name}")
         require(stage == "0" and name not in entries, f"index: unresolved entry: {name}")
         require(mode in ("100644", "100755"), f"index: non-regular file: {name}")
         require(re.fullmatch(r"[0-9a-f]{40}", oid), f"index: invalid blob ID: {name}")
@@ -1075,33 +982,37 @@ def read_index(root):
     return entries
 
 
-def inspect_git(root, *, ci=False, contents=None, complete_index=False):
+def inspect_git(root, *, ci=False, contents=None, complete_index=False,
+                baseline=None, branch=None, allowed=None, immutable_hashes=None):
+    baseline = BASELINE if baseline is None else baseline
+    branch = BRANCH if branch is None else branch
+    allowed = ALLOWED if allowed is None else allowed
     root = Path(root).resolve()
     require(Path(git(root, "rev-parse", "--show-toplevel").strip()).resolve() == root,
             "Git root differs from requested root")
-    exact(git(root, "rev-parse", "--verify", f"{BASELINE}^{{commit}}").strip(), BASELINE,
+    exact(git(root, "rev-parse", "--verify", f"{baseline}^{{commit}}").strip(), baseline,
           "Git baseline")
-    git(root, "merge-base", "--is-ancestor", BASELINE, "HEAD")
+    git(root, "merge-base", "--is-ancestor", baseline, "HEAD")
     if not ci:
-        exact(git(root, "symbolic-ref", "--quiet", "--short", "HEAD").strip(), BRANCH,
+        exact(git(root, "symbolic-ref", "--quiet", "--short", "HEAD").strip(), branch,
               "Git branch")
     diff_flags = ("--no-ext-diff", "--no-textconv", "--no-renames", "--name-only", "-z")
-    committed = git_paths(git(root, "diff", *diff_flags, BASELINE, "HEAD", "--"))
+    committed = git_paths(git(root, "diff", *diff_flags, baseline, "HEAD", "--"))
     staged = git_paths(git(root, "diff", *diff_flags, "--cached", "--ita-invisible-in-index", "HEAD", "--"))
     removed = git_paths(git(root, "diff", *diff_flags, "--cached", "--ita-invisible-in-index",
                            "--diff-filter=D", "HEAD", "--"))
     working = git_paths(git(root, "diff", *diff_flags, "--"))
-    entries = read_index(root)
+    entries = read_index(root, allowed=allowed)
     tracked = list(entries)
     head = git_paths(git(root, "ls-tree", "-r", "--name-only", "-z", "HEAD", "--"))
     untracked = git_paths(git(root, "ls-files", "--others", "--exclude-standard", "-z"))
     ignored = git_paths(git(root, "ls-files", "--others", "--ignored", "--exclude-standard", "-z"))
     for name in set(committed + staged + working + tracked + head + untracked + ignored):
         safe_path(root, name)
-        if name in ignored and harmless_cache(name):
+        if name in ignored and harmless_cache(name, allowed=allowed):
             continue
-        require(name in ALLOWED, f"out-of-scope path: {name}")
-    required = set(ALLOWED) if complete_index else set(head)
+        require(name in allowed, f"out-of-scope path: {name}")
+    required = set(allowed) if complete_index else set(head)
     missing = (required - entries.keys()) | set(removed)
     require(not missing, f"index: missing commit candidate files: {', '.join(sorted(missing))}")
     indexed_blobs = read_blobs(root, entries.values())
@@ -1117,18 +1028,23 @@ def inspect_git(root, *, ci=False, contents=None, complete_index=False):
             working_text = contents[name]
         require(indexed == working_text, f"index/worktree mismatch: {name}; stage the final working content")
     # Historical evidence is not just in scope: its exact baseline content is immutable.
-    baseline_entries = {}
-    for record in git_paths(git(root, "ls-tree", "-r", "-z", BASELINE, "--", *IMMUTABLE)):
-        metadata, separator, name = record.partition("\t")
-        fields = metadata.split()
-        require(separator and len(fields) == 3 and fields[1] == "blob",
-                "immutable baseline: malformed entry")
-        baseline_entries[name] = fields[2]
-    exact(sorted(baseline_entries), sorted(IMMUTABLE), "immutable baseline paths")
-    baseline_blobs = read_blobs(root, baseline_entries.values())
-    for name, oid in baseline_entries.items():
-        require(read_text(root, name) == baseline_blobs[oid],
-                f"immutable historical input changed: {name}")
+    if immutable_hashes is None:
+        baseline_entries = {}
+        for record in git_paths(git(root, "ls-tree", "-r", "-z", baseline, "--", *IMMUTABLE)):
+            metadata, separator, name = record.partition("\t")
+            fields = metadata.split()
+            require(separator and len(fields) == 3 and fields[1] == "blob",
+                    "immutable baseline: malformed entry")
+            baseline_entries[name] = fields[2]
+        exact(sorted(baseline_entries), sorted(IMMUTABLE), "immutable baseline paths")
+        baseline_blobs = read_blobs(root, baseline_entries.values())
+        for name, oid in baseline_entries.items():
+            require(read_text(root, name) == baseline_blobs[oid],
+                    f"immutable historical input changed: {name}")
+    else:
+        for name, digest in immutable_hashes.items():
+            require(name in allowed, f"immutable path outside scope: {name}")
+            exact(sha256(read_text(root, name)), digest, f"immutable historical input changed: {name}")
     # Git can omit an empty directory junction. Inspect links before descending,
     # excluding only Git's own metadata, which is not a construction input.
     directories = [root]
@@ -1203,53 +1119,26 @@ def validate_historical_preparation(text):
     return value
 
 
-def prior_merge_evidence():
-    return {
-        "schema_version": 1,
-        "role": "historical_merge_observation",
-        "observed_on": "2026-11-19",
-        "package_id": "P4M",
-        "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12",
-        "merge_commit": BASELINE,
-        "merged_at": "2026-11-19T04:03:58Z",
-        "merged_by": "kamrean",
-        "tested_head": "49e9488b1ab586c8bfd24df3654a4e49bd2ef38b",
-        "same_tree": "b047d1fb0fcb644cd5ea44545f464fcd896297d0",
-        "pr_ci_run": 44345530691,
-        "merge_ci_run": 44455715479,
-        "ci_status": "PASS",
-        "merge_status": "merged",
-        "pr_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44345530691",
-        "merge_ci_url": "https://github.com/kamrean/a-share-market-intelligence-public/actions/runs/44455715479",
-        "merge_ci_head": BASELINE,
-        "merge_ci_jobs": [
-            {
-                "platform": "ubuntu-24.04",
-                "status": "completed",
-                "conclusion": "success",
-                "completed_at": "2026-11-19T04:08:19Z",
-                "duration_seconds": 255,
-            },
-            {
-                "platform": "windows-2022",
-                "status": "completed",
-                "conclusion": "success",
-                "completed_at": "2026-11-19T04:26:03Z",
-                "duration_seconds": 1319,
-            },
-        ],
-        "prior_snapshot": "7bd48541f337c3aaa26a488d19cbd47935d84f6b4640bd3df861f13bb07f98c1",
-        "remote_release_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/12#issuecomment-6984949160",
-        "verification_basis": "Coordinator verified actual GitHub merge and exact-head PR/main CI. Independent merge reviewer 01a1f1fb-db53-7252-8f46-f0999a854c66 verified matching trees, snapshot, receipts, branch protection and passing check/prompt/bundle/gate with CI branch handling on clean merged main before P4B planning edits.",
-        "prior_gate_result": "LOCAL_READY_FOR_PR; governance-only, all historical operation gates closed",
-        "prior_scope": "P4M is offline supplied daily-market computation, not acquisition; authored input2/5 and live verification0/5 do not imply a new real observation or research run.",
-        "authority": "Evidence of prior human merge, not operational authorization. Current P4B authority comes only from its distinct protected user authorization, contract and exact-snapshot release.",
-    }
+def prior_merge_evidence(root=ROOT):
+    text = read_text(root, "docs/reviews/p4b-merge.json")
+    exact(sha256(text), FROZEN_INPUT_HASHES["docs/reviews/p4b-merge.json"],
+          "prior merge evidence frozen content")
+    return parse_json(text)
 
+
+def phase_attestations(phase):
+    require(type(phase) is str and phase in PHASE_RELEASE, "invalid recovery phase")
+    return CURRENT_ATTESTATIONS if phase == "diagnostic" else VERIFICATION_ATTESTATIONS
+
+
+def protected_paths(state):
+    validate_state(state)
+    return tuple(sorted(set(ALLOWED) - set(phase_attestations(state["phase"]))))
 
 def check(root=ROOT, *, ci=False, complete_index=False):
     root = Path(root).resolve()
-    contents = {name: read_text(root, name) for name in PROTECTED}
+    state = parse_json(read_text(root, "project-state/state.json"))
+    contents = {name: read_text(root, name) for name in protected_paths(state)}
     contract = validate_contract(tomllib.loads(contents[CONTRACT_PATH]))
     exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "policy")
     state = parse_json(contents["project-state/state.json"])
@@ -1257,8 +1146,7 @@ def check(root=ROOT, *, ci=False, complete_index=False):
     validate_live_prerequisites(contents[PREREQUISITE_PATH])
     validate_historical_probe(contents[SOURCE_PROBE_PATH])
     validate_historical_preparation(contents[PREPARATION_PATH])
-    prior = parse_json(contents["docs/reviews/p4m-merge.json"])
-    exact(prior, prior_merge_evidence(), "prior merge evidence")
+    prior_merge_evidence(root)
     exact(contents[PROMPT_PATH], render_prompt(contract, contents[TEMPLATE_PATH]), "builder prompt")
     validate_prerequisite(parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]]),
                           "blueprint_reviewer", AUDIT_INPUTS,
@@ -1273,7 +1161,7 @@ def check(root=ROOT, *, ci=False, complete_index=False):
         require(agent == agent.strip() and agent not in state["builder_agents"],
                 f"{role}: builder self-review")
         exact(agent, AUDIT_AGENT, f"{role}: approved independent audit agent")
-    for name in CURRENT_ATTESTATIONS:
+    for name in phase_attestations(state["phase"]):
         path = safe_path(root, name)
         if path.exists():
             contents[name] = read_text(root, name)
@@ -1284,9 +1172,14 @@ def check(root=ROOT, *, ci=False, complete_index=False):
 
 
 def snapshot(contents):
+    state = parse_json(contents["project-state/state.json"])
+    return snapshot_for_paths(contents, protected_paths(state))
+
+
+def snapshot_for_paths(contents, paths):
     aggregate = hashlib.sha256()
     hashes = {}
-    for name in PROTECTED:
+    for name in sorted(paths):
         content = contents[name].encode("utf-8")
         hashes[name] = hashlib.sha256(content).hexdigest()
         # Length framing makes even embedded NULs unambiguous; Git HEAD is not an input.
@@ -1296,12 +1189,14 @@ def snapshot(contents):
 
 
 def make_bundle(checked):
-    contract, _state, contents, changed = checked
+    contract, state, contents, changed = checked
+    validate_state(state)
     snapshot_id, hashes = snapshot(contents)
-    return {"schema_version": 1, "package_id": "P4B", "baseline": contract["baseline"],
+    return {"schema_version": 1, "package_id": "P4D", "phase": state["phase"],
+            "baseline": contract["baseline"],
             "branch": contract["branch"], "snapshot_id": snapshot_id, "hash_algorithm": ALGORITHM,
             "protected_file_hashes": hashes, "changed_paths": changed,
-            "attestation_paths": list(CURRENT_ATTESTATIONS), "scope_result": "PASS"}
+            "attestation_paths": list(phase_attestations(state["phase"])), "scope_result": "PASS"}
 
 
 def bundle(root=ROOT, *, ci=False):
@@ -1375,9 +1270,14 @@ def validate_preparation_record(value, snapshot_id, *, root=ROOT):
 
 
 def _validate_review_attestations(checked, current, *, paths, audit_path, next_gate,
-                                  release_fields=(), release_verdict=LOCAL_RELEASE, p4n_repair=False):
+                                  release_fields=(), release_verdict=LOCAL_RELEASE, p4n_repair=False,
+                                  allowed_paths=None, package_status="implemented_unreleased",
+                                  approval_values=None, repair_limit=1):
     contract, state, contents, _changed = checked
-    require(state["package_status"] == "implemented_unreleased", "gate: state is still building")
+    allowed = ALLOWED if allowed_paths is None else allowed_paths
+    approval_values = {} if approval_values is None else approval_values
+    require(type(repair_limit) is int and repair_limit in (1, 2), "review: invalid repair limit")
+    require(state["package_status"] == package_status, "gate: state is still building")
     receipts = []
     for name in paths:
         require(name in contents, f"missing required receipt: {name}")
@@ -1389,7 +1289,7 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
         if key != "changed_paths":
             exact(saved[key], value, f"bundle receipt.{key}")
     require(type(saved["changed_paths"]) is list, "bundle receipt.changed_paths: expected list")
-    require(all(type(name) is str and name in ALLOWED for name in saved["changed_paths"]),
+    require(all(type(name) is str and name in allowed for name in saved["changed_paths"]),
             "bundle receipt.changed_paths: out of scope")
     exact(saved["changed_paths"], sorted(set(saved["changed_paths"])), "bundle receipt.changed_paths")
     common = {"schema_version": 1, "snapshot_id": current["snapshot_id"]}
@@ -1398,10 +1298,11 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
                                     for command in contract["required_validation"]],
                        "python_version": "3.12.10", "remote_ci": "NOT_RUN_AT_SNAPSHOT"},
           "validation receipt")
-    keys(review, (*common, "role", "verdict", "agent_id", "read_only", "findings", "repair_cycles"),
+    keys(review, (*common, "role", "verdict", "agent_id", "read_only", "findings", "repair_cycles",
+                  *approval_values),
          "review receipt")
     for key, value in {**common, "role": "reviewer", "verdict": "PASS", "read_only": True,
-                       "findings": []}.items():
+                       "findings": [], **approval_values}.items():
         exact(review[key], value, f"review receipt.{key}")
     cycles = review["repair_cycles"]
     audit_cycles = parse_json(contents[audit_path])["repair_cycles"]
@@ -1420,15 +1321,15 @@ def _validate_review_attestations(checked, current, *, paths, audit_path, next_g
         exact(review["agent_id"], REPAIR_EXCEPTION["reviewer_agent"],
               "review receipt: same approved repair Reviewer")
     else:
-        require(type(audit_cycles) is int and type(cycles) is int and 0 <= audit_cycles <= cycles <= 1,
+        require(type(audit_cycles) is int and type(cycles) is int and 0 <= audit_cycles <= cycles <= repair_limit,
                 "review receipt: repair bound or reset")
     keys(release, (*common, "role", "verdict", "agent_id", "read_only", "remote_ci", "pr_url",
-                   "merge_status", "vps_sync", "next_gate", *release_fields), "release receipt")
+                   "merge_status", "vps_sync", "next_gate", *release_fields, *approval_values), "release receipt")
     for key, value in {**common, "role": "release_checker", "read_only": True,
                        "verdict": release_verdict,
                        "remote_ci": "NOT_RUN_AT_SNAPSHOT",
                        "pr_url": None, "merge_status": "not_merged", "vps_sync": "not_requested",
-                       "next_gate": next_gate}.items():
+                       "next_gate": next_gate, **approval_values}.items():
         exact(release[key], value, f"release receipt.{key}")
     for role, receipt in (("reviewer", review), ("release_checker", release)):
         nonempty(receipt["agent_id"], f"{role}.agent_id")
@@ -1485,8 +1386,8 @@ def _validate_market_bindings(checked, current):
         exact(binding.get("limited_market_ingestion"), LIMITED_MARKET_INGESTION,
               f"{label}.limited_market_ingestion")
     require("governance/policy.toml" in contents, "current approval: missing policy")
-    exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "current approval policy")
-    for name in CURRENT_ATTESTATIONS:
+    exact(tomllib.loads(contents["governance/policy.toml"]), MARKET_POLICY, "current approval policy")
+    for name in MARKET_ATTESTATIONS:
         require(name in contents, f"missing required receipt: {name}")
 
 
@@ -1522,8 +1423,7 @@ def validate_market_observation(value, snapshot_id, *, root=ROOT):
 
 
 def assert_market_journal_unconsumed(snapshot_id, *, root=ROOT):
-    result = _market_validation_call(root, "assert_journal_unconsumed", snapshot_id)
-    exact(result, None, "market: journal check return")
+    raise Block("P4D: historical market capability is closed; old journal access forbidden")
 
 
 def not_run_market_release(snapshot_id):
@@ -1537,30 +1437,30 @@ def validate_market_prerequisites(checked, current, *, root=ROOT):
     _validate_market_bindings(checked, current)
     contents = checked[2]
     _validate_review_attestations(
-        checked, current, paths=CURRENT_ATTESTATIONS[:4],
-        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        checked, current, paths=MARKET_ATTESTATIONS[:4],
+        audit_path=MARKET_RECEIPT_PATHS["prompt_audit"], next_gate=MARKET_NEXT_GATE,
         release_verdict=PRE_PROBE_RELEASE)
-    observation = parse_json(contents[CURRENT_RECEIPT_PATHS["observation"]])
+    observation = parse_json(contents[MARKET_RECEIPT_PATHS["observation"]])
     validate_market_observation(observation, current["snapshot_id"], root=root)
     exact(observation["status"], "NOT_RUN", "market gate: allowance already observed")
-    exact(parse_json(contents[CURRENT_RECEIPT_PATHS["release"]]),
+    exact(parse_json(contents[MARKET_RECEIPT_PATHS["release"]]),
           not_run_market_release(current["snapshot_id"]), "pending final release")
 
 
-def validate_current_attestations(checked, current, *, root=ROOT):
+def validate_historical_market_attestations(checked, current, *, root=ROOT):
     _validate_market_bindings(checked, current)
     contents = checked[2]
     pre_release = _validate_review_attestations(
-        checked, current, paths=CURRENT_ATTESTATIONS[:4],
-        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        checked, current, paths=MARKET_ATTESTATIONS[:4],
+        audit_path=MARKET_RECEIPT_PATHS["prompt_audit"], next_gate=MARKET_NEXT_GATE,
         release_verdict=PRE_PROBE_RELEASE)
-    observation = parse_json(contents[CURRENT_RECEIPT_PATHS["observation"]])
+    observation = parse_json(contents[MARKET_RECEIPT_PATHS["observation"]])
     validate_market_observation(observation, current["snapshot_id"], root=root)
     require(observation["status"] != "NOT_RUN", "final gate: terminal market observation required")
     release = _validate_review_attestations(
         checked, current,
-        paths=(*CURRENT_ATTESTATIONS[:3], CURRENT_RECEIPT_PATHS["release"]),
-        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        paths=(*MARKET_ATTESTATIONS[:3], MARKET_RECEIPT_PATHS["release"]),
+        audit_path=MARKET_RECEIPT_PATHS["prompt_audit"], next_gate=MARKET_NEXT_GATE,
         release_fields=("pre_probe_release_digest", "observation_digest"))
     exact(release["pre_probe_release_digest"], probe_digest(pre_release),
           "release receipt.pre_probe_release_digest")
@@ -1633,6 +1533,228 @@ def validate_attestations(checked, current, *, root=ROOT):
           "historical release receipt.preparation_digest")
 
 
+
+def _recovery_validation_call(root, function, *args):
+    root = Path(root).resolve()
+    package_path = safe_path(root, "market_intelligence/__init__.py")
+    module_path = safe_path(root, "market_intelligence/baostock_recovery.py")
+    namespace = "_p4d_recovery_validation_" + sha256(str(root))
+    require(not any(name == namespace or name.startswith(namespace + ".")
+                    for name in sys.modules), "recovery: recursive validation")
+    spec = importlib.util.spec_from_file_location(
+        namespace, package_path, submodule_search_locations=[str(package_path.parent)])
+    require(spec is not None and spec.loader is not None, "recovery: package unavailable")
+    package = importlib.util.module_from_spec(spec)
+    sys.modules[namespace] = package
+    try:
+        spec.loader.exec_module(package)
+        recovery = importlib.import_module(namespace + ".baostock_recovery")
+        exact(Path(recovery.__file__).resolve(), module_path.resolve(), "recovery module")
+        return getattr(recovery, function)(*args)
+    except (ValueError, ImportError, AttributeError, OSError, TypeError, RuntimeError):
+        raise Block("recovery: invalid record or unavailable safe phase validator") from None
+    finally:
+        for name in tuple(sys.modules):
+            if name == namespace or name.startswith(namespace + "."):
+                del sys.modules[name]
+
+
+def validate_recovery_receipt(value, snapshot_id, phase, *, root=ROOT):
+    validated = _recovery_validation_call(
+        root, "validate_recovery_receipt", value, snapshot_id, phase)
+    require(validated is value, "recovery: validator changed the result")
+
+
+def not_run_recovery_release(snapshot_id):
+    return {"schema_version": 1, "package_id": "P4D", "phase": "verification",
+            "snapshot_id": snapshot_id, "role": "release_checker", "verdict": "NOT_RUN",
+            "reason": "awaiting_terminal_observation_and_independent_release"}
+
+
+def _recovery_bindings(checked, current, phase):
+    contract, state, contents, _changed = checked
+    validate_contract(contract)
+    validate_state(state)
+    exact(state["phase"], phase, "recovery gate phase")
+    exact(tomllib.loads(contents["governance/policy.toml"]), POLICY, "recovery policy")
+    exact(parse_json(contents["project-state/state.json"]), state, "recovery state content")
+    expected = make_bundle(checked)
+    exact(current, expected, "recovery current bundle")
+    for role in ("blueprint_review", "prompt_audit"):
+        receipt = parse_json(contents[CURRENT_RECEIPT_PATHS[role]])
+        validate_prerequisite(receipt, "blueprint_reviewer" if role == "blueprint_review"
+                              else "prompt_auditor", AUDIT_INPUTS, contents)
+        require(receipt["agent_id"] not in state["builder_agents"], "entry: builder self-review")
+        exact(receipt["agent_id"], AUDIT_AGENT, "entry: independent audit agent")
+    entry = parse_json(contents[CURRENT_RECEIPT_PATHS["blueprint_review"]])
+    audit = parse_json(contents[CURRENT_RECEIPT_PATHS["prompt_audit"]])
+    require(entry["repair_cycles"] <= audit["repair_cycles"], "entry: repair bound or reset")
+    needed = DIAGNOSTIC_ATTESTATIONS if phase == "diagnostic" else CURRENT_ATTESTATIONS
+    for name in needed:
+        require(name in contents, f"missing required receipt: {name}")
+
+
+def _phase_review(checked, current, phase):
+    paths = DIAGNOSTIC_ATTESTATIONS[:4] if phase == "diagnostic" else VERIFICATION_ATTESTATIONS[:4]
+    return _validate_review_attestations(
+        checked, current, paths=paths, audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"],
+        next_gate=NEXT_GATE, release_verdict=PHASE_RELEASE[phase])
+
+
+def _terminal_receipt(checked, current, phase, *, root):
+    name = CURRENT_RECEIPT_PATHS["diagnostic" if phase == "diagnostic" else "observation"]
+    value = parse_json(checked[2][name])
+    validate_recovery_receipt(value, current["snapshot_id"], phase, root=root)
+    require(value["status"] != "NOT_RUN", "final gate: actual terminal recovery result required")
+    require_market_cleanup(value)
+    if phase == "diagnostic":
+        exact(value["status"], "RECORDED", "diagnostic: inconclusive result cannot authorize verification")
+    return value
+
+
+CHECKPOINT_FILE_BYTES = 1024 * 1024
+CHECKPOINT_TOTAL_BYTES = 2 * 1024 * 1024
+
+
+def _checkpoint_contents(contents, basis):
+    """Rebuild reviewed phase-A text without importing it or relying on Git history."""
+    commit = basis["checkpoint_commit"]
+    require(commit is None or (type(commit) is str and re.fullmatch(r"[0-9a-f]{40}", commit)),
+            "repair basis: checkpoint commit must be null or full provenance hash")
+    artifact_hashes = basis["checkpoint_artifact_hashes"]
+    keys(artifact_hashes, DIAGNOSTIC_ATTESTATIONS, "repair basis.checkpoint_artifact_hashes")
+    for name in DIAGNOSTIC_ATTESTATIONS:
+        exact(sha256(contents[name]), artifact_hashes[name], f"frozen diagnostic artifact: {name}")
+    saved = parse_json(contents[DIAGNOSTIC_ATTESTATIONS[0]])
+    require(type(saved) is dict, "repair basis: diagnostic bundle required")
+    hashes = saved.get("protected_file_hashes")
+    keys(hashes, PROTECTED, "repair basis: checkpoint protected hashes")
+    for name, digest in hashes.items():
+        require(type(digest) is str and re.fullmatch(r"[0-9a-f]{64}", digest),
+                f"repair basis: invalid checkpoint hash: {name}")
+    changed = {name for name in PROTECTED if sha256(contents[name]) != hashes[name]}
+    archived = basis["checkpoint_inputs"]
+    keys(archived, changed, "repair basis: checkpoint inputs")
+    total = 0
+    for name, text in archived.items():
+        require(type(text) is str and normalize_text(text) == text,
+                f"repair basis: checkpoint input must be LF text: {name}")
+        size = len(text.encode("utf-8"))
+        total += size
+        require(size <= CHECKPOINT_FILE_BYTES, "repair basis: checkpoint input exceeds per-file limit")
+        require(total <= CHECKPOINT_TOTAL_BYTES, "repair basis: checkpoint inputs exceed total limit")
+        scan_secrets(f"checkpoint:{name}", text)
+    frozen = {**contents, **archived}
+    for name in PROTECTED:
+        exact(sha256(frozen[name]), hashes[name], f"repair basis: checkpoint input hash: {name}")
+    for name in IMMUTABLE:
+        exact(frozen[name], contents[name], f"repair basis: immutable historical input: {name}")
+    return frozen
+
+
+def validate_repair_basis(checked, current, *, root=ROOT):
+    """Verify a self-contained phase-A snapshot, including after squash merge."""
+    contents = checked[2]
+    basis = parse_json(contents[REPAIR_BASIS_PATH])
+    fields = ("schema_version", "package_id", "status", "diagnostic_snapshot_id",
+              "diagnostic_digest", "checkpoint_commit", "checkpoint_artifact_hashes",
+              "checkpoint_inputs", "rationale")
+    keys(basis, fields, "repair basis")
+    for key, value in {"schema_version": 1, "package_id": "P4D", "status": "SUPPORTED"}.items():
+        exact(basis[key], value, f"repair basis.{key}")
+    frozen = _checkpoint_contents(contents, basis)
+    old_state = parse_json(frozen["project-state/state.json"])
+    old_contract = tomllib.loads(frozen[CONTRACT_PATH])
+    old_checked = (old_contract, old_state, frozen, [])
+    old_bundle = make_bundle(old_checked)
+    _recovery_bindings(old_checked, old_bundle, "diagnostic")
+    _phase_review(old_checked, old_bundle, "diagnostic")
+    diagnostic = _terminal_receipt(old_checked, old_bundle, "diagnostic", root=root)
+    exact(basis["diagnostic_snapshot_id"], old_bundle["snapshot_id"],
+          "repair basis.diagnostic_snapshot_id")
+    exact(basis["diagnostic_digest"], probe_digest(diagnostic), "repair basis.diagnostic_digest")
+    require(current["snapshot_id"] != old_bundle["snapshot_id"], "fresh verification snapshot required")
+    old_review = parse_json(frozen[CURRENT_RECEIPT_PATHS["diagnostic_review"]])
+    for role in ("blueprint_review", "prompt_audit"):
+        exact(contents[CURRENT_RECEIPT_PATHS[role]], frozen[CURRENT_RECEIPT_PATHS[role]],
+              "frozen entry receipt")
+    current_review = parse_json(contents[CURRENT_RECEIPT_PATHS["reviewer"]])
+    require(type(current_review.get("repair_cycles")) is int
+            and old_review["repair_cycles"] <= current_review["repair_cycles"] <= 1,
+            "verification review: global repair bound or reset")
+    # Only the supported transport repair can change existing product behavior.
+    repair_paths = {"market_intelligence/baostock_transport.py", "tests/product/test_baostock_transport.py"}
+    for name in ALLOWED:
+        if name.startswith(("market_intelligence/", "tests/product/")) and name not in repair_paths:
+            exact(contents[name], frozen[name], f"repair basis: unrelated product change: {name}")
+    rationale = basis["rationale"]
+    require(type(rationale) is list and 1 <= len(rationale) <= 16, "repair basis: rationale required")
+    located = set()
+    for item in rationale:
+        keys(item, ("path", "line_start", "line_end", "before_sha256", "after_sha256",
+                    "explanation"), "repair rationale")
+        path = item["path"]
+        require(type(path) is str and path in repair_paths, "repair rationale: unsupported path")
+        require(type(item["line_start"]) is int and type(item["line_end"]) is int
+                and 1 <= item["line_start"] <= item["line_end"] <= len(contents[path].splitlines()),
+                "repair rationale: invalid source location")
+        exact(item["before_sha256"], sha256(frozen[path]), "repair rationale.before_sha256")
+        exact(item["after_sha256"], sha256(contents[path]), "repair rationale.after_sha256")
+        require(item["before_sha256"] != item["after_sha256"], "repair rationale: no actual change")
+        nonempty(item["explanation"], "repair rationale.explanation")
+        require(len(item["explanation"]) <= 2000, "repair rationale: explanation too long")
+        scan_secrets("repair rationale", item["explanation"])
+        located.add(path)
+    changed = {name for name in repair_paths if contents[name] != frozen[name]}
+    exact(located, changed, "repair rationale: changed paths")
+    require("market_intelligence/baostock_transport.py" in changed, "supported transport repair required")
+    return diagnostic, basis
+
+
+def validate_recovery_prerequisites(checked, current, phase, *, root=ROOT):
+    _recovery_bindings(checked, current, phase)
+    _phase_review(checked, current, phase)
+    diagnostic_digest = None
+    if phase == "verification":
+        diagnostic, _basis = validate_repair_basis(checked, current, root=root)
+        diagnostic_digest = probe_digest(diagnostic)
+        exact(parse_json(checked[2][CURRENT_RECEIPT_PATHS["release"]]),
+              not_run_recovery_release(current["snapshot_id"]), "pending final recovery release")
+    name = CURRENT_RECEIPT_PATHS["diagnostic" if phase == "diagnostic" else "observation"]
+    record = parse_json(checked[2][name])
+    validate_recovery_receipt(record, current["snapshot_id"], phase, root=root)
+    exact(record["status"], "NOT_RUN", "recovery gate: phase already observed")
+    return diagnostic_digest
+
+
+def validate_current_attestations(checked, current, *, root=ROOT):
+    _recovery_bindings(checked, current, "verification")
+    pre_release = _phase_review(checked, current, "verification")
+    diagnostic, basis = validate_repair_basis(checked, current, root=root)
+    observation = _terminal_receipt(checked, current, "verification", root=root)
+    release = _validate_review_attestations(
+        checked, current, paths=(*VERIFICATION_ATTESTATIONS[:3], CURRENT_RECEIPT_PATHS["release"]),
+        audit_path=CURRENT_RECEIPT_PATHS["prompt_audit"], next_gate=NEXT_GATE,
+        release_fields=("diagnostic_digest", "repair_basis_digest",
+                        "pre_probe_release_digest", "observation_digest"))
+    for field, value in (("diagnostic_digest", diagnostic), ("repair_basis_digest", basis),
+                         ("pre_probe_release_digest", pre_release), ("observation_digest", observation)):
+        exact(release[field], probe_digest(value), f"final release.{field}")
+
+
+def recovery_gate(root=ROOT, phase="diagnostic", *, ci=False):
+    exact(ci, False, "recovery-gate: --ci is not runtime authorization")
+    phase_attestations(phase)
+    checked = check(root, complete_index=True)
+    current = make_bundle(checked)
+    digest = validate_recovery_prerequisites(checked, current, phase, root=root)
+    result = _recovery_validation_call(root, "assert_phase_available", phase,
+                                       current["snapshot_id"], digest)
+    exact(result, None, "recovery: phase availability return")
+    return {"package_id": "P4D", "phase": phase, "snapshot_id": current["snapshot_id"],
+            "verdict": PHASE_RELEASE[phase], "diagnostic_digest": digest}
+
+
 def gate(root=ROOT, *, ci=False):
     checked = check(root, ci=ci, complete_index=True)
     validate_current_attestations(checked, make_bundle(checked), root=root)
@@ -1640,26 +1762,19 @@ def gate(root=ROOT, *, ci=False):
 
 
 def market_gate(root=ROOT, *, ci=False):
-    exact(ci, False, "market-gate: --ci is not runtime authorization")
-    checked = check(root, complete_index=True)
-    current = make_bundle(checked)
-    validate_market_prerequisites(checked, current, root=root)
-    assert_market_journal_unconsumed(current["snapshot_id"], root=root)
-    return {"package_id": "P4B", "snapshot_id": current["snapshot_id"],
-            "verdict": PRE_PROBE_RELEASE,
-            "limited_market_ingestion": dict(LIMITED_MARKET_INGESTION)}
+    raise Block("P4D: historical market capability is closed; --ci is not runtime authorization")
 
 
 def nbs_gate(root=ROOT, *, ci=False):
-    raise Block("P4B: historical NBS ingestion capability is closed; no network request authorized")
+    raise Block("P4D: historical NBS ingestion capability is closed; no network request authorized")
 
 
 def probe_gate(root=ROOT, *, ci=False):
-    raise Block("P4B: historical P4S probe capability is closed; no network request authorized")
+    raise Block("P4D: historical P4S probe capability is closed; no network request authorized")
 
 
 def preparation_gate(root=ROOT, *, ci=False):
-    raise Block("P4B: historical P4E preparation capability is closed; no runtime-store access authorized")
+    raise Block("P4D: historical P4E preparation capability is closed; no runtime-store access authorized")
 
 
 def main(argv=None, *, root=ROOT):
@@ -1671,7 +1786,8 @@ def main(argv=None, *, root=ROOT):
                                help="skip local branch identity only; retain baseline/scope/permission checks")
         if command == "prompt":
             subparser.add_argument("--verify", action="store_true")
-    for command in ("probe-gate", "preparation-gate", "nbs-gate", "market-gate"):
+    for command in ("probe-gate", "preparation-gate", "nbs-gate", "market-gate",
+                    "diagnostic-gate", "verification-gate"):
         subparsers.add_parser(command).add_argument(
             "--ci", action="store_true", help="capability remains closed even in CI")
     args = parser.parse_args(argv)
@@ -1694,6 +1810,8 @@ def main(argv=None, *, root=ROOT):
             print(probe_gate(root, ci=args.ci))
         elif args.command == "preparation-gate":
             print(preparation_gate(root, ci=args.ci))
+        elif args.command in ("diagnostic-gate", "verification-gate"):
+            print(json.dumps(recovery_gate(root, args.command.split("-")[0], ci=args.ci), sort_keys=True))
         elif args.command == "market-gate":
             print(json.dumps(market_gate(root, ci=args.ci), sort_keys=True))
         elif args.command == "nbs-gate":

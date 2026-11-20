@@ -55,6 +55,70 @@ _LOCK = threading.Lock()
 _monotonic = time.monotonic
 _create_socket = socket.socket
 
+PROTOCOL_POINTS = frozenset({
+    "response_utf8", "header_structure", "response_version", "response_type",
+    "length_syntax", "length_limit", "terminator_position", "frame_minimum_length",
+    "compressed_length", "plain_crc_syntax", "plain_length", "plain_crc",
+}) | frozenset("transport_" + reason for reason in REASONS)
+
+
+def empty_diagnostic():
+    return {
+        "schema_version": 1, "request_index": 0, "method": None,
+        "first_failure_point": None, "frame_bytes": 0, "header_bytes": 0,
+        "header_structure": "not_reached", "version": "unavailable",
+        "response_type": "unavailable", "declared_length_syntax": "not_reached",
+        "declared_length": None, "terminator": "not_seen", "utf8": "not_reached",
+        "crc_syntax": "not_reached", "crc_match": "not_reached",
+        "checksum_characters": None, "body_bytes": None, "body_characters": None,
+        "length_bytes_match": "not_reached", "length_characters_match": "not_reached",
+    }
+
+
+def _diagnose_frame(state):
+    # Observe bounded structure only. This never changes the accepting parser.
+    d = state.diagnostic
+    frame = bytes(state.plain_frame)
+    d.update(frame_bytes=state.frame_size, header_bytes=min(state.frame_size, 21))
+    position = frame.find(TERMINATOR)
+    d["terminator"] = ("not_seen" if position < 0 else "at_end"
+                       if position == len(frame) - len(TERMINATOR) else "nonterminal")
+    if len(frame) >= 21:
+        parts = frame[:21].split(b"\x01")
+        d["header_structure"] = "pass" if len(parts) == 3 else "fail"
+        if len(parts) == 3:
+            d["version"] = "expected" if parts[0] == VERSION.encode() else "other"
+            d["response_type"] = ("expected" if parts[1] == state.response_type.encode()
+                                  else "exception_04" if parts[1] == b"04" else "other")
+            valid = len(parts[2]) == 10 and parts[2].isdigit()
+            d["declared_length_syntax"] = "pass" if valid else "fail"
+            d["declared_length"] = int(parts[2]) if valid else None
+    try:
+        decoder = codecs.getincrementaldecoder("utf-8")()
+        decoder.decode(frame, final=d["terminator"] == "at_end")
+        d["utf8"] = "pass" if d["terminator"] == "at_end" else "indeterminate"
+    except UnicodeDecodeError:
+        d["utf8"] = "fail"
+    if d["terminator"] != "at_end":
+        return
+    head_body, separator, checksum = frame[:-len(TERMINATOR)].rpartition(b"\x01")
+    d["checksum_characters"] = len(checksum)
+    valid = bool(separator) and len(head_body) >= 21 and 1 <= len(checksum) <= 10 and checksum.isdigit()
+    d["crc_syntax"] = "pass" if valid else "fail"
+    if not valid:
+        return
+    d["crc_match"] = "pass" if checksum == str(zlib.crc32(head_body)).encode("ascii") else "fail"
+    body = head_body[21:]
+    d["body_bytes"] = len(body)
+    try:
+        d["body_characters"] = len(body.decode("utf-8"))
+    except UnicodeDecodeError:
+        pass
+    for field, count in (("length_bytes_match", d["body_bytes"]),
+                         ("length_characters_match", d["body_characters"])):
+        if d["declared_length"] is not None and count is not None:
+            d[field] = "pass" if d["declared_length"] == count else "fail"
+
 
 def _now():
     return datetime.now(timezone.utc)
@@ -329,8 +393,11 @@ def _resolve_ipv4(timeout):
 
 
 class _Session:
-    def __init__(self, budget):
+    def __init__(self, budget, maximum_requests=MAX_REQUESTS):
         self.budget = budget
+        self.maximum_requests = maximum_requests
+        self.diagnostic = empty_diagnostic()
+        self.first_failure = None
         self.reason = None
         self.requests = self.wire = self.decoded = 0
         self.hash = hashlib.sha256()
@@ -338,7 +405,10 @@ class _Session:
         self.index = 0
         self.responses = []
 
-    def fail(self, reason):
+    def fail(self, reason, point=None):
+        if self.first_failure is None:
+            self.diagnostic["first_failure_point"] = point or "transport_" + reason
+            self.first_failure = dict(self.diagnostic)
         if self.reason is None:
             self.reason = reason
         raise _Fault(self.reason)
@@ -367,6 +437,8 @@ class _Session:
         self.first_seen = self.completed = None
         self.utf8 = codecs.getincrementaldecoder("utf-8")()
         self.plain_frame = bytearray()
+        self.diagnostic = empty_diagnostic()
+        self.diagnostic.update(request_index=self.index, method=method)
 
     def dispose(self):
         for name in ("header", "tail", "first_seen", "completed", "utf8", "plain_frame"):
@@ -436,7 +508,7 @@ class _BoundedSocket:
     def send(self, payload):
         state = self.state
         state.check()
-        if not self.connected or self.closed or state.sent or state.requests >= MAX_REQUESTS:
+        if not self.connected or self.closed or state.sent or state.requests >= state.maximum_requests:
             state.fail("protocol")
         if type(payload) is not bytes or not 21 <= len(payload) <= 4096:
             state.fail("protocol")
@@ -490,36 +562,41 @@ class _BoundedSocket:
             state.first_seen = _stamp(state.budget.last_wall)
         if state.response_type != "96":
             state.plain_frame.extend(chunk)
+            _diagnose_frame(state)
             try:
                 state.utf8.decode(chunk, final=False)
             except UnicodeDecodeError:
-                state.fail("protocol")
+                state.fail("protocol", "response_utf8")
         if len(state.header) < 21:
             state.header += chunk[:21 - len(state.header)]
             if len(state.header) == 21:
                 pieces = state.header.split(b"\x01")
-                if (len(pieces) != 3 or pieces[0] != VERSION.encode()
-                        or pieces[1] != state.response_type.encode()
-                        or len(pieces[2]) != 10 or not pieces[2].isdigit()):
-                    state.fail("protocol")
+                if len(pieces) != 3:
+                    state.fail("protocol", "header_structure")
+                if pieces[0] != VERSION.encode():
+                    state.fail("protocol", "response_version")
+                if pieces[1] != state.response_type.encode():
+                    state.fail("protocol", "response_type")
+                if len(pieces[2]) != 10 or not pieces[2].isdigit():
+                    state.fail("protocol", "length_syntax")
                 state.body_length = int(pieces[2])
                 if state.body_length > MAX_FRAME - 21:
-                    state.fail("frame_limit")
+                    state.fail("frame_limit", "length_limit")
         end_check = state.tail + chunk
         position = end_check.find(TERMINATOR)
         if position >= 0:
             if position != len(end_check) - len(TERMINATOR) or state.body_length is None:
-                state.fail("protocol")
+                state.fail("protocol", "terminator_position")
             if state.frame_size < 21 + state.body_length + len(TERMINATOR):
-                state.fail("protocol")
+                state.fail("protocol", "frame_minimum_length")
             if state.response_type == "96":
                 if state.frame_size != 21 + state.body_length + len(TERMINATOR):
-                    state.fail("protocol")
+                    state.fail("protocol", "compressed_length")
             else:
                 try:
                     state.utf8.decode(b"", final=True)
                 except UnicodeDecodeError:
-                    state.fail("protocol")
+                    state.fail("protocol", "response_utf8")
                 _validate_plain_frame(state)
                 state.plain_frame.clear()
                 count = state.frame_size - 21
@@ -587,15 +664,16 @@ def _validate_plain_frame(state):
     head_body, separator, checksum = frame[:-len(TERMINATOR)].rpartition(b"\x01")
     if (not separator or len(head_body) < 21 or not 1 <= len(checksum) <= 10
             or not checksum.isdigit()):
-        state.fail("protocol")
+        state.fail("protocol", "plain_crc_syntax")
     body = head_body[21:]
     try:
         characters = len(body.decode("utf-8"))
     except UnicodeDecodeError:
-        state.fail("protocol")
-    if (state.body_length not in {len(body), characters}
-            or checksum != str(zlib.crc32(head_body)).encode("ascii")):
-        state.fail("protocol")
+        state.fail("protocol", "response_utf8")
+    if state.body_length not in {len(body), characters}:
+        state.fail("protocol", "plain_length")
+    if checksum != str(zlib.crc32(head_body)).encode("ascii"):
+        state.fail("protocol", "plain_crc")
 
 
 def _unique_json_object(pairs):
@@ -723,13 +801,24 @@ def _metadata(view):
 
 
 def run_once(*, accept_response):
+    return _run(accept_response=accept_response, mode="legacy")[0]
+
+
+def run_recovery(*, phase, accept_response):
+    if phase not in {"diagnostic", "verification"}:
+        raise ValueError("invalid_recovery_phase")
+    return _run(accept_response=accept_response, mode=phase)
+
+
+def _run(*, accept_response, mode):
     """Run after the caller's durable reservation and exact-snapshot release gate.
 
 An attempted protocol request is counted before its first OS send, even if that
 send fails ambiguously. Short-write completions are not additional requests.
 """
     budget = _Budget()
-    state, loaded = _Session(budget), _SDK()
+    maximum_requests = {"legacy": MAX_REQUESTS, "diagnostic": 1, "verification": 7}[mode]
+    state, loaded = _Session(budget, maximum_requests), _SDK()
     start = end = None
     reason = "internal_error"
     acquired = _LOCK.acquire(blocking=False)
@@ -762,6 +851,8 @@ send fails ambiguously. Short-write completions are not additional requests.
                 ("query_history_k_data_plus", SYMBOLS[1], "95", "96"),
                 ("logout", None, "02", "03"),
             )
+            if mode == "diagnostic":
+                steps = steps[:1]
             for method, symbol, request_type, response_type in steps:
                 state.begin(method, symbol, request_type, response_type)
                 if method == "login":
@@ -800,6 +891,10 @@ send fails ambiguously. Short-write completions are not additional requests.
     except Exception:
         reason = state.reason or "protocol"
     finally:
+        # Direct SDK exceptions must be latched before cleanup can fail too.
+        if reason != "complete" and state.first_failure is None:
+            state.diagnostic["first_failure_point"] = "transport_" + reason
+            state.first_failure = dict(state.diagnostic)
         result = view = sdk = accepted = None
         if state.socket is not None:
             try:
@@ -808,6 +903,9 @@ send fails ambiguously. Short-write completions are not additional requests.
                 reason = state.reason or "cleanup"
             closed = state.socket.closed
         restored = loaded.close()
+        diagnostic = dict(state.first_failure or state.diagnostic)
+        if reason != "complete" and diagnostic["first_failure_point"] is None:
+            diagnostic["first_failure_point"] = "transport_" + reason
         state.dispose()
         disposed = (state.socket is None and state.header is None and state.tail is None
                     and state.utf8 is None and state.plain_frame is None)
@@ -820,9 +918,12 @@ send fails ambiguously. Short-write completions are not additional requests.
         except _Fault as exc:
             if reason == "complete":
                 reason = exc.reason
+        if reason != "complete" and diagnostic["first_failure_point"] is None:
+            diagnostic["first_failure_point"] = "transport_" + reason
+        diagnostic["frame_bytes"] = getattr(state, "frame_size", 0)
     return TransportReceipt(
         "COMPLETE" if reason == "complete" else "FAILED", reason,
         _stamp(budget.started), _stamp(budget.last_wall), start, end, state.requests,
         state.wire, state.decoded, state.hash.hexdigest(), tuple(state.responses),
         closed, restored, disposed,
-    )
+    ), diagnostic

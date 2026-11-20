@@ -1,0 +1,55 @@
+{
+  "observation": {
+    "allowance_consumed": true,
+    "connections_closed": true,
+    "dispatch_attempts": 1,
+    "finished_at": "2026-11-19T16:23:52.833280Z",
+    "live_verified_benchmark_count": 0,
+    "local_error": null,
+    "normal_composition": "BLOCKED_SOURCE_RIGHTS",
+    "outcome": "FAILED",
+    "payload_references_discarded": true,
+    "payloads_persisted": false,
+    "reserved_requests": 3,
+    "results": [
+      {
+        "body_bytes": null,
+        "error": "content_type",
+        "finished_at": "2026-11-19T16:23:52.825870Z",
+        "http_bytes": null,
+        "parse": null,
+        "replay_verified": false,
+        "response_sha256": null,
+        "retrieved_at": null,
+        "started_at": "2026-11-19T16:23:52.464997Z",
+        "status": "FAILED",
+        "symbol": "sh000001"
+      }
+    ],
+    "run_id": "7a2fdc65a1554dd79e911eb78542a08d",
+    "started_at": "2026-11-19T16:23:45.305908Z",
+    "upstream_rights": "unknown",
+    "window": {
+      "as_of": "2026-11-19T16:23:45.305908Z",
+      "calendar_version": "sse-szse-2026-holiday-notices",
+      "end_date": "2026-11-19",
+      "expected_sessions": [
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19"
+      ],
+      "start_date": "2026-11-06"
+    }
+  },
+  "package_id": "P4T",
+  "schema_version": 1,
+  "snapshot_id": "9b3f1d2c71431bcd3c794657f8bd9b8276ba38802010276e3513f6f610da774b",
+  "status": "RECORDED"
+}

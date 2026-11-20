@@ -1,44 +1,49 @@
 # Construction Entrypoint
 
-Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml,
-contracts/p4b_baostock_live_evidence.toml, docs/BAOSTOCK_LIVE_EVIDENCE.md,
-docs/evidence/p4b-user-authorization.json, requirements-baostock.lock,
-config/p4b_sdk_manifest.json, docs/reviews/p4m-merge.json and the contract's
-named prerequisites. Blueprint stays v1; never access archived/private projects.
+## Active P4T Entry
 
-## Current Package
+Use only kamrean/a-share-market-intelligence-public and the active P4T contract:
+contracts/p4t_tencent_daily_index.toml. Read AGENTS.md, Blueprint v1, canonical
+state/policy and the contract's named inputs. No archived/private project access.
+Main is PR13; later P4D/final-connection checkpoints are local, not merged.
 
-P4M PR12 is human-merged. P4B groups pinned optional SDK dependencies, bounded
-two-index acquisition, existing daily computation, ephemeral replay and truthful
-test/disposal evidence. The user authorized one anonymous session after review
-and release, at most12 protocol requests, no retry, and results-only retention.
-Market payloads/intermediates must never reach disk/stdout/Git and are discarded
-after testing. Keep the durable sanitized quota/result journal. Unencrypted TCP
-is explicitly unauthenticated. General permissions and all historical probe
-gates remain closed. No model/Telegram/trading/scheduler/VPS or shutdown.
+One medium work package covers source verification, Tencent adapter integration,
+calendar freshness and duplicate tests, source-policy BLOCK preservation, bounded
+technical acquisition and review/PR/CI. Unknown rights are not legal permission.
+Actual entry/Prompt PASS must accept the exact limited test exception before
+implementation; fresh independent Reviewer and separate Release precede requests.
+All old quotas/gates remain closed. Payloads stay in RAM; only sanitized results
+persist. Use the active checker tools/governance_p4t.py, not a historical PASS.
 
-## Work Sequence
+Sequence: planning audit -> implementation -> full offline validation -> frozen
+review -> separate pre-probe release -> one bounded attempt -> final Release ->
+named commit/push/PR -> exact-head offline CI -> independent remote Release ->
+AWAITING_HUMAN_MERGE. Failure is recorded, never retried or hidden. Report previous,
+current and remaining progress plus actual latestness, duplicates and cleanup.
 
-1. Verify clean main, PR12 human merge and successful exact-head PR/main CI.
-2. Freeze planning, user authorization and SDK lock/manifest. Actual independent
-   entrypoint and Prompt Auditor PASS precede product/checker implementation.
-3. Disjoint Builders implement only new product/test files. Keep688 old product
-   cases/modules/fixtures byte-identical and all160 governance protections.
-4. Validate offline, including authored wire responses through pinned SDK;
-   full suites, dependency checks, scope/prompt/bundle/diff. Freeze code/state/log.
-5. Independent Reviewer, then separate exact-snapshot pre-probe Release and
-   market gate. One R0/R1 total; unknown/R2+ or second BLOCK escalates. Never
-   inherit old repair exceptions or probe allowances.
-6. Perform the single authorized bounded session. Failures/unknown/interrupted
-   outcomes consume it. Compose and verify in memory, discard all payloads,
-   inspect cleanup evidence, and record only actual sanitized terminal results.
-7. Independent final Release, commit/push/one PR, exact-head Ubuntu/Windows CI
-   and remote Release. Stop AWAITING_HUMAN_MERGE. Never merge or bypass.
+## Historical P4D Entry (Closed)
 
-## Next Gate
+Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml
+and contracts/p4d_protocol_recovery.toml with its named required inputs.
+Active repository: kamrean/a-share-market-intelligence-public. No archived or
+private project access. PR13 merged at3cceca6e1534484b9001db16644a98b7b068897b;
+PR and merged-main Ubuntu/Windows CI passed. Its failed login is not a data PASS.
 
-Human merge after exact-head CI and independent remote release; resolve remaining anonymous sources and genuine model/report/private-delivery acceptance. The one-shot market allowance is consumed after any reserved attempt and never authorizes retries, scheduling or VPS.
-Observed acquisition/input coverage is separate from authenticated data, accepted
-five-index coverage, genuine live research and MVP completion. Keep gaps explicit.
-Final report always includes prior completed, this-package completed and remaining
-work, as well as branch/commit/PR/audits/validation/CI/merge/VPS/next gate.
+P4D combines diagnosis, supported repair and one verification in one human-merged
+PR. Use the new explicit two-stage authorization, never the consumed P4B quota.
+Keep payloads in memory only and retain the sanitized results/quota records.
+
+Sequence: planning and independent entry/Prompt Auditor; implementation and
+offline validation; snapshot-bound independent Reviewer and separate Release;
+one login diagnostic; supported in-scope repair and frozen diagnostic evidence;
+renewed validation/Reviewer/Release; one two-index verification; final Release,
+commit/push/PR/exact-head CI and remote Release; AWAITING_HUMAN_MERGE.
+
+The contract defines exact paths, two-phase gates, preservation and repair
+limits. Do not duplicate it in another long handoff. An inconclusive diagnosis
+stops the second dispatch. All other runtime and historical probe gates remain
+closed; no automatic retries, merge, bypass, model, Telegram, VPS or shutdown.
+
+Report prior/current/remaining work; exact local test results and test scope;
+actual observed dates, latestness, duplicates, disposal, source/MVP gaps;
+branch/commit/PR/audits/CI/human-merge status and next gate.

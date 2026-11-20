@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "package_id": "P4D",
+  "source": "explicit_user_reply_in_active_conversation",
+  "observed_on": "2026-11-19",
+  "question_id": "call_8c131907778c47659a8f121ea1589e97",
+  "question": "是否授权本工作包最多两次新的 BaoStock 只读会话：一次仅匿名登录、收集不含原文的协议诊断；修复并重新独立审核后，一次两指数完整验证？合计最多 9 条协议请求，每阶段不自动重试，零付费、免注册、免个人密钥；数据仅在内存处理，结束后只留脱敏结果。旧测试日志不删除、不重置；模型、Telegram、交易和 VPS 继续关闭。未获授权前只进行离线排查与方案准备。",
+  "answer": "授权上述两阶段限量测试",
+  "maximum_sessions": 2,
+  "maximum_total_requests": 9,
+  "retries": 0,
+  "raw_payload_retention": false,
+  "old_journal_mutation": false,
+  "general_permissions_expanded": false,
+  "review_and_release_required": true
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "operation_id": "p4d-final-connection-20261119",
+  "snapshot_id": "b74bcd67accad2984612a56ed9562ad550a73efd35d685ff93ce7a722a686518",
+  "status": "FAILED_SOURCE_PLAN_SWITCH",
+  "source_decision": "BaoStock retired from the active candidate plan under the user's explicit failure condition",
+  "effect": "planning_only; existing product source registry and permissions remain unchanged and blocked",
+  "interpretation": "A connection returned an 88-byte frame; strict login validation rejected response_version. This is not a total connectivity outage, a provider defect diagnosis, a successful login, or market-data acceptance.",
+  "request_count": 1,
+  "additional_requests_allowed": 0,
+  "phase_b": "NOT_RUN_NOT_AUTHORIZED",
+  "protocol_repair": "NOT_AUTHORIZED",
+  "post_result_release_checker": {
+    "agent_id": "01a1f31e-108d-7603-959f-604c54e690ea",
+    "read_only": true,
+    "result": "CONFIRMED_FAILED_RETIRE_CANDIDATE_NO_PR_RELEASE"
+  },
+  "local_validation": {
+    "operator_tests": 18,
+    "passed": 18,
+    "skipped": 0,
+    "seconds": 19.407,
+    "pip_check": "PASS",
+    "scope_check": "PASS",
+    "patch_check": "PASS",
+    "development_history": "The initial16-case suite passed. Adding two quota/revocation cases exposed SQLite handle cleanup errors in test fixtures; fixtures were closed explicitly and all18 passed. Only the two named failed temporary fixtures were removed. No actual diagnostic allowance was consumed by tests.",
+    "historical_only": "Previous197 governance /854 product results were not rerun or claimed as new; old product, checker and test files remain unchanged."
+  },
+  "real_market_tests": {
+    "acquired_market_rows": 0,
+    "freshness": "NOT_EVALUATED_NO_MARKET_QUERY",
+    "deduplication": "NOT_EVALUATED_NO_MARKET_ROWS",
+    "live_verified_benchmark_count": 0,
+    "target_benchmark_count": 5
+  },
+  "cleanup": {
+    "transport_socket_closed": true,
+    "sdk_bindings_restored": true,
+    "transport_payloads_disposed": true,
+    "payload_persisted": false,
+    "old_journal_hashes_unchanged": true
+  },
+  "replacement_research": {
+    "status": "DOCUMENTATION_ONLY_UNVERIFIED",
+    "source_requests": 0,
+    "sdk_installed": false,
+    "credential_or_registration_used": false,
+    "preferred_candidate": {
+      "provider": "Tencent Finance",
+      "adapter_candidate": "AKShare index_zh_daily_tx",
+      "basis": "Maintainer documentation lists symbol and date-range inputs plus daily OHLC, volume and amount. These fit the bounded daily-market shape; this is an engineering selection inference, not observed access or rights."
+    },
+    "backup_candidate": {
+      "provider": "Eastmoney",
+      "adapter_candidate": "AKShare index_zh_daily_em",
+      "basis": "Maintainer documentation lists date-range inputs and daily OHLC, volume and amount; actual access, units and conditions still need verification."
+    },
+    "not_selected_now": "Sina index_zh_daily_sina documents full-history output rather than bounded date inputs; avoid making full-history acquisition the first replacement.",
+    "constraints": [
+      "Only zero-paid, anonymous, no-personal-key access may qualify.",
+      "AKShare is an adapter library, not the underlying data owner or permission grant.",
+      "The maintainer describes academic-research use and unstable/removable interfaces; intended usage and upstream provider terms require review.",
+      "Pin a tested package/API version: current documentation differs from older renamed interface names.",
+      "Verify actual request counts, endpoint/TLS, units, session dates, completeness and duplicate rejection before integrating.",
+      "KOSPI and SP500 remain unresolved; do not infer five-index coverage from mainland API documentation."
+    ],
+    "sources": [
+      {
+        "url": "https://akshare.akfamily.xyz/data/index/index.html",
+        "sections": [
+          "History - Tencent / index_zh_daily_tx",
+          "History - Eastmoney / index_zh_daily_em",
+          "History - Sina / index_zh_daily_sina"
+        ],
+        "observed_on": "2026-11-19"
+      },
+      {
+        "url": "https://github.com/akfamily/akshare/blob/main/README.md",
+        "sections": [
+          "Interface naming and upgrading",
+          "Disclaimer"
+        ],
+        "observed_on": "2026-11-19"
+      }
+    ]
+  },
+  "publication": {
+    "pr": "NOT_CREATED",
+    "remote_ci": "NOT_RUN",
+    "merge": "NOT_MERGED",
+    "vps_sync": "NOT_REQUESTED",
+    "checkpoint": "local_only"
+  },
+  "next_gate": "One reviewed replacement-source integration package must reconcile construction entry/state/policy/checkers/CI, audit source conditions and bounded adapters, then obtain explicit limited-probe release before real requests. Preserve all BaoStock failure evidence. No automatic third diagnosis or alternate-source request."
+}

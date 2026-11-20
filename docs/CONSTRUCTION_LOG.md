@@ -1716,3 +1716,210 @@ This protected log and implementation are frozen for complete revalidation and
 the same independent Reviewer's single re-review. Actual final counts/verdicts
 belong in the current attestations. No pre-probe release is anticipated. Another
 BLOCK requires escalation; no second repair cycle or source retry is granted.
+
+## P4D: Bounded Protocol Recovery
+
+PR13 was human-merged at3cceca6e1534484b9001db16644a98b7b068897b. Both PR and
+merged-main platform jobs passed. Clean-main scope and release gates passed
+before P4D planning. The actual P4B observation failed after one request and88
+received bytes; no validated response or composition was produced. Payloads
+were disposed and its allowance remains consumed. This is not source readiness.
+
+The user approved a hybrid workflow with less repetitive dispatch/documentation
+and explicitly granted two NEW sessions: login-only diagnosis, then a supported
+repair plus renewed independent review/release before two-index verification.
+Total ceiling9, planned1+7, no retry or automatic transition, results only.
+The old journal, original BLOCK/repair history and all historic receipts remain
+unchanged. No model, Telegram, trading, deployment, VPS or shutdown is authorized.
+
+Read-only analyst01a1f31e-108d-7603-959f-604c54e690ea confirmed that SDK request
+formatting and authored frames do not prove the server's plain-response CRC,
+length or version conventions. Old counters cannot identify the rejection point.
+No new source request has occurred. The contract freezes a closed diagnostic
+schema and two independent network checkpoints in one medium work package.
+Entry/Prompt Auditor review is pending; no product implementation is claimed.
+
+### P4D Entry PASS and Diagnostic Implementation
+
+Independent read-only agent01a1f31e-108d-7603-959f-604c54e690ea returned actual
+entrypoint PASS and Prompt Auditor PASS with no findings and15 LF-normalized
+planning hashes. The state was read but remains lifecycle-writable and will be
+bound by each implementation snapshot. The coordinator recorded both actual
+verdicts. These are not network-release approvals.
+
+The coordinator owns transport/controller/tests. Governance Builder
+01a1f32f-752e-7d53-a38f-ff19b0c23586 owns only checker, governance tests and CI.
+The original72 transport cases passed before changes. Diagnostic instrumentation
+then passed83/83 cases, including11 new cases, in33.366seconds. It retains all
+acceptance rules and emits only closed enums, counts and booleans; login-only
+mode sends no logout or subsequent query. No raw version/body/error is retained.
+
+The new controller reuses the existing guarded Store and memory composition.
+Phase/run/lease/request reservation is one transaction before dispatch;
+settlement/result/run closeout is one transaction after validation. Failure or
+interruption consumes the phase. Wrong, missing, successful-but-unexplained or
+inconclusive diagnostic evidence cannot authorize a speculative second probe.
+Old P4B globals, journal and historical receipt schemas remain unchanged.
+
+The initial24 controller cases passed in9.240seconds. Five additional negative
+cases cover typed reservations, duplicate JSON keys, inconclusive diagnostics,
+absent reset/retry options and a raced second reservation. Actual final results
+will be recorded after full validation on the frozen implementation. All current
+attestations are explicit NOT_RUN placeholders until real role results exist.
+No product network session has occurred; both new allowances remain unused.
+
+### P4D Local Product Validation
+
+The29 distinct controller cases passed in10.623seconds; the transport suite is
+83/83. The product tree contains851 distinct test definitions, preserving811
+previous cases plus40 new cases. Forty other product/fixture files were checked
+against the exact baseline and remain unchanged. Dependency closure passed.
+
+The first full product run used restricted desktop file permissions:851 cases
+in235.231seconds ended with8 errors and2 skips; temporary hardlink creation was
+denied before the relevant rejection assertions. No guard was weakened. The
+same complete suite was rerun with normal local permissions and finished851
+cases in195.370seconds:850PASS, one existing Windows unprivileged-symbolic-link
+skip (PreparationTests.test_symlink_refused), zero failures/errors. These are
+offline authored/replay tests, not live source verification. No request allowance
+has been consumed. Full governance and independent implementation/release review
+remain pending; engineering test success alone cannot open either network gate.
+
+### P4D Squash-Merge Compatibility
+
+Integration inspection found that the first checkpoint verifier required the A
+commit to remain an ancestor. Actual GitHub settings allow squash merge only,
+so that implementation would fail after the permitted human merge. No GitHub
+setting was changed. The checker is being corrected before implementation review.
+
+The existing repair-basis artifact will retain bounded original LF text only for
+approved A source/document inputs that change in B. Unchanged inputs come from
+the current tree; exact file hashes and the full original aggregate snapshot
+must reconstruct the actual A approvals. Archived source text is never executed,
+imported, written back or stored in the result journal. No SDK source, secrets or
+market payloads are archived. Commit identity is provenance only, not a required
+Git ancestor. Current scope and non-transport product immutability still apply.
+
+Read-only entry auditor01a1f31e-108d-7603-959f-604c54e690ea clarified that this
+is within the existing contract's optional-checkpoint wording and named paths;
+no entry re-audit is required solely for this implementation choice. This is
+not implementation or runtime approval and does not reset the findings-repair
+allowance. Actual implementation review must verify all reconstruction bounds,
+original approval bindings and squash-merge regressions.
+
+### P4D Diagnostic Checkpoint Freeze
+
+The Governance Builder froze its three files after actual focused checks:
+22/22 phase cases in16.799seconds;3/3 squash/CLI/repair-bound integration cases
+in100.553seconds; an earlier3/3 integration session in110.948seconds. The original
+174 governance test methods remain and23 were added, for197 total. Earlier
+development syntax/fixture errors were corrected and covered by reruns, not
+hidden or counted as passing runs. No full-governance PASS is anticipated here.
+
+Squash compatibility now uses an exact bounded checkpoint_inputs map:1MiB per
+original LF text and2MiB total, UTF-8 byte counts. The old file-hash set and full
+aggregate snapshot must match the original A bundle. Checkpoint commit is only
+nullable provenance. Current baseline ancestry, scope, all original A role
+bindings and non-transport product immutability remain required.
+
+Implementation, canonical state and this log are frozen for full validation and
+independent Reviewer/Release at the diagnostic checkpoint. Actual test results,
+role verdicts and the later measured diagnostic belong only in the named current
+attestations. Source/MVP gaps remain explicit. No genuine BaoStock session,
+model call, Telegram send, scheduling, deployment or VPS action has occurred.
+
+### P4D Governance Fixture Correction
+
+The first full197-case governance attempt found a fixture failure in the test
+for untracked candidate files. The A checkpoint commit had made those paths
+tracked in fixture HEAD, so removing them from the index correctly triggered
+the staged-deletion guard. The known-failing run was stopped, not reported PASS.
+Only the test fixture was corrected to restore its intended new-file premise;
+the checker, CI and receipt schemas were not weakened. Both the untracked-file
+case and the tracked-deletion rejection case passed in106.024seconds. No
+independent Reviewer finding-repair cycle has been consumed by this local test
+correction. All197 governance cases will be rerun on the new frozen snapshot.
+
+The complete product suite also passed again:851 cases in205.713seconds,
+850PASS and the same one pre-existing Windows symbolic-link permission skip.
+No source network allowance was used. Diagnostic implementation review and
+release approval remain pending.
+
+### P4D Consolidated Reviewer Repair
+
+Independent read-only Reviewer01a1f35d-d5fb-7101-8f7d-3dfc8c1f9c3e inspected
+all230 protected hashes of snapshot
+1c3d10063891ed92fcfd3b018b9804487fb14cadca8ac8ca6d9e6ce03a838475
+and returned STATIC_REVIEW_BLOCKED with two P2 findings: R1 direct SDK exceptions
+could lose their first-failure category when socket cleanup also failed; R0 the
+scope test retained obsolete P4B file counts. No diagnostic approval was issued.
+The complete governance run finished197 cases in3035.684seconds with7 failed
+assertions: the old count assertion and6 intent-to-add fixture assertions. Those
+six gates correctly blocked an incomplete candidate, but the checkpoint commit
+had changed the fixture HEAD premise and therefore the expected rejection path.
+The product run on that earlier snapshot passed851 cases in206.802seconds with
+the same one pre-existing Windows symbolic-link permission skip.
+
+All confirmed fixes are combined into the single allowed R0/R1 repair cycle,
+now consumed (repair_cycles=1). The transport latches direct failures before
+cleanup without changing acceptance, request, endpoint or payload rules. Three
+new regression methods cover a direct SDK exception, direct internal fault and
+both interruption types when cleanup also fails. Governance fixtures restore
+their intended HEAD premise and current exact counts; deletion protections and
+all197 existing governance methods remain. No source request or quota reset has
+occurred. Full validation and independent re-review must pass on the resulting
+frozen snapshot; another Reviewer BLOCK requires human escalation.
+
+The repaired transport passed86 cases in26.424seconds; recovery control passed
+29 in9.456seconds; full product validation passed854 in202.946seconds (853PASS,
+the same one Windows symbolic-link permission skip). Governance's five targeted
+cases passed in145.109seconds, preserving197 methods. The scope mutation case
+also now uses actual P4D path fields instead of an ineffective old prefix
+substitution. Checker and CI implementation bytes are unchanged by this repair.
+Inputs are frozen again for complete governance validation and independent
+re-review; focused test success is not yet full governance or Reviewer PASS.
+
+### Final Connection Diagnostic Authorization
+
+P4D diagnostic checkpoint5365ce7f9524e361758c45246f8a20a9ff61bde2 preserves
+the actual197/197 governance pass,854 product cases (853PASS,one platform skip),
+independent Reviewer PASS and diagnostic pre-release PASS. Its actual session
+c36fbfd2bcf64dd18cffdb3731ec28c9 sent one login request but received zero bytes;
+all five cleanup checks passed. The final release disposition is inconclusive,
+not PR-ready. No two-index verification ran; the original failure and quota stay.
+
+The user now explicitly authorized one final connection diagnostic and a switch
+of source if unsuccessful. The supplemental operation contract registers this
+separate one-use allowance and its exact local paths. It does not reset the old
+quota, relax parsing, change product permissions or spend the conditional Phase B
+allowance. Product, old checker/tests and historical approvals stay byte-identical
+to the checkpoint. New independent entry/prompt review, operator tests, Reviewer
+and separate Release must precede dispatch. Failure/UNKNOWN ends BaoStock work;
+only documentation research on free anonymous alternatives follows. No new source
+probe, publishing, model, Telegram, trading, deployment or VPS action is authorized.
+Actual approvals and terminal results belong in the named operation attestations.
+
+### P4T Tencent Daily Index Replacement
+
+On2026-11-19 the user requested one coherent source-replacement work package:
+source verification, adapter integration, freshness/deduplication validation,
+full independent review and an attempt to retrieve Tencent daily indices.
+The final BaoStock diagnostic received88bytes but failed response_version;
+its recorded disposition retires that candidate. Neither local diagnostic
+checkpoint was human-merged. All old results and consumed quotas remain intact.
+
+Located/pinned AKShare technical documentation identifies the Tencent HTTPS
+daily endpoint, but does not establish upstream data rights. P4T therefore
+proposes a narrow, independently accepted technical-probe exception only:
+three fixed mainland indices, one run and at most three requests, no retries,
+fixed dates/limits, RAM-only payloads and sanitized results. Unknown rights
+remain unknown; ordinary source operations, model, Telegram, scheduler,
+trading and VPS remain disabled. A successful probe cannot close the five-index
+or MVP gate. Official2026 calendars support separate expected-session checks.
+
+The new content-bound history manifest preserves local P4D/operator evidence
+without requiring their unpublished commits after squash. The current package
+will retain197 historical governance tests and854 product cases, adding focused
+source/transport/temporal/deduplication/rights/approval tests. These are required
+checks, not results yet. Actual entry, validation, Reviewer, Release, observation
+and CI outcomes belong in the named P4T attestations; human merge is mandatory.

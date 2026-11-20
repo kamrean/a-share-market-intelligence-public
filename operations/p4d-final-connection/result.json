@@ -1,0 +1,52 @@
+{
+  "old_journal_hashes_after": {
+    "p4b-baostock-test.sqlite": "56e806cff067e5cb4ac9e91b37763226063975fc1375d7dd66cfaaa0e31c73aa",
+    "p4d-baostock-recovery.sqlite": "9ce687699394ee716d14527d6b58dc68974efaf1b36ba66ff3b1b98f8a74b9cf"
+  },
+  "old_journal_hashes_before": {
+    "p4b-baostock-test.sqlite": "56e806cff067e5cb4ac9e91b37763226063975fc1375d7dd66cfaaa0e31c73aa",
+    "p4d-baostock-recovery.sqlite": "9ce687699394ee716d14527d6b58dc68974efaf1b36ba66ff3b1b98f8a74b9cf"
+  },
+  "old_journals_unchanged": true,
+  "operation_id": "p4d-final-connection-20261119",
+  "payload_persisted": false,
+  "protocol": {
+    "body_bytes": 43,
+    "body_characters": 43,
+    "checksum_characters": 10,
+    "crc_match": "pass",
+    "crc_syntax": "pass",
+    "declared_length": 43,
+    "declared_length_syntax": "pass",
+    "first_failure_point": "response_version",
+    "frame_bytes": 88,
+    "header_bytes": 21,
+    "header_structure": "pass",
+    "length_bytes_match": "pass",
+    "length_characters_match": "pass",
+    "method": "login",
+    "request_index": 1,
+    "response_type": "expected",
+    "schema_version": 1,
+    "terminator": "at_end",
+    "utf8": "pass",
+    "version": "other"
+  },
+  "reason": "protocol",
+  "snapshot_id": "b74bcd67accad2984612a56ed9562ad550a73efd35d685ff93ce7a722a686518",
+  "status": "FAILED",
+  "transport": {
+    "bindings_restored": true,
+    "decoded_bytes": 0,
+    "finished_at": "2026-11-19T13:54:35.905896Z",
+    "reason": "protocol",
+    "requests_sent": 1,
+    "socket_closed": true,
+    "started_at": "2026-11-19T13:54:33.471833Z",
+    "status": "FAILED",
+    "transport_payloads_disposed": true,
+    "validated_responses": 0,
+    "wire_bytes": 88,
+    "wire_sha256": "81159d275bb1f5d5828f3ced9397f7d860e32c759b81dd6d09f26e7f4af130e6"
+  }
+}

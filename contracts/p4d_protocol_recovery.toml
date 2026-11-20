@@ -1,0 +1,121 @@
+schema_version = 1
+package_id = "P4D"
+stage_ids = [1, 2, 3, 4]
+title = "Bounded BaoStock protocol diagnosis and evidence-supported recovery"
+objective = "Explain the P4B failed login without retaining payloads; repair only an observed incompatibility, then independently release one two-index in-memory verification within the same human-merged work package."
+branch = "stage1-baostock-protocol-recovery"
+baseline = "3cceca6e1534484b9001db16644a98b7b068897b"
+merge_tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+max_repair_cycles = 1
+blueprint_review_required = true
+prompt_audit_required = true
+independent_review_required = true
+snapshot_algorithm = "sha256-path-and-lf-normalized-utf8-v1"
+immutable_rule = "Every baseline path except the named mutable paths is byte-identical; every new path must be named. Historical receipts never become current approvals."
+mutable_paths = [
+  "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "README.md",
+  "docs/CONSTRUCTION_LOG.md", "governance/policy.toml", "project-state/state.json",
+  ".github/workflows/governance.yml", "tools/governance.py",
+  "tests/governance/test_governance.py", "market_intelligence/baostock_transport.py",
+  "tests/product/test_baostock_transport.py",
+]
+new_paths = [
+  "contracts/p4d_protocol_recovery.toml", "docs/BAOSTOCK_PROTOCOL_RECOVERY.md",
+  "docs/evidence/p4d-user-authorization.json", "docs/reviews/p4b-merge.json",
+  "templates/p4d_builder_prompt.md", "docs/reviews/p4d-builder-prompt.md",
+  "docs/reviews/p4d-entrypoint-review.json", "docs/reviews/p4d-prompt-audit.json",
+  "market_intelligence/baostock_recovery.py", "tests/product/test_baostock_recovery.py",
+  "docs/reviews/p4d-diagnostic-bundle.json", "docs/reviews/p4d-diagnostic-validation.json",
+  "docs/reviews/p4d-diagnostic-review.json", "docs/reviews/p4d-diagnostic-release.json",
+  "docs/evidence/p4d-diagnostic.json", "docs/evidence/p4d-repair-basis.json",
+  "docs/reviews/p4d-bundle.json", "docs/reviews/p4d-validation.json",
+  "docs/reviews/p4d-review.json", "docs/reviews/p4d-pre-probe-release.json",
+  "docs/evidence/p4d-market-observation.json", "docs/reviews/p4d-release.json",
+]
+required_reads = [
+  "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "BLUEPRINT.md",
+  "project-state/state.json", "governance/policy.toml",
+  "contracts/p4d_protocol_recovery.toml", "docs/BAOSTOCK_PROTOCOL_RECOVERY.md",
+  "docs/evidence/p4d-user-authorization.json", "docs/reviews/p4b-merge.json",
+  "docs/evidence/p4b-market-observation.json", "docs/reviews/p4b-review.json",
+  "docs/reviews/p4b-release.json", "requirements-baostock.lock", "config/p4b_sdk_manifest.json",
+]
+required_validation = [
+  "python -m pip check",
+  "python -m unittest discover -s tests/product -p test_baostock_transport.py -v",
+  "python -m unittest discover -s tests/product -p test_baostock_recovery.py -v",
+  "python -m unittest discover -s tests/governance -p test_*.py -v",
+  "python -m unittest discover -s tests/product -p test_*.py -v",
+  "python tools/governance.py check",
+  "python tools/governance.py prompt --verify",
+  "python tools/governance.py bundle",
+  "git diff --check 3cceca6e1534484b9001db16644a98b7b068897b",
+]
+diagnostic_validation = "Run the required validation before the diagnostic checkpoint. After an evidence-supported transport-only repair rerun both transport/recovery suites and product suite; rerun governance if any checker, policy, contract, prompt, state shape or approval logic changed. Final CI runs all suites on both platforms. No omitted test may be reported as executed on a later snapshot."
+next_gate = "AWAITING_HUMAN_MERGE after truthful terminal results, independent final Release and exact-head CI; any inconclusive diagnosis or failed verification remains an explicit source gap. No new session, model, Telegram, schedule or VPS authority."
+rollback = "Close the connection, discard bounded payloads, preserve consumed reservations and sanitized results. No reset, deletion of old journals, retry, merge, bypass or archived-project access."
+
+[permissions]
+research_only = true
+external_data_access_allowed = false
+scheduled_collection_allowed = false
+llm_research_allowed = false
+telegram_delivery_allowed = false
+vps_deployment_allowed = false
+vps_mutation_allowed = false
+broker_allowed = false
+order_execution_allowed = false
+portfolio_control_allowed = false
+
+[limited_protocol_recovery]
+user_authorization = "docs/evidence/p4d-user-authorization.json"
+source_id = "baostock_standard_free"
+endpoint = "tcp://public-api.baostock.com:10030"
+sdk_version = "0.9.4"
+dependency_lock = "requirements-baostock.lock"
+sdk_manifest = "config/p4b_sdk_manifest.json"
+tls = false
+peer_authenticated = false
+maximum_sessions = 2
+maximum_total_requests = 9
+diagnostic_requests = 1
+verification_requests = 7
+maximum_connections_per_session = 1
+retries = 0
+deadline_seconds = 20
+maximum_wire_bytes = 512000
+maximum_frame_bytes = 128000
+maximum_decoded_bytes = 1048576
+symbols = ["sh.000001", "sz.399001"]
+window_natural_days = 14
+window_end = "prior_Asia_Shanghai_calendar_day"
+requires_key = false
+requires_registration = false
+paid = false
+payload_lifetime = "bounded_process_memory_only"
+retained_results = "closed_schema_sanitized_metadata_only"
+journal_home_relative = ".a-share-market-intelligence/p4d-baostock-recovery.sqlite"
+journal_reset_allowed = false
+old_journal_mutation_allowed = false
+allowance_consumed_on = "durable_phase_reservation_before_any_dispatch"
+unknown_consumes_allowance = true
+unused_capacity_authorizes_extra_requests = false
+phase_transition_automatic = false
+ci_network_gate_allowed = false
+
+[review_flow]
+entry = "Freeze planning and deterministic prompt; actual independent entrypoint and Prompt Auditor PASS precede implementation."
+diagnostic = "Freeze implementation and validation; actual independent Reviewer and separate Release Checker PASS bind the diagnostic snapshot before login-only dispatch. Diagnostic acceptance rules remain unchanged."
+repair = "Record observed failure categories and source-located compatibility rationale. Do not infer the root cause from P4B counters. Diagnostic result and its snapshot-bound approvals become immutable protected inputs. A local checkpoint commit may preserve the reviewed phase-A tree; it is not pushed early or treated as a merge."
+verification = "Only after a supported in-scope repair and renewed independent Reviewer plus separate Release PASS on the changed snapshot. If diagnosis is inconclusive, leave verification NOT_RUN and escalate; never consume it speculatively."
+final = "Independent final Release binds actual diagnostic and verification results, cleanup and validation; commit/push one PR, exact-head offline CI on Ubuntu/Windows, independent remote Release, human merge."
+review_repairs = "The planned evidence-supported protocol repair is implementation, not a Reviewer repair allowance. One total R0/R1 findings repair cycle across both checkpoints; another BLOCK, unknown or R2+ trigger requires user escalation."
+
+[implementation]
+builder = "Coordinator integrates product code; a bounded disjoint governance Builder may update checker/tests/CI after entry PASS. Reviewer must not implement; Release Checker must be separate from Builder and Reviewer."
+transport = "Extend the existing pinned SDK wrapper, never a replacement wire client. Login-only diagnostic uses the same limits and strict parser. First failure point is latched, and diagnostics contain only enums, bounded counters and booleans, never raw header/body/error text."
+recovery = "New phase controller reuses existing results-only Store and memory composition helpers without changing P4B module constants, old receipt formats or old journals. Durable two-phase reservations and fail-closed UNKNOWN handling prevent retries, races and quota reuse."
+preservation = "Retain all 811 prior product cases and 174 governance protections. Only transport and its tests may change among existing product files. All other existing product modules, fixtures, SDK pins and historical attestations remain byte-identical."
+truthfulness = "Keep observed acquisition, latest expected provider session, retained live coverage, model research and MVP acceptance separate. Duplicate handling is reported from actual parse outcomes, not assumed from offline tests. TCP remains unauthenticated and publication/finality unknown."

@@ -10,6 +10,16 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
+Current work is P4T, the bounded Tencent daily-index replacement package.
+Its [source audit](docs/TENCENT_DAILY_SOURCE.md) separates source capability,
+unknown upstream usage rights and a proposed independently released technical
+probe. Ordinary collection/composition and all model/delivery/VPS permissions
+remain disabled. The three mainland indices are the proposed probe scope;
+Korean/U.S. coverage and the fixed five-index acceptance remain unresolved.
+BaoStock diagnosis is closed after failure; its two local checkpoints were not
+merged PRs. Historical records below describe their own snapshots, not current
+authorization. See the active contract/state for the present gate.
+
 P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
@@ -387,7 +397,14 @@ python tools/governance.py gate
 git diff --check
 ```
 
-The active construction branch is `stage1-baostock-live-evidence`. The gate checks
+P4B PR13 is merged. Its actual login failed before any validated response;
+its successful engineering checks are not a live data PASS. P4D investigates
+that failure with a separately authorized login-only diagnostic and, only after
+a supported repair and renewed independent release, one two-index verification.
+Old quota and failed evidence are immutable; payloads remain memory-only.
+See [the recovery plan](docs/BAOSTOCK_PROTOCOL_RECOVERY.md).
+
+The active construction branch is `stage1-baostock-protocol-recovery`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

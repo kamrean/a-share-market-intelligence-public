@@ -1,0 +1,79 @@
+schema_version = 1
+package_id = "P4T"
+repair_id = "post_probe_windows_path_r1"
+title = "One authorized post-probe Windows test-path repair"
+original_contract = "contracts/p4t_tencent_daily_index.toml"
+manifest = "docs/evidence/p4t-post-probe-test-repair.json"
+branch = "stage1-tencent-index-replacement"
+baseline = "3cceca6e1534484b9001db16644a98b7b068897b"
+original_probe_snapshot = "9b3f1d2c71431bcd3c794657f8bd9b8276ba38802010276e3513f6f610da774b"
+original_commit_provenance_only = "ec362d84c7c3fa0a8d142ac83a8531a20bbe12e0"
+original_commit_object_required = false
+authority = "Explicit current user approval on 2026-11-20 for one extra limited R1 in PR14; preserve actual evidence and quota, no further source access."
+precedence = "This reviewed supplement overrides only the original one-cycle ceiling for this exact post-probe repair and closes the consumed technical-probe entry. Original planning inputs and general permissions are unchanged."
+previous_repair_cycles = 1
+additional_repair_cycles = 1
+required_total_repair_cycles = 2
+default_repair_limit_unchanged = true
+third_repair_allowed = false
+human_merge_required = true
+auto_merge_allowed = false
+new_source_requests = 0
+original_planning_inputs_immutable = true
+
+mutable_paths = [
+  "tests/product/test_tencent_capture.py",
+  "tools/governance.py", "tools/governance_p4t.py",
+  "tests/governance/test_governance_p4t.py",
+  "docs/reviews/p4t-entrypoint-review.json", "docs/reviews/p4t-prompt-audit.json",
+  "docs/reviews/p4t-bundle.json", "docs/reviews/p4t-validation.json",
+  "docs/reviews/p4t-review.json", "docs/reviews/p4t-release.json",
+]
+new_paths = [
+  "contracts/p4t_post_probe_test_repair.toml",
+  "docs/evidence/p4t-post-probe-test-repair.json",
+]
+immutable_observation = "docs/evidence/p4t-market-observation.json"
+immutable_pre_probe_release = "docs/reviews/p4t-pre-probe-release.json"
+current_result_paths = [
+  "docs/reviews/p4t-bundle.json", "docs/reviews/p4t-validation.json",
+  "docs/reviews/p4t-review.json", "docs/reviews/p4t-release.json",
+]
+required_validation = [
+  "python -m pip check",
+  "python -m unittest discover -s tests/product -p test_tencent_*.py -v",
+  "python -m unittest discover -s tests/governance -p test_*.py -v",
+  "python -m unittest discover -s tests/product -p test_*.py -v",
+  "python tools/governance_p4t.py check",
+  "python tools/governance_p4t.py prompt --verify",
+  "python tools/governance_p4t.py bundle",
+  "git diff --check 3cceca6e1534484b9001db16644a98b7b068897b",
+]
+
+[permissions]
+research_only = true
+external_data_access_allowed = false
+scheduled_collection_allowed = false
+llm_research_allowed = false
+telegram_delivery_allowed = false
+vps_deployment_allowed = false
+vps_mutation_allowed = false
+broker_allowed = false
+order_execution_allowed = false
+portfolio_control_allowed = false
+
+[implementation]
+product_change = "Exactly one assertion changes self.path to self.path.resolve(); no product/runtime module, endpoint, MIME policy, calendar, quota or delivery change."
+history = "Archive original receipts and changed protected input text as bounded data. Reconstruct the exact original 268-path hash map and 9b3f snapshot without needing the original commit object. Never execute archived Python."
+current_binding = "Protect the two original runtime receipts at their existing paths and original bytes/snapshot. Exclude only four current result receipts from the new snapshot; bind final Release to the current snapshot, manifest digest and original observation/pre-release digests."
+probe_gate = "Unconditionally reject tencent-gate before file, validator or journal access, including changed NOT_RUN receipts and CI; old source gates remain closed."
+review_engine = "The precise validated supplement may require total cycles exactly2; unchanged default and historical validation behavior retain their original limits."
+tests = "Preserve all historical governance/product cases; test runtime drift, extra test edits, archive tampering, snapshot rebinding, count reset/third cycle, absent original Git objects and permanently closed network entry."
+
+[review_flow]
+entry = "Independent entry and Prompt Auditor PASS on the original17 inputs plus these two supplemental files (19 total) before implementation. Original builder prompt remains historical; these explicit offline repair instructions govern this repair."
+reviewer_agent = "01a1f35d-d5fb-7101-8f7d-3dfc8c1f9c3e"
+builder_agents = ["coordinator", "01a1f32f-752e-7d53-a38f-ff19b0c23586"]
+approval = "Fresh validation, same independent Reviewer with total cycles2, separate final Release, one update to PR14, exact-head Linux/Windows CI and remote release confirmation."
+no_probe_release = "The historical pre-probe approval is evidence only. Do not issue a new source approval or perform a new observation."
+stop = "Any further BLOCK, CI failure, unknown scope, extra repair or changed original observation requires a new human decision. Never merge or bypass."
