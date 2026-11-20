@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
-    # P4T retains locked setup and historical suites; no source requests in CI.
+    # Retain the locked setup and historical suites; no source requests in CI.
     timeout-minutes: 120
     steps:
       - name: Checkout exact PR head
@@ -73,12 +73,14 @@ jobs:
         run: python -m unittest discover -s tests/governance -p test_*.py -v
       - name: Offline source, evidence, research and publication tests
         run: python -m unittest discover -s tests/product -p test_*.py -v
+      - name: Smoke test the offline MVP demo
+        run: python -B -m market_intelligence.mvp demo --json
       - name: Scope and canonical consistency
-        run: python tools/governance_p4t.py check --ci
+        run: python tools/governance_mvp.py check --ci
       - name: Verify deterministic prompt
-        run: python tools/governance_p4t.py prompt --verify
+        run: python tools/governance_mvp.py snapshot --ci
       - name: Validate local review attestations
-        run: python tools/governance_p4t.py gate --ci
+        run: python tools/governance_mvp.py gate --ci
       - name: Confirm CI cannot authorize the Tencent probe
         shell: python
         run: |

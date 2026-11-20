@@ -2,6 +2,7 @@
 
 from datetime import date, time, timedelta, timezone
 from decimal import Decimal
+import json
 from pathlib import Path
 import re
 import tomllib
@@ -22,6 +23,7 @@ MAX_BYTES = 512000
 MAX_ROWS = 32
 SHANGHAI = timezone(timedelta(hours=8), "Asia/Shanghai")
 PARSER = "tencent-index-daily-v1"
+OPAQUE_EXTRAS_PARSER = "tencent-index-daily-v1-offline-opaque-extras"
 REASONS = frozenset({"invalid_row", "invalid_date", "outside_window", "not_scheduled_session",
                      "invalid_ohlc", "conflicting_key"})
 FRESHNESS = frozenset({"CURRENT", "LATEST_PRESENT_GAPS", "STALE", "EMPTY"})
@@ -110,10 +112,25 @@ def _number(value):
     return number
 
 
-def _rows(body, symbol):
+class _NumberToken(str):
+    """Exact JSON number spelling, distinct from a decoded JSON string."""
+
+
+def _typed_identity(value):
+    kind = type(value)
+    if kind is dict:
+        return ["object", {key: _typed_identity(item) for key, item in value.items()}]
+    if kind is list:
+        return ["array", [_typed_identity(item) for item in value]]
+    if kind is _NumberToken:
+        return ["number", str(value)]
+    return [kind.__name__, value]
+
+
+def _rows(body, symbol, *, opaque_extras=False):
     if type(body) is not bytes or len(body) > MAX_BYTES:
         raise Invalid("response_size")
-    body = body.strip()
+    body = body.strip(b" \t\r\n") if opaque_extras else body.strip()
     if body.startswith(b"kline_dayqfq="):
         body = body[len(b"kline_dayqfq="):]
         if body.endswith(b";"):
@@ -124,29 +141,79 @@ def _rows(body, symbol):
                 or type(value.get("data")) is not dict
                 or type(value["data"].get(symbol)) is not dict):
             raise Invalid("response_identity")
-        item = value["data"][symbol]
+        data = value["data"]
+        if opaque_extras and (set(data) != {symbol} or set(value) - {"code", "msg", "data"}
+                              or ("msg" in value and type(value["msg"]) is not str)):
+            raise Invalid("response_identity")
+        item = data[symbol]
         populated = [name for name in ("day", "qfqday") if item.get(name)]
         present = [name for name in ("day", "qfqday") if name in item]
+        if opaque_extras and any(type(item[name]) is not list for name in present):
+            raise Invalid("response_identity")
         if len(populated) > 1 or (not populated and len(present) != 1):
             raise Invalid("adjustment_ambiguous")
         adjustment = (populated or present)[0]
         rows = item[adjustment]
         if type(rows) is not list or len(rows) > MAX_ROWS:
             raise Invalid("row_limit")
+        if opaque_extras:
+            # Only re-decode JSON that already passed the strict decoder and bounds.
+            # The second pass preserves number spelling for full-row identity.
+            original = json.loads(body.decode("utf-8"), parse_int=_NumberToken, parse_float=_NumberToken)
+            rows = original["data"][symbol][adjustment]
         return rows, adjustment
     except (Invalid, KeyError, TypeError, ValueError, RecursionError):
         raise Invalid("response_schema") from None
 
 
+def _row_shape(row, *, opaque_extras):
+    if not 6 <= len(row) <= 20:
+        return False
+    scalar_types = (str, int, float, bool, type(None))
+    if opaque_extras:
+        scalar_types += (_NumberToken,)
+    for index, value in enumerate(row):
+        if opaque_extras and index >= 6 and type(value) in (dict, list):
+            # The envelope already bounds JSON depth, size and types.
+            pending = [value]
+            while pending:
+                extra = pending.pop()
+                if type(extra) is dict:
+                    pending.extend(extra.values())
+                elif type(extra) is list:
+                    pending.extend(extra)
+                elif type(extra) is str and len(extra) > 256:
+                    return False
+        elif (type(value) not in scalar_types
+              or (type(value) is str and len(value) > 256)):
+            return False
+    return True
+
+
 def parse(body, symbol, window, observed_at):
     """Build ephemeral core Fact shapes and closed, non-price diagnostics."""
-    if symbol not in SYMBOLS:
+    return _parse(body, symbol, window, observed_at, opaque_extras=False)
+
+
+def parse_opaque_extras(body, symbol, window, observed_at):
+    """Inspect already supplied bytes offline, without interpreting optional containers.
+
+    The summary uses OPAQUE_EXTRAS_PARSER, not the legacy receipt label accepted
+    by validate_summary. For duplicate detection, different JSON number spellings
+    conflict rather than being rounded or normalized. This confers no source
+    rights or live validation.
+    """
+    return _parse(body, symbol, window, observed_at, opaque_extras=True)
+
+
+def _parse(body, symbol, window, observed_at, *, opaque_extras):
+    if (opaque_extras and type(symbol) is not str) or symbol not in SYMBOLS:
         raise Invalid("unsupported_symbol")
     _plan(window)
     seen = instant(observed_at)
     if seen < instant(window["as_of"]) or seen.astimezone(SHANGHAI).year != 2026:
         raise Invalid("observation_time")
-    rows, adjustment = _rows(body, symbol)
+    rows, adjustment = _rows(body, symbol, opaque_extras=opaque_extras)
     groups, reasons, returned = {}, {}, []
 
     def reject(reason, count=1):
@@ -169,9 +236,7 @@ def parse(body, symbol, window, observed_at):
             reject("not_scheduled_session")
             continue
         reason, close = None, None
-        if (not 6 <= len(row) <= 20
-                or any(type(v) not in (str, int, float, bool, type(None)) for v in row)
-                or any(type(v) is str and len(v) > 256 for v in row)):
+        if not _row_shape(row, opaque_extras=opaque_extras):
             reason = "invalid_row"
         else:
             try:
@@ -180,7 +245,8 @@ def parse(body, symbol, window, observed_at):
                     raise Invalid("invalid_ohlc")
             except Invalid:
                 reason = "invalid_ohlc"
-        groups.setdefault(day, []).append((digest(row), float(close) if close is not None else None, reason))
+        row_hash = digest(_typed_identity(row) if opaque_extras else row)
+        groups.setdefault(day, []).append((row_hash, float(close) if close is not None else None, reason))
 
     facts, duplicate_rows, conflicts = [], 0, 0
     for day, values in sorted(groups.items()):
@@ -207,7 +273,8 @@ def parse(body, symbol, window, observed_at):
     freshness = ("EMPTY" if not latest else "STALE" if latest != window["end_date"] else
                  "LATEST_PRESENT_GAPS" if missing else "CURRENT")
     decision = composition_decision()
-    summary = {"symbol": symbol, "benchmark_id": SYMBOLS[symbol], "parser_version": PARSER,
+    summary = {"symbol": symbol, "benchmark_id": SYMBOLS[symbol],
+               "parser_version": OPAQUE_EXTRAS_PARSER if opaque_extras else PARSER,
                "adjustment": adjustment, "total": len(rows), "accepted": len(facts),
                "duplicate_rows": duplicate_rows, "conflicting_rows": conflicts,
                "rejected": sum(reasons.values()), "reasons": dict(sorted(reasons.items())),

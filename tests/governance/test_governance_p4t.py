@@ -13,6 +13,7 @@ import unittest
 from unittest.mock import patch
 
 import p4d_fixture
+import p4t_merged_fixture
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,15 +56,14 @@ def receipt_stub(_root, function, *args):
 class TencentGovernanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.contract, cls.state, planning = p.planning_inputs(ROOT)
-        cls.proof = g.parse_json(p.read_text(ROOT, p.HISTORY_PATH))
+        cls.merged = p4t_merged_fixture.merged_contents(ROOT, g)
+        with p4t_merged_fixture.merged_reads(p, cls.merged):
+            cls.contract, cls.state, planning = p.planning_inputs(ROOT)
+            cls.retained, cls.historical = p.historical_contents(ROOT)
+        cls.proof = g.parse_json(cls.merged[p.HISTORY_PATH])
         cls.baseline = p.baseline_contents(ROOT)
-        cls.retained, cls.historical = p.historical_contents(ROOT)
         cls.allowed, cls.protected = p.scope(cls.contract, cls.retained)
-        cls.inputs = {}
-        for name in cls.allowed:
-            path = ROOT / name
-            cls.inputs[name] = (g.read_text(ROOT, name) if path.is_file() else "Authored offline input.\n")
+        cls.inputs = {name: cls.merged[name] for name in cls.allowed}
         cls.inputs.update(planning)
 
     def setUp(self):
@@ -77,7 +77,8 @@ class TencentGovernanceTests(unittest.TestCase):
         self.assertEqual(g.snapshot_for_paths(self.contents, p.FROZEN_INPUT_HASHES)[0], p.PLANNING_SNAPSHOT)
         self.assertEqual(len(p.REPAIR_INPUT_HASHES), 19)
         self.assertEqual(g.snapshot_for_paths(self.contents, p.REPAIR_INPUT_HASHES)[0], p.REPAIR_PLANNING_SNAPSHOT)
-        p.planning_inputs(ROOT)
+        with p4t_merged_fixture.merged_reads(p, self.merged):
+            p.planning_inputs(ROOT)
 
     def test_planning_input_changes_cannot_rehash_their_own_authority(self):
         for name in p.FROZEN_INPUT_HASHES:
@@ -396,14 +397,14 @@ class TencentGovernanceTests(unittest.TestCase):
     def test_cli_prompt_and_ci_refusal(self):
         for args, result in ((["prompt", "--verify"], 0), (["tencent-gate", "--ci"], 1)):
             output, error = io.StringIO(), io.StringIO()
-            with redirect_stdout(output), redirect_stderr(error):
+            with redirect_stdout(output), redirect_stderr(error), p4t_merged_fixture.merged_reads(p, self.merged):
                 self.assertEqual(p.main(args, root=ROOT), result)
             if result:
                 self.assertEqual(output.getvalue(), "")
                 self.assertIn("--ci is not runtime authorization", error.getvalue())
 
     def test_ci_keeps_pins_full_suites_and_no_runtime_gate(self):
-        workflow = g.read_text(ROOT, ".github/workflows/governance.yml")
+        workflow = self.merged[".github/workflows/governance.yml"]
         old = self.proof["checkpoint_inputs"][".github/workflows/governance.yml"]
         for line in old.splitlines():
             if any(marker in line for marker in ("uses:", "os: [", "python-version:", "contents: read",
@@ -536,7 +537,9 @@ class TencentCandidateTests(unittest.TestCase):
     """One bounded local-only repository, with no unpublished checkpoint objects."""
 
     def test_squash_candidate_scope_index_and_history_guards(self):
-        with tempfile.TemporaryDirectory(prefix="p4t-candidate-") as directory:
+        call = p._receipt_call
+        with tempfile.TemporaryDirectory(prefix="p4t-candidate-") as directory, \
+                patch.object(p, "_receipt_call", side_effect=lambda _root, *args: call(ROOT, *args)):
             root = Path(directory)
             g.git(root, "init", "--initial-branch=" + p.BRANCH)
             # A local path and the public baseline are fixed by the test, not a remote/source request.
@@ -546,8 +549,10 @@ class TencentCandidateTests(unittest.TestCase):
             g.git(root, "config", "user.email", "fixture@example.invalid")
             g.git(root, "config", "commit.gpgsign", "false")
             g.git(root, "config", "core.autocrlf", "false")
-            contract, state, planning = p.planning_inputs(ROOT)
-            retained, _historical = p.historical_contents(ROOT)
+            merged = p4t_merged_fixture.merged_contents(ROOT, g)
+            with p4t_merged_fixture.merged_reads(p, merged):
+                contract, _state, _planning = p.planning_inputs(ROOT)
+                retained, _historical = p.historical_contents(ROOT)
             allowed, _protected = p.scope(contract, retained)
 
             def write(name, text):
@@ -556,7 +561,7 @@ class TencentCandidateTests(unittest.TestCase):
                 target.write_text(text, encoding="utf-8", newline="\n")
 
             for name in allowed:
-                write(name, g.read_text(ROOT, name) if (ROOT / name).is_file() else "Authored offline input.\n")
+                write(name, merged[name])
             g.git(root, "add", "--", *allowed)
             checked = p.check(root)
             current = p.make_bundle(checked)

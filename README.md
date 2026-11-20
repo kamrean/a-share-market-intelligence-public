@@ -10,15 +10,22 @@ a portfolio, and it does not promise investment returns.
 
 ## Current Status
 
-Current work is P4T, the bounded Tencent daily-index replacement package.
-Its [source audit](docs/TENCENT_DAILY_SOURCE.md) separates source capability,
-unknown upstream usage rights and a proposed independently released technical
-probe. Ordinary collection/composition and all model/delivery/VPS permissions
-remain disabled. The three mainland indices are the proposed probe scope;
-Korean/U.S. coverage and the fixed five-index acceptance remain unresolved.
-BaoStock diagnosis is closed after failure; its two local checkpoints were not
-merged PRs. Historical records below describe their own snapshots, not current
-authorization. See the active contract/state for the present gate.
+**Run the offline research demo** with Python 3.12 from the checkout:
+
+```text
+python -B -m market_intelligence.mvp demo
+```
+
+No API key or extra Python package is needed. The demo uses authored fixtures to
+produce a sourced three-part local report, a linked correction and simulated
+delivery. Use `demo --json` for a structured result. No real requests or account
+access; the workspace is temporary.
+
+P4MVP groups the demo and Tencent optional-field compatibility into one
+engineering candidate. See [acceptance status and gaps](docs/P4MVP_READINESS.md).
+Five-index coverage remains 0/5 live-verified; formal MVP, model research, real
+Telegram, ordinary collection, trading and VPS are not enabled. Historical
+observations below establish no new source rights or working live integration.
 
 P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
@@ -41,9 +48,9 @@ See [Blueprint v1](BLUEPRINT.md), [P4 methods](docs/P4_METHODS.md) and
 The local foundation includes bounded RSS capture, offline market CSV parsing,
 an SQLite provenance store, strict timestamps, domain-specific evidence checks,
 immutable reference bundles, retention and hash-verified replay. A fixed five-index
-profile remains **BLOCKED_MARKET_SOURCES**. Before the P4B one-shot, the frozen
-source baseline is0/5 live-verified; its separate observation receipt records
-actual partial acquisition without changing full five-index/MVP acceptance.
+profile remains **BLOCKED_MARKET_SOURCES**, with 0/5 live-verified. The
+historical P4B BaoStock receipt records no usable daily rows or validated
+symbols. Its allowance is closed; it did not advance five-index acceptance.
 This is an unresolved access/rights/implementation gap, not five failed requests.
 The [source matrix](docs/SOURCE_MATRIX.md) records candidate sources and limits.
 The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
@@ -390,21 +397,18 @@ transports cannot authorize live verification. CI makes no product HTTP requests
 ```text
 python -m unittest discover -s tests/governance -p test_*.py -v
 python -m unittest discover -s tests/product -p test_*.py -v
-python tools/governance.py check
-python tools/governance.py prompt --verify
-python tools/governance.py bundle
-python tools/governance.py gate
+python tools/governance_mvp.py check
+python tools/governance_mvp.py snapshot
+python tools/governance_mvp.py gate
 git diff --check
 ```
 
-P4B PR13 is merged. Its actual login failed before any validated response;
-its successful engineering checks are not a live data PASS. P4D investigates
-that failure with a separately authorized login-only diagnostic and, only after
-a supported repair and renewed independent release, one two-index verification.
-Old quota and failed evidence are immutable; payloads remain memory-only.
-See [the recovery plan](docs/BAOSTOCK_PROTOCOL_RECOVERY.md).
+P4B PR13 is merged. Its login failed before any validated response. The
+subsequent P4D and operator probes are closed historical diagnostics, not
+permissions or ready integrations. Their outcomes and exhausted quotas remain
+unchanged. See [the historical recovery plan](docs/BAOSTOCK_PROTOCOL_RECOVERY.md).
 
-The active construction branch is `stage1-baostock-protocol-recovery`. The gate checks
+The active construction branch is `stage7-offline-mvp-readiness`. The gate checks
 exact scope, staged/worktree agreement, permissions and content-bound receipts.
 On detached CI, `--ci` skips local branch identity only.
 

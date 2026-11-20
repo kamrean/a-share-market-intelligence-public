@@ -1,0 +1,58 @@
+schema_version = 1
+package = "P4MVP"
+branch = "stage7-offline-mvp-readiness"
+base = "652d5c6effcf22dc1f38b2d2a3c5ea86c20291ec"
+tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+allow_live_requests = false
+goal = "One runnable offline research MVP demo, evidence-backed Tencent row repair, and an honest acceptance gap register."
+next_gate = "AWAITING_HUMAN_MERGE only after independent review and exact-head Ubuntu and Windows CI; research MVP acceptance remains blocked."
+rollback = "Revert this PR as a unit. No runtime migrations or new stores outside the demo's disposable workspace."
+repairs = "User authorizes all necessary in-scope fixes within one consolidated implementation review repair cycle. Revalidate and independently re-review a revised snapshot. Escalate unknown findings, a second BLOCK, or scope, safety or permission changes."
+mutable_paths = [
+  ".github/workflows/governance.yml",
+  "AGENTS.md",
+  "README.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "docs/CONSTRUCTION_LOG.md",
+  "governance/policy.toml",
+  "market_intelligence/tencent_daily.py",
+  "project-state/state.json",
+  "tests/governance/test_governance_p4t.py",
+]
+new_paths = [
+  "contracts/p4mvp_offline_readiness.toml",
+  "docs/P4MVP_READINESS.md",
+  "docs/evidence/p4mvp-tencent-shape.json",
+  "docs/reviews/p4mvp-entry.json",
+  "docs/reviews/p4mvp-review.json",
+  "docs/reviews/p4mvp-validation.json",
+  "docs/reviews/p4mvp-release.json",
+  "market_intelligence/mvp.py",
+  "tests/product/test_mvp.py",
+  "tests/product/test_tencent_opaque_extras.py",
+  "tools/governance_mvp.py",
+  "tests/governance/test_governance_mvp.py",
+  "tests/governance/p4t_merged_fixture.py",
+]
+receipt_paths = [
+  "docs/reviews/p4mvp-review.json",
+  "docs/reviews/p4mvp-validation.json",
+  "docs/reviews/p4mvp-release.json",
+]
+planning_paths = [
+  "AGENTS.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "BLUEPRINT.md",
+  "contracts/p4mvp_offline_readiness.toml",
+  "governance/policy.toml",
+  "project-state/state.json",
+]
+
+[work]
+demo = "Stdlib Python 3.12 single demo command, authored scenario through existing gates, bounded committee, ledger, ordered report, append-only correction and fake delivery. No new persistent workspace, paid credentials, imports from archived projects, or live claims."
+tencent = "Add an explicit offline compatibility parser for already supplied exact-symbol response bytes. Permit bounded JSON list/object only in optional fields after six required positions. Keep strict prefix, length, bounds, dates, OHLC, symbol, full-row conflict and duplicate behavior. Never infer source rights; do not change the legacy strict entry or expose a new network route."
+evidence = "Publish only recent sanitized count evidence and clearly stated gaps. Preserve old staged diagnostics outside this worktree and every merged historical receipt byte. No private journal, payload, prices, keys or agent signing material in Git."
+automation = "Reuse repository governance helpers, required Ubuntu/Windows jobs, existing offline suites and content hashes. Native Codex agents work disjoint scopes; independent Prompt Auditor, read-only Reviewer, Release Checker and CI remain separate responsibilities. A later PR comment may record exact tested head without rewriting frozen records."
+tests = "Focused shape and demo tests, existing offline product and historical governance assertions, deterministic scope/permissions/fingerprint, invalid approval and CI network refusal. Retain pins/job names/protection. No runtime outbound request."
