@@ -21,11 +21,18 @@ produce a sourced three-part local report, a linked correction and simulated
 delivery. Use `demo --json` for a structured result. No real requests or account
 access; the workspace is temporary.
 
-P4MVP groups the demo and Tencent optional-field compatibility into one
-engineering candidate. See [acceptance status and gaps](docs/P4MVP_READINESS.md).
-Five-index coverage remains 0/5 live-verified; formal MVP, model research, real
-Telegram, ordinary collection, trading and VPS are not enabled. Historical
-observations below establish no new source rights or working live integration.
+PR #15 merged the offline demo and Tencent optional-field compatibility.
+The [current MVP profile](docs/P4CORE_ACCEPTANCE.md) requires three A-share
+indices and permitted primary news; KOSPI and SP500 are optional context.
+Run the offline readiness preflight with:
+
+```text
+python -B -m market_intelligence.mvp_core preflight
+```
+
+Current live-verified core coverage remains 0/3. Real collection, model
+research, Telegram, trading and VPS are not enabled. Earlier five-index
+profiles and receipts describe their own historical scope.
 
 P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
@@ -47,11 +54,11 @@ See [Blueprint v1](BLUEPRINT.md), [P4 methods](docs/P4_METHODS.md) and
 
 The local foundation includes bounded RSS capture, offline market CSV parsing,
 an SQLite provenance store, strict timestamps, domain-specific evidence checks,
-immutable reference bundles, retention and hash-verified replay. A fixed five-index
-profile remains **BLOCKED_MARKET_SOURCES**, with 0/5 live-verified. The
+immutable reference bundles, retention and hash-verified replay. The earlier
+fixed five-index profile recorded 0/5 live-verified. The
 historical P4B BaoStock receipt records no usable daily rows or validated
 symbols. Its allowance is closed; it did not advance five-index acceptance.
-This is an unresolved access/rights/implementation gap, not five failed requests.
+This is an unresolved access and rights gap, not five failed requests.
 The [source matrix](docs/SOURCE_MATRIX.md) records candidate sources and limits.
 The [probe record](docs/evidence/p1-source-probe.json) records the actual probe
 status, including when it has not run. An RSS result cannot satisfy index coverage.

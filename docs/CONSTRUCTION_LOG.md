@@ -1943,3 +1943,20 @@ precision in full-row identity, required-suite enforcement in the local release
 gate, and stale BaoStock acquisition wording. These are in-scope findings for a
 single consolidated repair, followed by validation and re-review of the
 corrected snapshot. The original block is not a release attestation.
+
+### P4CORE A-Share Acceptance
+
+PR15 was human-merged at 37a73f7 and the matching merged-main CI passed.
+The user selected the fastest credential-free route: three mainland indices
+and an accountable permitted primary source are required; KOSPI and SP500
+are optional context. Blueprint v1 and a separate versioned evaluator reflect
+that decision. The historical five-index records are unchanged.
+
+The package tests evidence eligibility offline. It does not fetch new data
+or attest source rights, live acceptance, model runs, Telegram or VPS.
+Sanitized historical diagnostics do not close the mainland provider gap.
+
+The first independent code review blocked malformed optional evidence
+entering the core assessment and invalid optional calendars aborting it.
+The one consolidated repair uses explicit optional input slots with isolated
+session calendars, followed by fresh tests and independent re-review.

@@ -1,0 +1,38 @@
+schema_version = 1
+version = "p4core-a-share-v1"
+method_version = "p4core-offline-evidence-v1"
+mode = "synthetic_test"
+required_market = ["000001.SH", "399001.SZ", "399006.SZ"]
+optional_market = ["KOSPI", "SP500"]
+required_news_tier = "A"
+
+[source_requirements]
+free = true
+no_registration = true
+no_key = true
+
+[news_candidate]
+source_id = "fed_press"
+publisher = "Federal Reserve Board"
+status = "documented_candidate_only"
+scope = "Attributed title, link and release time for Board-authored releases only; excludes third-party material and linked-content retrieval."
+documentation = [
+  "https://www.federalreserve.gov/feeds/feeds.htm",
+  "https://www.federalreserve.gov/disclaimer.htm",
+]
+
+[[rules]]
+domain = "market"
+validator = "market-v1"
+required = true
+minimum_coverage = 1.0
+max_age_seconds = 604800
+allow_degraded = false
+
+[[rules]]
+domain = "news"
+validator = "news-v1"
+required = true
+minimum_coverage = 1.0
+max_age_seconds = 2678400
+allow_degraded = false

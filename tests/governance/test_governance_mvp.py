@@ -21,6 +21,15 @@ SPEC.loader.exec_module(m)
 g = m.g
 
 
+def merged_mvp_inputs():
+    return p4t_merged_fixture.merged_contents(ROOT, g, p4t_merged_fixture.MERGED_P4MVP)
+
+
+def merged_planning():
+    merged = merged_mvp_inputs()
+    return {name: merged[name] for name in (*m.PLANNING_PATHS, m.ENTRY)}
+
+
 def json_text(value):
     return json.dumps(value, sort_keys=True) + "\n"
 
@@ -50,7 +59,7 @@ def authored_receipts(snapshot_id):
 class PlanningTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.planning = {name: g.read_text(ROOT, name) for name in (*m.PLANNING_PATHS, m.ENTRY)}
+        cls.planning = merged_planning()
 
     def test_recorded_entry_snapshot_and_contract_match(self):
         contract, state = m.validate_planning(self.planning)
@@ -78,7 +87,7 @@ class PlanningTests(unittest.TestCase):
     def test_workflow_changes_only_active_checks_and_demo_smoke(self):
         path = ".github/workflows/governance.yml"
         old = p4t_merged_fixture.merged_contents(ROOT, g)[path]
-        current = g.read_text(ROOT, path)
+        current = merged_mvp_inputs()[path]
         expected = old.replace(
             "# P4T retains locked setup and historical suites; no source requests in CI.",
             "# Retain the locked setup and historical suites; no source requests in CI.",
@@ -206,7 +215,7 @@ class ReceiptTests(unittest.TestCase):
 
 class CandidateTests(unittest.TestCase):
     def test_local_and_ci_checks_share_scope_and_receipt_guards(self):
-        planning = {name: g.read_text(ROOT, name) for name in (*m.PLANNING_PATHS, m.ENTRY)}
+        planning = merged_planning()
         contract, _ = m.validate_planning(planning)
         with tempfile.TemporaryDirectory(prefix="p4mvp-candidate-") as directory:
             root = Path(directory)
