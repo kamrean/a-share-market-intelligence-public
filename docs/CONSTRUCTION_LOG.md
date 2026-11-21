@@ -1972,3 +1972,23 @@ No original history, hash validator, product behavior, runtime permission
 or required job changes. Local release now requires the full governance
 suite in addition to the prior product and focused checks. New receipts
 bind the repair; CI and human merge remain separate.
+
+### P4FED Primary News and Source Readiness
+
+PR16 was human-merged at 39f89d7, and matching main CI passed (44890678839).
+This package audits mainland provider documents and independently checks a
+single newly authorized Board RSS fetch. It leaves general collection closed.
+The fixed allowance is reserved before dispatch, no retry is allowed, and
+only aggregate timing/count metadata can leave the operation.
+The result and approval records distinguish a news observation from absent
+market rights, zero qualifying end-to-end runs, and deferred model and private
+delivery. Historical results and provider tokens are not used.
+
+The first implementation review blocked snapshot
+`87cbc4a3c623f0bcd7eea64baa9bd2b6d01701fe3617335c9c0d93e7c3156281` before
+any request. It found that environment-dependent profile paths could
+reopen the one-shot marker, that revalidation omitted approval receipt
+identity, and that a malformed row could conceal a same-URL conflict.
+One bounded repair fixed OS-user path identity, bound the approval bytes
+across reservation, and made malformed same-locator evidence fail closed.
+Only fresh review and release may authorize the unrepeated request.

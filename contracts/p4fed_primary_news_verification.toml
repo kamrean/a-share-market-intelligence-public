@@ -1,0 +1,77 @@
+schema_version = 1
+package = "P4FED"
+base = "39f89d78987cca0f34d80dea8072451100b44ce5"
+branch = "stage7-live-integration"
+tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+repair_limit = 1
+merge_pr = 16
+merge_ci_run = 44890678839
+planning = [
+  "AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "BLUEPRINT.md",
+  "contracts/p4fed_primary_news_verification.toml", "docs/P4_LIVE_SOURCE_READINESS.md",
+  "governance/policy.toml", "project-state/state.json",
+]
+mutable = [
+  ".github/workflows/governance.yml", "AGENTS.md", "README.md",
+  "START_CONSTRUCTION_PROMPT.md", "docs/CONSTRUCTION_LOG.md",
+  "governance/policy.toml", "project-state/state.json",
+  "tests/governance/p4t_merged_fixture.py", "tests/governance/test_governance_core.py",
+]
+additions = [
+  "contracts/p4fed_primary_news_verification.toml", "docs/P4_LIVE_SOURCE_READINESS.md",
+  "docs/reviews/p4fed-entry.json", "docs/reviews/p4fed-validation.json",
+  "docs/reviews/p4fed-review.json", "docs/reviews/p4fed-preprobe-release.json",
+  "docs/reviews/p4fed-release.json", "docs/evidence/p4fed-observation.json",
+  "market_intelligence/primary_news_probe.py", "tests/product/test_primary_news_probe.py",
+  "tools/governance_news.py", "tests/governance/test_governance_news.py",
+]
+attestations = [
+  "docs/reviews/p4fed-validation.json", "docs/reviews/p4fed-review.json",
+  "docs/reviews/p4fed-preprobe-release.json", "docs/reviews/p4fed-release.json",
+  "docs/evidence/p4fed-observation.json",
+]
+
+[operation]
+id = "p4fed-board-rss-20261121-v1"
+source = "fed_press"
+method = "GET"
+endpoint = "https://www.federalreserve.gov/feeds/press_all.xml"
+max_attempts = 1
+retry = false
+redirect = false
+paid = false
+requires_registration = false
+requires_key = false
+persist_payload = false
+allowed_fields_in_memory = ["title", "link", "published_at"]
+freshness_seconds = 2678400
+max_bytes = 512000
+max_items = 1000
+transport_timeout_seconds = 10
+scope = "Implement the user-approved package: one fresh Board RSS read only after independent review and pre-probe release. Bounded metadata projection only; exclude indicated third-party and non-Board release locations. No descriptions, linked retrieval, or item values in persisted artifacts."
+reservation = "Fixed per-user external one-shot journal synchronized before dispatch. Failed, unknown or interrupted reservations consume the allowance. No reset or retries."
+dispatch_gate = "Require original base HEAD and exact branch, staged snapshot, independent entry, Builder validation, Reviewer PASS, separate PREPROBE_READY, pending result, explicit opt-in and non-CI. Recheck after reservation. No dispatch from a merged checkout or after terminal receipt."
+receipts = "Sanitized run/timing, bounded count partition, freshness and supported errors only. No raw bytes, individual values, response URLs, personal paths or credentials. Negative or unknown results may be published only as such after independent final release."
+
+[boundary]
+mainland = "Documentation only. No mainland request, source promotion or denominator revision. Core coverage 0/3, dated runs 0/3. KOSPI and SP500 optional."
+prohibitions = "No reopening historical probes, model, Telegram, scheduler, trading, deploy or VPS. No general permissions or automatic merge."
+next_gate = "Reviewed terminal summary, final Release Checker, exact-head Ubuntu and Windows CI, manual merge. MVP remains blocked."
+
+[validation]
+local = ["focused Fed product and governance suites", "full offline product suite", "historical P4CORE governance suite", "offline core preflight", "scope and staged snapshot check", "patch whitespace"]
+acceptance = [
+  "Use the existing fixed-host verified-TLS fetch in market_intelligence/sources.py, bounded parser primitives from sources.py, and external-path plus durable exclusive journal helpers from store.py and tencent_capture.py without changing them.",
+  "Admit only canonical HTTPS Board press release links in the official channel; reject third-party/contradictory attribution and out-of-scope URLs. Require unambiguous title, locator and timezone-aware publication. No decisions from descriptions or linked pages.",
+  "Check bounded item count accounting, URL deduplication, conflicting rows, current/stale/future cutoffs at capture time, and strict results-only receipts. Prove raw XML, item values, exceptions, local paths and personal data are not in stdout, journals or Git artifacts.",
+  "Verify positive one-shot with a stub transport and refusals for missing opt-in, CI, wrong branch or base HEAD, altered/stale or unstaged inputs, incomplete/duplicate roles, unfinalized journals, invalid response, interruption, failures and no retry after repair or rollback.",
+]
+history = "Retain all existing test suites and required job names. Historical P4CORE frozen planning and workflow tests read immutable blobs from merged PR16 commit 39f89d78987cca0f34d80dea8072451100b44ce5; never execute archived code or relax any old assertion."
+ci = "Run complete historical and new offline suites, exact-head Ubuntu and Windows. An explicit negative test proves CI cannot authorize the network command."
+
+[bindings]
+dispatch = "Compute the protected hash across original baseline plus allowed stage paths. Reject differences between the working tree and the exact staged bytes. Bind entry plan, validation, Reviewer and pre-probe release in sequence by SHA-256; recheck those bytes after durable reservation and before the only transport call."
+final = "A separate final release links the exact unchanged protected snapshot, normalized pre-probe receipt hash and normalized terminal sanitized observation hash; NOT_RUN, tampered or unbound results block publication."
+rollback = "Stop operations immediately. Revert the package as a unit by ordinary reviewed changes if merged; do not revert, remove, move, replace or reset the fixed external one-shot journal, including a failed, empty or interrupted reservation. Review, repair, restart, merge, revert or redelivery never issues a second allowance."

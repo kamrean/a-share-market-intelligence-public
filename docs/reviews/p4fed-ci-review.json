@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4FEDCI",
+  "snapshot_id": "1273547b09a936fe18624fe52e21caa065854169e82dbbb3b8af4a5b8418cbf1",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "read_only": true,
+  "agent_id": "01a1fe11-f570-7411-8d4e-950f05bca3d8",
+  "validation_sha256": "d9616efb432ad6d8e7049a2ff4a124f78bb29ea9432b2e2957d3ed56b8df424e",
+  "findings": []
+}

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "active_package": "P4CORE",
-  "active_contract": "contracts/p4core_a_share_acceptance.toml",
-  "branch": "stage1-a-share-core-acceptance",
-  "baseline": "37a73f7ff3c9d3f7fd4600cc460430c035c8213a",
+  "active_package": "P4FED",
+  "active_contract": "contracts/p4fed_primary_news_verification.toml",
+  "branch": "stage7-live-integration",
+  "baseline": "39f89d78987cca0f34d80dea8072451100b44ce5",
   "package_status": "active_unreleased",
   "builder_agents": [
     "coordinator"
@@ -67,10 +67,10 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P4MVP",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/15",
-    "merge_commit": "37a73f7ff3c9d3f7fd4600cc460430c035c8213a",
-    "merge_ci_run": 44872529639,
+    "package_id": "P4CORE",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/16",
+    "merge_commit": "39f89d78987cca0f34d80dea8072451100b44ce5",
+    "merge_ci_run": 44890678839,
     "merge_status": "merged",
     "ci_status": "PASS"
   },
@@ -83,23 +83,25 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "entry": "docs/reviews/p4core-entry.json",
-    "validation": "docs/reviews/p4core-validation.json",
-    "reviewer": "docs/reviews/p4core-review.json",
-    "release": "docs/reviews/p4core-release.json"
+    "entry": "docs/reviews/p4fed-entry.json",
+    "validation": "docs/reviews/p4fed-validation.json",
+    "reviewer": "docs/reviews/p4fed-review.json",
+    "preprobe_release": "docs/reviews/p4fed-preprobe-release.json",
+    "observation": "docs/evidence/p4fed-observation.json",
+    "release": "docs/reviews/p4fed-release.json"
   },
-  "next_gate": "Human merge after reviewed local validation and exact-head CI; live acceptance remains blocked pending approved A-share source evidence.",
+  "next_gate": "Scoped primary-news receipt and final review/release, exact-head CI and human merge; no general runtime or MVP acceptance.",
   "last_updated": "2026-11-21",
   "live_integration": {
     "entry_status": "human_merged",
-    "runtime_implementation": "a_share_core_profile_offline_planned",
+    "runtime_implementation": "a_share_core_offline_merged",
     "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
     "prerequisite_register": "docs/evidence/live-integration-prerequisites.json",
     "permissions_enabled": false
   },
-  "phase": "offline_core_acceptance",
+  "phase": "isolated_primary_news_verification",
   "limited_source_probe": {
-    "contract": "contracts/p4core_a_share_acceptance.toml",
+    "contract": "contracts/p4fed_primary_news_verification.toml",
     "mode": "closed",
     "upstream_rights": "unknown",
     "normal_source_operations_enabled": false,
@@ -117,6 +119,12 @@
     "old_allowances_reopened": false
   },
   "offline_mvp_demo": "human_merged",
+  "primary_news_verification": {
+    "operation_id": "p4fed-board-rss-20261121-v1",
+    "status_source": "docs/evidence/p4fed-observation.json",
+    "max_attempts": 1,
+    "grants_general_runtime": false
+  },
   "live_market_coverage": "0/3_core",
   "optional_market_context": [
     "KOSPI",

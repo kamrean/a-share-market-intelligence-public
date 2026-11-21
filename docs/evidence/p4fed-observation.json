@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "package": "P4FED",
+  "snapshot_id": "c15a6df3467bd62c1ba78f8c7b254348359d33daa14a6d672847f11a575adc08",
+  "status": "FAILED",
+  "observation": {
+    "captured_at": null,
+    "counts": null,
+    "dispatch_attempts": 1,
+    "error": "invalid_response",
+    "finished_at": "2026-11-21T12:49:46.409128Z",
+    "freshness_seconds": 2678400,
+    "operation_id": "p4fed-board-rss-20261121-v1",
+    "started_at": "2026-11-21T12:49:42.211051Z"
+  }
+}

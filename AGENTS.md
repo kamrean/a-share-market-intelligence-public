@@ -1,8 +1,16 @@
 # Project Work Rules
 
-## P4CORE Active Package
+## P4FED Active Package
 
-Use START_CONSTRUCTION_PROMPT.md and the active P4CORE contract. All prior
+Read START_CONSTRUCTION_PROMPT.md and the P4FED contract. Preserve the core
+profile and historical receipts. The sole possible network action is the
+separately reviewed, fixed one-use Board RSS check. No historical allowance
+can be re-used. Do not read secrets or enable general collection, model,
+Telegram, scheduled runs, trading or VPS.
+
+## Historical P4CORE Package (Merged)
+
+The P4CORE contract is historical evidence. All prior
 network gates remain closed. The core profile is offline and does not grant
 any provider or runtime permission. Preserve all historical evidence.
 

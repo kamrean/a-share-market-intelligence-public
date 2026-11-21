@@ -21,6 +21,10 @@ SPEC.loader.exec_module(c)
 g = c.g
 
 
+def merged_core():
+    return p4t_merged_fixture.merged_contents(ROOT, g, p4t_merged_fixture.MERGED_P4CORE)
+
+
 def json_text(value):
     return json.dumps(value, sort_keys=True) + "\n"
 
@@ -52,7 +56,7 @@ def authored_receipts(digest, builders):
 class PlanningTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.planning = {name: g.read_text(ROOT, name) for name in (*c.PLANNING_PATHS, c.ENTRY)}
+        cls.planning = {name: merged_core()[name] for name in (*c.PLANNING_PATHS, c.ENTRY)}
 
     def test_pinned_contract_and_entry(self):
         contract, state = c.validate_planning(self.planning)
@@ -93,7 +97,7 @@ class PlanningTests(unittest.TestCase):
             "        run: python -B -m market_intelligence.mvp_core preflight\n"
             "      - name: Scope and canonical consistency\n",
         ).replace("tools/governance_mvp.py", "tools/governance_core.py")
-        self.assertEqual(g.read_text(ROOT, path), expected)
+        self.assertEqual(merged_core()[path], expected)
 
 
 class ReceiptTests(unittest.TestCase):
@@ -192,7 +196,7 @@ class ReceiptTests(unittest.TestCase):
 
 class CandidateTests(unittest.TestCase):
     def test_local_and_ci_checks_bind_scope_history_and_receipts(self):
-        planning = {name: g.read_text(ROOT, name) for name in (*c.PLANNING_PATHS, c.ENTRY)}
+        planning = {name: merged_core()[name] for name in (*c.PLANNING_PATHS, c.ENTRY)}
         contract, _ = c.validate_planning(planning)
         with tempfile.TemporaryDirectory(prefix="p4core-candidate-") as directory:
             root = Path(directory)
