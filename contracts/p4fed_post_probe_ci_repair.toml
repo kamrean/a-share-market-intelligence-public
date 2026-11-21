@@ -1,0 +1,47 @@
+schema_version = 1
+package = "P4FEDCI"
+branch = "stage7-live-integration"
+pr = 17
+base = "39f89d78987cca0f34d80dea8072451100b44ce5"
+failed_head = "6070fc0284e6e7a989903b9f81180b20da12b8cf"
+failed_ci = 44906309903
+original_snapshot = "c15a6df3467bd62c1ba78f8c7b254348359d33daa14a6d672847f11a575adc08"
+original_commit_provenance_only = true
+new_source_requests = 0
+human_merge_required = true
+auto_merge_allowed = false
+authority = "The user authorized fixing PR17 until CI passes. This supplement is offline only and does not extend or renew the consumed source allowance."
+changes = [
+  ".github/workflows/governance.yml",
+  "tests/product/test_primary_news_probe.py",
+]
+additions = [
+  "contracts/p4fed_post_probe_ci_repair.toml",
+  "tools/governance_news_ci_repair.py",
+  "tests/governance/test_governance_news_ci_repair.py",
+  "docs/reviews/p4fed-ci-entry.json",
+  "docs/reviews/p4fed-ci-validation.json",
+  "docs/reviews/p4fed-ci-review.json",
+  "docs/reviews/p4fed-ci-release.json",
+]
+
+[repair]
+reproduction = "On Windows, use GetShortPathNameW for a synthetic TemporaryDirectory and run the original test with a stub transport. The two path spellings resolve to the same journal. The synchronize() assertion raises AssertionError, wrapped as probe_journal_unavailable. Do not read the real journal or contact any provider."
+test = "Exactly one assertion changes self.path to self.path.resolve(strict=True), preserving the existing path identity, handle identity, order, sync, and disclosure checks."
+workflow = "Only switch the three existing offline P4FED CI validation commands (check, snapshot, gate) to the repair checker. Preserve both required jobs, old CI and product test suites, and the original observe --ci refusal."
+immutability = "Reconstruct the exact reviewed original snapshot by reversing those four literal changes; confirm the pinned original receipt hashes and terminal/schema bindings. No failed-head Git object required; do not load archived code. Protect original observation, pre-probe approval, Reviewer, release, and validation at their existing paths and original bytes."
+review = "Bind a fresh independently audited offline plan, verified local product/targeted regression results, independent Reviewer and separate Release Checker to the repaired staged snapshot. Release scope is PR only."
+stop = "Do not issue source approval, retry RSS, touch the consumed journal, promote readiness, change runtime behavior or weaken CI. Unexpected scope or a different CI root cause must be diagnosed before any further change under the user's authorization. No merge or VPS."
+validation = [
+  "Original failing Windows short-path case reproduced with the existing test and no network; identical resolved paths confirmed.",
+  "The repaired same-path case passes, focused probe and repair governance suites pass, and full product suite passes with only the known host privilege skip.",
+  "Reconstruction rejects extra changes, altered historical receipts, changed runtime bytes or added permission. New gate has no dispatch command; the original gate remains closed.",
+  "Full exact-head Ubuntu and Windows CI before human merge.",
+]
+
+[immutable_receipt_hashes]
+"docs/reviews/p4fed-validation.json" = "884ded47cf074110667c03bb30a5cf2f0d044fdf420ab497b220632732f3edc1"
+"docs/reviews/p4fed-review.json" = "20bdca9a4032949844b4627bbda3ad23f9baa8e2af6989988ab69106e6df2036"
+"docs/reviews/p4fed-preprobe-release.json" = "4f8e1db928eb4315f5b92c99dad395143d7ad3f4896a129c55a5686c49e8dd69"
+"docs/reviews/p4fed-release.json" = "9c435a437a23392633a58aa6d6980d8836a05bded056c8de8958e556ddfeab91"
+"docs/evidence/p4fed-observation.json" = "5aa27a64f69fa9895a7de229eb94ec470aceecb9e868552bdf64aec52b25367b"

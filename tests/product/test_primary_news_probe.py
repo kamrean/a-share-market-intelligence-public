@@ -157,7 +157,7 @@ class PrimaryNewsProbeTests(unittest.TestCase):
 
         def synchronize(path):
             sync(path)
-            self.assertEqual(path, self.path)
+            self.assertEqual(path, self.path.resolve(strict=True))
             events.append("sync")
 
         def reassert(handle, path):

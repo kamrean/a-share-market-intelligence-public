@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "package": "P4FEDCI",
+  "snapshot_id": "1273547b09a936fe18624fe52e21caa065854169e82dbbb3b8af4a5b8418cbf1",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "read_only": true,
+  "agent_id": "01a1fe23-2a2f-74a1-8b92-650b6eab914c",
+  "review_sha256": "a121849ce5d135df0d13572ba80e8c49d146bd0d42de2cd1071d16960f73aa86",
+  "original_observation_sha256": "5aa27a64f69fa9895a7de229eb94ec470aceecb9e868552bdf64aec52b25367b",
+  "human_merge_required": true,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT"
+}
