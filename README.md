@@ -38,6 +38,10 @@ checkpoint has a [source audit](docs/P4_LIVE_SOURCE_READINESS.md) and a
 [sanitized result](docs/evidence/p4fed-observation.json). A news observation
 does not count as an end-to-end run or grant runtime permission.
 
+For authored RSS response cases and the latest documented source-rights gaps,
+see the [offline diagnosis](docs/P4DIAG_OFFLINE_RSS.md). This diagnostic does
+not contact a source or recover the original failed response.
+
 P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and

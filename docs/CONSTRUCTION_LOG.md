@@ -1992,3 +1992,13 @@ identity, and that a malformed row could conceal a same-URL conflict.
 One bounded repair fixed OS-user path identity, bound the approval bytes
 across reservation, and made malformed same-locator evidence fail closed.
 Only fresh review and release may authorize the unrepeated request.
+
+### P4DIAG Offline RSS Diagnostics
+
+PR17 was human-merged at 7a036af and matching main CI passed (44922015663).
+P4DIAG classifies authored RSS response failures with bounded, payload-free
+output while preserving the existing validator and the failed one-shot
+receipt. The historical response was not retained and its cause remains
+unknown. This work also records current mainland provider terms and unmet
+upstream, retention and completed-session requirements. No probe is renewed;
+mainland coverage and dated runs remain 0/3, with runtime permissions closed.
