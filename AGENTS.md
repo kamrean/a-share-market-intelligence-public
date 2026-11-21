@@ -1,12 +1,19 @@
 # Project Work Rules
 
-## Active P4T Construction Entry
+## P4MVP Active Package
 
-The current user requests one coherent Tencent daily-index replacement package.
+Use START_CONSTRUCTION_PROMPT.md and contracts/p4mvp_offline_readiness.toml.
+Older entries are historical, not runtime authority. All source/network gates
+remain closed. This package reuses the repository's automated scope, validation,
+review receipts and protected CI, with native Codex subagents for disjoint
+Builder slices and independent review/release. No new consumer rights.
+
+## Historical P4T Construction Entry (Closed)
+
+The former P4T package below is preserved for context only; its runtime gate is closed.
 Read START_CONSTRUCTION_PROMPT.md, BLUEPRINT.md, project-state/state.json,
 governance/policy.toml and contracts/p4t_tencent_daily_index.toml with its named
-inputs. That contract supersedes the historical instructions below for current
-construction only. It does not reopen BaoStock or reset any old allowance.
+inputs only when auditing P4T history. It grants no current operation or allowance.
 
 Only its nine mutable and 23 new paths may change against the content-bound
 historical view. Independent entry/Prompt Auditor PASS precede implementation.

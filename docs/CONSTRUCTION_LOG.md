@@ -1923,3 +1923,23 @@ will retain197 historical governance tests and854 product cases, adding focused
 source/transport/temporal/deduplication/rights/approval tests. These are required
 checks, not results yet. Actual entry, validation, Reviewer, Release, observation
 and CI outcomes belong in the named P4T attestations; human merge is mandatory.
+
+### P4MVP Offline Readiness
+
+P4MVP starts from merged PR14 and retains all published history. Unpublished
+operator work and consumed allowances remain untouched in their original
+worktree. Only sanitized comparison counts from two separate observations
+explain the targeted trailing-field repair. This package runs no source probe.
+
+The package puts a one-command synthetic report, correction and fake delivery
+in front of the existing workflow and tests narrow offline compatibility.
+It leaves full research MVP acceptance blocked and records the shortest
+remaining acceptance chain. Existing repository checks and protected CI are
+combined with native Codex disjoint Builders and independent review/release.
+Do not infer live delivery, permissions or a merge from local candidate status.
+
+The initial independent implementation review blocked the candidate on decimal
+precision in full-row identity, required-suite enforcement in the local release
+gate, and stale BaoStock acquisition wording. These are in-scope findings for a
+single consolidated repair, followed by validation and re-review of the
+corrected snapshot. The original block is not a release attestation.

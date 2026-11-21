@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "package": "P4MVP",
+  "role": "entry_and_prompt_auditor",
+  "agent_id": "01a1fa26-ba2b-7242-a748-a82cc1b7537e",
+  "read_only": true,
+  "entry_verdict": "PASS",
+  "prompt_verdict": "PASS",
+  "scope": "offline_candidate_only",
+  "planning_snapshot": "6281e4c5e963b0184345bca3764074826185f3c2db50f215459abcb9b126ade1",
+  "initial_block": "Clarified one consolidated review repair cycle and labeled the prior P4T entry historical/closed.",
+  "findings": []
+}

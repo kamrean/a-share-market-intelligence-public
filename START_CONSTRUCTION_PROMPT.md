@@ -1,49 +1,26 @@
-# Construction Entrypoint
+# Offline MVP Readiness Entrypoint
 
-## Active P4T Entry
+Use only kamrean/a-share-market-intelligence-public. Read Blueprint v1, AGENTS.md,
+canonical state/policy and the active P4MVP contract. PR14 is the merged baseline.
+This worktree excludes unpublished historical diagnostics; leave the original
+operator worktree and its consumed quotas intact.
 
-Use only kamrean/a-share-market-intelligence-public and the active P4T contract:
-contracts/p4t_tencent_daily_index.toml. Read AGENTS.md, Blueprint v1, canonical
-state/policy and the contract's named inputs. No archived/private project access.
-Main is PR13; later P4D/final-connection checkpoints are local, not merged.
+Implement one credential-free, synthetic workflow demo using the existing
+committee, ledger, report, correction and simulated delivery, plus the narrow
+offline Tencent row-shape compatibility candidate and an honest MVP checklist.
+No real source/model/delivery, scheduling, trading, deploy or VPS operations.
+No normal source rights, live benchmark coverage or research MVP acceptance
+may be claimed. Remain on Python 3.12 and existing SDK test lock.
 
-One medium work package covers source verification, Tencent adapter integration,
-calendar freshness and duplicate tests, source-policy BLOCK preservation, bounded
-technical acquisition and review/PR/CI. Unknown rights are not legal permission.
-Actual entry/Prompt PASS must accept the exact limited test exception before
-implementation; fresh independent Reviewer and separate Release precede requests.
-All old quotas/gates remain closed. Payloads stay in RAM; only sanitized results
-persist. Use the active checker tools/governance_p4t.py, not a historical PASS.
+Hybrid workflow: the active contract, scoped snapshot checker and existing
+required CI jobs enforce the repository gates. The coordinator uses Codex
+subagents for disjoint Builders and independent entry, Reviewer and Release
+responsibilities. Only named receipt files may follow the frozen review
+snapshot. Capture actual validation counts and independent verdicts; CI does
+not substitute for review. Group necessary in-scope fixes in one repair cycle
+with fresh validation and independent re-review. Escalate unknown findings, a
+second BLOCK or a scope/permission change. Do not weaken tests or rewrite history.
 
-Sequence: planning audit -> implementation -> full offline validation -> frozen
-review -> separate pre-probe release -> one bounded attempt -> final Release ->
-named commit/push/PR -> exact-head offline CI -> independent remote Release ->
-AWAITING_HUMAN_MERGE. Failure is recorded, never retried or hidden. Report previous,
-current and remaining progress plus actual latestness, duplicates and cleanup.
-
-## Historical P4D Entry (Closed)
-
-Read AGENTS.md, BLUEPRINT.md, project-state/state.json, governance/policy.toml
-and contracts/p4d_protocol_recovery.toml with its named required inputs.
-Active repository: kamrean/a-share-market-intelligence-public. No archived or
-private project access. PR13 merged at3cceca6e1534484b9001db16644a98b7b068897b;
-PR and merged-main Ubuntu/Windows CI passed. Its failed login is not a data PASS.
-
-P4D combines diagnosis, supported repair and one verification in one human-merged
-PR. Use the new explicit two-stage authorization, never the consumed P4B quota.
-Keep payloads in memory only and retain the sanitized results/quota records.
-
-Sequence: planning and independent entry/Prompt Auditor; implementation and
-offline validation; snapshot-bound independent Reviewer and separate Release;
-one login diagnostic; supported in-scope repair and frozen diagnostic evidence;
-renewed validation/Reviewer/Release; one two-index verification; final Release,
-commit/push/PR/exact-head CI and remote Release; AWAITING_HUMAN_MERGE.
-
-The contract defines exact paths, two-phase gates, preservation and repair
-limits. Do not duplicate it in another long handoff. An inconclusive diagnosis
-stops the second dispatch. All other runtime and historical probe gates remain
-closed; no automatic retries, merge, bypass, model, Telegram, VPS or shutdown.
-
-Report prior/current/remaining work; exact local test results and test scope;
-actual observed dates, latestness, duplicates, disposal, source/MVP gaps;
-branch/commit/PR/audits/CI/human-merge status and next gate.
+One commit/PR via existing protected repository; no direct main push, bypass,
+auto-merge or merge. Wait for exact-head Ubuntu/Windows checks and stop at the
+human merge gate. Report separately what remains for operational acceptance.

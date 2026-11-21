@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "package": "P4MVP",
+  "role": "builder_validation",
+  "verdict": "PASS",
+  "snapshot_id": "753df2fb37a75e3f2e15e08456379b22ea2fa628e9bc5c295ccb086a086d472d",
+  "live_requests": 0,
+  "results": {
+    "commands": [
+      {
+        "command": "python -B -m pip check",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B -m market_intelligence.mvp demo --json",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B -m unittest discover -s tests/product -p test_*.py -q",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B -m unittest discover -s tests/governance -p test_governance_mvp.py",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B -m unittest discover -s tests/governance -p test_governance_p4t.py",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B -m unittest discover -s tests/product -p test_tencent_*.py (socket-denied focused suite)",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B tools/governance_mvp.py check",
+        "exit_code": 0
+      },
+      {
+        "command": "python -B tools/governance_mvp.py snapshot",
+        "exit_code": 0
+      },
+      {
+        "command": "offline runtime/legacy gate CI-denial assertions",
+        "exit_code": 0
+      },
+      {
+        "command": "git diff --cached --check 652d5c6effcf22dc1f38b2d2a3c5ea86c20291ec",
+        "exit_code": 0
+      }
+    ],
+    "counts": {
+      "product_collected": 936,
+      "product_passed": 935,
+      "product_windows_symlink_skip": 1,
+      "focused_tencent": 74,
+      "focused_demo_workflow_scenario": 84,
+      "p4mvp_governance": 13,
+      "historical_p4t_governance": 41,
+      "ci_denial_assertions": 4
+    },
+    "builder_agents": [
+      "01a1fa29-05a5-7353-9a2a-7f053cb48b9d",
+      "01a1fa29-0721-78f2-bd2c-abd4f745dd7f",
+      "01a1fa29-0916-7843-96dc-a3e2d412244c"
+    ]
+  }
+}

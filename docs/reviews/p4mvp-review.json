@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4MVP",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "snapshot_id": "753df2fb37a75e3f2e15e08456379b22ea2fa628e9bc5c295ccb086a086d472d",
+  "agent_id": "01a1fa31-3a50-7871-9590-b6bf1b6f7950",
+  "read_only": true,
+  "findings": [],
+  "validation_sha256": "9214c20cd8135fc6cc00d46b71e2d765d046e1e48d2a9125092840ecd365a68f"
+}

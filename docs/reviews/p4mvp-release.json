@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "package": "P4MVP",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "snapshot_id": "753df2fb37a75e3f2e15e08456379b22ea2fa628e9bc5c295ccb086a086d472d",
+  "agent_id": "01a1fa3b-395a-7a32-9f07-21f6e5451e28",
+  "read_only": true,
+  "review_sha256": "7838e1a336ff9a7b5890767a30b85a9aa7075762c164b3c8d537467234d20b63",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "human_merge_required": true
+}

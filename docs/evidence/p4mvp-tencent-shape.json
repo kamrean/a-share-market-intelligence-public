@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mode": "historical_technical_diagnostics_only",
+  "recorded_in": "local operator worktree; not a prior merged PR",
+  "symbol": "sh000001",
+  "normal_usage_rights": "unknown",
+  "live_verified_benchmarks": 0,
+  "new_requests_in_this_package": 0,
+  "observations": [
+    {
+      "finished_at": "2026-11-20T17:14:43.333015Z",
+      "outcome": "PARTIAL",
+      "returned": 14,
+      "accepted": 0,
+      "reason_counts": {
+        "invalid_row": 10,
+        "outside_window": 4
+      },
+      "response_sha256": "6a2532974c94d50a87d954d09dda28680f10f6804d351a192bdc3192da7d049b",
+      "cleanup_confirmed": true,
+      "raw_persisted": false
+    },
+    {
+      "finished_at": "2026-11-20T17:53:36.477044Z",
+      "outcome": "SHAPE_COUNTS_ONLY",
+      "invalid_row": 10,
+      "breakdown": {
+        "non_scalar_extra": 10
+      },
+      "response_sha256": "7f8d8fac07cf62c293433d7fb77490de45b3a4c56dd68e564f4d8ed39bfca722",
+      "cleanup_confirmed": true,
+      "raw_persisted": false
+    }
+  ],
+  "limits": "Separate one-shot responses. The first payload cannot be reconstructed or attributed to the second breakdown. Neither result tests the candidate parser or grants rights. All prior allowances remain consumed."
+}

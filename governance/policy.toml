@@ -1,5 +1,5 @@
 schema_version = 1
-active_package = "P4T"
+active_package = "P4MVP"
 python_version = "3.12"
 merge_tier = "D"
 human_merge_required = true
@@ -30,8 +30,8 @@ order_execution_allowed = false
 portfolio_control_allowed = false
 
 [limited_source_probe]
-contract = "contracts/p4t_tencent_daily_index.toml"
-mode = "technical_probe_only"
+contract = "contracts/p4mvp_offline_readiness.toml"
+mode = "closed"
 upstream_rights = "unknown"
 normal_source_operations_enabled = false
 historical_gates_closed = true
