@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "package": "P4FED",
+  "snapshot_id": "c15a6df3467bd62c1ba78f8c7b254348359d33daa14a6d672847f11a575adc08",
+  "role": "builder_validation",
+  "verdict": "PASS",
+  "offline": true,
+  "product_collected": 980,
+  "product_passed": 979,
+  "product_skipped": 1,
+  "focused_product": 27,
+  "focused_governance": 11,
+  "historical_core": 12,
+  "agents": [
+    "01a1fe05-7073-7ea0-b253-a891f14842ee",
+    "01a1fe05-71fb-7e41-9be9-aac47412abc6"
+  ]
+}

@@ -1,4 +1,16 @@
-# A-Share Core Acceptance Entrypoint
+# P4FED: Bounded primary-news verification
+
+Start from merged PR #16. Read Blueprint v1, the P4FED contract, canonical
+state, policy and docs/P4_LIVE_SOURCE_READINESS.md. Independently audit the
+named plan before implementation and the exact staged candidate before
+pre-probe release. Only one fresh exact Board RSS GET is in scope. Reserve
+durably before dispatch; no retries or raw payload retention. Require final
+independent release, exact-head Ubuntu/Windows CI and manual merge.
+
+Mainland source rights remain unresolved. No mainland requests, model,
+Telegram, scheduler, trading or VPS. One bounded in-scope repair at most.
+
+## Historical P4CORE entry (not current authority)
 
 Use only this public repository, Blueprint v1, project-state/state.json and
 the active P4CORE contract. Start from human-merged #15. Keep all historic

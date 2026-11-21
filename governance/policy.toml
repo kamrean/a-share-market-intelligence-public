@@ -1,5 +1,5 @@
 schema_version = 1
-active_package = "P4CORE"
+active_package = "P4FED"
 python_version = "3.12"
 merge_tier = "D"
 human_merge_required = true
@@ -30,9 +30,16 @@ order_execution_allowed = false
 portfolio_control_allowed = false
 
 [limited_source_probe]
-contract = "contracts/p4core_a_share_acceptance.toml"
+contract = "contracts/p4fed_primary_news_verification.toml"
 mode = "closed"
 upstream_rights = "unknown"
 normal_source_operations_enabled = false
 historical_gates_closed = true
 ci_network_gate_allowed = false
+
+[primary_news_verification]
+operation_id = "p4fed-board-rss-20261121-v1"
+max_attempts = 1
+requires_exact_preprobe_release = true
+allows_normal_collection = false
+sanitized_result_path = "docs/evidence/p4fed-observation.json"

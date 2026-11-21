@@ -22,6 +22,8 @@ delivery. Use `demo --json` for a structured result. No real requests or account
 access; the workspace is temporary.
 
 PR #15 merged the offline demo and Tencent optional-field compatibility.
+PR #16 merged the three-index engineering profile; historical reports retain
+their original denominators.
 The [current MVP profile](docs/P4CORE_ACCEPTANCE.md) requires three A-share
 indices and permitted primary news; KOSPI and SP500 are optional context.
 Run the offline readiness preflight with:
@@ -30,9 +32,11 @@ Run the offline readiness preflight with:
 python -B -m market_intelligence.mvp_core preflight
 ```
 
-Current live-verified core coverage remains 0/3. Real collection, model
-research, Telegram, trading and VPS are not enabled. Earlier five-index
-profiles and receipts describe their own historical scope.
+Current live-verified core coverage remains 0/3. Normal collection, model
+research, Telegram, trading and VPS are not enabled. The bounded P4FED
+checkpoint has a [source audit](docs/P4_LIVE_SOURCE_READINESS.md) and a
+[sanitized result](docs/evidence/p4fed-observation.json). A news observation
+does not count as an end-to-end run or grant runtime permission.
 
 P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
@@ -301,7 +305,7 @@ not a real Telegram test, live research, forward observation or accuracy proof.
 See [raw demo evidence](docs/evidence/p4-demo.json) and
 [the readable sample](docs/evidence/p4-report.txt).
 
-Full MVP remains pending permitted five-index/source access, genuine model runs,
+Full MVP remains pending permitted three-index/primary-source access, genuine model runs,
 three dated end-to-end live runs, human claim-support assessment and an authorized
 private Telegram test/correction. Those are a grouped live-integration acceptance
 task, not a reason to fabricate observations or proceed directly to VPS.

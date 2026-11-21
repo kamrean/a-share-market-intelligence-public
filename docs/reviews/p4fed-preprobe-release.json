@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4FED",
+  "snapshot_id": "c15a6df3467bd62c1ba78f8c7b254348359d33daa14a6d672847f11a575adc08",
+  "role": "release_checker",
+  "verdict": "PREPROBE_READY",
+  "read_only": true,
+  "agent_id": "01a1fe23-2a2f-74a1-8b92-650b6eab914c",
+  "review_sha256": "20bdca9a4032949844b4627bbda3ad23f9baa8e2af6989988ab69106e6df2036",
+  "max_attempts": 1
+}

@@ -78,11 +78,21 @@ jobs:
       - name: Smoke test the offline A-share core preflight
         run: python -B -m market_intelligence.mvp_core preflight
       - name: Scope and canonical consistency
-        run: python tools/governance_core.py check --ci
+        run: python tools/governance_news.py check --ci
       - name: Verify deterministic prompt
-        run: python tools/governance_core.py snapshot --ci
+        run: python tools/governance_news.py snapshot --ci
       - name: Validate local review attestations
-        run: python tools/governance_core.py gate --ci
+        run: python tools/governance_news.py gate --ci
+      - name: Confirm CI cannot dispatch the Board RSS verification
+        shell: python
+        run: |
+          import subprocess
+          import sys
+          result = subprocess.run([sys.executable, '-B', 'tools/governance_news.py',
+                                   'observe', '--ci', '--allow-network'],
+                                  capture_output=True, text=True)
+          assert result.returncode == 1 and not result.stdout
+          assert 'not runtime authorization' in result.stderr
       - name: Confirm CI cannot authorize the Tencent probe
         shell: python
         run: |

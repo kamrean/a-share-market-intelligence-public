@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4FED",
+  "role": "entry_and_prompt_auditor",
+  "agent_id": "01a1fe00-7864-7f51-9100-ff7220944d47",
+  "read_only": true,
+  "entry_verdict": "PASS",
+  "prompt_verdict": "PASS",
+  "planning_snapshot": "b9df5602487eb0d625a41118c5b9cd813da205b84c71cd81c81ab72f923667d9",
+  "findings": []
+}

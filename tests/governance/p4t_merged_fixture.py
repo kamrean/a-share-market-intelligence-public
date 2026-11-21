@@ -1,4 +1,4 @@
-"""Pinned PR14 and PR15 inputs for historical assertions, never executable archives."""
+"""Pinned merged inputs for historical assertions, never executable archives."""
 
 from functools import lru_cache
 from types import MappingProxyType
@@ -7,9 +7,10 @@ from unittest.mock import patch
 
 MERGED_P4T = "652d5c6effcf22dc1f38b2d2a3c5ea86c20291ec"
 MERGED_P4MVP = "37a73f7ff3c9d3f7fd4600cc460430c035c8213a"
+MERGED_P4CORE = "39f89d78987cca0f34d80dea8072451100b44ce5"
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=3)
 def merged_contents(root, g, commit=MERGED_P4T):
     entries = {}
     for record in g.git_paths(g.git(root, "ls-tree", "-r", "-z", commit)):
