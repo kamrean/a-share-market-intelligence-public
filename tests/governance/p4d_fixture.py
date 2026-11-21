@@ -5,6 +5,8 @@ import importlib.util
 from pathlib import Path
 import tempfile
 
+import p4t_merged_fixture
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 _temporary = None
@@ -18,7 +20,9 @@ def view():
                                                  REPO_ROOT / "tools/governance_p4t.py")
     current = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(current)
-    _retained, historical = current.historical_contents(REPO_ROOT)
+    merged = p4t_merged_fixture.merged_contents(REPO_ROOT, current.g)
+    with p4t_merged_fixture.merged_reads(current, merged):
+        _retained, historical = current.historical_contents(REPO_ROOT)
     temporary = tempfile.TemporaryDirectory(prefix="p4d-historical-data-")
     root = Path(temporary.name)
     try:

@@ -1,26 +1,23 @@
-# Offline MVP Readiness Entrypoint
+# A-Share Core Acceptance Entrypoint
 
-Use only kamrean/a-share-market-intelligence-public. Read Blueprint v1, AGENTS.md,
-canonical state/policy and the active P4MVP contract. PR14 is the merged baseline.
-This worktree excludes unpublished historical diagnostics; leave the original
-operator worktree and its consumed quotas intact.
+Use only this public repository, Blueprint v1, project-state/state.json and
+the active P4CORE contract. Start from human-merged #15. Keep all historic
+five-index receipts and the separate local operator worktree unchanged.
 
-Implement one credential-free, synthetic workflow demo using the existing
-committee, ledger, report, correction and simulated delivery, plus the narrow
-offline Tencent row-shape compatibility candidate and an honest MVP checklist.
-No real source/model/delivery, scheduling, trading, deploy or VPS operations.
-No normal source rights, live benchmark coverage or research MVP acceptance
-may be claimed. Remain on Python 3.12 and existing SDK test lock.
+The user selected free, no registration and no key: the three named A-share
+indices and one permitted primary news/disclosure/official event source
+are required. KOSPI and SP500 are optional context and cannot satisfy a
+core slot. Implement a versioned offline evidence preflight and test actual
+gate behavior. Offline samples cannot attest rights or live readiness.
 
-Hybrid workflow: the active contract, scoped snapshot checker and existing
-required CI jobs enforce the repository gates. The coordinator uses Codex
-subagents for disjoint Builders and independent entry, Reviewer and Release
-responsibilities. Only named receipt files may follow the frozen review
-snapshot. Capture actual validation counts and independent verdicts; CI does
-not substitute for review. Group necessary in-scope fixes in one repair cycle
-with fresh validation and independent re-review. Escalate unknown findings, a
-second BLOCK or a scope/permission change. Do not weaken tests or rewrite history.
+No real requests, model calls, Telegram, scheduling, trading or VPS. Use
+the repo's existing validations and CI with disjoint native Builders, an
+independent Prompt Auditor and Reviewer, and a separate Release Checker.
+Only named receipts follow the snapshot. One consolidated in-scope repair;
+unknown findings or a second BLOCK escalate. Push one PR only after local
+release, confirm exact-head jobs, and wait for human merge. No direct merge.
 
-One commit/PR via existing protected repository; no direct main push, bypass,
-auto-merge or merge. Wait for exact-head Ubuntu/Windows checks and stop at the
-human merge gate. Report separately what remains for operational acceptance.
+For the explicitly authorized PR16 CI repair only, follow the contract's
+ci_repair section. Keep failed CI and prior reviews in Git history. Run the
+entire offline governance and product suites before fresh independent review,
+release checking, and exact-head CI on the same PR.

@@ -1,5 +1,5 @@
 schema_version = 1
-active_package = "P4MVP"
+active_package = "P4CORE"
 python_version = "3.12"
 merge_tier = "D"
 human_merge_required = true
@@ -30,7 +30,7 @@ order_execution_allowed = false
 portfolio_control_allowed = false
 
 [limited_source_probe]
-contract = "contracts/p4mvp_offline_readiness.toml"
+contract = "contracts/p4core_a_share_acceptance.toml"
 mode = "closed"
 upstream_rights = "unknown"
 normal_source_operations_enabled = false

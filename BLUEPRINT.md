@@ -6,7 +6,7 @@ Build a personal, read-only market intelligence and multi-agent research system.
 
 The first release is a research MVP: a small, reproducible end-to-end pipeline for collecting evidence, analyzing market context and producing traceable daily reports. Delivery is evaluated through working functionality, transparent methods and genuine execution evidence. This document remains Blueprint v1; amendments use Git history, not a new blueprint version. MVP acceptance, observation acceptance, and VPS release are separate milestones. A GitHub upload alone proves none of them.
 
-Free, permitted information sources are the MVP default. Paid providers get a disabled adapter boundary and contract tests; without credentials and successful authorized requests, they are not described as connected or live-verified. Model/API costs are separate from source costs.
+Use only permitted information sources that are free and require no registration or API key for MVP acceptance. Paid or keyed sources remain disabled; a public display, anonymous response or parser test is not a use right or a live-verified integration. Model/API costs are separate from source costs.
 
 ## 2. Non-Goals and Permanent Boundaries
 
@@ -156,7 +156,7 @@ Implement schemas, freshness, missingness, conflicts, source authority/quality, 
 
 ### Stage 3: Market, Flow, and Sector State
 
-Initial market target: at least three named mainland benchmarks, one Korean benchmark, and one U.S. benchmark, with exact symbols, source, delay, and calendar pinned by P1. Latest completed sessions are sufficient; real-time or full-market coverage is not promised.
+MVP requires three mainland benchmarks: Shanghai Composite (000001.SH), Shenzhen Component (399001.SZ), and ChiNext (399006.SZ). KOSPI and S&P 500 (SP500) are optional background. Missing, stale, conflicting or unlicensed foreign input is unavailable with explicit degradation; it cannot fill a mainland slot or block an otherwise eligible core run. Pin each selected source, its exact symbol, rights, delay and calendar. Latest completed sessions are sufficient.
 
 Implement documented breadth/turnover and sector-rotation measures over an explicit bounded universe. Preserve provider, methodology, universe, timestamp, coverage, and lookback. A missing historical window is insufficient_history, not a fabricated percentile. Provider-estimated flow, exchange statistics, and turnover proxies are different series and must never be mislabeled as each other. A flow adapter and missing-data path are required; unavailable live net-flow data remains a disclosed feature gap, not a claim of implemented full flow coverage.
 
@@ -195,7 +195,7 @@ Overnight, standalone premarket/intraday/midday/close, and weekly automated prod
 Research MVP acceptance requires all of the following:
 
 1. Clean-environment installation with a pinned dependency lock and documented commands. Offline synthetic/permitted replay runs without API keys; runs and output are labeled accurately.
-2. The P1 market target and at least one permitted primary news/disclosure or official event source are live-verified. Retain evidence of at least three dated end-to-end live research runs; report failures, missing domains, and exact observation dates. This is an integration sample, not statistical validation.
+2. Live-verify all three required A-share indices and at least one permitted primary news/disclosure or official event source. KOSPI and SP500 are optional background and do not enter the required denominator. Retain evidence of at least three dated end-to-end live research runs; report failures, missing domains, and exact observation dates. This is an integration sample, not statistical validation. Historical five-index receipts and their denominators remain historical, not rewritten or counted as new-profile evidence.
 3. Demonstrate deduplication, sourced upcoming events, sector mapping, transparent rotation/turnover methods, and the real-or-unavailable flow path. A recorded empty event day is valid; a test fixture does not prove live event discovery.
 4. Demonstrate actual model-backed research/review/editing, bounded rounds and cost accounting, and evidence-linked output. A stubbed model only satisfies offline tests, never live integration.
 5. All published substantive claims have valid evidence links. Audit at least 20 sampled claims, or all if fewer, for actual evidence support; publish counts/findings and resolve material unsupported claims. Do not report a quality percentage without the sample and method.

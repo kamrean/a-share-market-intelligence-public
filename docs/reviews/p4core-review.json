@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4CORE",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "snapshot_id": "ae8f91a41e450fdc522c29b19d6f78818a806ab4bbea46fa9975b90da3827ff2",
+  "agent_id": "01a1fcf8-bfad-7492-ab23-d18f108f0784",
+  "read_only": true,
+  "findings": [],
+  "validation_sha256": "92df00fddd0fcecca4558566978f7cc6249ea022fa9f17a80722d40952a513e5"
+}

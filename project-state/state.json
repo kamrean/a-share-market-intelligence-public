@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "active_package": "P4MVP",
-  "active_contract": "contracts/p4mvp_offline_readiness.toml",
-  "branch": "stage7-offline-mvp-readiness",
-  "baseline": "652d5c6effcf22dc1f38b2d2a3c5ea86c20291ec",
+  "active_package": "P4CORE",
+  "active_contract": "contracts/p4core_a_share_acceptance.toml",
+  "branch": "stage1-a-share-core-acceptance",
+  "baseline": "37a73f7ff3c9d3f7fd4600cc460430c035c8213a",
   "package_status": "active_unreleased",
   "builder_agents": [
     "coordinator"
@@ -67,10 +67,12 @@
   },
   "source_readiness": "BLOCKED_MARKET_SOURCES",
   "dependency": {
-    "package_id": "P4T",
-    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/14",
-    "merge_commit": "652d5c6effcf22dc1f38b2d2a3c5ea86c20291ec",
-    "merge_status": "merged"
+    "package_id": "P4MVP",
+    "pr_url": "https://github.com/kamrean/a-share-market-intelligence-public/pull/15",
+    "merge_commit": "37a73f7ff3c9d3f7fd4600cc460430c035c8213a",
+    "merge_ci_run": 44872529639,
+    "merge_status": "merged",
+    "ci_status": "PASS"
   },
   "github": {
     "remote_creation_authorized": false,
@@ -81,24 +83,23 @@
     "merge_status": "not_merged"
   },
   "receipts": {
-    "entry_and_prompt": "docs/reviews/p4mvp-entry.json",
-    "validation": "docs/reviews/p4mvp-validation.json",
-    "reviewer": "docs/reviews/p4mvp-review.json",
-    "release": "docs/reviews/p4mvp-release.json",
-    "source_shape": "docs/evidence/p4mvp-tencent-shape.json"
+    "entry": "docs/reviews/p4core-entry.json",
+    "validation": "docs/reviews/p4core-validation.json",
+    "reviewer": "docs/reviews/p4core-review.json",
+    "release": "docs/reviews/p4core-release.json"
   },
-  "next_gate": "AWAITING_HUMAN_MERGE only after independent review and exact-head Ubuntu and Windows CI; research MVP acceptance remains blocked.",
+  "next_gate": "Human merge after reviewed local validation and exact-head CI; live acceptance remains blocked pending approved A-share source evidence.",
   "last_updated": "2026-11-21",
   "live_integration": {
     "entry_status": "human_merged",
-    "runtime_implementation": "offline_demo_and_tencent_shape_candidate",
+    "runtime_implementation": "a_share_core_profile_offline_planned",
     "readiness": "BLOCKED_EXTERNAL_PREREQUISITES",
     "prerequisite_register": "docs/evidence/live-integration-prerequisites.json",
     "permissions_enabled": false
   },
-  "phase": "offline_deliverable",
+  "phase": "offline_core_acceptance",
   "limited_source_probe": {
-    "contract": "contracts/p4mvp_offline_readiness.toml",
+    "contract": "contracts/p4core_a_share_acceptance.toml",
     "mode": "closed",
     "upstream_rights": "unknown",
     "normal_source_operations_enabled": false,
@@ -115,6 +116,11 @@
     "content_manifest": "governance/p4t-history.json",
     "old_allowances_reopened": false
   },
-  "offline_mvp_demo": "candidate",
-  "live_market_coverage": "0/5"
+  "offline_mvp_demo": "human_merged",
+  "live_market_coverage": "0/3_core",
+  "optional_market_context": [
+    "KOSPI",
+    "SP500"
+  ],
+  "acceptance_profile": "config/mvp_core.toml"
 }

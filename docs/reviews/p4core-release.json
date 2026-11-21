@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "package": "P4CORE",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "snapshot_id": "ae8f91a41e450fdc522c29b19d6f78818a806ab4bbea46fa9975b90da3827ff2",
+  "agent_id": "01a1fd03-09f1-74d0-a8ad-72ee4a1d682e",
+  "read_only": true,
+  "review_sha256": "8af253e9ec5d583b383f9907e0b3b0c8683c2104cb2b4c398964185320445ee0",
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "human_merge_required": true
+}

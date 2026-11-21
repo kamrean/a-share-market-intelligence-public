@@ -1,6 +1,12 @@
 # Project Work Rules
 
-## P4MVP Active Package
+## P4CORE Active Package
+
+Use START_CONSTRUCTION_PROMPT.md and the active P4CORE contract. All prior
+network gates remain closed. The core profile is offline and does not grant
+any provider or runtime permission. Preserve all historical evidence.
+
+## Historical P4MVP Package (Merged)
 
 Use START_CONSTRUCTION_PROMPT.md and contracts/p4mvp_offline_readiness.toml.
 Older entries are historical, not runtime authority. All source/network gates

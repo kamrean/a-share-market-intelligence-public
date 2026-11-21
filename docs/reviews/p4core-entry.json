@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "package": "P4CORE",
+  "role": "entry_and_prompt_auditor",
+  "agent_id": "01a1fcef-cdae-7252-ae28-a768205e8f9c",
+  "read_only": true,
+  "entry_verdict": "PASS",
+  "prompt_verdict": "PASS",
+  "planning_snapshot": "fcbd7076504667edba23522d5d2572f55b751ee7fda953749ed7c5136c2bdcd7",
+  "scope": "offline_core_only",
+  "findings": []
+}

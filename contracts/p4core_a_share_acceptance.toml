@@ -1,0 +1,66 @@
+schema_version = 1
+package = "P4CORE"
+base = "37a73f7ff3c9d3f7fd4600cc460430c035c8213a"
+branch = "stage1-a-share-core-acceptance"
+tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+allow_live_requests = false
+objective = "Implement the authorized keyless A-share-core profile while preserving historical five-index evidence. Report blockers truthfully."
+next_gate = "Human merge after reviewed local validation and exact-head CI; live acceptance remains blocked pending approved A-share source evidence."
+rollback = "Revert this PR as a unit. No store migrations or external mutations."
+repair_limit = 1
+mutable_paths = [
+  ".github/workflows/governance.yml",
+  "AGENTS.md",
+  "BLUEPRINT.md",
+  "README.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "docs/CONSTRUCTION_LOG.md",
+  "governance/policy.toml",
+  "market_intelligence/gate.py",
+  "project-state/state.json",
+  "tests/governance/p4d_fixture.py",
+  "tests/governance/p4t_merged_fixture.py",
+  "tests/governance/test_governance_mvp.py",
+]
+new_paths = [
+  "config/mvp_core.toml",
+  "contracts/p4core_a_share_acceptance.toml",
+  "docs/P4CORE_ACCEPTANCE.md",
+  "docs/reviews/p4core-entry.json",
+  "docs/reviews/p4core-validation.json",
+  "docs/reviews/p4core-review.json",
+  "docs/reviews/p4core-release.json",
+  "market_intelligence/mvp_core.py",
+  "tests/product/test_mvp_core.py",
+  "tests/governance/test_governance_core.py",
+  "tools/governance_core.py",
+]
+receipt_paths = [
+  "docs/reviews/p4core-validation.json",
+  "docs/reviews/p4core-review.json",
+  "docs/reviews/p4core-release.json",
+]
+planning_paths = [
+  "AGENTS.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "BLUEPRINT.md",
+  "contracts/p4core_a_share_acceptance.toml",
+  "governance/policy.toml",
+  "project-state/state.json",
+]
+
+[work]
+profile = "Keep 000001.SH, 399001.SZ and 399006.SZ required, plus one permitted accountable primary news, disclosure or official event source. KOSPI and SP500 are optional, disclosed as unavailable or DEGRADED when absent/ineligible and never fill a core slot. Preserve prior artifacts, hash pins and legacy workflows."
+implementation = "New offline core profile/evaluator and no-credentials preflight; reuse existing market/news validation, use strict separate optional assessment. Reject missing, stale, untrusted, conflicting or future core evidence. Evidence evaluation is not live proof, rights approval or release."
+source_rules = "Free, no registration or key. Official Fed release metadata only as a documented news candidate; no actual new acquisition. Mainland index rights remain unverified; require operation-specific written/licensed or authoritative evidence and genuine source capture. No assumption from public display, technical probes or source paperwork alone."
+governance = "One grouped PR. Independent entry/Prompt audit, bounded native builders, offline validation, one independent Reviewer, separate Release Checker, exact-head Ubuntu/Windows CI and human merge. Retain preceding suites/receipts as historical and preserve protected job names. One consolidated in-scope repair then fresh review; escalate unknown/second BLOCK or permission expansion."
+prohibitions = "No source requests or credential access, no old allowance reopening, no model or Telegram dispatch, no VPS, scheduler, trading or provider substitution. No synthetic-to-live promotion. No operation on PR-CL is part of the code change."
+
+[ci_repair]
+failed_head = "11fd400da226835e451a62ab370a6a9b7f712dae"
+failed_run = 44880965382
+historical_merge = "652d5c6effcf22dc1f38b2d2a3c5ea86c20291ec"
+limit = 1
+scope = "Additional user-authorized PR16 CI repair, separate from the consumed Reviewer repair. Pin historical P4D test data to merged PR14, keep current Python and original checks, add regression, run full suites and refresh exact-snapshot attestations. No changes to product, workflow, source/runtime permissions or historical evidence."

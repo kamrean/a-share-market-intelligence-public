@@ -148,23 +148,38 @@ def evaluate(records, profile, calendar, as_of, now=None):
     cutoff = instant(as_of)
     if cutoff > now:
         raise Invalid("future as_of")
+    domains, accepted, rejected = _assess(
+        records, profile.rules, profile.mode, calendar, cutoff, now, UNIVERSE)
+    status = "BLOCK" if any(d["status"] == "BLOCK" for d in domains.values()) else (
+        "DEGRADED" if any(d["status"] == "DEGRADED" for d in domains.values()) else "PASS")
+    return {"schema_version": 1, "status": status, "as_of": stamp(cutoff), "mode": profile.mode,
+            "confidence_ceiling": "none" if status == "BLOCK" else ("limited" if status == "DEGRADED" else "supported"),
+            "domains": domains, "accepted_ids": accepted, "rejected": rejected,
+            "profile": profile.to_dict(), "calendar": calendar.to_dict(),
+            "profile_hash": digest(profile.to_dict()), "calendar_hash": digest(calendar.to_dict()),
+            "method_version": profile.method_version}
+
+
+def _assess(records, rules, mode, calendar, cutoff, now, market_keys, news_tiers=("A", "B")):
+    """Apply the evidence checks without producing a legacy five-index receipt."""
     eligible = {"market": [], "news": []}
     rejected, domain_faults = [], {"market": [], "news": []}
     ids = set()
     for original in records:
         domain, identity = "unknown", "unreadable"
         try:
+            claimed = (original.domain if isinstance(original, Evidence) else
+                       original.get("domain") if type(original) is dict else None)
+            domain = claimed if type(claimed) is str else "unknown"
             if isinstance(original, Evidence):
-                domain = original.domain
                 record = original.validate(now)
             else:
-                domain = original.get("domain", "unknown") if type(original) is dict else "unknown"
                 record = Evidence.from_dict(original)
             identity = record.evidence_id
             if identity in ids:
                 raise Invalid("duplicate evidence reference")
             ids.add(identity)
-            if record.mode != profile.mode:
+            if record.mode != mode:
                 raise Invalid("wrong evidence mode")
             for name in ("retrieved_at", "first_seen_at", "published_at", "occurred_at",
                          "effective_at", "observed_at", "close_at"):
@@ -173,11 +188,13 @@ def evaluate(records, profile, calendar, as_of, now=None):
                     raise Invalid(name + " after as_of")
             if record.expires_at and instant(record.expires_at) <= now:
                 raise Invalid("expired evidence")
-            rule = next(r for r in profile.rules if r.domain == domain)
+            rule = next(r for r in rules if r.domain == domain)
             anchor = instant(record.close_at if domain == "market" else record.published_at)
             if (cutoff - anchor).total_seconds() > rule.max_age_seconds:
                 raise Invalid("stale evidence")
             if domain == "market":
+                if record.key not in market_keys:
+                    raise Invalid("market evidence outside assessment scope")
                 calendar_id, timezone = MARKETS[record.key]
                 session = calendar.latest(calendar_id, cutoff)
                 if (record.calendar_id != calendar_id or session.timezone != timezone
@@ -185,14 +202,14 @@ def evaluate(records, profile, calendar, as_of, now=None):
                         or instant(record.close_at) != instant(session.close_at)):
                     raise Invalid("wrong or incomplete session identity")
             eligible[domain].append(record)
-        except (Invalid, ValueError, TypeError, StopIteration) as exc:
+        except (ValueError, TypeError, StopIteration, OverflowError) as exc:
             reason = str(exc) or "invalid record"
             rejected.append({"evidence_id": identity, "domain": domain, "reason": reason})
             for affected in ([domain] if domain in domain_faults else domain_faults):
                 domain_faults[affected].append(reason)
     accepted, domains = [], {}
     invalid_ids = {r["evidence_id"] for r in rejected}
-    for rule in profile.rules:
+    for rule in rules:
         groups = {}
         for record in eligible[rule.domain]:
             if record.evidence_id in invalid_ids:
@@ -202,23 +219,26 @@ def evaluate(records, profile, calendar, as_of, now=None):
         faults = list(domain_faults[rule.domain])
         if rule.validator != rule.domain + "-v1":
             faults.append("missing_required_validator" if rule.required else "missing_validator")
+        tiers = ("A", "B") if rule.domain == "market" else news_tiers
+        tier_label = "non-Tier-A" if tiers == ("A",) else "Tier C"
         for key, group in sorted(groups.items()):
             signatures = {(r.value, r.session_id, instant(r.close_at)) if rule.domain == "market"
                           else (r.title, instant(r.published_at)) for r in group}
             reason = "conflicting evidence" if len(signatures) > 1 else None
-            trusted = [r for r in group if r.tier != "C"]
+            trusted = [r for r in group if r.tier in tiers]
             if not trusted:
-                reason = reason or "Tier C cannot confirm"
+                reason = reason or tier_label + " cannot confirm"
             if reason:
                 faults.append(reason)
                 rejected.extend({"evidence_id": r.evidence_id, "domain": rule.domain, "reason": reason} for r in group)
             else:
                 confirmed.extend(trusted)
                 rejected.extend({"evidence_id": r.evidence_id, "domain": rule.domain,
-                                 "reason": "Tier C excluded from confirmed evidence"} for r in group if r.tier == "C")
+                                 "reason": tier_label + " excluded from confirmed evidence"}
+                                for r in group if r.tier not in tiers)
         covered = len({r.key for r in confirmed}) if rule.domain == "market" else int(bool(confirmed))
-        denominator = len(UNIVERSE) if rule.domain == "market" else 1
-        missing = [key for key in UNIVERSE if key not in {r.key for r in confirmed}] if rule.domain == "market" else ([] if confirmed else ["primary_news"])
+        denominator = len(market_keys) if rule.domain == "market" else 1
+        missing = [key for key in market_keys if key not in {r.key for r in confirmed}] if rule.domain == "market" else ([] if confirmed else ["primary_news"])
         if covered / denominator < rule.minimum_coverage:
             faults.append("insufficient_coverage")
         status = "PASS" if not faults else ("DEGRADED" if not rule.required and rule.allow_degraded else "BLOCK")
@@ -228,15 +248,8 @@ def evaluate(records, profile, calendar, as_of, now=None):
         # A missing validator cannot license even individually well-formed inputs.
         if rule.validator == rule.domain + "-v1":
             accepted.extend(confirmed)
-    status = "BLOCK" if any(d["status"] == "BLOCK" for d in domains.values()) else (
-        "DEGRADED" if any(d["status"] == "DEGRADED" for d in domains.values()) else "PASS")
-    return {"schema_version": 1, "status": status, "as_of": stamp(cutoff), "mode": profile.mode,
-            "confidence_ceiling": "none" if status == "BLOCK" else ("limited" if status == "DEGRADED" else "supported"),
-            "domains": domains, "accepted_ids": sorted(r.evidence_id for r in accepted),
-            "rejected": sorted(rejected, key=lambda r: (r["domain"], r["evidence_id"], r["reason"])),
-            "profile": profile.to_dict(), "calendar": calendar.to_dict(),
-            "profile_hash": digest(profile.to_dict()), "calendar_hash": digest(calendar.to_dict()),
-            "method_version": profile.method_version}
+    return (domains, sorted(r.evidence_id for r in accepted),
+            sorted(rejected, key=lambda r: (r["domain"], r["evidence_id"], r["reason"])))
 
 
 def validate_domains(value):

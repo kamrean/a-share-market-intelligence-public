@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "package": "P4CORE",
+  "role": "builder_validation",
+  "verdict": "PASS",
+  "snapshot_id": "ae8f91a41e450fdc522c29b19d6f78818a806ab4bbea46fa9975b90da3827ff2",
+  "live_requests": 0,
+  "results": {
+    "commands": [
+      {
+        "command": "product suite",
+        "exit_code": 0
+      },
+      {
+        "command": "P4CORE governance",
+        "exit_code": 0
+      },
+      {
+        "command": "historical P4MVP governance",
+        "exit_code": 0
+      },
+      {
+        "command": "full governance suite",
+        "exit_code": 0
+      },
+      {
+        "command": "offline preflight",
+        "exit_code": 0
+      },
+      {
+        "command": "scope check",
+        "exit_code": 0
+      },
+      {
+        "command": "patch whitespace",
+        "exit_code": 0
+      }
+    ],
+    "counts": {
+      "product_collected": 953,
+      "product_passed": 952,
+      "product_windows_symlink_skip": 1,
+      "core_governance": 12,
+      "historical_mvp_governance": 13,
+      "governance_collected": 263
+    },
+    "builder_agents": [
+      "01a1fcf1-8485-73e1-a3be-d2a7c359ba47",
+      "01a1fcf1-85fc-7fa2-9214-f414fac7ffcc"
+    ]
+  }
+}
