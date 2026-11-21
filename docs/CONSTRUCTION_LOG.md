@@ -1960,3 +1960,15 @@ The first independent code review blocked malformed optional evidence
 entering the core assessment and invalid optional calendars aborting it.
 The one consolidated repair uses explicit optional input slots with isolated
 session calendars, followed by fresh tests and independent re-review.
+
+### P4CORE PR16 CI Repair
+
+The initial PR16 head 11fd400 failed the required Ubuntu and Windows jobs
+in run 44880965382. Two historical governance cases read the current
+Blueprint v1 as a retained P4T input and rejected its changed hash.
+The user authorized one bounded CI repair. The P4D test fixture now reads
+historical data from merged PR14 while still loading current Python.
+No original history, hash validator, product behavior, runtime permission
+or required job changes. Local release now requires the full governance
+suite in addition to the prior product and focused checks. New receipts
+bind the repair; CI and human merge remain separate.

@@ -16,3 +16,8 @@ independent Prompt Auditor and Reviewer, and a separate Release Checker.
 Only named receipts follow the snapshot. One consolidated in-scope repair;
 unknown findings or a second BLOCK escalate. Push one PR only after local
 release, confirm exact-head jobs, and wait for human merge. No direct merge.
+
+For the explicitly authorized PR16 CI repair only, follow the contract's
+ci_repair section. Keep failed CI and prior reviews in Git history. Run the
+entire offline governance and product suites before fresh independent review,
+release checking, and exact-head CI on the same PR.

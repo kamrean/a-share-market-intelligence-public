@@ -10,6 +10,9 @@ import unittest
 from unittest.mock import patch
 from uuid import uuid4
 
+import p4d_fixture
+import p4t_merged_fixture
+
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location("p4core_governance_tests", ROOT / "tools/governance_core.py")
@@ -29,8 +32,8 @@ def authored_receipts(digest, builders):
         "results": {
             "commands": [{"command": name, "exit_code": 0} for name in c.VALIDATION_COMMANDS],
             "counts": {"product_collected": 947, "product_passed": 946,
-                       "product_windows_symlink_skip": 1, "core_governance": 11,
-                       "historical_mvp_governance": 13},
+                       "product_windows_symlink_skip": 1, "core_governance": 12,
+                       "historical_mvp_governance": 13, "governance_collected": 263},
             "builder_agents": builders,
         },
     })
@@ -75,6 +78,11 @@ class PlanningTests(unittest.TestCase):
             changed = {**self.planning, c.ENTRY: json_text({**entry, key: value})}
             with self.subTest(field=key), self.assertRaisesRegex(c.Block, "entry and prompt receipt"):
                 c.validate_planning(changed)
+
+    def test_p4d_fixture_materializes_the_pr14_blueprint(self):
+        name = "BLUEPRINT.md"
+        expected = g.git_raw(ROOT, "show", f"{p4t_merged_fixture.MERGED_P4T}:{name}")
+        self.assertEqual((p4d_fixture.view() / name).read_bytes(), expected)
 
     def test_workflow_retains_pinned_jobs_suites_and_historical_refusals(self):
         path = ".github/workflows/governance.yml"

@@ -3,7 +3,7 @@
   "package": "P4CORE",
   "role": "builder_validation",
   "verdict": "PASS",
-  "snapshot_id": "6cf4ba42d0e2b633a340416bd8b8972b9a599e953fe7e34ec94fac9177312b0b",
+  "snapshot_id": "ae8f91a41e450fdc522c29b19d6f78818a806ab4bbea46fa9975b90da3827ff2",
   "live_requests": 0,
   "results": {
     "commands": [
@@ -17,6 +17,10 @@
       },
       {
         "command": "historical P4MVP governance",
+        "exit_code": 0
+      },
+      {
+        "command": "full governance suite",
         "exit_code": 0
       },
       {
@@ -36,8 +40,9 @@
       "product_collected": 953,
       "product_passed": 952,
       "product_windows_symlink_skip": 1,
-      "core_governance": 11,
-      "historical_mvp_governance": 13
+      "core_governance": 12,
+      "historical_mvp_governance": 13,
+      "governance_collected": 263
     },
     "builder_agents": [
       "01a1fcf1-8485-73e1-a3be-d2a7c359ba47",

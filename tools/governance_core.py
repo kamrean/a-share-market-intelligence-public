@@ -33,18 +33,18 @@ RELEASE = "docs/reviews/p4core-release.json"
 RECEIPTS = (VALIDATION, REVIEW, RELEASE)
 PLANNING_PATHS = ("AGENTS.md", "START_CONSTRUCTION_PROMPT.md", "BLUEPRINT.md",
                   CONTRACT, POLICY, STATE)
-PLANNING_SNAPSHOT = "397d05efb42ff3aed14aea2d4209551a55ac0da19a67e94432c2f1182a532e34"
+PLANNING_SNAPSHOT = "fcbd7076504667edba23522d5d2572f55b751ee7fda953749ed7c5136c2bdcd7"
 AUDITOR = "01a1fcef-cdae-7252-ae28-a768205e8f9c"
 CLOSED_PROBE = {**m.CLOSED_PROBE, "contract": CONTRACT}
 CLOSED_COMMANDS = m.CLOSED_COMMANDS
 VALIDATION_COMMANDS = (
     "product suite", "P4CORE governance", "historical P4MVP governance",
-    "offline preflight", "scope check", "patch whitespace",
+    "full governance suite", "offline preflight", "scope check", "patch whitespace",
 )
 # PR15's 936 product tests plus 11 core tests, with at most one Windows skip.
 VALIDATION_COUNT_MINIMA = {
     "product_collected": 947, "product_passed": 946, "product_windows_symlink_skip": 0,
-    "core_governance": 11, "historical_mvp_governance": 13,
+    "core_governance": 12, "historical_mvp_governance": 13, "governance_collected": 263,
 }
 
 

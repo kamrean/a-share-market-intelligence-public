@@ -6,7 +6,7 @@
   "read_only": true,
   "entry_verdict": "PASS",
   "prompt_verdict": "PASS",
-  "planning_snapshot": "397d05efb42ff3aed14aea2d4209551a55ac0da19a67e94432c2f1182a532e34",
+  "planning_snapshot": "fcbd7076504667edba23522d5d2572f55b751ee7fda953749ed7c5136c2bdcd7",
   "scope": "offline_core_only",
   "findings": []
 }
