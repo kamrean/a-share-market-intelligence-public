@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4DIAG",
+  "role": "entry_and_prompt_auditor",
+  "agent_id": "01a1fe00-7864-7f51-9100-ff7220944d47",
+  "read_only": true,
+  "entry_verdict": "PASS",
+  "prompt_verdict": "PASS",
+  "planning_snapshot": "54c37ced0dfe9006a214930b1d33cf19277c1ba8f1b4a480593a27944c0969b0",
+  "findings": []
+}

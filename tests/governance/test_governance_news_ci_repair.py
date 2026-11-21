@@ -13,8 +13,11 @@ import unittest
 from unittest.mock import patch
 from uuid import UUID
 
+from p4t_merged_fixture import merged_contents
+
 
 ROOT = Path(__file__).resolve().parents[2]
+MERGED_PR17 = "7a036af0e540ba1526b20330b18779e2cc71d421"
 TOOL = "tools/governance_news_ci_repair.py"
 SPEC = importlib.util.spec_from_file_location("p4fed_ci_repair_tests", ROOT / TOOL)
 repair = importlib.util.module_from_spec(SPEC)
@@ -35,13 +38,14 @@ class RepairScopeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.baseline = n.baseline_entries(ROOT)
-        cls.planning = {name: g.read_text(ROOT, name) for name in
+        frozen = merged_contents(ROOT, g, MERGED_PR17)
+        cls.planning = {name: frozen[name] for name in
                         (repair.CONTRACT, repair.ENTRY, *n.PLANNING_PATHS, n.ENTRY)}
         cls.plan = repair._validate_plan(cls.planning)
         cls.original_paths = cls.baseline.keys() | set(n.validate_planning(cls.planning)["additions"])
         cls.protected = tuple(sorted(
             (cls.original_paths | set(cls.plan["additions"])) - set(repair.RECEIPTS)))
-        cls.contents = {name: (ROOT / name).read_bytes().decode("utf-8") for name in cls.protected}
+        cls.contents = {name: frozen[name] for name in cls.protected}
 
     def seed(self, root):
         for name, value in self.contents.items():

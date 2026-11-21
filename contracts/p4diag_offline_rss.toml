@@ -1,0 +1,51 @@
+schema_version = 1
+package = "P4DIAG"
+base = "7a036af0e540ba1526b20330b18779e2cc71d421"
+branch = "stage7-rss-offline-diagnostics"
+dependency_pr = 17
+dependency_main_ci = 44922015663
+tier = "D"
+human_merge_required = true
+auto_merge_allowed = false
+repair_limit = 1
+runtime_permissions_changed = false
+new_source_requests = 0
+original_observation_sha256 = "5aa27a64f69fa9895a7de229eb94ec470aceecb9e868552bdf64aec52b25367b"
+planning = [
+  "contracts/p4diag_offline_rss.toml",
+  "docs/P4DIAG_OFFLINE_RSS.md",
+]
+mutable = [
+  ".github/workflows/governance.yml",
+  "README.md",
+  "docs/CONSTRUCTION_LOG.md",
+  "tests/governance/test_governance_news_ci_repair.py",
+]
+additions = [
+  "contracts/p4diag_offline_rss.toml",
+  "docs/P4DIAG_OFFLINE_RSS.md",
+  "docs/reviews/p4diag-entry.json",
+  "docs/reviews/p4diag-validation.json",
+  "docs/reviews/p4diag-review.json",
+  "docs/reviews/p4diag-release.json",
+  "market_intelligence/rss_diagnostics.py",
+  "tests/product/test_rss_diagnostics.py",
+  "tools/governance_rss_diagnostics.py",
+  "tests/governance/test_governance_rss_diagnostics.py",
+]
+attestations = [
+  "docs/reviews/p4diag-validation.json",
+  "docs/reviews/p4diag-review.json",
+  "docs/reviews/p4diag-release.json",
+]
+
+[work]
+objective = "Explain possible Board RSS validation failures on authored or injected bounded in-memory responses without changing the original parser or attempting to reconstruct the historical response. Record operation-specific A-share evidence gaps."
+product = "Reuse fixed P4FED response and parser validation. Return coarse closed codes for invalid response envelope, encoding, disallowed XML, malformed XML, RSS structure, channel identity, attribution/limits and admitted aggregate item counts; use a fixed opaque fallback. A deterministic demo uses authored fixtures only, never self-references them as live evidence. No new file import, network client, endpoint option, or historical journal path."
+evidence = "Final original observation remains FAILED with invalid_response and one spent attempt. Cause is not recoverable from the retained record; no body retained. Do not infer historical cause from compatible fixtures or use actual quotes in the repo. Preserve profile, all original permissions, old result bytes, and zero mainland coverage and dated runs."
+rights = "Documentation-only audit. Record the AShareAPI provider-side analysis terms and explicitly unresolved upstream authorization, finality/corrections and operation-specific retention and egress. No act of acceptance, provider contact, account creation, A-share request, or licensing advice. Keep free/no-registration/no-key and required core symbols."
+history = "Pin historical P4FEDCI test inputs to immutable PR17 merge blobs; do not execute archived code. Do not alter historic tests beyond this input-selection change, the CI matrix, existing suites, or refusal checks. Only switch the existing three offline checker commands in the workflow."
+validation = "Use stdlib unittest; offline classifications, malformed/provenance/duplicate/stale/future examples, exact labels and no input content or exception leak, CLI cannot accept network or input paths. Scope checker binds reviewed plan, exact staged bytes, unchanged predecessor receipts and independently issued validation/review/release. Run complete product suite, focused governance and historical P4FEDCI suites locally, full unchanged offline CI suites on Ubuntu and Windows before human merge."
+rollback = "Ordinary reviewed revert of this package only. No original provider evidence, budgets, configuration or journal touched. No new dispatch path."
+prohibitions = "No live news or market request, no old allowance opening, credentials, model, private or production Telegram, trading, deploy, or VPS. No auto-merge, direct merge, or bypass."
+next_gate = "Independent Reviewer and separate Release Checker, one PR, exact-head CI, and human merge. To consider a new source operation, independently establish concrete terms and a new authorized contract."

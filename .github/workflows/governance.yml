@@ -78,11 +78,11 @@ jobs:
       - name: Smoke test the offline A-share core preflight
         run: python -B -m market_intelligence.mvp_core preflight
       - name: Scope and canonical consistency
-        run: python tools/governance_news_ci_repair.py check --ci
+        run: python tools/governance_rss_diagnostics.py check --ci
       - name: Verify deterministic prompt
-        run: python tools/governance_news_ci_repair.py snapshot --ci
+        run: python tools/governance_rss_diagnostics.py snapshot --ci
       - name: Validate local review attestations
-        run: python tools/governance_news_ci_repair.py gate --ci
+        run: python tools/governance_rss_diagnostics.py gate --ci
       - name: Confirm CI cannot dispatch the Board RSS verification
         shell: python
         run: |

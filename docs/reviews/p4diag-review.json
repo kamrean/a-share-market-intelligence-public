@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4DIAG",
+  "snapshot_id": "ecb0db75e15bd3d51c0573ba04cd2dbf34910fc54d990eb936d6551f8684ecd6",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "read_only": true,
+  "agent_id": "01a1fe11-f570-7411-8d4e-950f05bca3d8",
+  "validation_sha256": "d64b86f1d287bb1e9681469dd22a512a422346b5b9d221fd182d5058f2850bb7",
+  "findings": []
+}
