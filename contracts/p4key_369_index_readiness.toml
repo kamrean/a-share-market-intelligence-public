@@ -1,0 +1,49 @@
+schema_version = 1
+package = "P4KEY"
+base = "12ee5864d0dece50d0a049d26186403fd0a5d892"
+branch = "stage1-369-index-readiness"
+dependency_pr = 18
+human_merge_required = true
+repair_limit = 1
+real_requests_authorized = 0
+market_symbols = ["000001.SH", "399001.SZ", "399006.SZ"]
+mutable = [
+  ".github/workflows/governance.yml",
+  "AGENTS.md",
+  "BLUEPRINT.md",
+  "README.md",
+  "START_CONSTRUCTION_PROMPT.md",
+  "docs/CONSTRUCTION_LOG.md",
+  "tests/governance/test_governance_news.py",
+]
+additions = [
+  "contracts/p4key_369_index_readiness.toml",
+  "docs/P4KEY_369_INDEX_READINESS.md",
+  "docs/reviews/p4key-entry.json",
+  "docs/reviews/p4key-validation.json",
+  "docs/reviews/p4key-review.json",
+  "docs/reviews/p4key-release.json",
+  "market_intelligence/data369_daily.py",
+  "tests/product/test_data369_daily.py",
+  "tests/governance/test_governance_data369.py",
+  "tools/governance_data369.py",
+]
+attestations = [
+  "docs/reviews/p4key-validation.json",
+  "docs/reviews/p4key-review.json",
+  "docs/reviews/p4key-release.json",
+]
+
+[work]
+objective = "Bring Blueprint v1 from anonymous-free to zero-cost permitted sources, prepare the 369 daily-archive adapter and verify it on bounded authored responses in this work package."
+scope = "Exact three A-share indices. Use explicit provider codes and fixed documented HTTPS host/path, two explicit latest consecutive exchange sessions from a trusted caller, narrow date range, two rows minimum for current and previous close. No bare codes, broad market request or adjusted series. A bound transport interface is test-injected; this package contains no callable live transport, no key getter, no CLI dispatch and no persisted observations."
+data = "Operator confirms the three indices are offered. Public docs describe free index daily archives and approximate 16:00 Shanghai release. Treat exact per-index semantics, upstream permission, corrections and local retention as unresolved. Request specs and fixture summaries prove neither finality nor runtime readiness. No source is added to the live registry. Historical profiles, policies, receipts and test assertions remain unchanged."
+validation = "Validate identity, freshness against explicit expected sessions and cutoff, strict bounded UTF-8 JSON and finite positive points, duplicate versus conflict, invalid/outside dates and closed failure outputs. Preserve 0/3 live index and 0/3 dated-live-run coverage. Reuse repository Git scope and snapshot helpers; independent Prompt Auditor, Reviewer and Release Checker; three offline CI command switches only."
+closeout = "Preserve exact merged PR18 immutable bytes. Allow no old allowance reuse, real requests, persisted vendor data, key input, private delivery, model, scheduled operations, trades, VPS or merge automation. Stop before a live contract until corroborating provider evidence is available; any live validation remains in the intended combined feature scope but is not performed or authorized by this snapshot."
+rollback = "Normal reviewed revert on the human merge path. The adapter and documentation have no deployed state and cannot open any old source allowance."
+
+[repair]
+prior_snapshot = "fe33c8af403a2f63a09576f3c47e3550ba2a399aed79ac5f30f4a2d820240afb"
+prior_reviewer = "01a2039e-6819-7503-9f6f-11c37144f840"
+prior_verdict = "BLOCK"
+scope = "The operator instructed continuation after the one-file scope request. Pin the two historical P4FED planning inputs in test_governance_news.py to their exact PR18 committed bytes; do not change its assertions, actual receipts, or any old runtime path. Normalize overflow to a closed invalid-as-of result and use the documented SDK success code 200. No other scope or authority changes."

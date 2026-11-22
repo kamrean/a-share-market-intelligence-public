@@ -24,6 +24,12 @@ SPEC.loader.exec_module(news)
 g = news.g
 
 
+def historical_planning():
+    merged = "12ee5864d0dece50d0a049d26186403fd0a5d892"
+    return {name: g.git(ROOT, "show", f"{merged}:{name}")
+            for name in (*news.PLANNING_PATHS, news.ENTRY)}
+
+
 def json_text(value):
     return json.dumps(value, sort_keys=True) + "\n"
 
@@ -72,7 +78,7 @@ def isolated_env():
 class PlanningTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.planning = {name: g.read_text(ROOT, name) for name in (*news.PLANNING_PATHS, news.ENTRY)}
+        cls.planning = historical_planning()
 
     def test_pinned_contract_and_entry(self):
         contract = news.validate_planning(self.planning)
@@ -237,7 +243,7 @@ class ObserveTests(unittest.TestCase):
 
 class CandidateTests(unittest.TestCase):
     def test_index_snapshot_and_offline_release_lifecycle(self):
-        planning = {name: g.read_text(ROOT, name) for name in (*news.PLANNING_PATHS, news.ENTRY)}
+        planning = historical_planning()
         contract = news.validate_planning(planning)
         with tempfile.TemporaryDirectory(prefix="p4fed-candidate-") as directory:
             root = Path(directory)

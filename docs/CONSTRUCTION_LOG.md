@@ -2002,3 +2002,23 @@ receipt. The historical response was not retained and its cause remains
 unknown. This work also records current mainland provider terms and unmet
 upstream, retention and completed-session requirements. No probe is renewed;
 mainland coverage and dated runs remain 0/3, with runtime permissions closed.
+
+### P4KEY 369 Daily Archive Candidate
+
+PR18 was human-merged at 12ee586 and matching main CI passed (44928880025).
+Blueprint v1 now permits named zero-cost registered/keyed candidates without
+opening collection. P4KEY binds three required index codes to a narrow daily
+archive window and verifies identity, dates, freshness and deduplication on
+authored responses. It does not read a key, contact a source or retain a quote.
+The operator's coverage confirmation is not an upstream, finality, correction
+or retention grant. The next gate is corroborated source evidence and a
+reviewed, bounded operator test; full live readiness is still 0/3 and 0/3.
+
+The independent Reviewer blocked the initial P4KEY snapshot
+`fe33c8af403a2f63a09576f3c47e3550ba2a399aed79ac5f30f4a2d820240afb`:
+two legacy fixture reads used current planning files, and an out-of-range
+timestamp could escape the adapter. One separately audited repair pins
+those fixture reads to PR18, preserves all assertions and old receipts,
+and classifies timestamp overflow as invalid input. The same cycle
+aligns the success envelope with the checksum-matched provider SDK.
+The initial BLOCK never authorized release or an actual request.
