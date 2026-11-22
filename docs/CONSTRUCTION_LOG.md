@@ -2022,3 +2022,12 @@ those fixture reads to PR18, preserves all assertions and old receipts,
 and classifies timestamp overflow as invalid input. The same cycle
 aligns the success envelope with the checksum-matched provider SDK.
 The initial BLOCK never authorized release or an actual request.
+
+PR19 CI run 45038430219 on 9c21970 passed on Windows and failed one
+Ubuntu product test. The authored deep array was rejected on both hosts,
+but the decoder rejected it earlier on Windows than on Ubuntu, producing
+different closed codes. The operator authorized one additional offline
+CI-only repair: cap structural JSON nesting at 32 before decoding, retain
+the original regression, and check the 32/33 boundary and escaped string
+literals. The prior commit and remote result remain historical evidence.
+This repair opens no operation, credential, model or publishing permission.

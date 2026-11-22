@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "package": "P4KEY",
-  "snapshot_id": "e151575d0cbd2241e54b207b05298e01be4dc093a5ca29de8bf7a121b087fc34",
+  "snapshot_id": "02c956995fd64dcc34b10d15b2af132fbc6d22bdb75ebad587deced30ad9a8c9",
   "role": "builder_validation",
   "verdict": "PASS",
   "agent_id": "coordinator",
   "source_requests": 0,
   "live_index_count": 0,
   "dated_run_count": 0,
-  "product_total": 1012,
+  "product_total": 1014,
   "product_skips": 1,
-  "governance_total": 25,
-  "focused_product": 12
+  "governance_total": 14,
+  "focused_product": 14
 }

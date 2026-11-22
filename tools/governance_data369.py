@@ -19,7 +19,7 @@ BASE = "12ee5864d0dece50d0a049d26186403fd0a5d892"
 BRANCH = "stage1-369-index-readiness"
 PACKAGE = "P4KEY"
 CONTRACT = "contracts/p4key_369_index_readiness.toml"
-PLANNING_SHA = "083379f2e3bf2ee05416934f34fe5ca1d25318b7cf2610ae5388d4c8c3d18563"
+PLANNING_SHA = "907ae11b4eb24ebd03c5899937921021fac6383bd17d7096e6e1d6d6ecec7672"
 WORKFLOW = ".github/workflows/governance.yml"
 ENTRY, VALIDATION, REVIEW, RELEASE = tuple(
     f"docs/reviews/p4key-{kind}.json" for kind in ("entry", "validation", "review", "release"))

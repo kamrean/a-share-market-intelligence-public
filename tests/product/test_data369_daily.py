@@ -3,6 +3,7 @@
 from dataclasses import asdict
 import json
 import unittest
+from unittest.mock import patch
 from urllib.parse import parse_qs, urlsplit
 
 from market_intelligence import data369_daily as provider
@@ -107,6 +108,28 @@ class DailyArchiveTests(unittest.TestCase):
             with self.subTest(status=status):
                 self.assertEqual(self.inspect(body), provider.ArchiveDiagnostic(
                     status, missing_sessions=SESSIONS))
+
+    def test_depth_32_is_allowed_and_33_is_rejected_before_decoding(self):
+        def body_at_depth(depth):
+            extra = None
+            for level in range(depth - 1):
+                extra = [extra] if level % 2 else {"nested": extra}
+            envelope = json.loads(payload([EARLY, LATEST]))
+            envelope["extra"] = extra
+            return json.dumps(envelope).encode()
+
+        at_limit = self.inspect(body_at_depth(32))
+        self.assertEqual((at_limit.status, at_limit.accepted_sessions), ("complete_window", 2))
+        too_deep = body_at_depth(33)
+        with patch.object(provider.json, "loads", side_effect=AssertionError("decoder called")):
+            result = self.inspect(too_deep)
+        self.assertEqual(result, provider.ArchiveDiagnostic("invalid_json", missing_sessions=SESSIONS))
+
+    def test_escaped_quotes_backslashes_and_literal_brackets_do_not_add_depth(self):
+        envelope = json.loads(payload([EARLY, LATEST]))
+        envelope["message"] = (r'\"' + "[{" * 40 + "}]") * 2 + "\\"
+        result = self.inspect(json.dumps(envelope).encode())
+        self.assertEqual((result.status, result.accepted_sessions), ("complete_window", 2))
 
     def test_provider_message_mismatch_and_wrong_adjustment_do_not_leak(self):
         for body, status in [

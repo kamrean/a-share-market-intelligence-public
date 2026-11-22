@@ -4,6 +4,6 @@
   "role": "entry_and_prompt_auditor",
   "agent_id": "01a203d2-b496-7833-93f7-b0cda9b4e41a",
   "verdict": "PASS",
-  "planning_sha256": "083379f2e3bf2ee05416934f34fe5ca1d25318b7cf2610ae5388d4c8c3d18563",
+  "planning_sha256": "907ae11b4eb24ebd03c5899937921021fac6383bd17d7096e6e1d6d6ecec7672",
   "runtime_authority": false
 }

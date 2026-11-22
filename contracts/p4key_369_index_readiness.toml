@@ -47,3 +47,11 @@ prior_snapshot = "fe33c8af403a2f63a09576f3c47e3550ba2a399aed79ac5f30f4a2d820240a
 prior_reviewer = "01a2039e-6819-7503-9f6f-11c37144f840"
 prior_verdict = "BLOCK"
 scope = "The operator instructed continuation after the one-file scope request. Pin the two historical P4FED planning inputs in test_governance_news.py to their exact PR18 committed bytes; do not change its assertions, actual receipts, or any old runtime path. Normalize overflow to a closed invalid-as-of result and use the documented SDK success code 200. No other scope or authority changes."
+
+[ci_repair]
+base = "9c2197063d80a75791de67f4c8d464135d56d2a0"
+run = 45038430219
+failed_job = 137257264511
+limit = 1
+max_json_depth = 32
+scope = "Operator authorized one additional CI-only R1 repair. Enforce a JSON nesting limit before decoding to make deep valid syntax fail closed with the same reason on Windows and Ubuntu. Count only structural arrays and objects (the root container is level 1), never quoted brackets or escaped characters. Depth 32 must not be rejected on depth alone; depth 33 must return invalid_json before decoding. Preserve the old failing fixture and test both boundaries and quoted literals. Refresh only this plan, construction log, plan binding and the four P4KEY receipts. Keep the old commit, CI and approvals in Git/GitHub history. No workflow, dependency, historical test or runtime changes."

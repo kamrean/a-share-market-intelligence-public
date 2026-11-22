@@ -21,6 +21,7 @@ ARCHIVE_CANDIDATE_TIME = time(16)
 SUCCESS_CODE = 200
 MAX_ROWS = 4
 MAX_BODY_BYTES = 8192
+MAX_JSON_DEPTH = 32
 
 
 @dataclass(frozen=True)
@@ -96,6 +97,30 @@ def _nonfinite(_token):
     raise ValueError("nonfinite_json")
 
 
+def _check_json_depth(text):
+    # Bound structural nesting; the decoder still validates the JSON grammar.
+    depth = 0
+    quoted = escaped = False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            if depth > MAX_JSON_DEPTH:
+                raise ValueError("excessive_json_depth")
+        elif char in "]}":
+            depth -= 1
+            if depth < 0:
+                raise ValueError("unbalanced_json")
+
+
 def inspect_archive(body, symbol, sessions, as_of):
     """Check an injected archive response against its exact requested window.
 
@@ -106,7 +131,9 @@ def inspect_archive(body, symbol, sessions, as_of):
     if type(body) is not bytes or not 0 < len(body) <= MAX_BODY_BYTES:
         return ArchiveDiagnostic("invalid_body", missing_sessions=sessions)
     try:
-        envelope = json.loads(body.decode("utf-8"), object_pairs_hook=_unique_pairs,
+        text = body.decode("utf-8")
+        _check_json_depth(text)
+        envelope = json.loads(text, object_pairs_hook=_unique_pairs,
                               parse_float=_decimal, parse_constant=_nonfinite)
     except (ValueError, InvalidOperation, RecursionError):
         return ArchiveDiagnostic("invalid_json", missing_sessions=sessions)
