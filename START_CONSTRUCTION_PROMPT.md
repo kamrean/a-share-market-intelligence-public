@@ -1,4 +1,13 @@
-# P4FED: Bounded primary-news verification
+# P4KEY: Zero-cost 369 archive candidate
+
+Start from human-merged PR #18 at 12ee586. Read Blueprint v1 and
+contracts/p4key_369_index_readiness.toml, then
+docs/P4KEY_369_INDEX_READINESS.md. The older policy, profile and state record
+preserve historical scope and closed runtime. No real requests are approved.
+Use the existing staged-snapshot tooling, independent Reviewer and Release
+Checker, Ubuntu/Windows CI and human merge. Never read or store keys.
+
+## Historical P4FED entry (closed)
 
 Start from merged PR #16. Read Blueprint v1, the P4FED contract, canonical
 state, policy and docs/P4_LIVE_SOURCE_READINESS.md. Independently audit the

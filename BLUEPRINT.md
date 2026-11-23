@@ -6,7 +6,7 @@ Build a personal, read-only market intelligence and multi-agent research system.
 
 The first release is a research MVP: a small, reproducible end-to-end pipeline for collecting evidence, analyzing market context and producing traceable daily reports. Delivery is evaluated through working functionality, transparent methods and genuine execution evidence. This document remains Blueprint v1; amendments use Git history, not a new blueprint version. MVP acceptance, observation acceptance, and VPS release are separate milestones. A GitHub upload alone proves none of them.
 
-Use only permitted information sources that are free and require no registration or API key for MVP acceptance. Paid or keyed sources remain disabled; a public display, anonymous response or parser test is not a use right or a live-verified integration. Model/API costs are separate from source costs.
+Use only permitted zero-cost information sources for MVP acceptance. Free registration and an API key kept locally are eligible only for a named, reviewed source and explicitly authorized operation. Paid plans, overage, and unapproved source access remain disabled. A public display, account, API response, or parser test is not a use right or a live-verified integration. Model/API costs are separate from source costs.
 
 ## 2. Non-Goals and Permanent Boundaries
 
@@ -132,7 +132,7 @@ P4E follows human-merged P4S with local, read-only preparation of already retain
 
 P4I follows human-merged P4E with pure mode-safe real-source historical-replay composition and operation-scoped source-policy decisions. Legacy synthetic behavior remains unchanged; applicable local analysis rights are separated from disabled future model/delivery rights. It does not select sources, read runtime stores, dispatch research or grant operational permissions; live-verified benchmark coverage remains0/5.
 
-P4N follows human-merged P4I with a user-authorized single anonymous NBS RSS acquisition, bounded normalized metadata storage and provenance-bound composition. No registration or API keys are accepted for current sources. Unknown item attribution/time semantics remain rejected; no raw XML or linked article is retained. This news integration does not close any of the five benchmark gaps, enable model/delivery operations or satisfy MVP acceptance.
+P4N follows human-merged P4I with a user-authorized single anonymous NBS RSS acquisition, bounded normalized metadata storage and provenance-bound composition. That historical operation scope does not accept registration or API keys. Unknown item attribution/time semantics remain rejected; no raw XML or linked article is retained. This news integration does not close any of the five benchmark gaps, enable model/delivery operations or satisfy MVP acceptance.
 
 P4M follows human-merged P4N with a bounded, offline daily-market input-to-composition path. It keeps unknown publication time unknown and distinguishes a supplied observation of an already closed session from source publication. Actual transport provenance is separate from documentation links. Authored test responses can demonstrate partial input coverage without claiming live acquisition, finality, legal entitlement or five-index acceptance. Existing publication-required replay behavior remains unchanged. No source request, SDK, private-store access, model, delivery or VPS permission is inherited; the P4N one-shot is consumed and closed. This is one integration package, not a parser-only or contract-only PR.
 

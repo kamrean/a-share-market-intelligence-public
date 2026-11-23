@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "package": "P4KEY",
+  "snapshot_id": "02c956995fd64dcc34b10d15b2af132fbc6d22bdb75ebad587deced30ad9a8c9",
+  "role": "release_checker",
+  "verdict": "LOCAL_READY_FOR_PR",
+  "agent_id": "01a203da-5c60-79b2-950a-69714552cb4a",
+  "read_only": true,
+  "human_merge_required": true,
+  "runtime_authority": false,
+  "remote_ci": "NOT_RUN_AT_SNAPSHOT",
+  "review_sha256": "e587ed2aeb9ad7b195509836347aaac85861c0f1e91cb507203d638c1232774d"
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package": "P4KEY",
+  "snapshot_id": "02c956995fd64dcc34b10d15b2af132fbc6d22bdb75ebad587deced30ad9a8c9",
+  "role": "reviewer",
+  "verdict": "PASS",
+  "agent_id": "01a2039e-6819-7503-9f6f-11c37144f840",
+  "read_only": true,
+  "findings": [],
+  "validation_sha256": "6d90ca7d1b197b5566f66d8e302c10e45e8ed5de34d35da6a86df930cdf5fe28"
+}

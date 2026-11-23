@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "package": "P4KEY",
+  "snapshot_id": "02c956995fd64dcc34b10d15b2af132fbc6d22bdb75ebad587deced30ad9a8c9",
+  "role": "builder_validation",
+  "verdict": "PASS",
+  "agent_id": "coordinator",
+  "source_requests": 0,
+  "live_index_count": 0,
+  "dated_run_count": 0,
+  "product_total": 1014,
+  "product_skips": 1,
+  "governance_total": 14,
+  "focused_product": 14
+}

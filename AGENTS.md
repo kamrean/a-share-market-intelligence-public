@@ -1,12 +1,19 @@
 # Project Work Rules
 
-## P4FED Active Package
+## P4KEY Source Candidate
 
-Read START_CONSTRUCTION_PROMPT.md and the P4FED contract. Preserve the core
-profile and historical receipts. The sole possible network action is the
-separately reviewed, fixed one-use Board RSS check. No historical allowance
-can be re-used. Do not read secrets or enable general collection, model,
-Telegram, scheduled runs, trading or VPS.
+Read START_CONSTRUCTION_PROMPT.md and the named P4KEY contract. Zero-cost
+registration/key eligibility does not open runtime. This package is offline:
+no account access, key handling, live transport, real payload retention or
+reuse of prior allowances. Preserve historical files and exact-head review,
+release and CI evidence. Human merge only.
+
+## Historical P4FED Package (Closed)
+
+Preserve the P4FED contract, core profile and historical receipts. The only
+former network action was a separately reviewed, fixed one-use Board RSS
+check. No historical allowance can be re-used. Do not read secrets or
+enable general collection, model, Telegram, scheduled runs, trading or VPS.
 
 ## Historical P4CORE Package (Merged)
 

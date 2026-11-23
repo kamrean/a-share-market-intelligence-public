@@ -42,6 +42,11 @@ For authored RSS response cases and the latest documented source-rights gaps,
 see the [offline diagnosis](docs/P4DIAG_OFFLINE_RSS.md). This diagnostic does
 not contact a source or recover the original failed response.
 
+[369 archive readiness](docs/P4KEY_369_INDEX_READINESS.md) covers the three
+required benchmarks. An API key on a zero-cost plan can be eligible, but the
+adapter's bounded request plan and authored checks are not live observation
+or permission. Do not set a key for the offline demo or tests.
+
 P0-P4M are human-merged in this public repository. Stage1 retains source gaps;
 Stage2 core and the Stage3-7 offline engineering foundation are merged.
 P4 adds local three-part reports, an append-only ledger, linked corrections and
